@@ -7,6 +7,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody rigid;
     
     private Vector2 moveDir;
+    private Vector2 mouseDelta;
+    private bool isRotating = false;
+    private Vector2 fixedCursorPos;
+
+    void Update()
+    {
+        if(isRotating) 
+        {
+            Look();
+
+            Mouse.current.WarpCursorPosition(fixedCursorPos);
+        }
+    }
 
     void FixedUpdate()
     {
@@ -21,9 +34,30 @@ public class PlayerController : MonoBehaviour
         rigid.linearVelocity = worldVec * moveSpeed;
     }
 
+    public void Look()
+    {
+        float mouseX = mouseDelta.x;
+        transform.Rotate(0f, mouseX, 0f);
+    }
+
     // Input
     public void OnMove(InputValue value)
     {
         moveDir = value.Get<Vector2>();
+    }
+
+    public void OnLook(InputValue value)
+    {
+        mouseDelta = value.Get<Vector2>();
+    }
+
+    public void OnMouse(InputValue value)
+    {
+        if(value.isPressed && !isRotating)
+        {
+            fixedCursorPos = Mouse.current.position.ReadValue();
+        }
+
+        isRotating = value.isPressed;
     }
 }
