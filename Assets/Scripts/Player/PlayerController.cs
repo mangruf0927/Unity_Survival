@@ -11,21 +11,6 @@ public class PlayerController : MonoBehaviour
     private bool isRotating = false;
     private Vector2 fixedCursorPos;
 
-    void Update()
-    {
-        if(isRotating) 
-        {
-            Look();
-
-            Mouse.current.WarpCursorPosition(fixedCursorPos);
-        }
-    }
-
-    void FixedUpdate()
-    {
-        Move();
-    }
-
     public void Move()
     {
         Vector3 moveVec = new Vector3(moveDir.x, 0f, moveDir.y);
@@ -36,8 +21,13 @@ public class PlayerController : MonoBehaviour
 
     public void Look()
     {
-        float mouseX = mouseDelta.x;
-        transform.Rotate(0f, mouseX, 0f);
+        if(isRotating) 
+        {
+            float mouseX = mouseDelta.x;
+            transform.Rotate(0f, mouseX, 0f);
+
+            Mouse.current.WarpCursorPosition(fixedCursorPos);
+        }
     }
 
     // Input
