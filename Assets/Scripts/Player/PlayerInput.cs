@@ -7,7 +7,9 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private PlayerStateMachine stateMachine;
 
     private bool isRotating;
+    private bool isRunPressed;
     private Vector2 fixedCursorPos;
+    private Vector2 direction;
 
     void LateUpdate()
     {
@@ -16,12 +18,12 @@ public class PlayerInput : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
-        Vector2 direction = value.Get<Vector2>();
+        direction = value.Get<Vector2>();
+        playerController.SetDirection(direction);
 
         if(direction == Vector2.zero) stateMachine.ChangeState(PlayerStateEnums.IDLE);
-        else stateMachine.ChangeState(PlayerStateEnums.MOVE);
+        else stateMachine.ChangeState(isRunPressed ? PlayerStateEnums.RUN : PlayerStateEnums.MOVE);
 
-        playerController.SetDirection(direction);
     }
 
     public void OnLook(InputValue value)
@@ -37,5 +39,14 @@ public class PlayerInput : MonoBehaviour
         if(value.isPressed && !isRotating) fixedCursorPos = Mouse.current.position.ReadValue();
         
         isRotating = value.isPressed;
+    }
+
+    public void OnRun(InputValue value)
+    {
+        isRunPressed = value.isPressed;
+
+        if (direction != Vector2.zero)
+        stateMachine.ChangeState(isRunPressed ? PlayerStateEnums.RUN : PlayerStateEnums.MOVE);
+
     }
 }

@@ -398,6 +398,7 @@ GameObject:
   - component: {fileID: 631703131}
   - component: {fileID: 631703129}
   - component: {fileID: 631703132}
+  - component: {fileID: 631703133}
   - component: {fileID: 631703130}
   m_Layer: 0
   m_Name: Player
@@ -510,8 +511,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1bbf5e8466d74ae2b88497d4ddfdc40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 3
   rigid: {fileID: 631703131}
+  moveSpeed: 3
 --- !u!114 &631703130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -582,6 +583,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStateMachine
   playerController: {fileID: 631703129}
+--- !u!114 &631703133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631703124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 920c1ed885d7b4810a5377e766dc8210, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
+  playerController: {fileID: 631703129}
+  stateMachine: {fileID: 631703132}
 --- !u!1 &682914123
 GameObject:
   m_ObjectHideFlags: 0

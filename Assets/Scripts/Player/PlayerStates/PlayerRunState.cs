@@ -1,20 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMoveState : IPlayerState
+public class PlayerRunState : IPlayerState
 {
     private PlayerStateMachine stateMachine;
     private PlayerController playerController;
 
-    public PlayerMoveState(PlayerStateMachine _stateMachine, PlayerController _playerController)
+    public PlayerRunState(PlayerStateMachine _stateMachine, PlayerController _playerController)
     {
         stateMachine = _stateMachine;
         playerController = _playerController;
     }
-    
+
     public void Enter()
     {
-        Debug.Log("Move 상태");
+        Debug.Log("Run 상태");
+        playerController.moveSpeed *= 2;
     }
 
     public void Update()
@@ -29,6 +30,6 @@ public class PlayerMoveState : IPlayerState
 
     public void Exit()
     {
-        
+        playerController.moveSpeed /= 2;
     }
 }

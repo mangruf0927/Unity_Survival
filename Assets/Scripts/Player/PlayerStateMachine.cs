@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerStateEnums{ IDLE, MOVE }
+public enum PlayerStateEnums{ IDLE, MOVE, RUN }
 
 public class PlayerStateMachine : MonoBehaviour
 {    
@@ -15,7 +15,8 @@ public class PlayerStateMachine : MonoBehaviour
         stateDictionary = new Dictionary<PlayerStateEnums, IPlayerState>
         {
             { PlayerStateEnums.IDLE, new PlayerIdleState(this, playerController) },
-            { PlayerStateEnums.MOVE, new PlayerMoveState(this, playerController) }
+            { PlayerStateEnums.MOVE, new PlayerMoveState(this, playerController) },
+            { PlayerStateEnums.RUN, new PlayerRunState(this, playerController) }
         };
 
         if(stateDictionary.TryGetValue(PlayerStateEnums.IDLE, out IPlayerState newState))
@@ -44,5 +45,14 @@ public class PlayerStateMachine : MonoBehaviour
         curState?.Exit();        
         curState = newState;
         curState.Enter();
+    }
+
+    public bool CheckCurState(PlayerStateEnums stateType)
+    {
+        if(stateDictionary.TryGetValue(stateType, out IPlayerState stateValue))
+        {
+            return curState == stateValue;
+        }
+        return false;
     }
 }

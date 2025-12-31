@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 3.0f;
     [SerializeField] private Rigidbody rigid;
+    [SerializeField] public float moveSpeed = 3.0f;
     
     private Vector2 moveDir;
     private Vector2 mouseDelta;
