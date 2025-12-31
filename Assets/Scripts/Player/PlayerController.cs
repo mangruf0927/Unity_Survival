@@ -1,15 +1,22 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 1.0f;
+    [SerializeField] private float moveSpeed = 3.0f;
     [SerializeField] private Rigidbody rigid;
     
     private Vector2 moveDir;
     private Vector2 mouseDelta;
-    private bool isRotating = false;
-    private Vector2 fixedCursorPos;
+
+    public void SetDirection(Vector2 direction)
+    {
+        moveDir = direction;
+    }
+
+    public void SetMouseDelta(Vector2 delta)
+    {
+        mouseDelta = delta;
+    }
 
     public void Move()
     {
@@ -21,33 +28,6 @@ public class PlayerController : MonoBehaviour
 
     public void Look()
     {
-        if(isRotating) 
-        {
-            float mouseX = mouseDelta.x;
-            transform.Rotate(0f, mouseX, 0f);
-
-            Mouse.current.WarpCursorPosition(fixedCursorPos);
-        }
-    }
-
-    // Input
-    public void OnMove(InputValue value)
-    {
-        moveDir = value.Get<Vector2>();
-    }
-
-    public void OnLook(InputValue value)
-    {
-        mouseDelta = value.Get<Vector2>();
-    }
-
-    public void OnMouse(InputValue value)
-    {
-        if(value.isPressed && !isRotating)
-        {
-            fixedCursorPos = Mouse.current.position.ReadValue();
-        }
-
-        isRotating = value.isPressed;
+        transform.Rotate(0f, mouseDelta.x, 0f);
     }
 }

@@ -13,6 +13,7 @@ public class PlayerMoveState : IPlayerState
 
     public void Enter()
     {
+        Debug.Log("Move 상태");
     }
 
     public void Update()

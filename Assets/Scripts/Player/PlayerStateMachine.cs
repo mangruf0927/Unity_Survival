@@ -18,7 +18,7 @@ public class PlayerStateMachine : MonoBehaviour
             { PlayerStateEnums.MOVE, new PlayerMoveState(this, playerController) }
         };
 
-        if(stateDictionary.TryGetValue(PlayerStateEnums.MOVE, out IPlayerState newState))
+        if(stateDictionary.TryGetValue(PlayerStateEnums.IDLE, out IPlayerState newState))
         {
             curState = newState;
             curState.Enter();

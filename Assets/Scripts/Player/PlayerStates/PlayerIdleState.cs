@@ -13,12 +13,12 @@ public class PlayerIdleState : IPlayerState
 
     public void Enter()
     {
-        Debug.Log("Idle 상태 진입");
+        Debug.Log("Idle 상태");
     }
 
     public void Update()
     {
-        
+        playerController.Look();
     }
 
     public void FixedUpdate()
