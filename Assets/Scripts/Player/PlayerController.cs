@@ -8,11 +8,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 moveDirection;
 
-    void FixedUpdate()
-    {
-        Move();
-    }
-
     public void Move()
     {
         Vector3 moveVec = new(moveDirection.x, 0f, moveDirection.y);
@@ -22,8 +17,14 @@ public class PlayerController : MonoBehaviour
         rigid.linearVelocity = new Vector3(moveVec.x * moveSpeed, temp.y, moveVec.z * moveSpeed);
     }  
 
-    public void OnMove(InputValue value)
+    public void SetDirection(Vector2 direction)
     {
-        moveDirection = value.Get<Vector2>();
+        moveDirection = direction;
+    }
+
+    public void StopPlayer()
+    {
+        Vector3 temp = rigid.linearVelocity;
+        rigid.linearVelocity = new Vector3(0f, temp.y, 0f);
     }
 }

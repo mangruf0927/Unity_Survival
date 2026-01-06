@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerStateEnums{ IDLE };
+public enum PlayerStateEnums{ IDLE, MOVE };
 
 public class PlayerStateMachine : MonoBehaviour
 {
@@ -15,6 +15,7 @@ public class PlayerStateMachine : MonoBehaviour
         stateDictionary = new Dictionary<PlayerStateEnums, IPlayerState>()
         {
             {PlayerStateEnums.IDLE, new PlayerIdleState(this, playerController)},
+            {PlayerStateEnums.MOVE, new PlayerMoveState(this, playerController)},
         };
 
         if(stateDictionary.TryGetValue(PlayerStateEnums.IDLE, out IPlayerState newState))

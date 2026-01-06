@@ -1,20 +1,20 @@
 using UnityEngine;
 
-public class PlayerIdleState : IPlayerState
+public class PlayerMoveState : IPlayerState
 {
     private PlayerController playerController;
     private PlayerStateMachine stateMachine;
 
-    public PlayerIdleState( PlayerStateMachine _stateMachine, PlayerController _playerController)
+    public PlayerMoveState( PlayerStateMachine _stateMachine, PlayerController _playerController)
     {
         stateMachine = _stateMachine;
         playerController = _playerController;
     }
 
+
     public void Enter()
     {
-        Debug.Log("Idle 상태");
-        playerController.StopPlayer();
+        Debug.Log("Move 상태");
     }
 
     public void Update()
@@ -24,7 +24,7 @@ public class PlayerIdleState : IPlayerState
 
     public void FixedUpdate()
     {
-        
+        playerController.Move();
     }
 
     public void Exit()
