@@ -6,12 +6,12 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private PlayerStateMachine stateMachine;
 
-    private Vector2 direction;
-
     public void OnMove(InputValue value)
     {
-        direction = value.Get<Vector2>();
+        Vector2 direction = value.Get<Vector2>();
         playerController.SetDirection(direction);
+
+        if (!playerController.IsGround()) return;
 
         if(direction == Vector2.zero) stateMachine.ChangeInputState(PlayerStateEnums.IDLE);
         else stateMachine.ChangeInputState(PlayerStateEnums.MOVE);
@@ -20,5 +20,13 @@ public class PlayerInput : MonoBehaviour
     public void OnRun(InputValue value)
     {
         playerController.SetRun(value.isPressed);
+    }
+
+    public void OnJump(InputValue value)
+    {
+        if(value.isPressed && playerController.IsGround()) 
+        {
+            stateMachine.ChangeInputState(PlayerStateEnums.JUMP);
+        }
     }
 }

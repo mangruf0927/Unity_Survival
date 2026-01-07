@@ -6,7 +6,7 @@ public class PlayerMoveState : IPlayerState
     private PlayerController playerController;
     private PlayerStateMachine stateMachine;
 
-    public PlayerMoveState( PlayerStateMachine _stateMachine, PlayerController _playerController)
+    public PlayerMoveState(PlayerStateMachine _stateMachine, PlayerController _playerController)
     {
         stateMachine = _stateMachine;
         playerController = _playerController;
@@ -15,6 +15,7 @@ public class PlayerMoveState : IPlayerState
     public HashSet<PlayerStateEnums> inputHash { get; } = new HashSet<PlayerStateEnums>()
     {
         PlayerStateEnums.IDLE,
+        PlayerStateEnums.JUMP,
     };
 
     public HashSet<PlayerStateEnums> logicHash { get; } = new HashSet<PlayerStateEnums>()
@@ -24,7 +25,7 @@ public class PlayerMoveState : IPlayerState
 
     public void Enter()
     {
-        Debug.Log("Move 상태");
+        
     }
 
     public void Update()

@@ -278,6 +278,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   rigid: {fileID: 253048706}
   moveSpeed: 3
+  runSpeed: 6
+  jumpForce: 4
 --- !u!114 &253048708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -724,7 +726,7 @@ GameObject:
   - component: {fileID: 1786133220}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

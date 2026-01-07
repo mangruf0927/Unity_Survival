@@ -3,11 +3,18 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody rigid;
-    [SerializeField] private float moveSpeed = 3.0f;  
-    [SerializeField] private float runSpeed = 5.0f;  
+    [SerializeField] private float moveSpeed;  
+    [SerializeField] private float runSpeed;  
+    [SerializeField] private float jumpForce;
 
     private Vector2 moveDirection;
     private bool isRun;
+    private bool isGround;
+
+    public void SetDirection(Vector2 direction) { moveDirection = direction; }
+    public void SetRun(bool state) { isRun = state; }
+    public bool IsGround() { return isGround;}
+    public Vector2 GetDirection() { return moveDirection; }
 
     public void Move()
     {
@@ -19,19 +26,20 @@ public class PlayerController : MonoBehaviour
         rigid.linearVelocity = new Vector3(moveVec.x * speed, temp.y, moveVec.z * speed);
     }  
 
-    public void SetDirection(Vector2 direction)
-    {
-        moveDirection = direction;
-    }
-
-    public void SetRun(bool state)
-    {
-        isRun = state;
-    }
-
-    public void StopPlayer()
+    public void Stop()
     {
         Vector3 temp = rigid.linearVelocity;
         rigid.linearVelocity = new Vector3(0f, temp.y, 0f);
+    }
+
+    public void Jump()
+    {
+        isGround = false;
+        rigid.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Ground")) isGround = true;
     }
 }
