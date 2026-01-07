@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMoveState : IPlayerState
@@ -11,6 +12,15 @@ public class PlayerMoveState : IPlayerState
         playerController = _playerController;
     }
 
+    public HashSet<PlayerStateEnums> inputHash { get; } = new HashSet<PlayerStateEnums>()
+    {
+        PlayerStateEnums.IDLE,
+    };
+
+    public HashSet<PlayerStateEnums> logicHash { get; } = new HashSet<PlayerStateEnums>()
+    {
+        
+    };
 
     public void Enter()
     {

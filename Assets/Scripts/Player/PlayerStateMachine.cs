@@ -37,6 +37,30 @@ public class PlayerStateMachine : MonoBehaviour
             curState.FixedUpdate();
     }
 
+    public void ChangeInputState(PlayerStateEnums newStateType)
+    {
+        if(!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
+        if(curState == newState) return;
+
+        if(!curState.inputHash.Contains(newStateType)) return;
+
+        curState?.Exit();
+        curState = newState;
+        curState.Enter();
+    }
+
+    public void ChangeLogicState(PlayerStateEnums newStateType)
+    {
+        if(!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
+        if(curState == newState) return;
+
+        if(!curState.logicHash.Contains(newStateType)) return;
+
+        curState?.Exit();
+        curState = newState;
+        curState.Enter();
+    }
+
     public void ChangeState(PlayerStateEnums newStateType)
     {
         if(!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
