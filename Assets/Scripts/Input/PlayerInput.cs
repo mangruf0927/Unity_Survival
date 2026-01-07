@@ -16,4 +16,9 @@ public class PlayerInput : MonoBehaviour
         if(direction == Vector2.zero) stateMachine.ChangeState(PlayerStateEnums.IDLE);
         else stateMachine.ChangeState(PlayerStateEnums.MOVE);
     }
+
+    public void OnRun(InputValue value)
+    {
+        playerController.SetRun(value.isPressed);
+    }
 }

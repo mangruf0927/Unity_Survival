@@ -1,12 +1,13 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody rigid;
     [SerializeField] private float moveSpeed = 3.0f;  
+    [SerializeField] private float runSpeed = 5.0f;  
 
     private Vector2 moveDirection;
+    private bool isRun;
 
     public void Move()
     {
@@ -14,12 +15,18 @@ public class PlayerController : MonoBehaviour
         moveVec = Vector3.ClampMagnitude(moveVec, 1f);
         
         Vector3 temp = rigid.linearVelocity;
-        rigid.linearVelocity = new Vector3(moveVec.x * moveSpeed, temp.y, moveVec.z * moveSpeed);
+        float speed = isRun ? runSpeed : moveSpeed;
+        rigid.linearVelocity = new Vector3(moveVec.x * speed, temp.y, moveVec.z * speed);
     }  
 
     public void SetDirection(Vector2 direction)
     {
         moveDirection = direction;
+    }
+
+    public void SetRun(bool state)
+    {
+        isRun = state;
     }
 
     public void StopPlayer()
