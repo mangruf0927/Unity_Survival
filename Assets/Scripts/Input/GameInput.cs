@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInputHandler : MonoBehaviour
+public class GameInput : MonoBehaviour
 {
     [SerializeField] private PlayerController playerController;
     [SerializeField] private PlayerStateMachine stateMachine;
