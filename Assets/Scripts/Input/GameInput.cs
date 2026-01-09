@@ -5,6 +5,7 @@ public class GameInput : MonoBehaviour
 {
     [SerializeField] private PlayerController playerController;
     [SerializeField] private PlayerStateMachine stateMachine;
+    [SerializeField] private CameraRotate cameraRotate;
 
     public void OnMove(InputValue value)
     {
@@ -28,5 +29,15 @@ public class GameInput : MonoBehaviour
         {
             stateMachine.ChangeInputState(PlayerStateEnums.JUMP);
         }
+    }
+
+    public void OnLook(InputValue value)
+    {
+        cameraRotate.SetCamAngle(value.Get<Vector2>());
+    }
+
+    public void OnRotate(InputValue value)
+    {
+        cameraRotate.SetRightClick(value.isPressed);
     }
 }
