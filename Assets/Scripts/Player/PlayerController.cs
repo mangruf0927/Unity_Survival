@@ -3,9 +3,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody rigid;
-    [SerializeField] private float moveSpeed;  
-    [SerializeField] private float runSpeed;  
-    [SerializeField] private float jumpForce;
+    [SerializeField] private PlayerStat playerStat;
 
     private Vector2 moveDirection;
     private bool isRun;
@@ -22,7 +20,7 @@ public class PlayerController : MonoBehaviour
         moveVec = Vector3.ClampMagnitude(moveVec, 1f);
         
         Vector3 temp = rigid.linearVelocity;
-        float speed = isRun ? runSpeed : moveSpeed;
+        float speed = isRun ? playerStat.runSpeed : playerStat.moveSpeed;
         rigid.linearVelocity = new Vector3(moveVec.x * speed, temp.y, moveVec.z * speed);
     }  
 
@@ -35,7 +33,7 @@ public class PlayerController : MonoBehaviour
     public void Jump()
     {
         isGround = false;
-        rigid.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        rigid.AddForce(Vector3.up * playerStat.jumpForce, ForceMode.Impulse);
     }
 
     void OnCollisionEnter(Collision collision)
