@@ -13,7 +13,6 @@ public class CameraRotate : MonoBehaviour
         Vector3 targetPos = target.position;
         
         if(isRightClick) transform.RotateAround(targetPos, Vector3.up, mouseDelta.x * rotateSpeed * Time.deltaTime);        
-        transform.LookAt(targetPos);
 
         // transform.RotateAround(targetPos, Vector3.right, -mouseDelta.y * rotateSpeed * Time.deltaTime);
     }
