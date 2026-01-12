@@ -10,4 +10,7 @@ public class PlayerStat : MonoBehaviour
 
     [Header("점프 높이")]
     public float jumpForce;
+
+    [Header("회전 속도")]
+    public float rotateSpeed;
 }
