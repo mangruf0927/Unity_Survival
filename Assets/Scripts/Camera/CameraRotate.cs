@@ -1,33 +1,41 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraRotate : MonoBehaviour
 {
     [SerializeField] private Transform target;
     [SerializeField] private float rotateSpeed;
-    [SerializeField] private float distance;
+    [SerializeField] private float distance = 5f; 
 
     private bool isRightClick = false;
     private Vector2 mouseDelta;
+    private Vector3 cameraPos = new(0, 0, -1);
 
     void LateUpdate()
     {
         Vector3 targetPos = target.position;
 
-        if (isRightClick) transform.RotateAround(targetPos, Vector3.up, mouseDelta.x * rotateSpeed * Time.deltaTime);
+        if (isRightClick) 
+        {
+            transform.RotateAround(targetPos, Vector3.up, mouseDelta.x * rotateSpeed * Time.deltaTime);
+            transform.RotateAround(targetPos, Vector3.right, -mouseDelta.y * rotateSpeed * Time.deltaTime);
 
-        Vector3 direction = transform.position - targetPos;
-        direction.y = 0f;
-        direction.Normalize();
+            cameraPos = (transform.position - targetPos).normalized;
+        }
+        Vector3 pos = targetPos + cameraPos * distance;
+        Quaternion rot = Quaternion.LookRotation((targetPos - pos).normalized, Vector3.up);
 
-        Vector3 pos = targetPos + direction * distance;
-        pos.y = targetPos.y + 2;
+        Vector3 euler = rot.eulerAngles;
+        if (euler.x > 180f) euler.x -= 360f;
+        euler.x = Mathf.Clamp(euler.x, -80f, 80f);
         
-        transform.position = pos;
+        rot = Quaternion.Euler(euler.x, euler.y, 0f);
 
+        transform.SetPositionAndRotation(pos, rot);
+        
         mouseDelta = Vector2.zero;
     }
-    
-    // transform.RotateAround(targetPos, Vector3.right, -mouseDelta.y * rotateSpeed * Time.deltaTime);
 
     public void SetCamAngle(Vector2 delta)
     {
