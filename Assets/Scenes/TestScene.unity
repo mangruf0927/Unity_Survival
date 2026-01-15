@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraRotate
   target: {fileID: 253048705}
-  rotateSpeed: 100
+  rotateSpeed: 200
   distance: 5
 --- !u!1 &253048701
 GameObject:

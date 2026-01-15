@@ -10,38 +10,38 @@ public class CameraRotate : MonoBehaviour
 
     private bool isRightClick = false;
     private Vector2 mouseDelta;
-    private Vector3 cameraPos = new(0, 0, -1);
+
+    private float x = 0f;
+    private float y = 0f;
 
     void LateUpdate()
     {
         Vector3 targetPos = target.position;
 
-        if (isRightClick) 
-        {
-            transform.RotateAround(targetPos, Vector3.up, mouseDelta.x * rotateSpeed * Time.deltaTime);
-            transform.RotateAround(targetPos, Vector3.right, -mouseDelta.y * rotateSpeed * Time.deltaTime);
+        if (isRightClick) UpdateAngles();
 
-            cameraPos = (transform.position - targetPos).normalized;
-        }
-        Vector3 pos = targetPos + cameraPos * distance;
-        Quaternion rot = Quaternion.LookRotation((targetPos - pos).normalized, Vector3.up);
-
-        Vector3 euler = rot.eulerAngles;
-        if (euler.x > 180f) euler.x -= 360f;
-        euler.x = Mathf.Clamp(euler.x, -80f, 80f);
-        
-        rot = Quaternion.Euler(euler.x, euler.y, 0f);
+        Quaternion rot = Quaternion.Euler(y, x, 0f);
+        Vector3 pos = targetPos + rot * new Vector3(0f, 0f, -distance);
 
         transform.SetPositionAndRotation(pos, rot);
-        
+
         mouseDelta = Vector2.zero;
+    }
+
+    private void UpdateAngles()
+    {
+        x += mouseDelta.x * rotateSpeed * Time.deltaTime;
+
+        float deltaY = -mouseDelta.y * rotateSpeed * Time.deltaTime;
+        bool isLimit = (y >= 89f && deltaY > 0f) || (y <= -89f && deltaY < 0f);
+            
+        if(!isLimit) y = Mathf.Clamp(y + deltaY, -89f, 89f);
     }
 
     public void SetCamAngle(Vector2 delta)
     {
         mouseDelta = delta;
     }
-
 
     public void SetRightClick(bool isClick)
     {
