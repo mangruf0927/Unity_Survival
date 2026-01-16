@@ -25,7 +25,7 @@ public class PlayerMoveState : IPlayerState
 
     public void Enter()
     {
-        
+        playerController.SetAnimation("isWalk", true);
     }
 
     public void Update()

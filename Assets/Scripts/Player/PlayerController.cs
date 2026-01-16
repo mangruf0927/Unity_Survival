@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody rigid;
     [SerializeField] private PlayerStat playerStat;
     [SerializeField] private Transform cameraPivot;
+    [SerializeField] private Animator animator;
 
     private Vector2 moveDirection;
     private bool isRun;
@@ -52,6 +53,11 @@ public class PlayerController : MonoBehaviour
     {
         isGround = false;
         rigid.AddForce(Vector3.up * playerStat.jumpForce, ForceMode.Impulse);
+    }
+
+    public void SetAnimation(string str, bool isTrue)
+    {
+        animator.SetBool(str, isTrue);
     }
 
     void OnCollisionEnter(Collision collision)
