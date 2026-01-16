@@ -26,7 +26,6 @@ public class PlayerIdleState : IPlayerState
     public void Enter()
     {
         playerController.Stop();
-        playerController.SetAnimation("isWalk", false);
     }
 
     public void Update()

@@ -41,6 +41,6 @@ public class PlayerMoveState : IPlayerState
 
     public void Exit()
     {
-        
+        playerController.SetAnimation("isWalk", false);
     }
 }
