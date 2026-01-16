@@ -7,20 +7,31 @@ public class GameInput : MonoBehaviour
     [SerializeField] private PlayerStateMachine stateMachine;
     [SerializeField] private CameraRotate cameraRotate;
 
+    private bool isRun;
+    private Vector2 direction;
+
     public void OnMove(InputValue value)
     {
-        Vector2 direction = value.Get<Vector2>();
+        direction = value.Get<Vector2>();
         playerController.SetDirection(direction);
 
-        if (!playerController.IsGround()) return;
-
-        if(direction == Vector2.zero) stateMachine.ChangeInputState(PlayerStateEnums.IDLE);
-        else stateMachine.ChangeInputState(PlayerStateEnums.MOVE);
+        UpdateMoveState();
     }
 
     public void OnRun(InputValue value)
     {
-        playerController.SetRun(value.isPressed);
+        isRun = value.isPressed;
+        playerController.SetRun(isRun);
+
+        UpdateMoveState();
+    }
+
+    private void UpdateMoveState()
+    {
+        if (!playerController.IsGround()) return;
+
+        if(direction == Vector2.zero) stateMachine.ChangeInputState(PlayerStateEnums.IDLE);
+        else stateMachine.ChangeInputState(isRun ? PlayerStateEnums.RUN : PlayerStateEnums.MOVE);
     }
 
     public void OnJump(InputValue value)

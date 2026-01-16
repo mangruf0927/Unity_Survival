@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerJumpState :  IPlayerState
@@ -22,6 +21,7 @@ public class PlayerJumpState :  IPlayerState
     {
         PlayerStateEnums.IDLE,
         PlayerStateEnums.MOVE,
+        PlayerStateEnums.RUN,
     };
 
     public void Enter()
@@ -37,7 +37,7 @@ public class PlayerJumpState :  IPlayerState
         if(playerController.GetDirection() == Vector2.zero)
             stateMachine.ChangeLogicState(PlayerStateEnums.IDLE);
         else
-            stateMachine.ChangeLogicState(PlayerStateEnums.MOVE);
+            stateMachine.ChangeLogicState(playerController.IsRun() ? PlayerStateEnums.RUN : PlayerStateEnums.MOVE);
     }
 
     public void FixedUpdate()

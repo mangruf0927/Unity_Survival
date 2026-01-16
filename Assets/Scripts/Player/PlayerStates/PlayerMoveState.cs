@@ -15,6 +15,7 @@ public class PlayerMoveState : IPlayerState
     public HashSet<PlayerStateEnums> inputHash { get; } = new HashSet<PlayerStateEnums>()
     {
         PlayerStateEnums.IDLE,
+        PlayerStateEnums.RUN,
         PlayerStateEnums.JUMP,
     };
 

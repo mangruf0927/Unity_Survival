@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerStateEnums{ IDLE, MOVE, JUMP };
+public enum PlayerStateEnums{ IDLE, MOVE, RUN, JUMP };
 
 public class PlayerStateMachine : MonoBehaviour
 {
@@ -16,6 +16,7 @@ public class PlayerStateMachine : MonoBehaviour
         {
             {PlayerStateEnums.IDLE, new PlayerIdleState(this, playerController)},
             {PlayerStateEnums.MOVE, new PlayerMoveState(this, playerController)},
+            {PlayerStateEnums.RUN, new PlayerRunState(this, playerController)},
             {PlayerStateEnums.JUMP, new PlayerJumpState(this, playerController)},
         };
 
@@ -31,7 +32,7 @@ public class PlayerStateMachine : MonoBehaviour
         if (curState != null) 
             curState.Update();
 
-        // Debug.Log(curState);
+        Debug.Log(curState);
     }
 
     void FixedUpdate()

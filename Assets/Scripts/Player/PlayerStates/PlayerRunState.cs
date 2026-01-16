@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIdleState : IPlayerState
+public class PlayerRunState : IPlayerState
 {
     private PlayerController playerController;
     private PlayerStateMachine stateMachine;
 
-    public PlayerIdleState(PlayerStateMachine _stateMachine, PlayerController _playerController)
+    public PlayerRunState(PlayerStateMachine _stateMachine, PlayerController _playerController)
     {
         stateMachine = _stateMachine;
         playerController = _playerController;
@@ -14,33 +14,32 @@ public class PlayerIdleState : IPlayerState
 
     public HashSet<PlayerStateEnums> inputHash { get; } = new HashSet<PlayerStateEnums>()
     {
+        PlayerStateEnums.IDLE,
         PlayerStateEnums.MOVE,
-        PlayerStateEnums.RUN,
         PlayerStateEnums.JUMP,
     };
 
     public HashSet<PlayerStateEnums> logicHash { get; } = new HashSet<PlayerStateEnums>()
     {
-        
     };
 
     public void Enter()
     {
-        playerController.Stop();
+        playerController.SetAnimation("isRun", true);
     }
 
     public void Update()
     {
-        
     }
 
     public void FixedUpdate()
     {
-        
+        playerController.Move();
+        playerController.Look();
     }
 
     public void Exit()
     {
-        
+        playerController.SetAnimation("isRun", false);
     }
 }
