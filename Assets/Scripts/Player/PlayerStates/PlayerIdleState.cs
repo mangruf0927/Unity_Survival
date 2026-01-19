@@ -17,6 +17,7 @@ public class PlayerIdleState : IPlayerState
         PlayerStateEnums.MOVE,
         PlayerStateEnums.RUN,
         PlayerStateEnums.JUMP,
+        PlayerStateEnums.ATTACK,
     };
 
     public HashSet<PlayerStateEnums> logicHash { get; } = new HashSet<PlayerStateEnums>()

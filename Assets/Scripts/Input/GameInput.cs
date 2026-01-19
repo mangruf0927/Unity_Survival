@@ -51,4 +51,9 @@ public class GameInput : MonoBehaviour
     {
         cameraRotate.SetRightClick(value.isPressed);
     }
+
+    public void OnAttack(InputValue value)
+    {
+        if(value.isPressed) stateMachine.ChangeInputState(PlayerStateEnums.ATTACK);
+    }
 }

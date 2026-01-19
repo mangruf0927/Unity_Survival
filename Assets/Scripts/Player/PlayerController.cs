@@ -56,11 +56,6 @@ public class PlayerController : MonoBehaviour
         rigid.AddForce(Vector3.up * playerStat.jumpForce, ForceMode.Impulse);
     }
 
-    public void SetAnimation(string str, bool isTrue)
-    {
-        animator.SetBool(str, isTrue);
-    }
-
     void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.CompareTag("Ground")) isGround = true;
