@@ -27,6 +27,7 @@ public class PlayerIdleState : IPlayerState
     public void Enter()
     {
         playerController.Stop();
+        playerController.animator.SetFloat("speed", 0f);
     }
 
     public void Update()

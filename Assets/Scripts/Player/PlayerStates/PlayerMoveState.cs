@@ -26,7 +26,7 @@ public class PlayerMoveState : IPlayerState
 
     public void Enter()
     {
-        playerController.SetAnimation("isWalk", true);
+        playerController.animator.SetFloat("speed", 1f);
     }
 
     public void Update()
@@ -42,6 +42,5 @@ public class PlayerMoveState : IPlayerState
 
     public void Exit()
     {
-        playerController.SetAnimation("isWalk", false);
     }
 }

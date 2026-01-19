@@ -25,7 +25,7 @@ public class PlayerRunState : IPlayerState
 
     public void Enter()
     {
-        playerController.SetAnimation("isRun", true);
+        playerController.animator.SetFloat("speed", 2f);
     }
 
     public void Update()
@@ -40,6 +40,5 @@ public class PlayerRunState : IPlayerState
 
     public void Exit()
     {
-        playerController.SetAnimation("isRun", false);
     }
 }

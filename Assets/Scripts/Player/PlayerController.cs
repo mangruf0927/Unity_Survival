@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody rigid;
     [SerializeField] private PlayerStat playerStat;
     [SerializeField] private Transform cameraPivot;
-    [SerializeField] private Animator animator;
+    [SerializeField] public Animator animator;
 
     private Vector2 moveDirection;
     private bool isRun;
