@@ -19,7 +19,7 @@ public class CameraRotate : MonoBehaviour
         if (isRightClick) UpdateAngles();
 
         Quaternion rot = Quaternion.Euler(y, x, 0f);
-        Vector3 pos = targetPos + rot * new Vector3(0f, 1f, -distance);
+        Vector3 pos = targetPos + rot * new Vector3(0f, 0f, -distance);
 
         transform.SetPositionAndRotation(pos, rot);
 
