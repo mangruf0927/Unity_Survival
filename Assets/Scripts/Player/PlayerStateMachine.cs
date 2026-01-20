@@ -33,7 +33,7 @@ public class PlayerStateMachine : MonoBehaviour
         if (curState != null) 
             curState.Update();
 
-        Debug.Log(curState);
+        // Debug.Log(curState);
     }
 
     void FixedUpdate()
