@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class EnemyIdleState : IEnemyState
+public class EnemyChaseState : IEnemyState
 {
     private EnemyController enemyController;
     private EnemyStateMachine stateMachine;
 
-    public EnemyIdleState(EnemyStateMachine _stateMachine, EnemyController _enemyController)
+    public EnemyChaseState(EnemyStateMachine _stateMachine, EnemyController _enemyController)
     {
         enemyController = _enemyController;
         stateMachine = _stateMachine;
@@ -13,12 +13,13 @@ public class EnemyIdleState : IEnemyState
 
     public void Enter()
     {
-        enemyController.Stop();
+        
     }   
 
     public void Update()
     {
-        if(enemyController.RangeCheck()) stateMachine.ChangeState(EnemyStateEnums.CHASE);
+        if(enemyController.RangeCheck()) enemyController.Chase();
+        else stateMachine.ChangeState(EnemyStateEnums.IDLE);
     }
 
     public void FixedUpdate()
