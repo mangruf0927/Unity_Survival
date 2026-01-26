@@ -5,6 +5,9 @@ public class EnemyIdleState : IEnemyState
     private EnemyController enemyController;
     private EnemyStateMachine stateMachine;
 
+    private float timer;
+    private float randomTime;
+
     public EnemyIdleState(EnemyStateMachine _stateMachine, EnemyController _enemyController)
     {
         enemyController = _enemyController;
@@ -14,11 +17,22 @@ public class EnemyIdleState : IEnemyState
     public void Enter()
     {
         enemyController.Stop();
-    }   
+
+        timer = 0f;
+        randomTime = enemyController.RandomTime(); 
+    }
 
     public void Update()
     {
-        if(enemyController.RangeCheck()) stateMachine.ChangeState(EnemyStateEnums.CHASE);
+        if (enemyController.RangeCheck())
+        {
+            stateMachine.ChangeState(EnemyStateEnums.CHASE);
+            return;
+        }
+
+        timer += Time.deltaTime;
+
+        if (timer >= randomTime) stateMachine.ChangeState(EnemyStateEnums.PATROL);
     }
 
     public void FixedUpdate()
