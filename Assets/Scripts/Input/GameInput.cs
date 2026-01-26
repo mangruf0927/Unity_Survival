@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour
@@ -55,5 +56,12 @@ public class GameInput : MonoBehaviour
     public void OnAttack(InputValue value)
     {
         if(value.isPressed) stateMachine.ChangeInputState(PlayerStateEnums.ATTACK);
+    }
+
+    public void OnZoom(InputValue value)
+    {
+        float y = value.Get<Vector2>().y;
+        cameraRotate.SetZoomY(y);
+        // Debug.Log(y);
     }
 }
