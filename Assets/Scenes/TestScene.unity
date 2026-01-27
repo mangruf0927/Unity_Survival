@@ -338,6 +338,7 @@ MonoBehaviour:
   playerController: {fileID: 1167997878}
   stateMachine: {fileID: 1167997877}
   cameraRotate: {fileID: 104391445}
+  enemyStats: {fileID: 1638928231}
 --- !u!114 &329913523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1250,6 +1251,7 @@ GameObject:
   - component: {fileID: 1638928230}
   - component: {fileID: 1638928227}
   - component: {fileID: 1638928228}
+  - component: {fileID: 1638928231}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -1428,6 +1430,21 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &1638928231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638928222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 571199f623554497ab9ef9233673b383, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
+  maxHP: 75
+  attackDamage: 0
+  enemyStateMachine: {fileID: 1638928228}
 --- !u!1 &1786133219
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyStateEnums { IDLE, CHASE, PATROL };
+public enum EnemyStateEnums { IDLE, CHASE, PATROL, DEAD };
 
 public class EnemyStateMachine : MonoBehaviour
 {
@@ -17,6 +17,7 @@ public class EnemyStateMachine : MonoBehaviour
             {EnemyStateEnums.IDLE, new EnemyIdleState(this, enemyController)},
             {EnemyStateEnums.CHASE, new EnemyChaseState(this, enemyController)}, 
             {EnemyStateEnums.PATROL, new EnemyPatrolState(this, enemyController)},
+            {EnemyStateEnums.DEAD, new EnemyDeadState(this, enemyController)},
         };
 
         if(stateDictionary.TryGetValue(EnemyStateEnums.IDLE, out IEnemyState newState))

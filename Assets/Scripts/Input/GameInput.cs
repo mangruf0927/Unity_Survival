@@ -7,6 +7,7 @@ public class GameInput : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private PlayerStateMachine stateMachine;
     [SerializeField] private CameraRotate cameraRotate;
+    [SerializeField] private EnemyStats enemyStats;
 
     private bool isRun;
     private Vector2 direction;
@@ -62,6 +63,10 @@ public class GameInput : MonoBehaviour
     {
         float y = value.Get<Vector2>().y;
         cameraRotate.SetZoomY(y);
-        // Debug.Log(y);
+    }
+
+    public void OnEnemyHPTest(InputValue value)
+    {
+        if(value.isPressed) enemyStats.TakeDamage(10);
     }
 }
