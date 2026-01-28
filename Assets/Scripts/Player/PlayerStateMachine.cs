@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerStateEnums{ IDLE, MOVE, RUN, JUMP, ATTACK };
+public enum PlayerStateEnums{ IDLE, MOVE, RUN, JUMP, ATTACK, DEAD };
 
 public class PlayerStateMachine : MonoBehaviour
 {
@@ -19,6 +19,7 @@ public class PlayerStateMachine : MonoBehaviour
             {PlayerStateEnums.RUN, new PlayerRunState(this, playerController)},
             {PlayerStateEnums.JUMP, new PlayerJumpState(this, playerController)},
             {PlayerStateEnums.ATTACK, new PlayerAttackState(this, playerController)},
+            {PlayerStateEnums.DEAD, new PlayerDeadState(this, playerController)},
         };
 
         if(stateDictionary.TryGetValue(PlayerStateEnums.IDLE, out IPlayerState newState))

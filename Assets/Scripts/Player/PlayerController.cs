@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetDirection(Vector2 direction) { moveDirection = direction; }
     public void SetRun(bool state) { isRun = state; }
+    
     public bool IsRun() { return isRun; }
     public bool IsGround() { return isGround;}
     public Vector2 GetDirection() { return moveDirection; }

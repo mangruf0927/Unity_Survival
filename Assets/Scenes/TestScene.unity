@@ -884,7 +884,7 @@ GameObject:
   - component: {fileID: 1167997876}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -901,10 +901,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3d87b75841a9466eb31ba2791f0a658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStat
+  playerStateMachine: {fileID: 1167997877}
   moveSpeed: 3
   runSpeed: 6
   jumpForce: 4
   rotateSpeed: 5
+  maxHP: 100
 --- !u!114 &1167997877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1254,7 +1256,7 @@ GameObject:
   - component: {fileID: 1638928231}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1365,9 +1367,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   target: {fileID: 1167997880}
-  navMesh: {fileID: 1638928230}
   scanRange: 8
   patrolRange: 10
+  navMesh: {fileID: 1638928230}
+  enemyStats: {fileID: 1638928231}
 --- !u!114 &1638928228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1443,7 +1446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
   maxHP: 75
-  attackDamage: 0
+  attackDamage: 10
   enemyStateMachine: {fileID: 1638928228}
 --- !u!1 &1786133219
 GameObject:

@@ -5,10 +5,11 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private NavMeshAgent navMesh;
-    
     [SerializeField] private float scanRange;
     [SerializeField] private float patrolRange;
+
+    [SerializeField] private NavMeshAgent navMesh;
+    [SerializeField] private EnemyStats enemyStats;
 
     public void Stop()
     {
@@ -51,5 +52,13 @@ public class EnemyController : MonoBehaviour
         // if (navMesh.hasPath && navMesh.velocity.sqrMagnitude > 0.01f) return false;
 
         return true;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        var player = other.GetComponent<IDamageable>();
+        player.TakeDamage(enemyStats.attackDamage);
     }
 }

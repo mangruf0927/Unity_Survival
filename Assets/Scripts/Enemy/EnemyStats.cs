@@ -3,7 +3,8 @@ using UnityEngine;
 public class EnemyStats : MonoBehaviour, IDamageable
 {
     [SerializeField] private int maxHP;
-    [SerializeField] private int attackDamage;
+    [SerializeField] public int attackDamage;
+    
     [SerializeField] private EnemyStateMachine enemyStateMachine;
     
     public int CurrentHP { get; private set; }
