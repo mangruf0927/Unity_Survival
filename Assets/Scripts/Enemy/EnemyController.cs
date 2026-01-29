@@ -5,9 +5,6 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private float scanRange;
-    [SerializeField] private float patrolRange;
-
     [SerializeField] private NavMeshAgent navMesh;
     [SerializeField] private EnemyStats enemyStats;
 
@@ -18,10 +15,16 @@ public class EnemyController : MonoBehaviour
         navMesh.velocity = Vector3.zero;
     }
 
+    public bool CanChasePlayer()
+    {
+        if(!enemyStats.CanChase) return false;
+        return RangeCheck();
+    }
+
     public bool RangeCheck()
     {
         float distance = (target.position - transform.position).sqrMagnitude;
-        return distance <= scanRange * scanRange;
+        return distance <= enemyStats.ScanRange * enemyStats.ScanRange;
     }
 
     public void Chase()
@@ -34,10 +37,10 @@ public class EnemyController : MonoBehaviour
     {
         navMesh.isStopped = false;
 
-        Vector3 random = Random.insideUnitSphere * patrolRange;
+        Vector3 random = Random.insideUnitSphere * enemyStats.PatrolRange;
         Vector3 sourcePosition = transform.position + random;
 
-        if (NavMesh.SamplePosition(sourcePosition, out var hit, patrolRange, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(sourcePosition, out var hit, enemyStats.PatrolRange, NavMesh.AllAreas))
             navMesh.SetDestination(hit.position);
     }
 
@@ -56,9 +59,10 @@ public class EnemyController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if(enemyStats.AttackDamage <= 0) return;
         if (!other.CompareTag("Player")) return;
 
         var player = other.GetComponent<IDamageable>();
-        player.TakeDamage(enemyStats.attackDamage);
+        player.TakeDamage(enemyStats.AttackDamage);
     }
 }

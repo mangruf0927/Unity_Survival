@@ -24,7 +24,7 @@ public class EnemyIdleState : IEnemyState
 
     public void Update()
     {
-        if (enemyController.RangeCheck())
+        if (enemyController.CanChasePlayer())
         {
             stateMachine.ChangeState(EnemyStateEnums.CHASE);
             return;

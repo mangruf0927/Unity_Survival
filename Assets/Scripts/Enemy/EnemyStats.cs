@@ -2,16 +2,20 @@ using UnityEngine;
 
 public class EnemyStats : MonoBehaviour, IDamageable
 {
-    [SerializeField] private int maxHP;
-    [SerializeField] public int attackDamage;
-    
+    [SerializeField] private EnemyData data;
     [SerializeField] private EnemyStateMachine enemyStateMachine;
+
+    public int MaxHP => data.maxHP;
+    public int AttackDamage => data.attackDamage;
+    public float ScanRange => data.scanRange;
+    public bool CanChase => data.canChase;
+    public float PatrolRange => data.patrolRange;
     
     public int CurrentHP { get; private set; }
 
     private void Awake()
     {
-        CurrentHP = maxHP;
+        CurrentHP = data.maxHP;
     }
 
     public void TakeDamage(int dmg)
