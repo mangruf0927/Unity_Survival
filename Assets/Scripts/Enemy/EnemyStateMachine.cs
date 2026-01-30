@@ -10,7 +10,7 @@ public class EnemyStateMachine : MonoBehaviour
     public IEnemyState curState {get; private set;}
     private Dictionary<EnemyStateEnums, IEnemyState> stateDictionary;
 
-    void Awake()
+    private void Awake()
     {
         stateDictionary = new Dictionary<EnemyStateEnums, IEnemyState>()
         {
@@ -27,7 +27,7 @@ public class EnemyStateMachine : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
         if(curState != null) 
             curState.Update();
@@ -35,7 +35,7 @@ public class EnemyStateMachine : MonoBehaviour
         // Debug.Log(curState);
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if(curState != null) 
             curState.FixedUpdate();

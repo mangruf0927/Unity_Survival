@@ -10,7 +10,7 @@ public class PlayerStateMachine : MonoBehaviour
     public IPlayerState curState {get; private set;}
     private Dictionary<PlayerStateEnums, IPlayerState> stateDictionary;
 
-    void Awake()
+    private void Awake()
     {
         stateDictionary = new Dictionary<PlayerStateEnums, IPlayerState>()
         {
@@ -29,7 +29,7 @@ public class PlayerStateMachine : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
         if (curState != null) 
             curState.Update();
@@ -37,7 +37,7 @@ public class PlayerStateMachine : MonoBehaviour
         // Debug.Log(curState);
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (curState != null) 
             curState.FixedUpdate();

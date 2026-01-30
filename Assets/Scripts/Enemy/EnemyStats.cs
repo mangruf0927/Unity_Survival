@@ -23,6 +23,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
         if(dmg < 0) return;
 
         CurrentHP = Mathf.Max(CurrentHP - dmg, 0);
+        Debug.Log(CurrentHP);
         if(CurrentHP <= 0) enemyStateMachine.ChangeState(EnemyStateEnums.DEAD);
     }
 }
