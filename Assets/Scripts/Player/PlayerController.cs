@@ -7,7 +7,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cameraPivot;
     
     public Animator animator;
-    public MeleeWeapon meleeWeapon;
+    //public MeleeWeapon meleeWeapon;
+    public GunWeapon gunWeapon;
 
     private Vector2 moveDirection;
     private bool isRun;

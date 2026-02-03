@@ -235,7 +235,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Player
+  m_Name: PlayerShootTest
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: speed
@@ -322,7 +322,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -2493277499941417448, guid: 5d4ea3e4d5351458fab123d729f5ef79, type: 3}
+  m_Motion: {fileID: -4501595119538727285, guid: 5d4ea3e4d5351458fab123d729f5ef79, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

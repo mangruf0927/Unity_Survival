@@ -26,7 +26,8 @@ public class PlayerAttackState : IPlayerState
     public void Enter()
     {
         playerController.animator.SetBool("isAttack", true);
-        playerController.meleeWeapon.BeginAttack();
+        // playerController.meleeWeapon.BeginAttack();
+        playerController.gunWeapon.Shoot();
     }
 
     public void Update()
@@ -50,6 +51,6 @@ public class PlayerAttackState : IPlayerState
     public void Exit()
     {
         playerController.animator.SetBool("isAttack", false);
-        playerController.meleeWeapon.EndAttack();
+        // playerController.meleeWeapon.EndAttack();
     }
 }
