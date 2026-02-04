@@ -25,8 +25,6 @@ public class PlayerAttackState : IPlayerState
 
     public void Enter()
     {
-        Debug.Log("Attack Enter");
-        
         if(playerController.currentWeapon.weaponType == WeaponTypeEnums.MELEE)
             playerController.animator.SetTrigger("OnMeleeAttack");
         else if(playerController.currentWeapon.weaponType == WeaponTypeEnums.RANGED)
@@ -57,7 +55,6 @@ public class PlayerAttackState : IPlayerState
 
     public void Exit()
     {
-        Debug.Log("Attack Exit");
         playerController.currentWeapon.ExitAttack();
     }
 }

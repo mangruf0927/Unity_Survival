@@ -3,17 +3,24 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] private Rigidbody rigid;
-    
+
+    private int damage;
+    private float speed;
     private float lifeTime = 3;
-    private int attackDamage;
 
     void Awake()
     {
         rigid.useGravity = false;
         rigid.isKinematic = false;
     }
+    
+    public void SetData(int damage, float speed)
+    {
+        this.damage = damage;
+        this.speed = speed;
+    }
 
-    public void Fire(Vector3 direction, float speed)
+    public void Fire(Vector3 direction)
     {
         rigid.linearVelocity = direction.normalized * speed;
         Destroy(gameObject, lifeTime);
@@ -21,10 +28,12 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (attackDamage <= 0) return;
+        if (damage <= 0) return;
         if (!other.CompareTag("Enemy")) return;
 
-        var enemy = other.GetComponent<IDamageable>();
-        enemy.TakeDamage(attackDamage);
+        if (other.TryGetComponent<IDamageable>(out var enemy))
+        enemy.TakeDamage(damage);
+
+        Destroy(gameObject);
     }
 }
