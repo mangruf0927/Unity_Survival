@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class GunWeapon : MonoBehaviour
+public class RangedWeapon : Weapon
 {
-    // [SerializeField] private WeaponData weaponData;
+    [SerializeField] private RangedWeaponData weaponData;
 
     [SerializeField] private Transform shootPosition;
     [SerializeField] private Vector3 target;
@@ -11,10 +11,20 @@ public class GunWeapon : MonoBehaviour
 
     [SerializeField] GameObject projectile;
 
-    public void Shoot()
+    public override void EnterAttack()
+    {
+    }
+
+    public override void Attack()
     {
         GameObject bulletObj = Instantiate(projectile, shootPosition.position, shootPosition.rotation);
         Bullet bullet = bulletObj.GetComponent<Bullet>();
         bullet.Fire(shootPosition.forward, bulletSpeed);
     }
+
+    public override void ExitAttack()
+    {
+        
+    }
+
 }

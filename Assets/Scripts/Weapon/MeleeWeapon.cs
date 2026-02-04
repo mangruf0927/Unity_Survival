@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MeleeWeapon : MonoBehaviour
+public class MeleeWeapon : Weapon
 {
     [SerializeField] private MeleeWeaponData weaponData;
     [SerializeField] private BoxCollider boxCollider;
@@ -13,16 +13,20 @@ public class MeleeWeapon : MonoBehaviour
         boxCollider.enabled = false;
     }
 
-    public void BeginAttack()
+    public override void EnterAttack()
     {
         hasHit = false;
         boxCollider.enabled = true;
     }
 
-    public void EndAttack()
+    public override void Attack()
+    {
+        
+    }
+
+    public override void ExitAttack()
     {
         boxCollider.enabled = false;
-        hasHit = true;
     }
 
     void OnTriggerEnter(Collider other)
@@ -31,8 +35,10 @@ public class MeleeWeapon : MonoBehaviour
         if (weaponData.attackDamage <= 0) return;
         if (!other.CompareTag("Enemy")) return;
 
-        var enemy = other.GetComponent<IDamageable>();
-        hasHit = true;
-        enemy.TakeDamage(weaponData.attackDamage);
+        if (other.TryGetComponent<IDamageable>(out var enemy))
+        {
+            hasHit = true;
+            enemy.TakeDamage(weaponData.attackDamage);
+        }
     }
 }
