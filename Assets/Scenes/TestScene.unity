@@ -1177,7 +1177,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2804036681021304787, guid: 8147cbc638990a74995cb3f8161c7edd, type: 3}
       propertyPath: m_Name
-      value: Pistol_E
+      value: Pistol
       objectReference: {fileID: 0}
     - target: {fileID: 3288226059333465449, guid: 8147cbc638990a74995cb3f8161c7edd, type: 3}
       propertyPath: m_LocalScale.x
@@ -1263,6 +1263,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dda60ea8bc004564b3e91abc658bc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunWeapon
+  weaponType: 1
+  weaponData: {fileID: 11400000, guid: e28661b521558489bb528550e9105d67, type: 2}
   shootPosition: {fileID: 1764675125}
   target: {x: 0, y: 0, z: 0}
   bulletSpeed: 3
@@ -1685,7 +1687,7 @@ MonoBehaviour:
   playerStat: {fileID: 1167997876}
   cameraPivot: {fileID: 104391444}
   animator: {fileID: 1197332585}
-  gunWeapon: {fileID: 1055922603}
+  currentWeapon: {fileID: 1055922603}
 --- !u!54 &1167997879
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1770,7 +1772,7 @@ Animator:
   m_GameObject: {fileID: 1197332583}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b5d39247a725247edad43a4043a139cc, type: 2}
+  m_Controller: {fileID: 9100000, guid: bc06980ac46fc4d8cb8e11a4219acd6f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1934,6 +1936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d33d7c09f0c48f2b4faf23a4cf501f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeWeapon
+  weaponType: 0
   weaponData: {fileID: 11400000, guid: c0ba64f6bd17b4182862515d90e7a0fa, type: 2}
   boxCollider: {fileID: 1433342296}
 --- !u!1 &1560019132
@@ -2173,6 +2176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d33d7c09f0c48f2b4faf23a4cf501f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeWeapon
+  weaponType: 0
   weaponData: {fileID: 11400000, guid: 9e204aa6c75084f31839117412e3feac, type: 2}
   boxCollider: {fileID: 1591042580}
 --- !u!1 &1620081797

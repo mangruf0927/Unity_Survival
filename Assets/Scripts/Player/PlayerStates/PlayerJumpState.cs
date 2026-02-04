@@ -14,7 +14,7 @@ public class PlayerJumpState :  IPlayerState
 
     public HashSet<PlayerStateEnums> inputHash { get; } = new HashSet<PlayerStateEnums>()
     {
-        
+        PlayerStateEnums.ATTACK,
     };
 
     public HashSet<PlayerStateEnums> logicHash { get; } = new HashSet<PlayerStateEnums>()

@@ -25,7 +25,14 @@ public class PlayerAttackState : IPlayerState
 
     public void Enter()
     {
-        playerController.animator.SetBool("isAttack", true);
+        Debug.Log("Attack Enter");
+        
+        if(playerController.currentWeapon.weaponType == WeaponTypeEnums.MELEE)
+            playerController.animator.SetTrigger("OnMeleeAttack");
+        else if(playerController.currentWeapon.weaponType == WeaponTypeEnums.RANGED)
+            playerController.animator.SetTrigger("OnRangedAttack");
+
+
         playerController.currentWeapon.EnterAttack();
         playerController.currentWeapon.Attack();
     }
@@ -34,7 +41,7 @@ public class PlayerAttackState : IPlayerState
     {
         var state = playerController.animator.GetCurrentAnimatorStateInfo(0);
 
-        if(state.IsName("attack") && state.normalizedTime >= 1.0f)
+        if((state.IsName("attack_melee") || state.IsName("attack_ranged")) && state.normalizedTime >= 1.0f)
         {
             if(playerController.GetDirection() == Vector2.zero)
                 stateMachine.ChangeLogicState(PlayerStateEnums.IDLE);
@@ -50,7 +57,7 @@ public class PlayerAttackState : IPlayerState
 
     public void Exit()
     {
-        playerController.animator.SetBool("isAttack", false);
+        Debug.Log("Attack Exit");
         playerController.currentWeapon.ExitAttack();
     }
 }
