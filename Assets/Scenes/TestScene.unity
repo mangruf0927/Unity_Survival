@@ -1268,10 +1268,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunWeapon
   weaponType: 1
+  aimPos: {x: 0, y: 0, z: 0}
   weaponData: {fileID: 11400000, guid: e28661b521558489bb528550e9105d67, type: 2}
   shootPosition: {fileID: 1764675125}
-  target: {x: 0, y: 0, z: 0}
-  bulletSpeed: 3
   projectile: {fileID: 2175682463181139635, guid: 32f482e32f77a4c7f80c5a21e0f5486e, type: 3}
 --- !u!1 &1072211402
 GameObject:
@@ -1941,6 +1940,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeWeapon
   weaponType: 0
+  aimPos: {x: 0, y: 0, z: 0}
   weaponData: {fileID: 11400000, guid: c0ba64f6bd17b4182862515d90e7a0fa, type: 2}
   boxCollider: {fileID: 1433342296}
 --- !u!1 &1560019132
@@ -2181,6 +2181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeWeapon
   weaponType: 0
+  aimPos: {x: 0, y: 0, z: 0}
   weaponData: {fileID: 11400000, guid: 9e204aa6c75084f31839117412e3feac, type: 2}
   boxCollider: {fileID: 1591042580}
 --- !u!1 &1620081797
@@ -2593,6 +2594,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 5d4ea3e4d5351458fab123d729f5ef79, type: 3}
       propertyPath: m_Name
       value: character
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5d4ea3e4d5351458fab123d729f5ef79, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

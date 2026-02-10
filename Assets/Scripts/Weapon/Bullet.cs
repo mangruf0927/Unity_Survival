@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
 
     private int damage;
     private float speed;
-    private float lifeTime = 3;
+    private float lifeTime = 10;
 
     void Awake()
     {
@@ -28,11 +28,10 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (damage <= 0) return;
-        if (!other.CompareTag("Enemy")) return;
+        if (other.transform.root.CompareTag("Player")) return;
 
-        if (other.TryGetComponent<IDamageable>(out var enemy))
-        enemy.TakeDamage(damage);
+        if (other.CompareTag("Enemy") && other.TryGetComponent<IDamageable>(out var enemy))
+            enemy.TakeDamage(damage);
 
         Destroy(gameObject);
     }

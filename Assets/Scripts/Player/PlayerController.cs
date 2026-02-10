@@ -14,12 +14,12 @@ public class PlayerController : MonoBehaviour
     private bool isGround;
 
     public void SetDirection(Vector2 direction) { moveDirection = direction; }
+    public void SetAimPoint(Vector3 point) { currentWeapon.SetAimPoint(point); }
     public void SetRun(bool state) { isRun = state; }
     
     public bool IsRun() { return isRun; }
     public bool IsGround() { return isGround;}
     public Vector2 GetDirection() { return moveDirection; }
-
     public void Move()
     {
         Vector3 forward = cameraPivot.forward;

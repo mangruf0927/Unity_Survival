@@ -4,7 +4,7 @@ public class RangedWeapon : Weapon
 {
     [SerializeField] private RangedWeaponData weaponData;
     [SerializeField] private Transform shootPosition;
-    [SerializeField] private Vector3 target;
+
     [SerializeField] GameObject projectile;
 
     public override void EnterAttack()
@@ -18,7 +18,7 @@ public class RangedWeapon : Weapon
         if (bulletObj.TryGetComponent<Bullet>(out var bullet))
         {
             bullet.SetData(weaponData.attackDamage, weaponData.bulletSpeed);
-            bullet.Fire(shootPosition.forward);
+            bullet.Fire(aimPos - shootPosition.position);
         }
     }
 

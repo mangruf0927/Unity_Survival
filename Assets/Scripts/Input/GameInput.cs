@@ -55,7 +55,13 @@ public class GameInput : MonoBehaviour
 
     public void OnAttack(InputValue value)
     {
-        if(value.isPressed) stateMachine.ChangeInputState(PlayerStateEnums.ATTACK);
+        if (!value.isPressed) return;
+
+        Ray camRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (Physics.Raycast(camRay, out RaycastHit hit)) playerController.SetAimPoint(hit.point);
+        else playerController.SetAimPoint(camRay.origin + camRay.direction * 1000f);
+
+        stateMachine.ChangeInputState(PlayerStateEnums.ATTACK);
     }
 
     public void OnZoom(InputValue value)
