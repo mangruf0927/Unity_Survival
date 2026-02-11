@@ -1,4 +1,6 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,6 +12,8 @@ public class PlayerController : MonoBehaviour
     public Weapon currentWeapon;
 
     private Vector2 moveDirection;
+    private Vector3 lookDirection = Vector3.forward;
+
     private bool isRun;
     private bool isGround;
 
@@ -20,7 +24,8 @@ public class PlayerController : MonoBehaviour
     public bool IsRun() { return isRun; }
     public bool IsGround() { return isGround;}
     public Vector2 GetDirection() { return moveDirection; }
-    public void Move()
+
+    private Vector3 GetCameraDirection(Vector2 input)
     {
         Vector3 forward = cameraPivot.forward;
         Vector3 right = cameraPivot.right;
@@ -31,19 +36,26 @@ public class PlayerController : MonoBehaviour
         forward.Normalize();
         right.Normalize();
 
-        Vector3 moveVec = right * moveDirection.x + forward * moveDirection.y;
-        moveVec = Vector3.ClampMagnitude(moveVec, 1f);
+        Vector3 direction = right * input.x + forward * input.y;
+        return Vector3.ClampMagnitude(direction, 1f);
+    }
 
+    public void Move()
+    {
         Vector3 curVelocity = rigid.linearVelocity;
         float speed = isRun ? playerStat.runSpeed : playerStat.moveSpeed;
 
+        Vector3 moveVec = GetCameraDirection(moveDirection);
         rigid.linearVelocity = new Vector3(moveVec.x * speed, curVelocity.y, moveVec.z * speed);
     }  
 
     public void Look()
     {
-        Quaternion target = Quaternion.Euler(0f, cameraPivot.eulerAngles.y, 0f);
-        rigid.MoveRotation(Quaternion.Slerp(rigid.rotation, target, Time.fixedDeltaTime * playerStat.rotateSpeed));
+        Vector3 lookVec = GetCameraDirection(moveDirection);
+        if (lookVec.sqrMagnitude >= 0.0001f) lookDirection = lookVec.normalized;
+
+        Quaternion target = Quaternion.LookRotation(lookDirection, Vector3.up);
+        rigid.MoveRotation(Quaternion.Slerp(rigid.rotation, target,Time.fixedDeltaTime * playerStat.rotateSpeed));
     }
 
     public void Stop()
