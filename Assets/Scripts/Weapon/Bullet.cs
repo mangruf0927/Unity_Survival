@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
 
     private int damage;
     private float speed;
-    private float lifeTime = 10;
+    private readonly float lifeTime = 10;
 
     void Awake()
     {

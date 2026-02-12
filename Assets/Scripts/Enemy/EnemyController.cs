@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -37,10 +36,9 @@ public class EnemyController : MonoBehaviour
     {
         navMesh.isStopped = false;
 
-        Vector3 random = Random.insideUnitSphere * enemyStats.PatrolRange;
-        Vector3 sourcePosition = transform.position + random;
+        Vector3 randomPoint = transform.position + Random.insideUnitSphere * enemyStats.PatrolRange;
 
-        if (NavMesh.SamplePosition(sourcePosition, out var hit, enemyStats.PatrolRange, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(randomPoint, out var hit, enemyStats.PatrolRange, NavMesh.AllAreas))
             navMesh.SetDestination(hit.position);
     }
 
@@ -59,9 +57,8 @@ public class EnemyController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(enemyStats.AttackDamage <= 0) return;
-        if (!other.CompareTag("Player")) return;
-
+        if(enemyStats.AttackDamage <= 0 || !other.CompareTag("Player")) return;
+        
         var player = other.GetComponent<IDamageable>();
         player.TakeDamage(enemyStats.AttackDamage);
     }

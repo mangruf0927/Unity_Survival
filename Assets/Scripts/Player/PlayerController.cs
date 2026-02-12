@@ -1,6 +1,4 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,7 +22,6 @@ public class PlayerController : MonoBehaviour
     public bool IsRun() { return isRun; }
     public bool IsGround() { return isGround;}
     public Vector2 GetDirection() { return moveDirection; }
-
     private Vector3 GetCameraDirection(Vector2 input)
     {
         Vector3 forward = cameraPivot.forward;
@@ -55,6 +52,7 @@ public class PlayerController : MonoBehaviour
         if (lookVec.sqrMagnitude >= 0.0001f) lookDirection = lookVec.normalized;
 
         Quaternion target = Quaternion.LookRotation(lookDirection, Vector3.up);
+        Debug.Log(target.eulerAngles);
         rigid.MoveRotation(Quaternion.Slerp(rigid.rotation, target,Time.fixedDeltaTime * playerStat.rotateSpeed));
     }
 
