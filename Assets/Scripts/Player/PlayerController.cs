@@ -52,7 +52,6 @@ public class PlayerController : MonoBehaviour
         if (lookVec.sqrMagnitude >= 0.0001f) lookDirection = lookVec.normalized;
 
         Quaternion target = Quaternion.LookRotation(lookDirection, Vector3.up);
-        Debug.Log(target.eulerAngles);
         rigid.MoveRotation(Quaternion.Slerp(rigid.rotation, target,Time.fixedDeltaTime * playerStat.rotateSpeed));
     }
 
