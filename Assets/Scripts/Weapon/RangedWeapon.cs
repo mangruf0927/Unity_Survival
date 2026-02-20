@@ -5,7 +5,8 @@ public class RangedWeapon : Weapon
     [SerializeField] private RangedWeaponData weaponData;
     [SerializeField] private Transform shootPosition;
 
-    [SerializeField] GameObject projectile;
+    [SerializeField] private GameObject projectile;
+    [SerializeField] private ObjectPool pool;
 
     public override void EnterAttack()
     {
@@ -13,11 +14,12 @@ public class RangedWeapon : Weapon
 
     public override void Attack()
     {
-        GameObject bulletObj = Instantiate(projectile, shootPosition.position, shootPosition.rotation);
+        GameObject bulletObj = pool.GetFromPool(projectile, PoolTypeEnums.BULLET);
+        bulletObj.transform.SetPositionAndRotation(shootPosition.position, shootPosition.rotation);
         
         if (bulletObj.TryGetComponent<Bullet>(out var bullet))
         {
-            bullet.SetData(weaponData.attackDamage, weaponData.bulletSpeed);
+            bullet.SetData(weaponData.attackDamage, weaponData.bulletSpeed, pool);
             bullet.Fire(aimPos - shootPosition.position);
         }
     }
