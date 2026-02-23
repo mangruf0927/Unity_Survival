@@ -68,4 +68,9 @@ public class GameInput : MonoBehaviour
         float y = value.Get<Vector2>().y;
         cameraRotate.SetZoomY(y);
     }
+
+    public void OnDrop(InputValue value)
+    {
+        playerController.DropWeapon();
+    }
 }

@@ -3,20 +3,20 @@ using UnityEngine;
 public class MeleeWeapon : Weapon
 {
     [SerializeField] private MeleeWeaponData weaponData;
-    [SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private BoxCollider hitCollider;
 
     private bool hasHit;
 
     private void Awake()
     {
-        boxCollider.isTrigger = true;
-        boxCollider.enabled = false;
+        hitCollider.isTrigger = true;
+        hitCollider.enabled = false;
     }
 
     public override void EnterAttack()
     {
         hasHit = false;
-        boxCollider.enabled = true;
+        hitCollider.enabled = true;
     }
 
     public override void Attack()
@@ -26,7 +26,7 @@ public class MeleeWeapon : Weapon
 
     public override void ExitAttack()
     {
-        boxCollider.enabled = false;
+        hitCollider.enabled = false;
     }
 
     void OnTriggerEnter(Collider other)

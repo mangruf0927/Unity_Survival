@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody rigid;
     [SerializeField] private PlayerStat playerStat;
     [SerializeField] private Transform cameraPivot;
+    [SerializeField] private Transform weaponPosition; 
     
     public Animator animator;
     public Weapon currentWeapon;
@@ -65,6 +66,19 @@ public class PlayerController : MonoBehaviour
     {
         isGround = false;
         rigid.AddForce(Vector3.up * playerStat.jumpForce, ForceMode.Impulse);
+    }
+
+    public void DropWeapon()
+    {
+        if(currentWeapon == null || !currentWeapon.canDrop) return;
+
+        currentWeapon.ExitAttack();
+
+        Weapon weapon = currentWeapon;
+        currentWeapon = null;
+
+        weapon.Drop();
+        weapon.transform.position = transform.position + transform.forward * 1.0f + Vector3.up * 1.3f;;
     }
 
     void OnCollisionEnter(Collision collision)
