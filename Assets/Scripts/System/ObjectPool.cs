@@ -31,6 +31,7 @@ public class ObjectPool : MonoBehaviour
         var pool = poolList[(int)poolType];
 
         GameObject obj = pool.Count > 0 ? pool.Pop() : CreatePool(prefab, parent);
+        obj.transform.SetParent(parent, false);
         obj.SetActive(true);
         return obj;
     }
