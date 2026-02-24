@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerStat : MonoBehaviour, IDamageable
+public class PlayerStat : HealthBase
 {
     [SerializeField] PlayerStateMachine playerStateMachine;
 
@@ -18,19 +18,10 @@ public class PlayerStat : MonoBehaviour, IDamageable
 
     [Header("체력")]
     [SerializeField] private int maxHP = 100;
-    
-    public int CurrentHP { get; private set; }
+    protected override int MaxHP => maxHP;
 
-    private void Awake()
+    protected override void Die()
     {
-        CurrentHP = maxHP;
-    }
-
-    public void TakeDamage(int dmg)
-    {
-        if(dmg <= 0) return;
-
-        CurrentHP = Mathf.Max(CurrentHP - dmg, 0);
-        if(CurrentHP <= 0) playerStateMachine.ChangeState(PlayerStateEnums.DEAD);
+        playerStateMachine.ChangeState(PlayerStateEnums.DEAD);
     }
 }
