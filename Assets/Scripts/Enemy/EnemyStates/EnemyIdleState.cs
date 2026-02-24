@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class EnemyIdleState : IEnemyState
 {
-    private EnemyController enemyController;
-    private EnemyStateMachine stateMachine;
+    private readonly EnemyController enemyController;
+    private readonly EnemyStateMachine stateMachine;
 
     private float timer;
     private float randomTime;

@@ -8,8 +8,8 @@ public class TimeSystem : MonoBehaviour
 
     public enum Phase { DAY, NIGHT }
 
-    private float day = 180f;
-    private float night = 90f;
+    private readonly float day = 180f;
+    private readonly float night = 90f;
     private int dayCount = 1;
 
     private float timeElapsed;

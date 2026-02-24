@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerJumpState :  IPlayerState
-{
-    private PlayerController playerController;
-    private PlayerStateMachine stateMachine;
+{    
+    private readonly PlayerController playerController;
+    private readonly PlayerStateMachine stateMachine;
 
     public PlayerJumpState(PlayerStateMachine _stateMachine, PlayerController _playerController)
     {
@@ -12,12 +12,12 @@ public class PlayerJumpState :  IPlayerState
         playerController = _playerController;
     }
 
-    public HashSet<PlayerStateEnums> inputHash { get; } = new HashSet<PlayerStateEnums>()
+    public HashSet<PlayerStateEnums> InputHash { get; } = new HashSet<PlayerStateEnums>()
     {
         PlayerStateEnums.ATTACK,
     };
 
-    public HashSet<PlayerStateEnums> logicHash { get; } = new HashSet<PlayerStateEnums>()
+    public HashSet<PlayerStateEnums> LogicHash { get; } = new HashSet<PlayerStateEnums>()
     {
         PlayerStateEnums.IDLE,
         PlayerStateEnums.MOVE,

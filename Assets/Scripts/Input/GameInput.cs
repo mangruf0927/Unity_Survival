@@ -54,7 +54,7 @@ public class GameInput : MonoBehaviour
 
     public void OnAttack(InputValue value)
     {
-        if (!value.isPressed) return;
+        if (!value.isPressed || playerController.currentWeapon == null) return;
 
         Ray camRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(camRay, out RaycastHit hit)) playerController.SetAimPoint(hit.point);

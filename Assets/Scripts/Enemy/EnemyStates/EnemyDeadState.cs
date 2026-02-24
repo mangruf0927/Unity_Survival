@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class EnemyDeadState : IEnemyState
 {
-    private EnemyController enemyController;
-    private EnemyStateMachine stateMachine;
+    private readonly EnemyController enemyController;
+    private readonly EnemyStateMachine stateMachine;
 
     public EnemyDeadState(EnemyStateMachine _stateMachine, EnemyController _enemyController)
     {

@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerAttackState : IPlayerState
 {
-    private PlayerController playerController;
-    private PlayerStateMachine stateMachine;
+    private readonly PlayerController playerController;
+    private readonly PlayerStateMachine stateMachine;
 
     public PlayerAttackState(PlayerStateMachine _stateMachine, PlayerController _playerController)
     {
@@ -12,11 +12,11 @@ public class PlayerAttackState : IPlayerState
         playerController = _playerController;
     }
 
-    public HashSet<PlayerStateEnums> inputHash { get; } = new HashSet<PlayerStateEnums>()
+    public HashSet<PlayerStateEnums> InputHash { get; } = new HashSet<PlayerStateEnums>()
     {
     };
 
-    public HashSet<PlayerStateEnums> logicHash { get; } = new HashSet<PlayerStateEnums>()
+    public HashSet<PlayerStateEnums> LogicHash { get; } = new HashSet<PlayerStateEnums>()
     {
         PlayerStateEnums.IDLE,
         PlayerStateEnums.MOVE,

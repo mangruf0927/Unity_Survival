@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class EnemyChaseState : IEnemyState
 {
-    private EnemyController enemyController;
-    private EnemyStateMachine stateMachine;
+    private readonly EnemyController enemyController;
+    private readonly EnemyStateMachine stateMachine;
 
     public EnemyChaseState(EnemyStateMachine _stateMachine, EnemyController _enemyController)
     {

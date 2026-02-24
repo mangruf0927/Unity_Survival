@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class EnemyPatrolState : IEnemyState
 {
-    private EnemyController enemyController;
-    private EnemyStateMachine stateMachine;
+    private readonly EnemyController enemyController;
+    private readonly EnemyStateMachine stateMachine;
 
     public EnemyPatrolState(EnemyStateMachine _stateMachine, EnemyController _enemyController)
     {

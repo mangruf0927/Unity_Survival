@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 public interface IPlayerState
 {
-    HashSet<PlayerStateEnums> inputHash { get; }
-    HashSet<PlayerStateEnums> logicHash { get; }
+    HashSet<PlayerStateEnums> InputHash { get; }
+    HashSet<PlayerStateEnums> LogicHash { get; }
 
     void Enter();
     void Update();

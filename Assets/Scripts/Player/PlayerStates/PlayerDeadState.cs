@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerDeadState : IPlayerState
 {
-    private PlayerController playerController;
-    private PlayerStateMachine stateMachine;
+    private readonly PlayerController playerController;
+    private readonly PlayerStateMachine stateMachine;
 
     public PlayerDeadState(PlayerStateMachine _stateMachine, PlayerController _playerController)
     {
@@ -12,18 +12,17 @@ public class PlayerDeadState : IPlayerState
         playerController = _playerController;
     }
 
-    public HashSet<PlayerStateEnums> inputHash { get; } = new HashSet<PlayerStateEnums>()
+    public HashSet<PlayerStateEnums> InputHash { get; } = new HashSet<PlayerStateEnums>()
     {
     };
 
-    public HashSet<PlayerStateEnums> logicHash { get; } = new HashSet<PlayerStateEnums>()
+    public HashSet<PlayerStateEnums> LogicHash { get; } = new HashSet<PlayerStateEnums>()
     {
     };
 
     public void Enter()
     {
         playerController.animator.SetBool("IsDead", true);
-        Debug.Log("죽음 ㅜㅜ");
     }
 
     public void Update()

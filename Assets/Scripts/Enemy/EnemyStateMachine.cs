@@ -7,7 +7,7 @@ public class EnemyStateMachine : MonoBehaviour
 {
     [SerializeField] private EnemyController enemyController;
     
-    public IEnemyState curState {get; private set;}
+    public IEnemyState CurState {get; private set;}
     private Dictionary<EnemyStateEnums, IEnemyState> stateDictionary;
 
     private void Awake()
@@ -22,32 +22,32 @@ public class EnemyStateMachine : MonoBehaviour
 
         if(stateDictionary.TryGetValue(EnemyStateEnums.IDLE, out IEnemyState newState))
         {
-            curState = newState;
-            curState.Enter();
+            CurState = newState;
+            CurState.Enter();
         }
     }
 
     private void Update()
     {
-        if(curState != null) 
-            curState.Update();
+        if(CurState != null) 
+            CurState.Update();
         
         // Debug.Log(curState);
     }
 
     private void FixedUpdate()
     {
-        if(curState != null) 
-            curState.FixedUpdate();
+        if(CurState != null) 
+            CurState.FixedUpdate();
     }
 
     public void ChangeState(EnemyStateEnums newStateType)
     {
         if(!stateDictionary.TryGetValue(newStateType, out IEnemyState newState)) return;
-        if(curState == newState) return;
+        if(CurState == newState) return;
 
-        curState?.Exit();
-        curState = newState;
-        curState.Enter();
+        CurState?.Exit();
+        CurState = newState;
+        CurState.Enter();
     }
 }
