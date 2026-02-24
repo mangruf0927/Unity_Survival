@@ -7,7 +7,7 @@ public class RangedWeaponData : ScriptableObject
     public int attackDamage;
 
     [Header("최대 장전 수")]
-    public int magBullet;
+    public int magSize;
 
     [Header("총알 속도")]
     public int bulletSpeed;

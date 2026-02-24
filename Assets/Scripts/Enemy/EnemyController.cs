@@ -49,8 +49,8 @@ public class EnemyController : MonoBehaviour
 
     public bool CheckArrive()
     {
-        if (navMesh.pathPending || navMesh.remainingDistance > 0f) return false;
-        // if (navMesh.hasPath && navMesh.velocity.sqrMagnitude > 0.01f) return false;
+        if (navMesh.pathPending || !navMesh.hasPath ) return false;
+        if (navMesh.remainingDistance > 0.1f) return false;
 
         return true;
     }

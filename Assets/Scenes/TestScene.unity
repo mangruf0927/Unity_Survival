@@ -2655,6 +2655,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
   data: {fileID: 11400000, guid: f6ea59fafb84a4a39b1ca2f00e63acb0, type: 2}
   enemyStateMachine: {fileID: 1638928228}
+--- !u!65 &1639043815 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 2793784687227002502, guid: 2e8e1240bc83d4535bf71f2e3a3e5807, type: 3}
+  m_PrefabInstance: {fileID: 9017324914458065961}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1653406256
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3756,6 +3761,10 @@ PrefabInstance:
       propertyPath: rigidbody
       value: 
       objectReference: {fileID: 1591042585}
+    - target: {fileID: 3021538608507919723, guid: 2e8e1240bc83d4535bf71f2e3a3e5807, type: 3}
+      propertyPath: hitCollider
+      value: 
+      objectReference: {fileID: 1639043815}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
