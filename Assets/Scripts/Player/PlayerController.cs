@@ -78,7 +78,6 @@ public class PlayerController : MonoBehaviour
         currentWeapon = null;
 
         weapon.Drop();
-        weapon.transform.position = transform.position + transform.forward * 1.0f + Vector3.up * 1.3f;;
     }
 
     void OnCollisionEnter(Collision collision)

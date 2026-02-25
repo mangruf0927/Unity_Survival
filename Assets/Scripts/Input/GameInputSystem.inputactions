@@ -204,7 +204,7 @@
                 {
                     "name": "",
                     "id": "75dd82b3-9534-4705-9e23-5ee714784436",
-                    "path": "<Keyboard>/g",
+                    "path": "<Keyboard>/backspace",
                     "interactions": "Press",
                     "processors": "",
                     "groups": "",
