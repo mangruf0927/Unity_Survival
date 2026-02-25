@@ -32,7 +32,7 @@ public class EnemyStateMachine : MonoBehaviour
         if(CurState != null) 
             CurState.Update();
         
-        // Debug.Log(curState);
+        // Debug.Log(CurState);
     }
 
     private void FixedUpdate()
