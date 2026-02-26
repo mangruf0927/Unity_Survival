@@ -26,9 +26,13 @@ public class PlayerAttackState : IPlayerState
     public void Enter()
     {
         if(playerController.currentWeapon.weaponType == WeaponTypeEnums.MELEE)
+        {
             playerController.animator.SetTrigger("OnMeleeAttack");
+        }
         else if(playerController.currentWeapon.weaponType == WeaponTypeEnums.RANGED)
+        {
             playerController.animator.SetTrigger("OnRangedAttack");
+        }
 
 
         playerController.currentWeapon.EnterAttack();
