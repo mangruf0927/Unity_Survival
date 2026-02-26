@@ -68,6 +68,14 @@ public class PlayerController : MonoBehaviour
         rigid.AddForce(Vector3.up * playerStat.jumpForce, ForceMode.Impulse);
     }
 
+    public void GetWeapon(Weapon weapon)
+    {
+        if(currentWeapon != null) return;
+
+        currentWeapon = weapon;
+        currentWeapon.Pick(weaponPosition);
+    }
+
     public void DropWeapon()
     {
         if(currentWeapon == null || !currentWeapon.canDrop) return;

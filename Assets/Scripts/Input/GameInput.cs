@@ -12,31 +12,56 @@ public class GameInput : MonoBehaviour
     private Vector2 direction;
 
     private Outline currentOutline;
+    private Weapon currentWeapon;
+
     void Update()
     {
         if (Camera.main == null || Mouse.current == null) return;
 
+        GetTargetWeapon(out Weapon nextWeapon, out Outline nextOutline);
+        UpdateOutline(nextOutline);
+
+        currentWeapon = nextWeapon;
+    }
+
+    private void GetTargetWeapon(out Weapon nextWeapon, out Outline nextOutline)
+    {
+        nextWeapon = null;
+        nextOutline = null;
+
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-        Outline nextOutline = null;
+        if (!Physics.Raycast(ray, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide)) return;
+        if (hit.collider.gameObject.layer != 9) return;
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide))
-        {
-            // Debug.Log(hit.collider.gameObject.layer);
-
-            if (hit.collider.gameObject.layer == 9)
-            {
-                if (nextOutline == null) nextOutline = hit.collider.GetComponent<Outline>();
-            }
-        }
-
-        if (nextOutline != currentOutline)
-        {
-            if (currentOutline != null) currentOutline.enabled = false;
-            currentOutline = nextOutline;
-            if (currentOutline != null) currentOutline.enabled = true;
-        }
+        nextWeapon = hit.collider.GetComponentInParent<Weapon>();
+        if (nextWeapon != null)
+            nextOutline = hit.collider.GetComponentInParent<Outline>();
     }
+
+    private void UpdateOutline(Outline nextOutline)
+    {
+        if (nextOutline == currentOutline) return;
+
+        if (currentOutline != null) currentOutline.enabled = false;
+
+        currentOutline = nextOutline;
+
+        if (currentOutline != null) currentOutline.enabled = true;
+    }
+
+    public void OnPick(InputValue value)
+    {
+        if (!value.isPressed || currentWeapon == null) return;
+
+        playerController.GetWeapon(currentWeapon);
+
+        if (currentOutline != null) currentOutline.enabled = false;
+        
+        currentOutline = null;
+        currentWeapon = null;
+    }
+
 
     public void OnMove(InputValue value)
     {

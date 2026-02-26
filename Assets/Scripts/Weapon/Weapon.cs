@@ -1,3 +1,4 @@
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public enum WeaponTypeEnums { MELEE, RANGED }
@@ -13,6 +14,24 @@ public abstract class Weapon : MonoBehaviour
     public Vector3 aimPos;
     public void SetAimPoint(Vector3 pos) {aimPos = pos;}
 
+    public virtual void Pick(Transform position)
+    {
+        transform.SetParent(position);
+        transform.SetLocalPositionAndRotation(new Vector3(0.2f, -1f, 0.5f), Quaternion.Euler(0f, 0f, -90f));        
+        
+        if (collider != null)
+        {
+            collider.enabled = false;
+            collider.isTrigger = true;
+        }
+
+        if (rigidbody != null)
+        {
+            rigidbody.isKinematic = true;
+            rigidbody.useGravity = false;
+        }
+    }
+
     public virtual void Drop()
     {
         transform.SetParent(null);
@@ -27,8 +46,6 @@ public abstract class Weapon : MonoBehaviour
         {
             rigidbody.isKinematic = false;
             rigidbody.useGravity = true;
-            rigidbody.linearVelocity = Vector3.zero;
-            rigidbody.angularVelocity = Vector3.zero;
         }
     }
 
