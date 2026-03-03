@@ -9,6 +9,7 @@ public abstract class Weapon : MonoBehaviour
 
     [SerializeField] private new Rigidbody rigidbody;
     [SerializeField] private new Collider collider;
+    [SerializeField] private Transform attachPoint;
 
     public bool canDrop;
     public Vector3 aimPos;
@@ -16,9 +17,10 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void Pick(Transform position)
     {
-        transform.SetParent(position);
-        transform.SetLocalPositionAndRotation(new Vector3(0.2f, -1f, 0.5f), Quaternion.Euler(0f, 0f, -90f));        
-        
+        transform.rotation = position.rotation * Quaternion.Inverse(attachPoint.rotation) * transform.rotation;
+        transform.position += position.position - attachPoint.position;
+        transform.SetParent(position, true);
+
         if (collider != null)
         {
             collider.enabled = false;
