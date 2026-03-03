@@ -110,7 +110,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7b4aaccf78ddc492daeafa977bd4242b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.47
+      value: 0.57
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7b4aaccf78ddc492daeafa977bd4242b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -268,9 +268,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 0
+  outlineMode: 1
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 10
+  outlineWidth: 8
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
