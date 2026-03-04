@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerStat playerStat;
     [SerializeField] private Transform cameraPivot;
     [SerializeField] private Transform weaponPosition; 
+    [SerializeField] private Inventory inventory;
     
     public Animator animator;
     public Weapon currentWeapon;

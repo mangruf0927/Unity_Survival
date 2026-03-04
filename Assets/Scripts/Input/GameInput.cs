@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,6 +21,26 @@ public class GameInput : MonoBehaviour
         UpdateOutline(nextOutline);
 
         currentWeapon = nextWeapon;
+
+        int number = InputNumber();
+        if(number != -1) SelectItem(number);
+    }
+
+    private int InputNumber()
+    {
+        for(int i = 0; i < 9; i++)
+        {
+            Key key = Key.Digit1 + i;
+            Key numpadKey = Key.Numpad1 + i;
+
+            if(Keyboard.current[key].wasPressedThisFrame || Keyboard.current[numpadKey].wasPressedThisFrame) return i;
+        }
+        return -1;
+    }
+
+    private void SelectItem(int idx)
+    {
+        Debug.Log(idx + 1);
     }
 
     private void GetTargetWeapon(out Weapon nextWeapon, out Outline nextOutline)
@@ -62,6 +81,10 @@ public class GameInput : MonoBehaviour
         currentWeapon = null;
     }
 
+    public void OnDrop(InputValue value)
+    {
+        playerController.DropWeapon();
+    }
 
     public void OnMove(InputValue value)
     {
@@ -120,10 +143,5 @@ public class GameInput : MonoBehaviour
     {
         float y = value.Get<Vector2>().y;
         cameraRotate.SetZoomY(y);
-    }
-
-    public void OnDrop(InputValue value)
-    {
-        playerController.DropWeapon();
     }
 }
