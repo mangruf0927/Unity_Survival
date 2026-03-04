@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sack : MonoBehaviour
+public class Sack : EquippableItem
 {
     public enum SackLevel { OLD, GOOD, GIANT }
 
@@ -13,6 +13,16 @@ public class Sack : MonoBehaviour
     public int Count => items.Count;
     public bool IsFull => items.Count >= Capacity;
     public bool IsEmpty => items.Count == 0;
+
+    public override void OnEquip(PlayerController player)
+    {
+        gameObject.SetActive(true);
+    }
+
+    public override void OnUnequip(PlayerController player)
+    {
+        gameObject.SetActive(false);
+    }
 
     private int GetCapacity()
     {
@@ -29,7 +39,7 @@ public class Sack : MonoBehaviour
         return true;
     }
 
-    public ItemTest PopItem()
+    public ItemTest RemoveItem()
     {
         if(IsEmpty) return null;
 

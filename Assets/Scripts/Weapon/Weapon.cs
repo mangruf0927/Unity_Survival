@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum WeaponTypeEnums { MELEE, RANGED }
 
-public abstract class Weapon : MonoBehaviour
+public abstract class Weapon : EquippableItem
 {
     public WeaponTypeEnums weaponType;
 
@@ -13,7 +13,19 @@ public abstract class Weapon : MonoBehaviour
 
     public bool canDrop;
     public Vector3 aimPos;
+    public override bool CanDrop => canDrop;
+
     public void SetAimPoint(Vector3 pos) {aimPos = pos;}
+
+    public override void OnEquip(PlayerController player)
+    {
+        gameObject.SetActive(true);
+    }
+
+    public override void OnUnequip(PlayerController player)
+    {
+        gameObject.SetActive(false);
+    }
 
     public virtual void Pick(Transform position)
     {
