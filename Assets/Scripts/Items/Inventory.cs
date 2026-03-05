@@ -3,18 +3,35 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    [SerializeField] private List<EquippableItem> basicItems = new();
     private List<EquippableItem> items = new();
 
-    public void AddItem(EquippableItem item)
+    private void Awake()
     {
-        if(item == null) return;
-        items.Add(item);
+        foreach(EquippableItem item in basicItems)
+        {
+            items.Add(item);
+            item.gameObject.SetActive(false);
+        }
     }
 
-    public void RemoveItem(EquippableItem item)
+    public bool AddItem(EquippableItem item)
     {
-        if(item == null) return;
-        items.Remove(item);
+        if(item == null || items.Exists(x => x.ItemName == item.ItemName)) 
+        {
+            // Debug.Log(item + "획득 실패!");
+            return false;
+        }
+
+        items.Add(item);
+        // Debug.Log(item + "획득!");
+        return true;
+    }
+
+    public bool RemoveItem(EquippableItem item)
+    {
+        if(item == null) return false;
+        return items.Remove(item);
     }
 
     public EquippableItem SelectItem(int idx)

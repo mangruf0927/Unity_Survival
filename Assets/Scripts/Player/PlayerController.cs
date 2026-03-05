@@ -1,3 +1,5 @@
+using NUnit.Framework.Interfaces;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -5,12 +7,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody rigid;
     [SerializeField] private PlayerStat playerStat;
     [SerializeField] private Transform cameraPivot;
-    [SerializeField] private Transform weaponPosition; 
     [SerializeField] private Inventory inventory;
     
+    public Transform equipPosition; 
     public Animator animator;
     public Weapon currentWeapon;
 
+    private EquippableItem currentEquipped;
     private Vector2 moveDirection;
     private Vector3 lookDirection = Vector3.forward;
 
@@ -69,24 +72,64 @@ public class PlayerController : MonoBehaviour
         rigid.AddForce(Vector3.up * playerStat.jumpForce, ForceMode.Impulse);
     }
 
-    public void GetWeapon(Weapon weapon)
+    public bool GetItem(EquippableItem item)
     {
-        if(currentWeapon != null) return;
+        if(!inventory.AddItem(item)) return false;
 
-        currentWeapon = weapon;
-        currentWeapon.Pick(weaponPosition);
+        item.Attach(equipPosition);
+        item.gameObject.SetActive(false);
+        return true;
     }
 
-    public void DropWeapon()
+    public void EquipItem(int idx)
     {
-        if(currentWeapon == null || !currentWeapon.canDrop) return;
+        EquippableItem nextItem = inventory.SelectItem(idx);
+        if(nextItem == null) return;
 
-        currentWeapon.ExitAttack();
+        if (currentEquipped == nextItem)
+        {
+            UnequipItem();
+            return;
+        }
 
-        Weapon weapon = currentWeapon;
+        if (currentEquipped != null) currentEquipped.OnUnequip(this);
+        currentEquipped = nextItem;
+        currentEquipped.OnEquip(this);
+
+        UpdateUpperBodyWeight();
+    }
+
+    public void UnequipItem()
+    {
+        if (currentEquipped == null) return;
+
+        currentEquipped.OnUnequip(this);
+        currentEquipped = null;
         currentWeapon = null;
 
-        weapon.Drop();
+        UpdateUpperBodyWeight();
+    }
+
+    public void DropItem()
+    {
+        if (currentEquipped == null || !currentEquipped.CanDrop) return;
+
+        EquippableItem item = currentEquipped;
+        item.OnUnequip(this);
+        inventory.RemoveItem(item);
+
+        item.gameObject.SetActive(true);
+        item.Detach();
+
+        currentEquipped = null;
+        currentWeapon = null;
+        
+        UpdateUpperBodyWeight();
+    }
+
+    private void UpdateUpperBodyWeight()
+    {
+        animator.SetLayerWeight(1, currentEquipped == null ? 0f : 1f);
     }
 
     void OnCollisionEnter(Collision collision)

@@ -40,7 +40,7 @@ public class GameInput : MonoBehaviour
 
     private void SelectItem(int idx)
     {
-        Debug.Log(idx + 1);
+        playerController.EquipItem(idx);
     }
 
     private void GetTargetWeapon(out Weapon nextWeapon, out Outline nextOutline)
@@ -72,8 +72,7 @@ public class GameInput : MonoBehaviour
     public void OnPick(InputValue value)
     {
         if (!value.isPressed || currentWeapon == null) return;
-
-        playerController.GetWeapon(currentWeapon);
+        if (!playerController.GetItem(currentWeapon)) return;
 
         if (currentOutline != null) currentOutline.enabled = false;
         
@@ -83,7 +82,7 @@ public class GameInput : MonoBehaviour
 
     public void OnDrop(InputValue value)
     {
-        playerController.DropWeapon();
+        playerController.DropItem();
     }
 
     public void OnMove(InputValue value)

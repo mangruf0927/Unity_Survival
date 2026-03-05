@@ -13,6 +13,7 @@ public class Sack : EquippableItem
     public int Count => items.Count;
     public bool IsFull => items.Count >= Capacity;
     public bool IsEmpty => items.Count == 0;
+    public override bool CanDrop => false;
 
     public override void OnEquip(PlayerController player)
     {
