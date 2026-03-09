@@ -7,7 +7,7 @@ public class Sack : EquippableItem
 
     [SerializeField] private SackLevel level;
     
-    private Stack<ItemTest> items = new();
+    private Stack<Item> items = new();
     
     public int Capacity => GetCapacity();
     public int Count => items.Count;
@@ -18,11 +18,13 @@ public class Sack : EquippableItem
     public override void OnEquip(PlayerController player)
     {
         gameObject.SetActive(true);
+        player.currentSack = this;
     }
 
     public override void OnUnequip(PlayerController player)
     {
         gameObject.SetActive(false);
+        player.currentSack = null;
     }
 
     private int GetCapacity()
@@ -32,18 +34,26 @@ public class Sack : EquippableItem
         else return 25;
     }
 
-    public bool AddItem(ItemTest item)
+    public bool AddItem(Item item)
     {
         if(item == null || IsFull) return false;
 
         items.Push(item);
+
+        item.transform.SetParent(transform);
+        item.gameObject.SetActive(false);
         return true;
     }
 
-    public ItemTest RemoveItem()
+    public Item DropItem()
     {
         if(IsEmpty) return null;
 
-        return items.Pop();
+        Item item = items.Pop();
+        item.transform.position = transform.position + Vector3.up * 0.7f;
+        item.transform.SetParent(null);
+        item.gameObject.SetActive(true);
+
+        return item;
     }
 }

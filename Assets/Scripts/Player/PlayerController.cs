@@ -1,5 +1,3 @@
-using NUnit.Framework.Interfaces;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -12,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public Transform equipPosition; 
     public Animator animator;
     public Weapon currentWeapon;
+    public Sack currentSack;
 
     private EquippableItem currentEquipped;
     private Vector2 moveDirection;
@@ -81,6 +80,24 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
+    public void DropItem()
+    {
+        if (currentEquipped == null || !currentEquipped.CanDrop) return;
+
+        EquippableItem item = currentEquipped;
+        item.OnUnequip(this);
+        inventory.RemoveItem(item);
+
+        item.gameObject.SetActive(true);
+        item.Detach();
+
+        currentEquipped = null;
+        currentWeapon = null;
+        currentSack = null;
+        
+        UpdateUpperBodyWeight();
+    }
+
     public void EquipItem(int idx)
     {
         EquippableItem nextItem = inventory.SelectItem(idx);
@@ -105,26 +122,22 @@ public class PlayerController : MonoBehaviour
 
         currentEquipped.OnUnequip(this);
         currentEquipped = null;
+        currentSack = null;
         currentWeapon = null;
 
         UpdateUpperBodyWeight();
     }
 
-    public void DropItem()
+    public bool GetSackItem(Item item)
     {
-        if (currentEquipped == null || !currentEquipped.CanDrop) return;
+        if (currentSack == null) return false;
+        return currentSack.AddItem(item);
+    }
 
-        EquippableItem item = currentEquipped;
-        item.OnUnequip(this);
-        inventory.RemoveItem(item);
-
-        item.gameObject.SetActive(true);
-        item.Detach();
-
-        currentEquipped = null;
-        currentWeapon = null;
-        
-        UpdateUpperBodyWeight();
+    public void DropSackItem()
+    {
+        if(currentSack == null) return;
+        currentSack.DropItem();
     }
 
     private void UpdateUpperBodyWeight()

@@ -12,15 +12,13 @@ public class GameInput : MonoBehaviour
 
     private Outline currentOutline;
     private Weapon currentWeapon;
+    private Item currentItem;
 
     void Update()
     {
         if (Camera.main == null || Mouse.current == null) return;
 
-        GetTargetWeapon(out Weapon nextWeapon, out Outline nextOutline);
-        UpdateOutline(nextOutline);
-
-        currentWeapon = nextWeapon;
+        GetTargetItem();
 
         int number = InputNumber();
         if(number != -1) SelectItem(number);
@@ -43,19 +41,32 @@ public class GameInput : MonoBehaviour
         playerController.EquipItem(idx);
     }
 
-    private void GetTargetWeapon(out Weapon nextWeapon, out Outline nextOutline)
+    private void GetTargetItem()
     {
-        nextWeapon = null;
-        nextOutline = null;
+        Weapon nextWeapon = null;
+        Item nextItem = null;
+        Outline nextOutline = null;
 
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-        if (!Physics.Raycast(ray, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide)) return;
-        if (hit.collider.gameObject.layer != 9) return;
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide))
+        {
+            if(hit.collider.gameObject.layer == 9)
+            {
+                nextWeapon = hit.collider.GetComponentInParent<Weapon>();
+                if (nextWeapon != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
+            }
+            else if(hit.collider.gameObject.layer == 10)
+            {
+                nextItem = hit.collider.GetComponentInParent<Item>();
+                if (nextItem != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
+            }    
+        }
+        
+        UpdateOutline(nextOutline);
 
-        nextWeapon = hit.collider.GetComponentInParent<Weapon>();
-        if (nextWeapon != null)
-            nextOutline = hit.collider.GetComponentInParent<Outline>();
+        currentWeapon = nextWeapon;
+        currentItem = nextItem;
     }
 
     private void UpdateOutline(Outline nextOutline)
@@ -78,6 +89,25 @@ public class GameInput : MonoBehaviour
         
         currentOutline = null;
         currentWeapon = null;
+    }
+
+    public void OnCollect(InputValue value)
+    {
+        if (!value.isPressed) return;
+
+        if (currentItem != null)
+        {
+            if (playerController.GetSackItem(currentItem))
+            {
+                if (currentOutline != null) currentOutline.enabled = false;
+
+                currentOutline = null;
+                currentItem = null;
+            }
+            return;
+        }
+
+        playerController.DropSackItem();
     }
 
     public void OnDrop(InputValue value)
