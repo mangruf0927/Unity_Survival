@@ -6,6 +6,8 @@ public class Inventory : MonoBehaviour
     [SerializeField] private List<EquippableItem> basicItems = new();
     private List<EquippableItem> items = new();
 
+    public IReadOnlyList<EquippableItem> Items => items;
+
     private void Awake()
     {
         foreach(EquippableItem item in basicItems)
@@ -17,14 +19,10 @@ public class Inventory : MonoBehaviour
 
     public bool AddItem(EquippableItem item)
     {
-        if(item == null || items.Exists(x => x.ItemName == item.ItemName)) 
-        {
-            // Debug.Log(item + "획득 실패!");
-            return false;
-        }
+        if(item == null) return false;
+        if (items.Exists(x => x.ItemName == item.ItemName)) return false;
 
         items.Add(item);
-        // Debug.Log(item + "획득!");
         return true;
     }
 

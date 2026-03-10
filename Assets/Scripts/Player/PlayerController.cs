@@ -73,10 +73,65 @@ public class PlayerController : MonoBehaviour
 
     public bool GetItem(EquippableItem item)
     {
+        if(item is MeleeWeapon nextMelee) return GetMeleeWeapon(nextMelee);
+
         if(!inventory.AddItem(item)) return false;
 
         item.Attach(equipPosition);
         item.gameObject.SetActive(false);
+        return true;
+    }
+
+    private bool GetMeleeWeapon(MeleeWeapon nextMelee)
+    {
+        if (nextMelee == null) return false;
+
+        MeleeWeapon currentMelee = null;
+
+        foreach (EquippableItem item in inventory.Items)
+        {
+            if (item is MeleeWeapon melee && melee.ItemName == nextMelee.ItemName)
+            {
+                currentMelee = melee;
+                break;
+            }
+        }
+
+        if (currentMelee == null)
+        {
+            if (!inventory.AddItem(nextMelee)) return false;
+
+            nextMelee.Attach(equipPosition);
+            nextMelee.gameObject.SetActive(false);
+            return true;
+        }
+
+        if (nextMelee.Level <= currentMelee.Level) return false;
+
+        bool wasEquipped = currentEquipped == currentMelee;
+
+        inventory.RemoveItem(currentMelee);
+
+        if (wasEquipped)
+        {
+            currentMelee.OnUnequip(this);
+            currentEquipped = null;
+            currentWeapon = null;
+        }
+
+        Destroy(currentMelee.gameObject);
+
+        if (!inventory.AddItem(nextMelee)) return false;
+
+        nextMelee.Attach(equipPosition);
+        nextMelee.gameObject.SetActive(false);
+
+        if (wasEquipped)
+        {
+            currentEquipped = nextMelee;
+            nextMelee.OnEquip(this);
+            UpdateUpperBodyWeight();
+        }
         return true;
     }
 

@@ -4,7 +4,6 @@ using UnityEngine;
 public class Sack : EquippableItem
 {
     public enum SackLevel { OLD, GOOD, GIANT }
-
     [SerializeField] private SackLevel level;
     
     private Stack<Item> items = new();
