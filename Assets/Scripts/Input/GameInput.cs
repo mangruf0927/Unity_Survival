@@ -11,7 +11,7 @@ public class GameInput : MonoBehaviour
     private Vector2 direction;
 
     private Outline currentOutline;
-    private Weapon currentWeapon;
+    private EquippableItem currentEquip;
     private Item currentItem;
 
     void Update()
@@ -43,7 +43,7 @@ public class GameInput : MonoBehaviour
 
     private void GetTargetItem()
     {
-        Weapon nextWeapon = null;
+        EquippableItem nextEquip = null;
         Item nextItem = null;
         Outline nextOutline = null;
 
@@ -53,19 +53,19 @@ public class GameInput : MonoBehaviour
         {
             if(hit.collider.gameObject.layer == 9)
             {
-                nextWeapon = hit.collider.GetComponentInParent<Weapon>();
-                if (nextWeapon != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
+                nextEquip = hit.collider.GetComponentInParent<EquippableItem>();
+                if (nextEquip != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
             }
             else if(hit.collider.gameObject.layer == 10)
             {
                 nextItem = hit.collider.GetComponentInParent<Item>();
                 if (nextItem != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
-            }    
+            }
         }
         
         UpdateOutline(nextOutline);
 
-        currentWeapon = nextWeapon;
+        currentEquip = nextEquip;
         currentItem = nextItem;
     }
 
@@ -82,13 +82,13 @@ public class GameInput : MonoBehaviour
 
     public void OnPick(InputValue value)
     {
-        if (!value.isPressed || currentWeapon == null) return;
-        if (!playerController.GetItem(currentWeapon)) return;
+        if (!value.isPressed || currentEquip == null) return;
+        if (!playerController.GetItem(currentEquip)) return;
 
         if (currentOutline != null) currentOutline.enabled = false;
         
         currentOutline = null;
-        currentWeapon = null;
+        currentEquip = null;
     }
 
     public void OnCollect(InputValue value)
@@ -112,6 +112,7 @@ public class GameInput : MonoBehaviour
 
     public void OnDrop(InputValue value)
     {
+        if (!value.isPressed) return;
         playerController.DropItem();
     }
 

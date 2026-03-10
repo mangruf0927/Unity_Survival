@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Sack : EquippableItem
-{
-    public enum SackLevel { OLD, GOOD, GIANT }
-    [SerializeField] private SackLevel level;
-    
+{   
+    [SerializeField] private SackData sackData;
+
     private Stack<Item> items = new();
     
-    public int Capacity => GetCapacity();
+    public SackLevel Level => sackData.level;
+    public int Capacity => sackData.capacity;
     public int Count => items.Count;
     public bool IsFull => items.Count >= Capacity;
     public bool IsEmpty => items.Count == 0;
@@ -24,13 +24,6 @@ public class Sack : EquippableItem
     {
         gameObject.SetActive(false);
         player.currentSack = null;
-    }
-
-    private int GetCapacity()
-    {
-        if(level == SackLevel.OLD) return 5;
-        else if(level == SackLevel.GOOD) return 15;
-        else return 25;
     }
 
     public bool AddItem(Item item)
@@ -54,5 +47,23 @@ public class Sack : EquippableItem
         item.gameObject.SetActive(true);
 
         return item;
+    }
+
+    public void MoveItems(Sack nextSack)
+    {
+        if(nextSack == null) return;
+
+        Stack<Item> temp = new();
+
+        while(items.Count > 0)
+        {
+            temp.Push(items.Pop());
+        }
+
+        while(temp.Count > 0)
+        {
+            Item item = temp.Pop();
+            nextSack.AddItem(item);
+        }
     }
 }
