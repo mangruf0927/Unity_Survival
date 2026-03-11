@@ -16,7 +16,7 @@ public class EnemyController : MonoBehaviour
 
     public bool CanChasePlayer()
     {
-        if(!enemyStats.CanChase) return false;
+        if (!enemyStats.CanChase) return false;
         return RangeCheck();
     }
 
@@ -57,7 +57,7 @@ public class EnemyController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(enemyStats.AttackDamage <= 0 || !other.CompareTag("Player")) return;
+        if (enemyStats.AttackDamage <= 0 || !other.CompareTag("Player")) return;
         
         var player = other.GetComponent<IDamageable>();
         player.TakeDamage(enemyStats.AttackDamage);

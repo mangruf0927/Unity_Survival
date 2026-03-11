@@ -80,7 +80,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.02, y: 0.015, z: 0.03}
   m_Center: {x: 0.005, y: -0.0005, z: 0.005}
@@ -150,7 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9f98165067e014177822127aac098c8c, type: 3}
       propertyPath: m_Name
-      value: Axe
+      value: Axe_Old
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9f98165067e014177822127aac098c8c, type: 3}
       propertyPath: m_Layer
@@ -179,9 +179,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9f98165067e014177822127aac098c8c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3021538608507919723}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9f98165067e014177822127aac098c8c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5357160533927996591}
   m_SourcePrefab: {fileID: 100100000, guid: 9f98165067e014177822127aac098c8c, type: 3}
 --- !u!4 &457456602442786079 stripped
 Transform:
@@ -253,29 +250,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d33d7c09f0c48f2b4faf23a4cf501f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeWeapon
-  weaponType: 0
+  itemName: AXE
+  attachPoint: {fileID: 5404523626731672577}
   rigidbody: {fileID: 1335279983054638191}
   collider: {fileID: 2793784687227002502}
-  attachPoint: {fileID: 5404523626731672577}
-  canDrop: 1
+  canDrop: 0
   aimPos: {x: 0, y: 0, z: 0}
   weaponData: {fileID: 11400000, guid: 9e204aa6c75084f31839117412e3feac, type: 2}
   hitCollider: {fileID: 2983852482669014994}
---- !u!114 &5357160533927996591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 942069223464779685}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Outline
-  outlineMode: 1
-  outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  outlineWidth: 8
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []

@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     private float speed;
     private readonly float lifeTime = 10;
 
-    void Awake()
+    private void Awake()
     {
         rigid.useGravity = false;
         rigid.isKinematic = false;
@@ -34,7 +34,6 @@ public class Bullet : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other.transform.root.CompareTag("Player")) return;
-
         if (other.CompareTag("Enemy") && other.TryGetComponent<IDamageable>(out var enemy))
             enemy.TakeDamage(damage);
 

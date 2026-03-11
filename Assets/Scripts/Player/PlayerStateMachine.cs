@@ -22,7 +22,7 @@ public class PlayerStateMachine : MonoBehaviour
             {PlayerStateEnums.DEAD, new PlayerDeadState(this, playerController)},
         };
 
-        if(stateDictionary.TryGetValue(PlayerStateEnums.IDLE, out IPlayerState newState))
+        if (stateDictionary.TryGetValue(PlayerStateEnums.IDLE, out IPlayerState newState))
         {
             CurState = newState;
             CurState.Enter();
@@ -45,10 +45,10 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void ChangeInputState(PlayerStateEnums newStateType)
     {
-        if(!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
-        if(CurState == newState) return;
+        if (!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
+        if (CurState == newState) return;
 
-        if(!CurState.InputHash.Contains(newStateType)) return;
+        if (!CurState.InputHash.Contains(newStateType)) return;
 
         CurState?.Exit();
         CurState = newState;
@@ -57,10 +57,10 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void ChangeLogicState(PlayerStateEnums newStateType)
     {
-        if(!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
-        if(CurState == newState) return;
+        if (!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
+        if (CurState == newState) return;
 
-        if(!CurState.LogicHash.Contains(newStateType)) return;
+        if (!CurState.LogicHash.Contains(newStateType)) return;
 
         CurState?.Exit();
         CurState = newState;
@@ -69,8 +69,8 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void ChangeState(PlayerStateEnums newStateType)
     {
-        if(!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
-        if(CurState == newState) return;
+        if (!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
+        if (CurState == newState) return;
 
         CurState?.Exit();
         CurState = newState;

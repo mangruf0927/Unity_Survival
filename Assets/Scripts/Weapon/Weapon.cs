@@ -1,12 +1,7 @@
-using Unity.Burst.Intrinsics;
 using UnityEngine;
-
-public enum WeaponTypeEnums { MELEE, RANGED }
 
 public abstract class Weapon : EquippableItem
 {
-    public WeaponTypeEnums weaponType;
-
     public bool canDrop;
     public Vector3 aimPos;
     public override bool CanDrop => canDrop;
@@ -26,7 +21,6 @@ public abstract class Weapon : EquippableItem
         gameObject.SetActive(false);
     }
 
-    public abstract void EnterAttack();
     public abstract void Attack();
     public abstract void ExitAttack();
 }

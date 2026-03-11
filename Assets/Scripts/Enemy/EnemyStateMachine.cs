@@ -20,7 +20,7 @@ public class EnemyStateMachine : MonoBehaviour
             {EnemyStateEnums.DEAD, new EnemyDeadState(this, enemyController)},
         };
 
-        if(stateDictionary.TryGetValue(EnemyStateEnums.IDLE, out IEnemyState newState))
+        if (stateDictionary.TryGetValue(EnemyStateEnums.IDLE, out IEnemyState newState))
         {
             CurState = newState;
             CurState.Enter();
@@ -29,7 +29,7 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void Update()
     {
-        if(CurState != null) 
+        if (CurState != null) 
             CurState.Update();
         
         // Debug.Log(CurState);
@@ -37,14 +37,14 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(CurState != null) 
+        if (CurState != null) 
             CurState.FixedUpdate();
     }
 
     public void ChangeState(EnemyStateEnums newStateType)
     {
-        if(!stateDictionary.TryGetValue(newStateType, out IEnemyState newState)) return;
-        if(CurState == newState) return;
+        if (!stateDictionary.TryGetValue(newStateType, out IEnemyState newState)) return;
+        if (CurState == newState) return;
 
         CurState?.Exit();
         CurState = newState;

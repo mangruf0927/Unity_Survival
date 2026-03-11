@@ -25,13 +25,11 @@ public class PlayerAttackState : IPlayerState
 
     public void Enter()
     {
-        if(playerController.currentWeapon.weaponType == WeaponTypeEnums.MELEE)
+        if (playerController.currentWeapon is MeleeWeapon)
             playerController.animator.SetTrigger("OnMeleeAttack");
-        else if(playerController.currentWeapon.weaponType == WeaponTypeEnums.RANGED)
+        else if (playerController.currentWeapon is RangedWeapon)
             playerController.animator.SetTrigger("OnRangedAttack");
 
-
-        playerController.currentWeapon.EnterAttack();
         playerController.currentWeapon.Attack();
     }
 
@@ -39,9 +37,9 @@ public class PlayerAttackState : IPlayerState
     {
         var state = playerController.animator.GetCurrentAnimatorStateInfo(0);
 
-        if((state.IsName("attack_melee") || state.IsName("attack_ranged")) && state.normalizedTime >= 1.0f)
+        if ((state.IsName("attack_melee") || state.IsName("attack_ranged")) && state.normalizedTime >= 1.0f)
         {
-            if(playerController.GetDirection() == Vector2.zero)
+            if (playerController.GetDirection() == Vector2.zero)
                 stateMachine.ChangeLogicState(PlayerStateEnums.IDLE);
             else
                 stateMachine.ChangeLogicState(playerController.IsRun() ? PlayerStateEnums.RUN : PlayerStateEnums.MOVE);

@@ -3849,7 +3849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f481d4898eb8472dbd99c7bfa616949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
-  basicItems:
+  basicItemList:
   - {fileID: 5582109068648341813}
   - {fileID: 706601795}
 --- !u!4 &1717421987
@@ -4680,6 +4680,14 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2793784687227002502, guid: 2e8e1240bc83d4535bf71f2e3a3e5807, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983852482669014994, guid: 2e8e1240bc83d4535bf71f2e3a3e5807, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3021538608507919723, guid: 2e8e1240bc83d4535bf71f2e3a3e5807, type: 3}
       propertyPath: canDrop
       value: 0
@@ -4688,8 +4696,7 @@ PrefabInstance:
       propertyPath: itemName
       value: AXE
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5357160533927996591, guid: 2e8e1240bc83d4535bf71f2e3a3e5807, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

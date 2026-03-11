@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public abstract class EquippableItem : MonoBehaviour
@@ -46,7 +45,7 @@ public abstract class EquippableItem : MonoBehaviour
             rigidbody.useGravity = true;
         }
     }
-
+    
     public abstract void OnEquip(PlayerController player);
     public abstract void OnUnequip(PlayerController player);
 }

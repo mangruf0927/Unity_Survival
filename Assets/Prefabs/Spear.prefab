@@ -80,7 +80,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.4, y: 1, z: 0.3}
   m_Center: {x: 0.005, y: 0, z: 0.005}
@@ -248,10 +248,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d33d7c09f0c48f2b4faf23a4cf501f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeWeapon
-  weaponType: 0
+  itemName: SPEAR
+  attachPoint: {fileID: 259362694345454847}
   rigidbody: {fileID: 3809525931766685306}
   collider: {fileID: 3014555923330533279}
-  attachPoint: {fileID: 259362694345454847}
   canDrop: 1
   aimPos: {x: 0, y: 0, z: 0}
   weaponData: {fileID: 11400000, guid: c0ba64f6bd17b4182862515d90e7a0fa, type: 2}

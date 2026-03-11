@@ -103,10 +103,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dda60ea8bc004564b3e91abc658bc4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunWeapon
-  weaponType: 1
+  itemName: PISTOL
+  attachPoint: {fileID: 6277276120723551836}
   rigidbody: {fileID: 1496494087540859946}
   collider: {fileID: 3195698400007576928}
-  attachPoint: {fileID: 6277276120723551836}
   canDrop: 1
   aimPos: {x: 0, y: 0, z: 0}
   weaponData: {fileID: 11400000, guid: e28661b521558489bb528550e9105d67, type: 2}

@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d84068d3d571417382d6988da7f80a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sacks
-  itemName: Sack
+  itemName: SACK
   attachPoint: {fileID: 8616143806539203676}
   rigidbody: {fileID: 3041071958515767886}
   collider: {fileID: 9165653193055608283}

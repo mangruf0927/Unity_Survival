@@ -14,14 +14,62 @@ public class GameInput : MonoBehaviour
     private EquippableItem currentEquip;
     private Item currentItem;
 
-    void Update()
+    private void Update()
     {
         if (Camera.main == null || Mouse.current == null) return;
 
-        GetTargetItem();
+        UpdateTarget();
 
         int number = InputNumber();
-        if(number != -1) SelectItem(number);
+        if (number != -1) playerController.EquipItem(number);
+    }
+
+    private void UpdateTarget()
+    {
+        EquippableItem nextEquip = null;
+        Item nextItem = null;
+        Outline nextOutline = null;
+
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide))
+        {
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Equippable"))          
+            {
+                nextEquip = hit.collider.GetComponentInParent<EquippableItem>();
+                if (nextEquip != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
+            }
+            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Item"))   
+            {
+                nextItem = hit.collider.GetComponentInParent<Item>();
+                if (nextItem != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
+            }
+        }
+        
+        UpdateOutline(nextOutline);
+
+        currentEquip = nextEquip;
+        currentItem = nextItem;
+    }
+
+    private void ClearTarget()
+    {
+        if (currentOutline != null) currentOutline.enabled = false;
+        
+        currentOutline = null;
+        currentEquip = null;
+        currentItem = null;
+    }
+
+    private void UpdateOutline(Outline nextOutline)
+    {
+        if (nextOutline == currentOutline) return;
+
+        if (currentOutline != null) currentOutline.enabled = false;
+
+        currentOutline = nextOutline;
+
+        if (currentOutline != null) currentOutline.enabled = true;
     }
 
     private int InputNumber()
@@ -36,59 +84,12 @@ public class GameInput : MonoBehaviour
         return -1;
     }
 
-    private void SelectItem(int idx)
-    {
-        playerController.EquipItem(idx);
-    }
-
-    private void GetTargetItem()
-    {
-        EquippableItem nextEquip = null;
-        Item nextItem = null;
-        Outline nextOutline = null;
-
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide))
-        {
-            if(hit.collider.gameObject.layer == 9)
-            {
-                nextEquip = hit.collider.GetComponentInParent<EquippableItem>();
-                if (nextEquip != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
-            }
-            else if(hit.collider.gameObject.layer == 10)
-            {
-                nextItem = hit.collider.GetComponentInParent<Item>();
-                if (nextItem != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
-            }
-        }
-        
-        UpdateOutline(nextOutline);
-
-        currentEquip = nextEquip;
-        currentItem = nextItem;
-    }
-
-    private void UpdateOutline(Outline nextOutline)
-    {
-        if (nextOutline == currentOutline) return;
-
-        if (currentOutline != null) currentOutline.enabled = false;
-
-        currentOutline = nextOutline;
-
-        if (currentOutline != null) currentOutline.enabled = true;
-    }
-
     public void OnPick(InputValue value)
     {
         if (!value.isPressed || currentEquip == null) return;
-        if (!playerController.GetItem(currentEquip)) return;
+        if (!playerController.GetEquippableItem(currentEquip)) return;
 
-        if (currentOutline != null) currentOutline.enabled = false;
-        
-        currentOutline = null;
-        currentEquip = null;
+        ClearTarget();
     }
 
     public void OnCollect(InputValue value)
@@ -97,23 +98,18 @@ public class GameInput : MonoBehaviour
 
         if (currentItem != null)
         {
-            if (playerController.GetSackItem(currentItem))
+            if (playerController.GetCollectibleItem(currentItem))     
             {
-                if (currentOutline != null) currentOutline.enabled = false;
-
-                currentOutline = null;
-                currentItem = null;
+                ClearTarget();
             }
-            return;
         }
-
-        playerController.DropSackItem();
+        else playerController.DropCollectibleItem();
     }
 
     public void OnDrop(InputValue value)
     {
         if (!value.isPressed) return;
-        playerController.DropItem();
+        playerController.DropEquippableItem();
     }
 
     public void OnMove(InputValue value)

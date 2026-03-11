@@ -8,10 +8,6 @@ public class RangedWeapon : Weapon
     [SerializeField] private GameObject projectile;
     [SerializeField] private ObjectPool pool;
 
-    public override void EnterAttack()
-    {
-    }
-
     public override void Attack()
     {
         GameObject bulletObj = pool.GetFromPool(projectile, PoolTypeEnums.BULLET);
@@ -26,7 +22,6 @@ public class RangedWeapon : Weapon
 
     public override void ExitAttack()
     {
-        
     }
 
 }

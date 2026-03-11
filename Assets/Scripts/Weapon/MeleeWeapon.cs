@@ -9,21 +9,10 @@ public class MeleeWeapon : Weapon
     private int AttackDamage => weaponData.attackDamage;
     private bool hasHit;
 
-    private void Awake()
-    {
-        hitCollider.isTrigger = true;
-        hitCollider.enabled = false;
-    }
-
-    public override void EnterAttack()
+    public override void Attack()
     {
         hasHit = false;
         hitCollider.enabled = true;
-    }
-
-    public override void Attack()
-    {
-        
     }
 
     public override void ExitAttack()
@@ -33,8 +22,7 @@ public class MeleeWeapon : Weapon
 
     void OnTriggerEnter(Collider other)
     {
-        if(hasHit) return;
-        if (AttackDamage <= 0) return;
+        if (hasHit || AttackDamage <= 0) return;
         if (!other.CompareTag("Enemy")) return;
 
         if (other.TryGetComponent<IDamageable>(out var enemy))

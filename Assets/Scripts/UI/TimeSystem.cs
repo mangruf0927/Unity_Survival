@@ -25,12 +25,12 @@ public class TimeSystem : MonoBehaviour
     {
         timeElapsed -= Time.deltaTime;
 
-        if(timeElapsed <= 0f)
+        if (timeElapsed <= 0f)
         {
             timeElapsed = 0f;
             UpdateTimer();
 
-            if(curPhase == Phase.DAY) SetPhase(Phase.NIGHT);
+            if (curPhase == Phase.DAY) SetPhase(Phase.NIGHT);
             else
             {
                 dayCount += 1;

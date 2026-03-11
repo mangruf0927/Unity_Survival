@@ -32,9 +32,9 @@ public class PlayerJumpState :  IPlayerState
 
     public void Update()
     {
-        if(!playerController.IsGround()) return;
+        if (!playerController.IsGround()) return;
 
-        if(playerController.GetDirection() == Vector2.zero)
+        if (playerController.GetDirection() == Vector2.zero)
             stateMachine.ChangeLogicState(PlayerStateEnums.IDLE);
         else
             stateMachine.ChangeLogicState(playerController.IsRun() ? PlayerStateEnums.RUN : PlayerStateEnums.MOVE);

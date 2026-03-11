@@ -5,43 +5,44 @@ public class Sack : EquippableItem
 {   
     [SerializeField] private SackData sackData;
 
-    private Stack<Item> items = new();
+    private Stack<Item> itemStack = new();
     
     public SackLevel Level => sackData.level;
     public int Capacity => sackData.capacity;
-    public int Count => items.Count;
-    public bool IsFull => items.Count >= Capacity;
-    public bool IsEmpty => items.Count == 0;
     public override bool CanDrop => false;
+
+    public int Count => itemStack.Count;
+    public bool IsFull => itemStack.Count >= Capacity;
+    public bool IsEmpty => itemStack.Count == 0;
 
     public override void OnEquip(PlayerController player)
     {
-        gameObject.SetActive(true);
         player.currentSack = this;
+        gameObject.SetActive(true);
     }
 
     public override void OnUnequip(PlayerController player)
     {
-        gameObject.SetActive(false);
         player.currentSack = null;
+        gameObject.SetActive(false);
     }
 
     public bool AddItem(Item item)
     {
-        if(item == null || IsFull) return false;
+        if (item == null || IsFull) return false;
 
-        items.Push(item);
-
+        itemStack.Push(item);
         item.transform.SetParent(transform);
         item.gameObject.SetActive(false);
+        
         return true;
     }
 
     public Item DropItem()
     {
-        if(IsEmpty) return null;
+        if (IsEmpty) return null;
 
-        Item item = items.Pop();
+        Item item = itemStack.Pop();
         item.transform.position = transform.position + Vector3.up * 0.7f;
         item.transform.SetParent(null);
         item.gameObject.SetActive(true);
@@ -51,16 +52,16 @@ public class Sack : EquippableItem
 
     public void MoveItems(Sack nextSack)
     {
-        if(nextSack == null) return;
+        if (nextSack == null) return;
 
         Stack<Item> temp = new();
 
-        while(items.Count > 0)
+        while (itemStack.Count > 0)
         {
-            temp.Push(items.Pop());
+            temp.Push(itemStack.Pop());
         }
 
-        while(temp.Count > 0)
+        while (temp.Count > 0)
         {
             Item item = temp.Pop();
             nextSack.AddItem(item);

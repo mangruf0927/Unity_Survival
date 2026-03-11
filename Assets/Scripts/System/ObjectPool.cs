@@ -20,7 +20,7 @@ public class ObjectPool : MonoBehaviour
     {
         var pool = poolList[(int)poolType];
 
-        for(int i = 0; i < poolSize; i++)
+        for (int i = 0; i < poolSize; i++)
         {
             pool.Push(CreatePool(prefab, parent));
         }

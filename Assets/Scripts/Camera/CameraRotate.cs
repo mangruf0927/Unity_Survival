@@ -3,10 +3,8 @@ using UnityEngine;
 public class CameraRotate : MonoBehaviour
 {
     [SerializeField] private Transform target;
-
     [SerializeField] private float rotateSpeed;
     [SerializeField] private float zoomSpeed;
-
     [SerializeField] private float distance; 
     [SerializeField] private float minDistance;
     [SerializeField] private float maxDistance;
@@ -15,10 +13,10 @@ public class CameraRotate : MonoBehaviour
     private bool isRightClick = false;
     private float scrollY = 0f;
 
-    private float yaw;          // 좌우     
     private float pitch;        // 상하
+    private float yaw;          // 좌우     
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         Zoom();
         UpdateAngles();
@@ -53,7 +51,7 @@ public class CameraRotate : MonoBehaviour
     public void SetRightClick(bool isClick)
     {
         isRightClick = isClick;
-        if(!isClick) mouseDelta = Vector2.zero;
+        if (!isClick) mouseDelta = Vector2.zero;
     }
 
     public void SetZoomY(float y)
@@ -61,7 +59,7 @@ public class CameraRotate : MonoBehaviour
         scrollY += y;
     }
 
-    public void Zoom()
+    private void Zoom()
     {
         scrollY = Mathf.Lerp(scrollY, 0f, 4f * Time.deltaTime);
         float delta = -scrollY * zoomSpeed * 0.01f;

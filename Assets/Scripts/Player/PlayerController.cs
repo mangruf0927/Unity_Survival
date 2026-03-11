@@ -25,8 +25,8 @@ public class PlayerController : MonoBehaviour
 
     public bool IsRun() { return isRun; }
     public bool IsGround() { return isGround; }
-    public Vector2 GetDirection() { return moveDirection; }
 
+    public Vector2 GetDirection() { return moveDirection; }
     private Vector3 GetCameraDirection(Vector2 input)
     {
         Vector3 forward = cameraPivot.forward;
@@ -71,139 +71,52 @@ public class PlayerController : MonoBehaviour
         isGround = false;
         rigid.AddForce(Vector3.up * playerStat.jumpForce, ForceMode.Impulse);
     }
-
-    public bool GetItem(EquippableItem item)
+ 
+    public bool GetEquippableItem(EquippableItem item)
     {
         if (item == null) return false;
-
-        if (item is MeleeWeapon nextMelee)
-            return GetMeleeWeapon(nextMelee);
-
-        if (item is Sack nextSack)
-            return GetSack(nextSack);
-
-        if (!inventory.AddItem(item)) return false;
+        if (!inventory.AddItem(item, out EquippableItem prevItem)) return false;
 
         item.Attach(equipPosition);
         item.gameObject.SetActive(false);
-        return true;
-    }
 
-    private bool GetMeleeWeapon(MeleeWeapon nextMelee)
-    {
-        if (nextMelee == null) return false;
-
-        MeleeWeapon prevMelee = null;
-
-        foreach (EquippableItem item in inventory.Items)
+        if (ReplacedItem(prevItem, item))
         {
-            if (item is MeleeWeapon melee && melee.ItemName == nextMelee.ItemName)
-            {
-                prevMelee = melee;
-                break;
-            }
-        }
-
-        if (prevMelee == null)
-        {
-            if (!inventory.AddItem(nextMelee)) return false;
-
-            nextMelee.Attach(equipPosition);
-            nextMelee.gameObject.SetActive(false);
-            return true;
-        }
-
-        if (nextMelee.Level <= prevMelee.Level) return false;
-
-        bool wasEquipped = (currentEquipped == prevMelee);
-
-        inventory.RemoveItem(prevMelee);
-
-        if (wasEquipped)
-        {
-            prevMelee.OnUnequip(this);
-            currentEquipped = null;
-            currentWeapon = null;
-        }
-
-        Destroy(prevMelee.gameObject);
-
-        if (!inventory.AddItem(nextMelee)) return false;
-
-        nextMelee.Attach(equipPosition);
-        nextMelee.gameObject.SetActive(false);
-
-        if (wasEquipped)
-        {
-            currentEquipped = nextMelee;
-            nextMelee.OnEquip(this);
+            currentEquipped = item;
+            item.OnEquip(this);
             UpdateUpperBodyWeight();
         }
-
         return true;
     }
 
-    private bool GetSack(Sack nextSack)
+    private bool ReplacedItem(EquippableItem prevItem, EquippableItem newItem)
     {
-        if (nextSack == null) return false;
+        if (prevItem == null) return false;
 
-        Sack prevSack = null;
-
-        foreach (EquippableItem item in inventory.Items)
+        bool equipped = currentEquipped == prevItem;
+        if (equipped)
         {
-            if (item is Sack sack && sack.ItemName == nextSack.ItemName)
-            {
-                prevSack = sack;
-                break;
-            }
-        }
-
-        if (prevSack == null)
-        {
-            if (!inventory.AddItem(nextSack)) return false;
-
-            nextSack.Attach(equipPosition);
-            nextSack.gameObject.SetActive(false);
-            return true;
-        }
-
-        if (nextSack.Level <= prevSack.Level) return false;
-
-        bool wasEquipped = (currentEquipped == prevSack);
-
-        inventory.RemoveItem(prevSack);
-
-        if (wasEquipped)
-        {
-            prevSack.OnUnequip(this);
+            prevItem.OnUnequip(this);
             currentEquipped = null;
+            currentWeapon = null;
             currentSack = null;
         }
 
-        if (!inventory.AddItem(nextSack)) return false;
-
-        nextSack.Attach(equipPosition);
-        nextSack.gameObject.SetActive(false);
-
-        prevSack.MoveItems(nextSack);
-
-        Destroy(prevSack.gameObject);
-
-        if (wasEquipped)
+        if (prevItem is Sack prevSack && newItem is Sack newSack)
         {
-            currentEquipped = nextSack;
-            nextSack.OnEquip(this);
-            UpdateUpperBodyWeight();
+            prevSack.MoveItems(newSack);
         }
 
-        return true;
+        Destroy(prevItem.gameObject);
+        return equipped;
     }
 
-    public void DropItem()
+    public void DropEquippableItem()
     {
         if (currentEquipped == null || !currentEquipped.CanDrop) return;
 
         EquippableItem item = currentEquipped;
+
         item.OnUnequip(this);
         inventory.RemoveItem(item);
 
@@ -248,20 +161,20 @@ public class PlayerController : MonoBehaviour
         UpdateUpperBodyWeight();
     }
 
-    public bool GetSackItem(Item item)
+    public bool GetCollectibleItem(Item item)
     {
         if (currentSack == null) return false;
         return currentSack.AddItem(item);
     }
 
-    public void DropSackItem()
+    public void DropCollectibleItem()
     {
         if (currentSack == null) return;
 
         Item item = currentSack.DropItem();
         if (item == null) return;
 
-        item.transform.position = transform.position + transform.forward * 1.5f + Vector3.up * 0.5f;
+        item.transform.position = transform.position + transform.forward * 1.5f + Vector3.up;
     }
 
     private void UpdateUpperBodyWeight()
