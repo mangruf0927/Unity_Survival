@@ -22,7 +22,8 @@ public class PlayerDeadState : IPlayerState
 
     public void Enter()
     {
-        playerController.animator.SetBool("IsDead", true);
+        playerController.animator.SetTrigger("Dead");
+        Debug.Log("나 죽었다");
     }
 
     public void Update()

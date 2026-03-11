@@ -26,9 +26,9 @@ public class PlayerAttackState : IPlayerState
     public void Enter()
     {
         if (playerController.currentWeapon is MeleeWeapon)
-            playerController.animator.SetTrigger("OnMeleeAttack");
+            playerController.animator.SetTrigger("MeleeAttack");
         else if (playerController.currentWeapon is RangedWeapon)
-            playerController.animator.SetTrigger("OnRangedAttack");
+            playerController.animator.SetTrigger("RangedAttack");
 
         playerController.currentWeapon.Attack();
     }
