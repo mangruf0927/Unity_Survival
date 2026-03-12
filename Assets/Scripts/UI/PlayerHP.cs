@@ -21,6 +21,6 @@ public class PlayerHP : MonoBehaviour, IObserver
     {
         hpSlider.maxValue = playerStat.MaxHP;
         hpSlider.value = playerStat.CurrentHP;
-        Debug.Log(playerStat.MaxHP + " " + playerStat.CurrentHP);
+        // Debug.Log(playerStat.MaxHP + " " + playerStat.CurrentHP);
     }
 }

@@ -26,7 +26,7 @@ public class Inventory : MonoBehaviour
         {
             EquippableItem item = itemList[i];
 
-            if (item.ItemName != newItem.ItemName) continue;
+            if (item.ItemType != newItem.ItemType) continue;
             if (!CanUpgrade(item, newItem)) return false;
 
             prevItem = item;

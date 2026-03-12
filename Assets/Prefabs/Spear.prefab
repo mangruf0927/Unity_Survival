@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d33d7c09f0c48f2b4faf23a4cf501f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeWeapon
-  itemName: SPEAR
+  itemType: 2
   attachPoint: {fileID: 259362694345454847}
   rigidbody: {fileID: 3809525931766685306}
   collider: {fileID: 3014555923330533279}

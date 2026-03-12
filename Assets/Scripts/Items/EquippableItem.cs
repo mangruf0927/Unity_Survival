@@ -1,13 +1,15 @@
 using UnityEngine;
 
+public enum ToolType {SACK, AXE, SPEAR, REVOLVER, RIFLE}
+
 public abstract class EquippableItem : MonoBehaviour
 {
-    [SerializeField] private string itemName;
+    [SerializeField] private ToolType itemType;
     [SerializeField] private Transform attachPoint;
     [SerializeField] private new Rigidbody rigidbody;
     [SerializeField] private new Collider collider;
 
-    public string ItemName => itemName;
+    public ToolType ItemType => itemType;
     public virtual bool CanDrop => true;
 
     public virtual void Attach(Transform position)

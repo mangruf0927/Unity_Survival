@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d33d7c09f0c48f2b4faf23a4cf501f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeleeWeapon
-  itemName: AXE
+  itemType: 1
   attachPoint: {fileID: 7482172172567400223}
   rigidbody: {fileID: 266026007911041275}
   collider: {fileID: 187187477447363179}
