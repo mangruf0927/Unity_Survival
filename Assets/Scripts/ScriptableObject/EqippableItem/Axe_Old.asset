@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49c517166dd1c41408ecd160b3e8fd82, type: 3}
   m_Name: Axe_Old
   m_EditorClassIdentifier: Assembly-CSharp::MeleeWeaponData
-  weaponType: 0
+  level: 0
   attackDamage: 10
+  treeDamage: 8

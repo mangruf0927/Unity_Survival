@@ -7,6 +7,8 @@ public class MeleeWeapon : Weapon
 
     public MeleeLevel Level => weaponData.level; 
     private int AttackDamage => weaponData.attackDamage;
+    private int TreeDamage => weaponData.treeDamage;
+    
     private bool hasHit;
 
     public override void Attack()
@@ -22,9 +24,19 @@ public class MeleeWeapon : Weapon
 
     void OnTriggerEnter(Collider other)
     {
-        if (hasHit || AttackDamage <= 0) return;
-        if (!other.CompareTag("Enemy")) return;
+        if(hasHit) return;
 
+        Tree tree = other.GetComponentInParent<Tree>();
+        if(tree != null)
+        {
+            if(ItemType != ToolType.AXE || TreeDamage <= 0) return;
+            
+            hasHit = true;
+            tree.TakeDamage(TreeDamage);
+            return;
+        }
+
+        if (!other.CompareTag("Enemy") || AttackDamage <= 0) return;
         if (other.TryGetComponent<IDamageable>(out var enemy))
         {
             hasHit = true;

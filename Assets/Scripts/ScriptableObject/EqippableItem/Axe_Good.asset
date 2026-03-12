@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MeleeWeaponData
   level: 1
   attackDamage: 16
+  treeDamage: 20
