@@ -26,7 +26,7 @@ public class MeleeWeapon : Weapon
     {
         if(hasHit) return;
 
-        Tree tree = other.GetComponentInParent<Tree>();
+        TreeObject tree = other.GetComponentInParent<TreeObject>();
         if(tree != null)
         {
             if(ItemType != ToolType.AXE || TreeDamage <= 0) return;

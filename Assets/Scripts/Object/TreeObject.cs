@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Tree : MonoBehaviour
+public class TreeObject : MonoBehaviour
 {
     [SerializeField] private int maxHP = 100;
     [SerializeField] private float shakeAngle;
