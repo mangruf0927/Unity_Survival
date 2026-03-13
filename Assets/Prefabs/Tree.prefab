@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6160098499916067487, guid: 22a9080c2f2402b499a0dc31dec98137, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 6160098499916067487, guid: 22a9080c2f2402b499a0dc31dec98137, type: 3}
       propertyPath: m_LocalPosition.y
@@ -34,7 +34,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6160098499916067487, guid: 22a9080c2f2402b499a0dc31dec98137, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.74
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6160098499916067487, guid: 22a9080c2f2402b499a0dc31dec98137, type: 3}
       propertyPath: m_LocalRotation.w
@@ -117,6 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea378271aaaad4eccbef31b9aba6fb15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tree
+  log: {fileID: 2156131655249105844, guid: 9856752a9aa24416998136ffabec76c1, type: 3}
   maxHP: 100
   shakeAngle: 5
   shakeTime: 0.15
