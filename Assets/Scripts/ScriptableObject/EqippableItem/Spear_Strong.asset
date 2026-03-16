@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49c517166dd1c41408ecd160b3e8fd82, type: 3}
-  m_Name: SpearData
+  m_Name: Spear_Strong
   m_EditorClassIdentifier: Assembly-CSharp::MeleeWeaponData
-  weaponType: 1
-  attackDamage: 25
+  level: 2
+  attackDamage: 70
+  treeDamage: 0
