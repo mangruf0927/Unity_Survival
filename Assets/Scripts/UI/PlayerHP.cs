@@ -12,7 +12,7 @@ public class PlayerHP : MonoBehaviour, IObserver
         Notify();       
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         playerStat.RemoveObserver(this);
     }

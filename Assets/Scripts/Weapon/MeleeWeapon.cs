@@ -3,7 +3,7 @@ using UnityEngine;
 public class MeleeWeapon : Weapon
 {
     [SerializeField] private MeleeWeaponData weaponData;
-    [SerializeField] private BoxCollider hitCollider;
+    [SerializeField] private Collider hitCollider;
 
     public MeleeLevel Level => weaponData.level; 
     private int AttackDamage => weaponData.attackDamage;

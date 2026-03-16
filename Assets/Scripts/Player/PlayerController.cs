@@ -1,27 +1,32 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rigid;
     [SerializeField] private PlayerStat playerStat;
     [SerializeField] private Transform cameraPivot;
     [SerializeField] private Inventory inventory;
+    [SerializeField] private Transform equipPosition;
+    [SerializeField] private Rigidbody rigid;
 
-    public Transform equipPosition;
     public Animator animator;
-    public Weapon currentWeapon;
-    public Sack currentSack;
 
-    private EquippableItem currentEquipped;
     private Vector2 moveDirection;
     private Vector3 lookDirection = Vector3.forward;
-
+    
     private bool isRun;
     private bool isGround;
+
+    private EquippableItem currentEquipped;
+    private Weapon currentWeapon;
+    public Weapon CurrentWeapon => currentWeapon;
+    private Sack currentSack;
 
     public void SetDirection(Vector2 direction) { moveDirection = direction; }
     public void SetAimPoint(Vector3 point) { currentWeapon.SetAimPoint(point); }
     public void SetRun(bool state) { isRun = state; }
+    public void SetWeapon(Weapon weapon) { currentWeapon = weapon; }
+    public void SetSack(Sack sack) { currentSack = sack; }
 
     public bool IsRun() { return isRun; }
     public bool IsGround() { return isGround; }

@@ -25,12 +25,12 @@ public class PlayerAttackState : IPlayerState
 
     public void Enter()
     {
-        if (playerController.currentWeapon is MeleeWeapon)
+        if (playerController.CurrentWeapon is MeleeWeapon)
             playerController.animator.SetTrigger("MeleeAttack");
-        else if (playerController.currentWeapon is RangedWeapon)
+        else if (playerController.CurrentWeapon is RangedWeapon)
             playerController.animator.SetTrigger("RangedAttack");
 
-        playerController.currentWeapon.Attack();
+        playerController.CurrentWeapon.Attack();
     }
 
     public void Update()
@@ -53,6 +53,6 @@ public class PlayerAttackState : IPlayerState
 
     public void Exit()
     {
-        playerController.currentWeapon.ExitAttack();
+        playerController.CurrentWeapon.ExitAttack();
     }
 }

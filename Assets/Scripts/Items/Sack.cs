@@ -8,22 +8,22 @@ public class Sack : EquippableItem
     private Stack<Item> itemStack = new();
     
     public SackLevel Level => sackData.level;
-    public int Capacity => sackData.capacity;
     public override bool CanDrop => false;
 
+    public int Capacity => sackData.capacity;
     public int Count => itemStack.Count;
     public bool IsFull => itemStack.Count >= Capacity;
     public bool IsEmpty => itemStack.Count == 0;
 
     public override void OnEquip(PlayerController player)
     {
-        player.currentSack = this;
+        player.SetSack(this);
         gameObject.SetActive(true);
     }
 
     public override void OnUnequip(PlayerController player)
     {
-        player.currentSack = null;
+        player.SetSack(null);
         gameObject.SetActive(false);
     }
 

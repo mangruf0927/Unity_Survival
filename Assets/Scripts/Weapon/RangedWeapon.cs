@@ -16,7 +16,7 @@ public class RangedWeapon : Weapon
         if (bulletObj.TryGetComponent<Bullet>(out var bullet))
         {
             bullet.SetData(weaponData.attackDamage, weaponData.bulletSpeed, pool);
-            bullet.Fire(aimPos - shootPosition.position);
+            bullet.Fire(AimPos - shootPosition.position);
         }
     }
 

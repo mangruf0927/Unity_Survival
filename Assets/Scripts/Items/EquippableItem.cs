@@ -4,8 +4,8 @@ public abstract class EquippableItem : MonoBehaviour
 {
     [SerializeField] private ToolType itemType;
     [SerializeField] private Transform attachPoint;
-    [SerializeField] private new Rigidbody rigidbody;
-    [SerializeField] private new Collider collider;
+    [SerializeField] private Rigidbody rigid;
+    [SerializeField] private Collider col;
 
     public ToolType ItemType => itemType;
     public virtual bool CanDrop => true;
@@ -16,16 +16,16 @@ public abstract class EquippableItem : MonoBehaviour
         transform.position += position.position - attachPoint.position;
         transform.SetParent(position, true);
 
-        if (collider != null)
+        if (col != null)
         {
-            collider.enabled = false;
-            collider.isTrigger = true;
+            col.enabled = false;
+            col.isTrigger = true;
         }
 
-        if (rigidbody != null)
+        if (rigid != null)
         {
-            rigidbody.isKinematic = true;
-            rigidbody.useGravity = false;
+            rigid.isKinematic = true;
+            rigid.useGravity = false;
         }
     }
 
@@ -33,16 +33,16 @@ public abstract class EquippableItem : MonoBehaviour
     {
         transform.SetParent(null);
 
-        if (collider != null)
+        if (col != null)
         {
-            collider.enabled = true;
-            collider.isTrigger = false;
+            col.enabled = true;
+            col.isTrigger = false;
         }
 
-        if (rigidbody != null)
+        if (rigid != null)
         {
-            rigidbody.isKinematic = false;
-            rigidbody.useGravity = true;
+            rigid.isKinematic = false;
+            rigid.useGravity = true;
         }
     }
     

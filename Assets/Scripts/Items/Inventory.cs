@@ -33,7 +33,7 @@ public class Inventory : MonoBehaviour
             itemList[i] = newItem;
             return true;
         }
-
+        
         itemList.Add(newItem);
         return true;
     }

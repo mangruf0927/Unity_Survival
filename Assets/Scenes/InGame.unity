@@ -1553,7 +1553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  name: WOOD
+  itemName: 
 --- !u!1 &685776878
 GameObject:
   m_ObjectHideFlags: 0
@@ -1763,7 +1763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  name: WOOD
+  itemName: 
 --- !u!54 &878540412
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2419,14 +2419,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20c128048f72a455883ddf606c7ee506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  rigid: {fileID: 1167997879}
   playerStat: {fileID: 1167997876}
   cameraPivot: {fileID: 104391444}
   inventory: {fileID: 1717421986}
   equipPosition: {fileID: 1620081798}
+  rigid: {fileID: 1167997879}
   animator: {fileID: 1197332585}
-  currentWeapon: {fileID: 0}
-  currentSack: {fileID: 0}
 --- !u!54 &1167997879
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2806,7 +2804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  name: WOOD
+  itemName: 
 --- !u!54 &1324887847
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3040,7 +3038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  name: WOOD
+  itemName: 
 --- !u!54 &1363684441
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3520,7 +3518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  name: IRON
+  itemName: 
 --- !u!1 &1475970775
 GameObject:
   m_ObjectHideFlags: 0
@@ -3778,7 +3776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  name: WOOD
+  itemName: 
 --- !u!54 &1589809721
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4814,7 +4812,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  name: WOOD
+  itemName: 
 --- !u!54 &1903628437
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5171,7 +5169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  name: IRON
+  itemName: 
 --- !u!54 &2016077327
 Rigidbody:
   m_ObjectHideFlags: 0
