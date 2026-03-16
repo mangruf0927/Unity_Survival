@@ -1,7 +1,5 @@
 using UnityEngine;
 
-public enum SackLevel { OLD, GOOD, GIANT }
-
 [CreateAssetMenu]
 public class SackData : ScriptableObject
 {

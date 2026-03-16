@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyStateEnums { IDLE, CHASE, PATROL, DEAD };
-
 public class EnemyStateMachine : MonoBehaviour
 {
     [SerializeField] private EnemyController enemyController;

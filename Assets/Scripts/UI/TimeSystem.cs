@@ -6,8 +6,6 @@ public class TimeSystem : MonoBehaviour
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] TextMeshProUGUI dayCountText;
 
-    public enum Phase { DAY, NIGHT }
-
     private readonly float day = 180f;
     private readonly float night = 90f;
     private int dayCount = 1;

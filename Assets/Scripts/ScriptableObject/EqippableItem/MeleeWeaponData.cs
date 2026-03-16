@@ -1,7 +1,5 @@
 using UnityEngine;
 
-public enum MeleeLevel { OLD, GOOD, STRONG }
-
 [CreateAssetMenu]
 public class MeleeWeaponData : ScriptableObject
 {    

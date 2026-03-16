@@ -1,7 +1,5 @@
 using UnityEngine;
 
-public enum ToolType {SACK, AXE, SPEAR, REVOLVER, RIFLE}
-
 public abstract class EquippableItem : MonoBehaviour
 {
     [SerializeField] private ToolType itemType;

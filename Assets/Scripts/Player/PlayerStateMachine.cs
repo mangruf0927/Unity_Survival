@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerStateEnums{ IDLE, MOVE, RUN, JUMP, ATTACK, DEAD };
-
 public class PlayerStateMachine : MonoBehaviour
 {
     [SerializeField] private PlayerController playerController;
