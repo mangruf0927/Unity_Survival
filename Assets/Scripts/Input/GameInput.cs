@@ -6,8 +6,10 @@ public class GameInput : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private PlayerStateMachine stateMachine;
     [SerializeField] private CameraRotate cameraRotate;
+    [SerializeField] private Chest chest;
 
     private bool isRun;
+    private bool isOpened;
     private Vector2 direction;
 
     private Outline currentOutline;
@@ -22,6 +24,8 @@ public class GameInput : MonoBehaviour
 
         int number = InputNumber();
         if (number != -1) playerController.EquipItem(number);
+
+        if(isOpened) chest.Hold();
     }
 
     private void UpdateTarget()
@@ -84,15 +88,22 @@ public class GameInput : MonoBehaviour
         return -1;
     }
 
-    public void OnPick(InputValue value)
+    public void OnPick(InputValue value)        // E키
     {
+        isOpened = value.isPressed;
+        if(!isOpened)
+        {
+            chest.Cancel();
+            return;
+        }
+
         if (!value.isPressed || currentEquip == null) return;
         if (!playerController.GetEquippableItem(currentEquip)) return;
 
         ClearTarget();
     }
 
-    public void OnCollect(InputValue value)
+    public void OnCollect(InputValue value)     // F키
     {
         if (!value.isPressed) return;
 

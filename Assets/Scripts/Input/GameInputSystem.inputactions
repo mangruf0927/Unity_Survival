@@ -234,7 +234,7 @@
                     "name": "",
                     "id": "9c6aca2a-99d3-4482-b40e-09f148a4ad58",
                     "path": "<Keyboard>/e",
-                    "interactions": "Press",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "",
                     "action": "Pick",
