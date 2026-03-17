@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: RifleData
   m_EditorClassIdentifier: Assembly-CSharp::RangedWeaponData
   attackDamage: 50
-  magBullet: 1
-  bulletSpeed: 5
+  magSize: 1
+  bulletSpeed: 10
