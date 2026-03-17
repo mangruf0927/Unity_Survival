@@ -7,9 +7,20 @@ public class RangedWeapon : Weapon
 
     [SerializeField] private GameObject projectile;
     [SerializeField] private ObjectPool pool;
+    [SerializeField] private int totalAmmo;
+
+    private int MagSize => weaponData.magSize;
+    
+    private int currentAmmo;
 
     public override void Attack()
     {
+        if(currentAmmo <= 0) 
+        {
+            Debug.Log("[탄약 없음] : " + currentAmmo + "/" + totalAmmo);
+            return;
+        }
+
         GameObject bulletObj = pool.GetFromPool(projectile, PoolTypeEnums.BULLET);
         bulletObj.transform.SetPositionAndRotation(shootPosition.position, shootPosition.rotation);
         
@@ -17,6 +28,9 @@ public class RangedWeapon : Weapon
         {
             bullet.SetData(weaponData.attackDamage, weaponData.bulletSpeed, pool);
             bullet.Fire(AimPos - shootPosition.position);
+
+            currentAmmo--;
+            Debug.Log("[발사] : " + currentAmmo + "/" + totalAmmo);
         }
     }
 
@@ -24,4 +38,21 @@ public class RangedWeapon : Weapon
     {
     }
 
+    public void Reload()
+    {
+        if(currentAmmo >= MagSize || totalAmmo <= 0) return;
+
+        int need = MagSize - currentAmmo;
+        int reload = Mathf.Min(need, totalAmmo);
+
+        currentAmmo += reload;
+        totalAmmo -= reload;
+
+        Debug.Log("[재장전] : " + currentAmmo + "/" + totalAmmo);
+    }
+
+    public void AddAmmo(int amount)
+    {
+        totalAmmo += amount;
+    }
 }

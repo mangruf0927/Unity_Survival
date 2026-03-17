@@ -88,7 +88,7 @@ public class GameInput : MonoBehaviour
         return -1;
     }
 
-    public void OnPick(InputValue value)        // E키
+    public void OnPick(InputValue value)        // E키 (무기 + 자루)
     {
         isOpened = value.isPressed;
         if(!isOpened)
@@ -103,7 +103,7 @@ public class GameInput : MonoBehaviour
         ClearTarget();
     }
 
-    public void OnCollect(InputValue value)     // F키
+    public void OnCollect(InputValue value)     // F키 (자루 아이템)
     {
         if (!value.isPressed) return;
 
@@ -180,5 +180,15 @@ public class GameInput : MonoBehaviour
     {
         float y = value.Get<Vector2>().y;
         cameraRotate.SetZoomY(y);
+    }
+
+    public void OnReload(InputValue value)
+    {
+        if(!value.isPressed || playerController.CurrentWeapon == null) return;
+
+        if(playerController.CurrentWeapon is RangedWeapon rangedWeapon)
+        {
+            rangedWeapon.Reload();
+        }
     }
 }
