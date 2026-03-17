@@ -1,9 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Chest : MonoBehaviour
 {
     [SerializeField] private float openTime;
     [SerializeField] private Animator animator;
+
+    [SerializeField] private List<GameObject> itemLists;
+    [SerializeField] private Transform spawnPoint;
 
     private float holdTime;
     private bool isOpened = false;
@@ -24,6 +28,15 @@ public class Chest : MonoBehaviour
         holdTime = 0f;    
 
         animator.SetTrigger("Open");
+
+        RandomItem();
+    }
+
+    private void RandomItem()
+    {
+        int idx = Random.Range(0, itemLists.Count);
+        
+        Instantiate(itemLists[idx], spawnPoint.position, Quaternion.identity);
     }
 
     public void Cancel()
@@ -36,6 +49,7 @@ public class Chest : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
+            Debug.Log("E키를 3초 누르세요");
             isPlayerCollision = true;
         }
     }
