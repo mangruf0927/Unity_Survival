@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerStat : HealthBase
+public class PlayerStats : HealthBase
 {
     [SerializeField] PlayerStateMachine playerStateMachine;
     

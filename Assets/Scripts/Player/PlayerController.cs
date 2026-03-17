@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private PlayerStat playerStat;
+    [SerializeField] private PlayerStats playerStats;
     [SerializeField] private Transform cameraPivot;
     [SerializeField] private Inventory inventory;
     [SerializeField] private Transform equipPosition;
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
     public void Move()
     {
         Vector3 curVelocity = rigid.linearVelocity;
-        float speed = isRun ? playerStat.runSpeed : playerStat.moveSpeed;
+        float speed = isRun ? playerStats.runSpeed : playerStats.moveSpeed;
 
         Vector3 moveVec = GetCameraDirection(moveDirection);
         rigid.linearVelocity = new Vector3(moveVec.x * speed, curVelocity.y, moveVec.z * speed);
@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
         if (lookVec.sqrMagnitude >= 0.0001f) lookDirection = lookVec.normalized;
 
         Quaternion target = Quaternion.LookRotation(lookDirection, Vector3.up);
-        rigid.MoveRotation(Quaternion.Slerp(rigid.rotation, target, Time.fixedDeltaTime * playerStat.rotateSpeed));
+        rigid.MoveRotation(Quaternion.Slerp(rigid.rotation, target, Time.fixedDeltaTime * playerStats.rotateSpeed));
     }
 
     public void Stop()
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
     public void Jump()
     {
         isGround = false;
-        rigid.AddForce(Vector3.up * playerStat.jumpForce, ForceMode.Impulse);
+        rigid.AddForce(Vector3.up * playerStats.jumpForce, ForceMode.Impulse);
     }
  
     public bool GetEquippableItem(EquippableItem item)

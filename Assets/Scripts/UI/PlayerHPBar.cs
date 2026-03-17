@@ -1,26 +1,26 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerHP : MonoBehaviour, IObserver
+public class PlayerHPBar : MonoBehaviour, IObserver
 {
     [SerializeField] private Slider hpSlider;
-    [SerializeField] private PlayerStat playerStat;
+    [SerializeField] private PlayerStats playerStats;
 
     private void Start()
     {
-        playerStat.AddObserver(this);
+        playerStats.AddObserver(this);
         Notify();       
     }
 
     private void OnDestroy()
     {
-        playerStat.RemoveObserver(this);
+        playerStats.RemoveObserver(this);
     }
 
     public void Notify()
     {
-        hpSlider.maxValue = playerStat.MaxHP;
-        hpSlider.value = playerStat.CurrentHP;
+        hpSlider.maxValue = playerStats.MaxHP;
+        hpSlider.value = playerStats.CurrentHP;
         // Debug.Log(playerStat.MaxHP + " " + playerStat.CurrentHP);
     }
 }
