@@ -10,8 +10,10 @@ public class RangedWeapon : Weapon
     [SerializeField] private int totalAmmo;
 
     private int MagSize => weaponData.magSize;
-    
     private int currentAmmo;
+
+    private Vector3 aimPos;
+    public void SetAimPoint(Vector3 pos) {aimPos = pos;}
 
     public override void Attack()
     {
@@ -27,7 +29,7 @@ public class RangedWeapon : Weapon
         if (bulletObj.TryGetComponent<Bullet>(out var bullet))
         {
             bullet.SetData(weaponData.attackDamage, weaponData.bulletSpeed, pool);
-            bullet.Fire(AimPos - shootPosition.position);
+            bullet.Fire(aimPos - shootPosition.position);
 
             currentAmmo--;
             Debug.Log("[발사] : " + currentAmmo + "/" + totalAmmo);

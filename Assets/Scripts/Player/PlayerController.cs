@@ -23,10 +23,14 @@ public class PlayerController : MonoBehaviour
     private Sack currentSack;
 
     public void SetDirection(Vector2 direction) { moveDirection = direction; }
-    public void SetAimPoint(Vector3 point) { currentWeapon.SetAimPoint(point); }
     public void SetRun(bool state) { isRun = state; }
     public void SetWeapon(Weapon weapon) { currentWeapon = weapon; }
     public void SetSack(Sack sack) { currentSack = sack; }
+    public void SetAimPoint(Vector3 point)
+    {
+        if(currentWeapon is RangedWeapon rangedWeapon) 
+            rangedWeapon.SetAimPoint(point);
+    }
 
     public bool IsRun() { return isRun; }
     public bool IsGround() { return isGround; }
@@ -180,6 +184,11 @@ public class PlayerController : MonoBehaviour
         if (item == null) return;
 
         item.transform.position = transform.position + transform.forward * 1.5f + Vector3.up;
+    }
+
+    public void Reload()
+    {
+        if(currentWeapon is RangedWeapon rangedWeapon) rangedWeapon.Reload();
     }
 
     private void UpdateUpperBodyWeight()

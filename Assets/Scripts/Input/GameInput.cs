@@ -169,9 +169,10 @@ public class GameInput : MonoBehaviour
     {
         if (!value.isPressed || playerController.CurrentWeapon == null) return;
 
+        
         Ray camRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(camRay, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide)) playerController.SetAimPoint(hit.point);
-        else playerController.SetAimPoint(camRay.origin + camRay.direction * 1000f);
+        else playerController.SetAimPoint(camRay.origin + camRay.direction * 1000f);   
 
         stateMachine.ChangeInputState(PlayerStateEnums.ATTACK);
     }
@@ -185,10 +186,6 @@ public class GameInput : MonoBehaviour
     public void OnReload(InputValue value)
     {
         if(!value.isPressed || playerController.CurrentWeapon == null) return;
-
-        if(playerController.CurrentWeapon is RangedWeapon rangedWeapon)
-        {
-            rangedWeapon.Reload();
-        }
+        playerController.Reload();
     }
 }
