@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HPRotation : MonoBehaviour
+public class UIRotation : MonoBehaviour
 {
     private Camera cam;
 

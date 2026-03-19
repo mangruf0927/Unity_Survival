@@ -42,8 +42,7 @@ public class TimeSystem : MonoBehaviour
     {
         int minutes = Mathf.FloorToInt(timeElapsed / 60F);
         int seconds = Mathf.FloorToInt(timeElapsed % 60F);
-        timerText.text = string.Format("{0:00} : {1:00}", minutes, seconds);
-
+        timerText.text = $"{minutes:00} : {seconds:00}";
         dayCountText.text = $"Day {dayCount}";
     }
 

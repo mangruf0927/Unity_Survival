@@ -22,7 +22,7 @@ public abstract class HealthBase : MonoBehaviour, IDamageable, ISubject
         if (CurrentHP <= 0) Die();
     }
 
-     public void AddObserver(IObserver observer)
+    public void AddObserver(IObserver observer)
     {
         ObserverList.Add(observer);
     }

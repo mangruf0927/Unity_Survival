@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sack : EquippableItem
+public class Sack : EquippableItem, ISubject
 {   
     [SerializeField] private SackData sackData;
 
     private Stack<Item> itemStack = new();
-    
+    private readonly List<IObserver> ObserverList = new();
+
     public SackLevel Level => sackData.level;
     public override bool CanDrop => false;
 
@@ -19,6 +20,7 @@ public class Sack : EquippableItem
     {
         player.SetSack(this);
         gameObject.SetActive(true);
+        NotifyObservers();
     }
 
     public override void OnUnequip(PlayerController player)
@@ -34,7 +36,8 @@ public class Sack : EquippableItem
         itemStack.Push(item);
         item.transform.SetParent(transform);
         item.gameObject.SetActive(false);
-        
+
+        NotifyObservers();
         return true;
     }
 
@@ -47,6 +50,7 @@ public class Sack : EquippableItem
         item.transform.SetParent(null);
         item.gameObject.SetActive(true);
 
+        NotifyObservers();
         return item;
     }
 
@@ -65,6 +69,24 @@ public class Sack : EquippableItem
         {
             Item item = temp.Pop();
             nextSack.AddItem(item);
+        }
+    }
+
+    public void AddObserver(IObserver observer)
+    {
+        ObserverList.Add(observer);
+    }
+
+    public void RemoveObserver(IObserver observer)
+    {
+        ObserverList.Remove(observer);
+    }
+
+    public void NotifyObservers()
+    {
+        foreach (IObserver observer in ObserverList)
+        {
+            observer.Notify();
         }
     }
 }
