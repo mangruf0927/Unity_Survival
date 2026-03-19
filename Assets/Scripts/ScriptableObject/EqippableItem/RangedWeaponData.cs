@@ -3,6 +3,9 @@ using UnityEngine;
 [CreateAssetMenu]
 public class RangedWeaponData : ScriptableObject
 {
+    [Header("총 타입")]
+    public AmmoType ammoType;
+
     [Header("공격력")]
     public int attackDamage;
 

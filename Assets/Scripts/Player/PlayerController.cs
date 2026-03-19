@@ -24,8 +24,14 @@ public class PlayerController : MonoBehaviour
 
     public void SetDirection(Vector2 direction) { moveDirection = direction; }
     public void SetRun(bool state) { isRun = state; }
-    public void SetWeapon(Weapon weapon) { currentWeapon = weapon; }
     public void SetSack(Sack sack) { currentSack = sack; }
+    
+    public void SetWeapon(Weapon weapon) 
+    { 
+        currentWeapon = weapon; 
+        UpdateAmmo();
+    }
+
     public void SetAimPoint(Vector3 point)
     {
         if(currentWeapon is RangedWeapon rangedWeapon) 
@@ -186,10 +192,29 @@ public class PlayerController : MonoBehaviour
         item.transform.position = transform.position + transform.forward * 1.5f + Vector3.up;
     }
 
+    public void AddAmmo(AmmoType ammoType, int amount)
+    {
+        inventory.AddAmmo(ammoType, amount);
+        UpdateAmmo();
+    }
+
     public void Reload()
     {
-        if(currentWeapon is RangedWeapon rangedWeapon) rangedWeapon.Reload();
+        if(currentWeapon is RangedWeapon rangedWeapon) 
+        {
+            int amount = inventory.UseAmmo(rangedWeapon.type, rangedWeapon.NeedAmmo());            
+            rangedWeapon.Reload(amount);
+            UpdateAmmo();
+        }
     }
+
+    private void UpdateAmmo()
+    {
+        if (currentWeapon is RangedWeapon rangedWeapon)
+        {
+            rangedWeapon.SetTotalAmmo(inventory.GetAmmoCount(rangedWeapon.type));
+        }
+    }   
 
     private void UpdateUpperBodyWeight()
     {

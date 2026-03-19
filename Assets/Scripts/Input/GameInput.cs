@@ -97,10 +97,21 @@ public class GameInput : MonoBehaviour
             return;
         }
 
-        if (!value.isPressed || currentEquip == null) return;
-        if (!playerController.GetEquippableItem(currentEquip)) return;
+        if(!value.isPressed) return;
 
-        ClearTarget();
+        if (currentItem is AmmoItem ammoItem)
+        {
+            playerController.AddAmmo(ammoItem.ammoType, ammoItem.amount);
+            Destroy(ammoItem.gameObject);
+            ClearTarget();
+            return;
+        }
+
+        if (currentEquip != null)
+        {
+            if (!playerController.GetEquippableItem(currentEquip)) return;
+            ClearTarget();
+        }
     }
 
     public void OnCollect(InputValue value)     // F키 (자루 아이템)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class Inventory : MonoBehaviour
     
     private List<EquippableItem> itemList = new();
     public IReadOnlyList<EquippableItem> ItemList => itemList;
+
+    private Dictionary<AmmoType, int> ammoDictionary = new();
 
     private void Awake()
     {
@@ -63,5 +66,32 @@ public class Inventory : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void AddAmmo(AmmoType ammoType, int count)
+    {
+        if(count <= 0) return;
+
+        if(!ammoDictionary.ContainsKey(ammoType)) ammoDictionary[ammoType] = 0;
+        ammoDictionary[ammoType] += count;
+
+        // Debug.Log("[INVENTORY AddAmmo] : " + ammoType + ", " + ammoDictionary[ammoType]);
+    }
+
+    public int UseAmmo(AmmoType ammoType, int count)
+    {
+        if(count <= 0) return 0;
+
+        int current = GetAmmoCount(ammoType);
+        int used = Mathf.Min(current, count);
+
+        ammoDictionary[ammoType] = current - used;
+        // Debug.Log("[INVENTORY UseAmmo] : " + ammoDictionary[ammoType] + ", " + used);
+        return used;
+    }
+
+    public int GetAmmoCount(AmmoType ammoType)
+    {
+        return ammoDictionary.TryGetValue(ammoType, out int count) ? count : 0;
     }
 }

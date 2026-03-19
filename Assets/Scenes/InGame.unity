@@ -1741,7 +1741,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 426ac79662fe64bc9b54116089da2a94, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1782,8 +1782,8 @@ Transform:
   m_GameObject: {fileID: 552091900}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31.51, y: 0.65, z: -9}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 31.51, y: 0.65, z: -9.99}
+  m_LocalScale: {x: 0.7, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1794021000}
@@ -1815,10 +1815,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 552091900}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f2230d1f032b43a9afdd1e4e23f07e5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  itemName: 
+  m_EditorClassIdentifier: Assembly-CSharp::AmmoItem
+  itemName: AMMO
+  ammoType: 0
+  amount: 6
 --- !u!4 &566609037 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 145434502484616043, guid: 9856752a9aa24416998136ffabec76c1, type: 3}
@@ -2040,8 +2042,8 @@ GameObject:
   - component: {fileID: 878540414}
   - component: {fileID: 878540413}
   - component: {fileID: 878540412}
-  - component: {fileID: 878540411}
   - component: {fileID: 878540410}
+  - component: {fileID: 878540417}
   m_Layer: 10
   m_Name: Item (5)
   m_TagString: Untagged
@@ -2067,19 +2069,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &878540411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878540409}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  itemName: 
 --- !u!54 &878540412
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2153,7 +2142,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 426ac79662fe64bc9b54116089da2a94, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2194,12 +2183,27 @@ Transform:
   m_GameObject: {fileID: 878540409}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 32.38, y: 0.65, z: -8.33}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 32.93, y: 0.65, z: -8.33}
+  m_LocalScale: {x: 0.7, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1794021000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &878540417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878540409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2230d1f032b43a9afdd1e4e23f07e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AmmoItem
+  itemName: AMMO
+  ammoType: 0
+  amount: 6
 --- !u!1 &915898308
 GameObject:
   m_ObjectHideFlags: 0
@@ -3050,8 +3054,8 @@ GameObject:
   - component: {fileID: 1324887849}
   - component: {fileID: 1324887848}
   - component: {fileID: 1324887847}
-  - component: {fileID: 1324887846}
   - component: {fileID: 1324887845}
+  - component: {fileID: 1324887852}
   m_Layer: 10
   m_Name: Item (2)
   m_TagString: Untagged
@@ -3077,19 +3081,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &1324887846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1324887844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  itemName: 
 --- !u!54 &1324887847
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3163,7 +3154,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 426ac79662fe64bc9b54116089da2a94, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3204,12 +3195,27 @@ Transform:
   m_GameObject: {fileID: 1324887844}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 31.94, y: 0.65, z: -8.64}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 31.94, y: 0.65, z: -9.2}
+  m_LocalScale: {x: 0.7, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1794021000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1324887852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324887844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2230d1f032b43a9afdd1e4e23f07e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AmmoItem
+  itemName: AMMO
+  ammoType: 0
+  amount: 6
 --- !u!1001 &1348254913
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3284,8 +3290,8 @@ GameObject:
   - component: {fileID: 1363684443}
   - component: {fileID: 1363684442}
   - component: {fileID: 1363684441}
-  - component: {fileID: 1363684440}
   - component: {fileID: 1363684439}
+  - component: {fileID: 1363684446}
   m_Layer: 10
   m_Name: Item (6)
   m_TagString: Untagged
@@ -3311,19 +3317,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &1363684440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1363684438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  itemName: 
 --- !u!54 &1363684441
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3397,7 +3390,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: b30fc23cdeaab496288200b3d8f786f9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3439,11 +3432,26 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 31.83, y: 0.65, z: -7.461}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalScale: {x: 0.7, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1794021000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1363684446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363684438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2230d1f032b43a9afdd1e4e23f07e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AmmoItem
+  itemName: AMMO
+  ammoType: 1
+  amount: 6
 --- !u!1001 &1371645090
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3660,8 +3668,8 @@ GameObject:
   - component: {fileID: 1440986142}
   - component: {fileID: 1440986141}
   - component: {fileID: 1440986140}
-  - component: {fileID: 1440986145}
   - component: {fileID: 1440986139}
+  - component: {fileID: 1440986146}
   m_Layer: 10
   m_Name: Item
   m_TagString: Untagged
@@ -3807,7 +3815,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1794021000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1440986145
+--- !u!114 &1440986146
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3816,10 +3824,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1440986138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f2230d1f032b43a9afdd1e4e23f07e5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  itemName: 
+  m_EditorClassIdentifier: Assembly-CSharp::AmmoItem
+  itemName: AMMO
+  ammoType: 0
+  amount: 0
 --- !u!1 &1475970775
 GameObject:
   m_ObjectHideFlags: 0
@@ -4187,8 +4197,8 @@ GameObject:
   - component: {fileID: 1589809723}
   - component: {fileID: 1589809722}
   - component: {fileID: 1589809721}
-  - component: {fileID: 1589809720}
   - component: {fileID: 1589809719}
+  - component: {fileID: 1589809726}
   m_Layer: 10
   m_Name: Item (3)
   m_TagString: Untagged
@@ -4214,19 +4224,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &1589809720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1589809718}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  itemName: 
 --- !u!54 &1589809721
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4300,7 +4297,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 426ac79662fe64bc9b54116089da2a94, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4341,12 +4338,27 @@ Transform:
   m_GameObject: {fileID: 1589809718}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 32.459, y: 0.65, z: -9.28}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 33.26, y: 0.65, z: -9.28}
+  m_LocalScale: {x: 0.7, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1794021000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1589809726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589809718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2230d1f032b43a9afdd1e4e23f07e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AmmoItem
+  itemName: AMMO
+  ammoType: 0
+  amount: 6
 --- !u!4 &1610125798 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1421667217799064455, guid: b5e226790c4d84227b9663bec8b136d3, type: 3}
@@ -5288,8 +5300,8 @@ GameObject:
   - component: {fileID: 1903628439}
   - component: {fileID: 1903628438}
   - component: {fileID: 1903628437}
-  - component: {fileID: 1903628436}
   - component: {fileID: 1903628435}
+  - component: {fileID: 1903628442}
   m_Layer: 10
   m_Name: Item (4)
   m_TagString: Untagged
@@ -5315,19 +5327,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &1903628436
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1903628434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  itemName: 
 --- !u!54 &1903628437
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5401,7 +5400,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: b30fc23cdeaab496288200b3d8f786f9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5443,11 +5442,26 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 31.44, y: 0.65, z: -8.17}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalScale: {x: 0.7, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1794021000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1903628442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903628434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2230d1f032b43a9afdd1e4e23f07e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AmmoItem
+  itemName: AMMO
+  ammoType: 1
+  amount: 6
 --- !u!1 &1974757414
 GameObject:
   m_ObjectHideFlags: 0
@@ -5747,7 +5761,7 @@ GameObject:
   - component: {fileID: 2016077329}
   - component: {fileID: 2016077328}
   - component: {fileID: 2016077327}
-  - component: {fileID: 2016077326}
+  - component: {fileID: 2016077332}
   - component: {fileID: 2016077325}
   m_Layer: 10
   m_Name: Item (7)
@@ -5774,19 +5788,6 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &2016077326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2016077324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemTest
-  itemName: 
 --- !u!54 &2016077327
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5907,6 +5908,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1794021000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2016077332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016077324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f2230d1f032b43a9afdd1e4e23f07e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AmmoItem
+  itemName: AMMO
+  ammoType: 0
+  amount: 0
 --- !u!1 &2039818686
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,13 +4,14 @@ public class RangedWeapon : Weapon
 {
     [SerializeField] private RangedWeaponData weaponData;
     [SerializeField] private Transform shootPosition;
-
     [SerializeField] private GameObject projectile;
     [SerializeField] private ObjectPool pool;
-    [SerializeField] private int totalAmmo;
-
-    private int MagSize => weaponData.magSize;
+    
+    private int totalAmmo = 0;
     private int currentAmmo;
+
+    public int MagSize => weaponData.magSize;
+    public AmmoType type => weaponData.ammoType;
 
     private Vector3 aimPos;
     public void SetAimPoint(Vector3 pos) {aimPos = pos;}
@@ -40,21 +41,18 @@ public class RangedWeapon : Weapon
     {
     }
 
-    public void Reload()
+    public void SetTotalAmmo(int count) { totalAmmo = count; }
+
+    public int NeedAmmo()
     {
-        if(currentAmmo >= MagSize || totalAmmo <= 0) return;
-
-        int need = MagSize - currentAmmo;
-        int reload = Mathf.Min(need, totalAmmo);
-
-        currentAmmo += reload;
-        totalAmmo -= reload;
-
-        Debug.Log("[재장전] : " + currentAmmo + "/" + totalAmmo);
+        return MagSize - currentAmmo;
     }
 
-    public void AddAmmo(int amount)
+    public void Reload(int amount)
     {
-        totalAmmo += amount;
+        if(amount <= 0) return;
+
+        currentAmmo += amount;
+        Debug.Log("[RangedWeapon Reload] : " + currentAmmo + "/" + totalAmmo);
     }
 }

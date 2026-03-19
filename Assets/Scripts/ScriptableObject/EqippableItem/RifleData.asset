@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a86c4df4a082d4dd99b8942517ff0846, type: 3}
   m_Name: RifleData
   m_EditorClassIdentifier: Assembly-CSharp::RangedWeaponData
+  ammoType: 1
   attackDamage: 50
   magSize: 1
   bulletSpeed: 10
