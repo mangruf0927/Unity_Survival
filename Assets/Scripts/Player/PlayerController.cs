@@ -114,8 +114,8 @@ public class PlayerController : MonoBehaviour
         if (prevItem is Sack prevSack && newItem is Sack newSack)
         {
             prevSack.MoveItems(newSack);
+            newSack.GetComponentInChildren<SackItemCount>(true).gameObject.SetActive(true);        
         }
-
         Destroy(prevItem.gameObject);
         return equipped;
     }
