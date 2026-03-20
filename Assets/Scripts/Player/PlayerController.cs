@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 moveDirection;
     private Vector3 lookDirection = Vector3.forward;
-    
     private bool isRun;
     private bool isGround;
 
@@ -21,6 +20,9 @@ public class PlayerController : MonoBehaviour
     private Weapon currentWeapon;
     public Weapon CurrentWeapon => currentWeapon;
     private Sack currentSack;
+
+    public delegate void EquippedHandler(EquippableItem item);
+    public event EquippedHandler OnEquipped;
 
     public void SetDirection(Vector2 direction) { moveDirection = direction; }
     public void SetRun(bool state) { isRun = state; }
@@ -162,6 +164,7 @@ public class PlayerController : MonoBehaviour
         currentEquipped.OnEquip(this);
 
         UpdateUpperBodyWeight();
+        OnEquipped?.Invoke(currentEquipped);
     }
 
     public void UnequipItem()
@@ -174,6 +177,7 @@ public class PlayerController : MonoBehaviour
         currentWeapon = null;
 
         UpdateUpperBodyWeight();
+        OnEquipped?.Invoke(currentEquipped);
     }
 
     public bool GetCollectibleItem(Item item)
