@@ -1,15 +1,20 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class RangedWeapon : Weapon
+public class RangedWeapon : Weapon, ISubject
 {
     [SerializeField] private RangedWeaponData weaponData;
     [SerializeField] private Transform shootPosition;
     [SerializeField] private GameObject projectile;
     [SerializeField] private ObjectPool pool;
     
+    private readonly List<IObserver> ObserverList = new();
+
     private int totalAmmo = 0;
     private int currentAmmo;
 
+    public int CurrentAmmo => currentAmmo;
+    public int TotalAmmo => totalAmmo;
     public int MagSize => weaponData.magSize;
     public AmmoType type => weaponData.ammoType;
 
@@ -18,11 +23,7 @@ public class RangedWeapon : Weapon
 
     public override void Attack()
     {
-        if(currentAmmo <= 0) 
-        {
-            Debug.Log("[탄약 없음] : " + currentAmmo + "/" + totalAmmo);
-            return;
-        }
+        if(currentAmmo <= 0) return;
 
         GameObject bulletObj = pool.GetFromPool(projectile, PoolTypeEnums.BULLET);
         bulletObj.transform.SetPositionAndRotation(shootPosition.position, shootPosition.rotation);
@@ -33,7 +34,7 @@ public class RangedWeapon : Weapon
             bullet.Fire(aimPos - shootPosition.position);
 
             currentAmmo--;
-            Debug.Log("[발사] : " + currentAmmo + "/" + totalAmmo);
+            NotifyObservers();
         }
     }
 
@@ -41,7 +42,11 @@ public class RangedWeapon : Weapon
     {
     }
 
-    public void SetTotalAmmo(int count) { totalAmmo = count; }
+    public void SetTotalAmmo(int count) 
+    { 
+        totalAmmo = count; 
+        NotifyObservers();
+    }
 
     public int NeedAmmo()
     {
@@ -53,6 +58,24 @@ public class RangedWeapon : Weapon
         if(amount <= 0) return;
 
         currentAmmo += amount;
-        Debug.Log("[RangedWeapon Reload] : " + currentAmmo + "/" + totalAmmo);
+        NotifyObservers();
+    }
+
+    public void AddObserver(IObserver observer)
+    {
+        ObserverList.Add(observer);
+    }
+
+    public void RemoveObserver(IObserver observer)
+    {
+        ObserverList.Remove(observer);
+    }
+
+    public void NotifyObservers()
+    {
+        foreach (IObserver observer in ObserverList)
+        {
+            observer.Notify();
+        }
     }
 }
