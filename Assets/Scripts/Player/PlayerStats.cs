@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class PlayerStats : HealthBase
 {
-    [SerializeField] PlayerStateMachine playerStateMachine;
+    [SerializeField] private PlayerStateMachine playerStateMachine;
+    [SerializeField] private PlayerData playerData;
     
-    [SerializeField] private int maxHP = 100;
-    public override int MaxHP => maxHP;
-
-    public float moveSpeed;  
-    public float runSpeed;  
-    public float jumpForce;
-    public float rotateSpeed;
+    public override int MaxHP => playerData.maxHP;
+    public float MoveSpeed => playerData.moveSpeed;  
+    public float RunSpeed => playerData.runSpeed;  
+    public float JumpForce => playerData.jumpForce;
+    public float RotateSpeed => playerData.rotateSpeed;
     
     protected override void Die()
     {

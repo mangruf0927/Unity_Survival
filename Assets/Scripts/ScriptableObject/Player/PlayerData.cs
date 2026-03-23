@@ -1,0 +1,20 @@
+using UnityEngine;
+
+[CreateAssetMenu]
+public class PlayerData : ScriptableObject
+{
+    [Header("체력")]
+    public int maxHP;
+
+    [Header("이동 속도")]
+    public float moveSpeed;  
+
+    [Header("달리기 속도")]
+    public float runSpeed;  
+
+    [Header("점프 높이")]
+    public float jumpForce;
+
+    [Header("회전 속도")]
+    public float rotateSpeed;
+}

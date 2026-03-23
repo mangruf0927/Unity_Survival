@@ -15,6 +15,8 @@ public class Inventory : MonoBehaviour
     {
         foreach (EquippableItem item in basicItemList)
         {
+            if(item == null || itemList.Contains(item)) continue;
+
             itemList.Add(item);
             item.gameObject.SetActive(false);
         }
@@ -36,7 +38,6 @@ public class Inventory : MonoBehaviour
             itemList[i] = newItem;
             return true;
         }
-        
         itemList.Add(newItem);
         return true;
     }
@@ -74,8 +75,6 @@ public class Inventory : MonoBehaviour
 
         if(!ammoDictionary.ContainsKey(ammoType)) ammoDictionary[ammoType] = 0;
         ammoDictionary[ammoType] += count;
-
-        // Debug.Log("[INVENTORY AddAmmo] : " + ammoType + ", " + ammoDictionary[ammoType]);
     }
 
     public int UseAmmo(AmmoType ammoType, int count)
@@ -86,7 +85,6 @@ public class Inventory : MonoBehaviour
         int used = Mathf.Min(current, count);
 
         ammoDictionary[ammoType] = current - used;
-        // Debug.Log("[INVENTORY UseAmmo] : " + ammoDictionary[ammoType] + ", " + used);
         return used;
     }
 

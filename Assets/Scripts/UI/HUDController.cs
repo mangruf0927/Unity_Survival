@@ -9,15 +9,15 @@ public class HUDController : MonoBehaviour
 
     private void Start()
     {
-        player.OnEquipped += EquipperItem;
+        player.OnEquipped += EquippedItem;
     }
 
     private void OnDestroy()
     {
-        player.OnEquipped -= EquipperItem;
+        player.OnEquipped -= EquippedItem;
     }
 
-    private void EquipperItem(EquippableItem item)
+    private void EquippedItem(EquippableItem item)
     {
         itemUI.UpdateUI(item);
 

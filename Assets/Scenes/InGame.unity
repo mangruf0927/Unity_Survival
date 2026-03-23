@@ -902,7 +902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571199f623554497ab9ef9233673b383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
-  data: {fileID: 11400000, guid: 98106f7275b78414e8dd126321d28a48, type: 2}
+  enemyData: {fileID: 0}
   enemyStateMachine: {fileID: 208183963}
 --- !u!114 &208183963
 MonoBehaviour:
@@ -1469,7 +1469,7 @@ MonoBehaviour:
   playerController: {fileID: 1167997878}
   stateMachine: {fileID: 1167997877}
   cameraRotate: {fileID: 104391445}
-  chest: {fileID: 0}
+  chest: {fileID: 2216645238573800789}
 --- !u!114 &329913523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2740,7 +2740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571199f623554497ab9ef9233673b383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
-  data: {fileID: 11400000, guid: ab23a933810f945caac889c9d319f255, type: 2}
+  enemyData: {fileID: 0}
   enemyStateMachine: {fileID: 1081084398}
 --- !u!114 &1081084398
 MonoBehaviour:
@@ -3090,11 +3090,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStat
   playerStateMachine: {fileID: 1167997877}
-  maxHP: 100
-  moveSpeed: 3
-  runSpeed: 6
-  jumpForce: 4
-  rotateSpeed: 5
+  playerData: {fileID: 11400000, guid: 7858cf26672014efca3e81bc8d353e2a, type: 2}
 --- !u!114 &1167997877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4818,7 +4814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571199f623554497ab9ef9233673b383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
-  data: {fileID: 11400000, guid: f6ea59fafb84a4a39b1ca2f00e63acb0, type: 2}
+  enemyData: {fileID: 11400000, guid: f6ea59fafb84a4a39b1ca2f00e63acb0, type: 2}
   enemyStateMachine: {fileID: 1638928228}
 --- !u!1001 &1658826729
 PrefabInstance:
@@ -6891,7 +6887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571199f623554497ab9ef9233673b383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
-  data: {fileID: 11400000, guid: 6fe7e7ddff7a143ed90c223f50148819, type: 2}
+  enemyData: {fileID: 0}
   enemyStateMachine: {fileID: 2143739523}
 --- !u!114 &2143739523
 MonoBehaviour:
@@ -7280,6 +7276,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1244075548453074272, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
   m_PrefabInstance: {fileID: 2216645238573800787}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2216645238573800789 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1377499415229848349, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
+  m_PrefabInstance: {fileID: 2216645238573800787}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c5640b883fc94a13b1b3757708f6415, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1001 &4064609081255824183
 PrefabInstance:
   m_ObjectHideFlags: 0

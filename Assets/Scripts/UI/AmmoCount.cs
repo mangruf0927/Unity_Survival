@@ -10,8 +10,8 @@ public class AmmoCount : MonoBehaviour, IObserver
     public void SetWeapon(RangedWeapon weapon)
     {
         if(rangedWeapon != null) rangedWeapon.RemoveObserver(this);
-
         rangedWeapon = weapon;
+
         if(rangedWeapon != null)
         {
             rangedWeapon.AddObserver(this);
@@ -27,7 +27,7 @@ public class AmmoCount : MonoBehaviour, IObserver
 
     private void OnDestroy()
     {
-        rangedWeapon.RemoveObserver(this);
+        if(rangedWeapon != null) rangedWeapon.RemoveObserver(this);
     }
 
     public void Notify()

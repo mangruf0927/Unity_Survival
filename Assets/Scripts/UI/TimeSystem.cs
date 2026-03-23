@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class TimeSystem : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI timerText;
-    [SerializeField] TextMeshProUGUI dayCountText;
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private TextMeshProUGUI dayCountText;
 
     private readonly float day = 180f;
     private readonly float night = 90f;

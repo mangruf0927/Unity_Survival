@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
     public void Move()
     {
         Vector3 curVelocity = rigid.linearVelocity;
-        float speed = isRun ? playerStats.runSpeed : playerStats.moveSpeed;
+        float speed = isRun ? playerStats.RunSpeed : playerStats.MoveSpeed;
 
         Vector3 moveVec = GetCameraDirection(moveDirection);
         rigid.linearVelocity = new Vector3(moveVec.x * speed, curVelocity.y, moveVec.z * speed);
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
         if (lookVec.sqrMagnitude >= 0.0001f) lookDirection = lookVec.normalized;
 
         Quaternion target = Quaternion.LookRotation(lookDirection, Vector3.up);
-        rigid.MoveRotation(Quaternion.Slerp(rigid.rotation, target, Time.fixedDeltaTime * playerStats.rotateSpeed));
+        rigid.MoveRotation(Quaternion.Slerp(rigid.rotation, target, Time.fixedDeltaTime * playerStats.RotateSpeed));
     }
 
     public void Stop()
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
     public void Jump()
     {
         isGround = false;
-        rigid.AddForce(Vector3.up * playerStats.jumpForce, ForceMode.Impulse);
+        rigid.AddForce(Vector3.up * playerStats.JumpForce, ForceMode.Impulse);
     }
  
     public bool GetEquippableItem(EquippableItem item)

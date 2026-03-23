@@ -29,6 +29,7 @@ public abstract class HealthBase : MonoBehaviour, IDamageable, ISubject
 
     public void RemoveObserver(IObserver observer)
     {
+        if(observer == null) return;
         ObserverList.Remove(observer);
     }
 

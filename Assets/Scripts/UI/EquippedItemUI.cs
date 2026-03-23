@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class EquippedItemUI : MonoBehaviour
 {
     [SerializeField] private List<Image> slotList;
-
     [SerializeField] private Sprite FKey;
     [SerializeField] private Sprite RKey;
     [SerializeField] private Sprite BackKey;
@@ -23,7 +22,7 @@ public class EquippedItemUI : MonoBehaviour
             if(equippableItem.CanDrop) showList.Add(BackKey);
         }
         
-        for(int i = 0; i < showList.Count; i++)
+        for(int i = 0; i < showList.Count && i < slotList.Count; i++)
         {
             slotList[i].sprite = showList[i];
             slotList[i].enabled = true;
