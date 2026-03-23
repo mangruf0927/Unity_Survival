@@ -19,7 +19,10 @@ public class PlayerStateMachine : MonoBehaviour
             {PlayerStateEnums.ATTACK, new PlayerAttackState(this, playerController)},
             {PlayerStateEnums.DEAD, new PlayerDeadState(this, playerController)},
         };
+    }
 
+    private void Start()
+    {
         if (stateDictionary.TryGetValue(PlayerStateEnums.IDLE, out IPlayerState newState))
         {
             CurState = newState;

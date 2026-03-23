@@ -4,11 +4,18 @@ public abstract class EquippableItem : MonoBehaviour
 {
     [SerializeField] private ToolType itemType;
     [SerializeField] private Transform attachPoint;
-    [SerializeField] private Rigidbody rigid;
-    [SerializeField] private Collider[] colliders;
+    
+    private Rigidbody rigid;
+    private Collider[] colliders;
 
     public ToolType ItemType => itemType;
     public virtual bool CanDrop => true;
+
+    private void Awake()
+    {
+        rigid = GetComponent<Rigidbody>();
+        colliders = GetComponents<Collider>();
+    }
 
     public virtual void Attach(Transform position)
     {

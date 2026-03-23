@@ -17,12 +17,15 @@ public class EnemyStateMachine : MonoBehaviour
             {EnemyStateEnums.PATROL, new EnemyPatrolState(this, enemyController)},
             {EnemyStateEnums.DEAD, new EnemyDeadState(this, enemyController)},
         };
+    }
 
+    private void Start()
+    {
         if (stateDictionary.TryGetValue(EnemyStateEnums.IDLE, out IEnemyState newState))
         {
             CurState = newState;
             CurState.Enter();
-        }
+        }        
     }
 
     private void Update()

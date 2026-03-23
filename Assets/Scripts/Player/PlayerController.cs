@@ -1,14 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private PlayerStats playerStats;
     [SerializeField] private Transform cameraPivot;
     [SerializeField] private Inventory inventory;
     [SerializeField] private Transform equipPosition;
-    [SerializeField] private Rigidbody rigid;
 
+    private PlayerStats playerStats;
+    private Rigidbody rigid;
     public Animator animator;
 
     private Vector2 moveDirection;
@@ -23,6 +22,12 @@ public class PlayerController : MonoBehaviour
 
     public delegate void EquippedHandler(EquippableItem item);
     public event EquippedHandler OnEquipped;
+
+    private void Awake()
+    {
+        rigid = GetComponent<Rigidbody>();
+        playerStats = GetComponent<PlayerStats>();
+    }
 
     public void SetDirection(Vector2 direction) { moveDirection = direction; }
     public void SetRun(bool state) { isRun = state; }

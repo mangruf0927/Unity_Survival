@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private Rigidbody rigid;
-
+    private Rigidbody rigid;
     private ObjectPool pool;
     private int damage;
     private float speed;
@@ -11,6 +10,8 @@ public class Bullet : MonoBehaviour
 
     private void Awake()
     {
+        rigid = GetComponent<Rigidbody>();
+
         rigid.useGravity = false;
         rigid.isKinematic = false;
     }
