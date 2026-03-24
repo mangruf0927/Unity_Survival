@@ -11,6 +11,9 @@ public class Inventory : MonoBehaviour
 
     private Dictionary<AmmoType, int> ammoDictionary = new();
 
+    public delegate void ChangeSlotHandler();
+    public event ChangeSlotHandler OnChanged;
+
     private void Awake()
     {
         foreach (EquippableItem item in basicItemList)
@@ -36,16 +39,33 @@ public class Inventory : MonoBehaviour
 
             prevItem = item;
             itemList[i] = newItem;
+            OnChanged?.Invoke();
             return true;
         }
         itemList.Add(newItem);
+        OnChanged?.Invoke();
         return true;
     }
 
     public bool RemoveItem(EquippableItem item)
     {
         if (item == null) return false;
-        return itemList.Remove(item);
+        bool isRemoved = itemList.Remove(item);
+        if (isRemoved) OnChanged?.Invoke();
+
+        return isRemoved;
+    }
+
+    public void MoveItem(int from, int to)
+    {
+        if (from == to) return;
+        if (from < 0 || to < 0 || from >= itemList.Count || to >= itemList.Count) return;
+
+        EquippableItem item = itemList[from];
+        itemList.RemoveAt(from);
+        itemList.Insert(to, item);
+
+        OnChanged?.Invoke();
     }
 
     public EquippableItem SelectItem(int idx)
