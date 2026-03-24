@@ -150,6 +150,7 @@ public class PlayerController : MonoBehaviour
         currentSack = null;
 
         UpdateUpperBodyWeight();
+        OnEquipped?.Invoke(currentEquipped);
     }
 
     public void EquipItem(int idx)
