@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class GameInput : MonoBehaviour
 {
@@ -19,13 +21,27 @@ public class GameInput : MonoBehaviour
     private void Update()
     {
         if (Camera.main == null || Mouse.current == null) return;
-
         UpdateTarget();
 
         int number = InputNumber();
         if (number != -1) playerController.EquipItem(number);
 
         if(isOpened) chest.Hold();
+        
+        OnAttack();
+    }
+
+    private void OnAttack()
+    {
+        if (playerController.CurrentWeapon == null) return;
+        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+        if (EventSystem.current == null || EventSystem.current.IsPointerOverGameObject()) return;
+
+        Ray camRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (Physics.Raycast(camRay, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide)) playerController.SetAimPoint(hit.point);
+        else playerController.SetAimPoint(camRay.origin + camRay.direction * 1000f);   
+
+        stateMachine.ChangeInputState(PlayerStateEnums.ATTACK);
     }
 
     private void UpdateTarget()
@@ -174,18 +190,6 @@ public class GameInput : MonoBehaviour
     public void OnRotate(InputValue value)
     {
         cameraRotate.SetRightClick(value.isPressed);
-    }
-
-    public void OnAttack(InputValue value)
-    {
-        if (!value.isPressed || playerController.CurrentWeapon == null) return;
-
-        
-        Ray camRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (Physics.Raycast(camRay, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide)) playerController.SetAimPoint(hit.point);
-        else playerController.SetAimPoint(camRay.origin + camRay.direction * 1000f);   
-
-        stateMachine.ChangeInputState(PlayerStateEnums.ATTACK);
     }
 
     public void OnZoom(InputValue value)

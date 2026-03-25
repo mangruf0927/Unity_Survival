@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventorySlot : MonoBehaviour, IPointerClickHandler
+public class InventorySlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] private Image iconImage;
     [SerializeField] private TextMeshProUGUI slotNumber;
@@ -33,5 +33,20 @@ public class InventorySlot : MonoBehaviour, IPointerClickHandler
         if (slotIndex == -1) return;
 
         OnClickSlot?.Invoke(slotIndex);
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (slotIndex == -1) return;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (slotIndex == -1) return;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (slotIndex == -1) return;
     }
 }

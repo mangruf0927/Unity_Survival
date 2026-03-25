@@ -4,6 +4,7 @@ using UnityEngine;
 public class HUDController : MonoBehaviour
 {
     [SerializeField] private PlayerController player;
+    
     [SerializeField] private EquippedItemUI itemUI;
     [SerializeField] private AmmoCount ammoCount;
     [SerializeField] private InventoryUI inventoryUI;

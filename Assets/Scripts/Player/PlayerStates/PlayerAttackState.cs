@@ -53,6 +53,6 @@ public class PlayerAttackState : IPlayerState
 
     public void Exit()
     {
-        playerController.CurrentWeapon.ExitAttack();
+        if(playerController.CurrentWeapon != null) playerController.CurrentWeapon.ExitAttack();
     }
 }

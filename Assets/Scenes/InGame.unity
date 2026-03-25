@@ -661,6 +661,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sack_Old
       objectReference: {fileID: 0}
+    - target: {fileID: 890399219125308829, guid: d55e668cdc781464f876ad9b29e21cb2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6260590695426379216, guid: d55e668cdc781464f876ad9b29e21cb2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8331008554813961364, guid: d55e668cdc781464f876ad9b29e21cb2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
