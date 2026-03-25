@@ -64,6 +64,13 @@ public class PlayerController : MonoBehaviour
         return Vector3.ClampMagnitude(direction, 1f);
     }
 
+    public void UpdateAnimation()
+    {
+        if (moveDirection == Vector2.zero) animator.SetFloat("speed", 0f);
+        else if (IsRun()) animator.SetFloat("speed", 2f);
+        else animator.SetFloat("speed", 1f);
+    }
+
     public void Move()
     {
         Vector3 curVelocity = rigid.linearVelocity;

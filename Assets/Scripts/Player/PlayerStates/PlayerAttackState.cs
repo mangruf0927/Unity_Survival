@@ -35,7 +35,8 @@ public class PlayerAttackState : IPlayerState
 
     public void Update()
     {
-        var state = playerController.animator.GetCurrentAnimatorStateInfo(0);
+        playerController.UpdateAnimation();
+        var state = playerController.animator.GetCurrentAnimatorStateInfo(1);
 
         if ((state.IsName("attack_melee") || state.IsName("attack_ranged")) && state.normalizedTime >= 1.0f)
         {
@@ -48,11 +49,13 @@ public class PlayerAttackState : IPlayerState
 
     public void FixedUpdate()
     {
-        
+        playerController.Look();
+        playerController.Move();
     }
 
     public void Exit()
     {
+        Debug.Log("Exit");
         if(playerController.CurrentWeapon != null) playerController.CurrentWeapon.ExitAttack();
     }
 }

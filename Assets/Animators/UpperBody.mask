@@ -14,9 +14,9 @@ AvatarMask:
   - m_Path: root
     m_Weight: 1
   - m_Path: root/leg-left
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: root/leg-right
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: root/torso
     m_Weight: 1
   - m_Path: root/torso/arm-left

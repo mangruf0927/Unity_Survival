@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
 
 public class GameInput : MonoBehaviour
 {
