@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class AmmoItem : Item
 {
-    public AmmoType ammoType;
-    public int amount;
+    [SerializeField] private AmmoType ammoType;
+
+    public AmmoType AmmoType => ammoType;
 }

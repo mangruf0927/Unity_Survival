@@ -116,7 +116,7 @@ public class GameInput : MonoBehaviour
 
         if (currentItem is AmmoItem ammoItem)
         {
-            playerController.AddAmmo(ammoItem.ammoType, ammoItem.amount);
+            playerController.AddAmmo(ammoItem.AmmoType, ammoItem.Value);
             Destroy(ammoItem.gameObject);
             ClearTarget();
             return;
