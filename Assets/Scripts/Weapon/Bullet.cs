@@ -3,24 +3,21 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     private Rigidbody rigid;
-    private ObjectPool pool;
     private int damage;
     private float speed;
+
     private readonly float lifeTime = 10;
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
-
         rigid.useGravity = false;
-        rigid.isKinematic = false;
     }
     
-    public void SetData(int damage, float speed, ObjectPool pool)
+    public void SetData(int damage, float speed)
     {
         this.damage = damage;
         this.speed = speed;
-        this.pool = pool;
     }
 
     public void Fire(Vector3 direction)
@@ -43,7 +40,7 @@ public class Bullet : MonoBehaviour
 
     private void DisableBullet()
     {
-        pool.ReturnToPool(gameObject, PoolTypeEnums.BULLET);
+        ObjectPool.Instance.ReturnToPool(gameObject, PoolTypeEnums.BULLET);
     }
 
     private void OnDisable()

@@ -2,18 +2,38 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PoolTypeEnums { BULLET }
-
 public class ObjectPool : MonoBehaviour
 {    
+    [SerializeField] private List<PoolData> poolDataList;
+
+    public static ObjectPool Instance { get; private set; }
+    
     private readonly List<Stack<GameObject>> poolList = new();
+    private readonly Dictionary<PoolTypeEnums, Transform> parentDictionary = new();
 
     private void Awake() 
     {
+        // 싱글톤
+        if (Instance == null) Instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         foreach (PoolTypeEnums type in Enum.GetValues(typeof(PoolTypeEnums)))
         {
             poolList.Add(new Stack<GameObject>());
+
+            GameObject parent = new(type.ToString());
+            parent.transform.SetParent(transform);
+            parentDictionary.Add(type, parent.transform);
         }    
+
+        foreach (var data in poolDataList)
+        {
+            InitializePool(data.size, data.prefab, data.poolType, parentDictionary[data.poolType]);
+        }
     }
 
     public void InitializePool(int poolSize, GameObject prefab, PoolTypeEnums poolType, Transform parent = null)
@@ -30,8 +50,8 @@ public class ObjectPool : MonoBehaviour
     {
         var pool = poolList[(int)poolType];
 
-        GameObject obj = pool.Count > 0 ? pool.Pop() : CreatePool(prefab, parent);
-        obj.transform.SetParent(parent, false);
+        GameObject obj = pool.Count > 0 ? pool.Pop() : CreatePool(prefab);
+        obj.transform.SetParent(parentDictionary[poolType], false);
         obj.SetActive(true);
         return obj;
     }
@@ -46,6 +66,7 @@ public class ObjectPool : MonoBehaviour
     public void ReturnToPool(GameObject obj, PoolTypeEnums poolType)
     {
         obj.SetActive(false);
+        obj.transform.SetParent(parentDictionary[poolType]);
         poolList[(int)poolType].Push(obj);
     }
 }

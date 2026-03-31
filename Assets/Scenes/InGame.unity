@@ -7219,6 +7219,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b87667d1d2abf4d249dd6adf10e479be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
+  poolDataList:
+  - poolType: 0
+    prefab: {fileID: 2175682463181139635, guid: 32f482e32f77a4c7f80c5a21e0f5486e, type: 3}
+    size: 10
 --- !u!4 &1661564470
 Transform:
   m_ObjectHideFlags: 0

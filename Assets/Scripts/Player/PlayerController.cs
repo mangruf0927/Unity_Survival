@@ -219,7 +219,7 @@ public class PlayerController : MonoBehaviour
     {
         if(currentWeapon is RangedWeapon rangedWeapon) 
         {
-            int amount = inventory.UseAmmo(rangedWeapon.type, rangedWeapon.NeedAmmo());            
+            int amount = inventory.UseAmmo(rangedWeapon.Type, rangedWeapon.NeedAmmo());            
             rangedWeapon.Reload(amount);
             UpdateAmmo();
         }
@@ -229,7 +229,7 @@ public class PlayerController : MonoBehaviour
     {
         if (currentWeapon is RangedWeapon rangedWeapon)
         {
-            rangedWeapon.SetTotalAmmo(inventory.GetAmmoCount(rangedWeapon.type));
+            rangedWeapon.SetTotalAmmo(inventory.GetAmmoCount(rangedWeapon.Type));
         }
     }   
 

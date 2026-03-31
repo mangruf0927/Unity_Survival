@@ -6,7 +6,6 @@ public class RangedWeapon : Weapon, ISubject
     [SerializeField] private RangedWeaponData weaponData;
     [SerializeField] private Transform shootPosition;
     [SerializeField] private GameObject projectile;
-    [SerializeField] private ObjectPool pool;
     
     private readonly List<IObserver> ObserverList = new();
 
@@ -16,7 +15,7 @@ public class RangedWeapon : Weapon, ISubject
     public int CurrentAmmo => currentAmmo;
     public int TotalAmmo => totalAmmo;
     public int MagSize => weaponData.magSize;
-    public AmmoType type => weaponData.ammoType;
+    public AmmoType Type => weaponData.ammoType;
 
     private Vector3 aimPos;
     public void SetAimPoint(Vector3 pos) {aimPos = pos;}
@@ -25,12 +24,12 @@ public class RangedWeapon : Weapon, ISubject
     {
         if(currentAmmo <= 0) return;
 
-        GameObject bulletObj = pool.GetFromPool(projectile, PoolTypeEnums.BULLET);
+        GameObject bulletObj = ObjectPool.Instance.GetFromPool(projectile, PoolTypeEnums.BULLET);
         bulletObj.transform.SetPositionAndRotation(shootPosition.position, shootPosition.rotation);
         
         if (bulletObj.TryGetComponent<Bullet>(out var bullet))
         {
-            bullet.SetData(weaponData.attackDamage, weaponData.bulletSpeed, pool);
+            bullet.SetData(weaponData.attackDamage, weaponData.bulletSpeed);
             bullet.Fire(aimPos - shootPosition.position);
 
             currentAmmo--;
