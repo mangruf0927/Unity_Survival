@@ -5,7 +5,6 @@ public class RangedWeapon : Weapon, ISubject
 {
     [SerializeField] private RangedWeaponData weaponData;
     [SerializeField] private Transform shootPosition;
-    [SerializeField] private GameObject projectile;
     
     private readonly List<IObserver> ObserverList = new();
 
@@ -24,7 +23,7 @@ public class RangedWeapon : Weapon, ISubject
     {
         if(currentAmmo <= 0) return;
 
-        GameObject bulletObj = ObjectPool.Instance.GetFromPool(projectile, PoolTypeEnums.BULLET);
+        GameObject bulletObj = ObjectPool.Instance.GetFromPool(PoolTypeEnums.BULLET);
         bulletObj.transform.SetPositionAndRotation(shootPosition.position, shootPosition.rotation);
         
         if (bulletObj.TryGetComponent<Bullet>(out var bullet))

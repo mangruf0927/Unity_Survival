@@ -36,7 +36,7 @@ public class ObjectPool : MonoBehaviour
         }
     }
 
-    public void InitializePool(int poolSize, GameObject prefab, PoolTypeEnums poolType, Transform parent = null)
+    private void InitializePool(int poolSize, GameObject prefab, PoolTypeEnums poolType, Transform parent = null)
     {
         var pool = poolList[(int)poolType];
 
@@ -46,11 +46,18 @@ public class ObjectPool : MonoBehaviour
         }
     }
 
-    public GameObject GetFromPool(GameObject prefab, PoolTypeEnums poolType, Transform parent = null)
+    public GameObject GetFromPool(PoolTypeEnums poolType)
     {
         var pool = poolList[(int)poolType];
 
-        GameObject obj = pool.Count > 0 ? pool.Pop() : CreatePool(prefab);
+        GameObject obj;
+        if(pool.Count > 0) obj = pool.Pop();
+        else
+        {
+            var data = poolDataList.Find(x => x.poolType == poolType);
+            if(data == null) return null;
+            obj = CreatePool(data.prefab);
+        }
         obj.transform.SetParent(parentDictionary[poolType], false);
         obj.SetActive(true);
         return obj;
