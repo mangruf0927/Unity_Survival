@@ -13,8 +13,8 @@ public class EnemyChaseState : IEnemyState
 
     public void Enter()
     {
-        
-    }   
+
+    }
 
     public void Update()
     {
@@ -24,11 +24,11 @@ public class EnemyChaseState : IEnemyState
 
     public void FixedUpdate()
     {
-        
+
     }
 
     public void Exit()
     {
-        
+
     }
 }

@@ -12,17 +12,17 @@ public class EquippedItemUI : MonoBehaviour
     public void UpdateUI(EquippableItem equippableItem)
     {
         ClearUI();
-        if(equippableItem == null) return;
+        if (equippableItem == null) return;
 
         List<Sprite> showList = new();
-        if(equippableItem is Sack) showList.Add(FKey);
+        if (equippableItem is Sack) showList.Add(FKey);
         else
         {
-            if(equippableItem is RangedWeapon) showList.Add(RKey);
-            if(equippableItem.CanDrop) showList.Add(BackKey);
+            if (equippableItem is RangedWeapon) showList.Add(RKey);
+            if (equippableItem.CanDrop) showList.Add(BackKey);
         }
-        
-        for(int i = 0; i < showList.Count && i < slotList.Count; i++)
+
+        for (int i = 0; i < showList.Count && i < slotList.Count; i++)
         {
             slotList[i].sprite = showList[i];
             slotList[i].enabled = true;
@@ -31,7 +31,7 @@ public class EquippedItemUI : MonoBehaviour
 
     private void ClearUI()
     {
-        foreach(Image slot in slotList)
+        foreach (Image slot in slotList)
         {
             slot.sprite = null;
             slot.enabled = false;

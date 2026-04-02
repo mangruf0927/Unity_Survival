@@ -5,10 +5,10 @@ public class MeleeWeapon : Weapon
     [SerializeField] private MeleeWeaponData weaponData;
     [SerializeField] private Collider hitCollider;
 
-    public MeleeLevel Level => weaponData.level; 
+    public MeleeLevel Level => weaponData.level;
     private int AttackDamage => weaponData.attackDamage;
     private int TreeDamage => weaponData.treeDamage;
-    
+
     private bool hasHit;
 
     public override void Attack()
@@ -24,13 +24,13 @@ public class MeleeWeapon : Weapon
 
     void OnTriggerEnter(Collider other)
     {
-        if(hasHit) return;
+        if (hasHit) return;
 
         TreeObject tree = other.GetComponentInParent<TreeObject>();
-        if(tree != null)
+        if (tree != null)
         {
-            if(ItemType != ToolType.AXE || TreeDamage <= 0) return;
-            
+            if (ItemType != ToolType.AXE || TreeDamage <= 0) return;
+
             hasHit = true;
             tree.TakeDamage(TreeDamage);
             return;

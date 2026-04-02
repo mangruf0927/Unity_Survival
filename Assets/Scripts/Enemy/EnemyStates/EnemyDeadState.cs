@@ -14,20 +14,20 @@ public class EnemyDeadState : IEnemyState
     public void Enter()
     {
         Debug.Log("Dead State");
-    }   
+    }
 
     public void Update()
     {
-        
+
     }
 
     public void FixedUpdate()
     {
-        
+
     }
 
     public void Exit()
     {
-        
+
     }
 }

@@ -4,8 +4,8 @@ using UnityEngine;
 public class PlayerStateMachine : MonoBehaviour
 {
     [SerializeField] private PlayerController playerController;
-    
-    public IPlayerState CurState {get; private set;}
+
+    public IPlayerState CurState { get; private set; }
     private Dictionary<PlayerStateEnums, IPlayerState> stateDictionary;
 
     private void Awake()
@@ -32,7 +32,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Update()
     {
-        if (CurState != null) 
+        if (CurState != null)
             CurState.Update();
 
         // Debug.Log(curState);
@@ -40,7 +40,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (CurState != null) 
+        if (CurState != null)
             CurState.FixedUpdate();
     }
 

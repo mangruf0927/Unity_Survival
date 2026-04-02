@@ -5,7 +5,7 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     [SerializeField] private List<EquippableItem> basicItemList = new();
-    
+
     private List<EquippableItem> itemList = new();
     public IReadOnlyList<EquippableItem> ItemList => itemList;
 
@@ -18,7 +18,7 @@ public class Inventory : MonoBehaviour
     {
         foreach (EquippableItem item in basicItemList)
         {
-            if(item == null || itemList.Contains(item)) continue;
+            if (item == null || itemList.Contains(item)) continue;
 
             itemList.Add(item);
             item.gameObject.SetActive(false);
@@ -91,15 +91,15 @@ public class Inventory : MonoBehaviour
 
     public void AddAmmo(AmmoType ammoType, int count)
     {
-        if(count <= 0) return;
+        if (count <= 0) return;
 
-        if(!ammoDictionary.ContainsKey(ammoType)) ammoDictionary[ammoType] = 0;
+        if (!ammoDictionary.ContainsKey(ammoType)) ammoDictionary[ammoType] = 0;
         ammoDictionary[ammoType] += count;
     }
 
     public int UseAmmo(AmmoType ammoType, int count)
     {
-        if(count <= 0) return 0;
+        if (count <= 0) return 0;
 
         int current = GetAmmoCount(ammoType);
         int used = Mathf.Min(current, count);

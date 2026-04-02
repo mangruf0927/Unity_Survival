@@ -31,7 +31,7 @@ public abstract class EquippableItem : MonoBehaviour
             {
                 col.enabled = false;
                 col.isTrigger = true;
-            }   
+            }
         }
 
         if (rigid != null)
@@ -52,7 +52,7 @@ public abstract class EquippableItem : MonoBehaviour
                 col.enabled = true;
                 col.isTrigger = false;
             }
-        }   
+        }
 
         if (rigid != null)
         {
@@ -60,7 +60,7 @@ public abstract class EquippableItem : MonoBehaviour
             rigid.useGravity = true;
         }
     }
-    
+
     public abstract void OnEquip(PlayerController player);
     public abstract void OnUnequip(PlayerController player);
 }

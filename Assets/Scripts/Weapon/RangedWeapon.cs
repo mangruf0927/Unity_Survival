@@ -5,7 +5,7 @@ public class RangedWeapon : Weapon, ISubject
 {
     [SerializeField] private RangedWeaponData weaponData;
     [SerializeField] private Transform shootPosition;
-    
+
     private readonly List<IObserver> ObserverList = new();
 
     private int totalAmmo = 0;
@@ -17,15 +17,15 @@ public class RangedWeapon : Weapon, ISubject
     public AmmoType Type => weaponData.ammoType;
 
     private Vector3 aimPos;
-    public void SetAimPoint(Vector3 pos) {aimPos = pos;}
+    public void SetAimPoint(Vector3 pos) { aimPos = pos; }
 
     public override void Attack()
     {
-        if(currentAmmo <= 0) return;
+        if (currentAmmo <= 0) return;
 
         GameObject bulletObj = ObjectPool.Instance.GetFromPool(PoolTypeEnums.BULLET);
         bulletObj.transform.SetPositionAndRotation(shootPosition.position, shootPosition.rotation);
-        
+
         if (bulletObj.TryGetComponent<Bullet>(out var bullet))
         {
             bullet.SetData(weaponData.attackDamage, weaponData.bulletSpeed);
@@ -40,9 +40,9 @@ public class RangedWeapon : Weapon, ISubject
     {
     }
 
-    public void SetTotalAmmo(int count) 
-    { 
-        totalAmmo = count; 
+    public void SetTotalAmmo(int count)
+    {
+        totalAmmo = count;
         NotifyObservers();
     }
 
@@ -53,7 +53,7 @@ public class RangedWeapon : Weapon, ISubject
 
     public void Reload(int amount)
     {
-        if(amount <= 0) return;
+        if (amount <= 0) return;
 
         currentAmmo += amount;
         NotifyObservers();

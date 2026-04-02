@@ -4,7 +4,6 @@ using UnityEngine;
 public class HUDController : MonoBehaviour
 {
     [SerializeField] private PlayerController player;
-    
     [SerializeField] private EquippedItemUI itemUI;
     [SerializeField] private AmmoCount ammoCount;
     [SerializeField] private InventoryUI inventoryUI;
@@ -25,7 +24,7 @@ public class HUDController : MonoBehaviour
     {
         itemUI.UpdateUI(item);
 
-        if(item is RangedWeapon rangedWeapon) ammoCount.SetWeapon(rangedWeapon);
+        if (item is RangedWeapon rangedWeapon) ammoCount.SetWeapon(rangedWeapon);
         else ammoCount.SetWeapon(null);
     }
 

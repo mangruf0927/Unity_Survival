@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         rigid.useGravity = false;
     }
-    
+
     public void SetData(int damage, float speed)
     {
         this.damage = damage;
@@ -24,7 +24,7 @@ public class Bullet : MonoBehaviour
     {
         rigid.linearVelocity = Vector3.zero;
         rigid.angularVelocity = Vector3.zero;
-        
+
         rigid.linearVelocity = direction.normalized * speed;
         Invoke(nameof(DisableBullet), lifeTime);
     }

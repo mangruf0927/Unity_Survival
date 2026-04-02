@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
-{    
+{
     [SerializeField] private List<PoolData> poolDataList;
 
     public static ObjectPool Instance { get; private set; }
-    
+
     private readonly List<Stack<GameObject>> poolList = new();
     private readonly Dictionary<PoolTypeEnums, Transform> parentDictionary = new();
 
-    private void Awake() 
+    private void Awake()
     {
         // 싱글톤
         if (Instance == null) Instance = this;
@@ -24,14 +24,18 @@ public class ObjectPool : MonoBehaviour
         foreach (PoolTypeEnums type in Enum.GetValues(typeof(PoolTypeEnums)))
         {
             poolList.Add(new Stack<GameObject>());
-
-            GameObject parent = new(type.ToString());
-            parent.transform.SetParent(transform);
-            parentDictionary.Add(type, parent.transform);
-        }    
+        }
 
         foreach (var data in poolDataList)
         {
+            Transform parent = data.parent != null ? data.parent : transform;
+
+            if (!parentDictionary.ContainsKey(data.poolType))
+            {
+                GameObject obj = new(data.poolType.ToString());
+                obj.transform.SetParent(parent, false);
+                parentDictionary.Add(data.poolType, obj.transform);
+            }
             InitializePool(data.size, data.prefab, data.poolType, parentDictionary[data.poolType]);
         }
     }
@@ -51,12 +55,12 @@ public class ObjectPool : MonoBehaviour
         var pool = poolList[(int)poolType];
 
         GameObject obj;
-        if(pool.Count > 0) obj = pool.Pop();
+        if (pool.Count > 0) obj = pool.Pop();
         else
         {
             var data = poolDataList.Find(x => x.poolType == poolType);
-            if(data == null) return null;
-            obj = CreatePool(data.prefab);
+            if (data == null) return null;
+            obj = CreatePool(data.prefab, parentDictionary[poolType]);
         }
         obj.transform.SetParent(parentDictionary[poolType], false);
         obj.SetActive(true);
@@ -73,7 +77,7 @@ public class ObjectPool : MonoBehaviour
     public void ReturnToPool(GameObject obj, PoolTypeEnums poolType)
     {
         obj.SetActive(false);
-        obj.transform.SetParent(parentDictionary[poolType]);
+        obj.transform.SetParent(parentDictionary[poolType], false);
         poolList[(int)poolType].Push(obj);
     }
 }

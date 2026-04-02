@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Sack : EquippableItem, ISubject
-{   
+{
     [SerializeField] private SackData sackData;
 
     private Stack<Item> itemStack = new();

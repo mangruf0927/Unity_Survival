@@ -25,7 +25,7 @@ public class TreeObject : MonoBehaviour
         currentHP = Mathf.Max(currentHP - damage, 0);
 
         if (!isShaking) StartCoroutine(Shake());
-        if (currentHP == 0) 
+        if (currentHP == 0)
         {
             StopAllCoroutines();
             CreateLog();

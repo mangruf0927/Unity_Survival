@@ -12,26 +12,26 @@ public class InventoryUI : MonoBehaviour
     private void Start()
     {
         inventory.OnChanged += UpdateSlot;
-        
-        for(int i = 0; i < slotList.Count; i++) 
+
+        for (int i = 0; i < slotList.Count; i++)
             slotList[i].OnClickSlot += ClickSlot;
-        
+
         UpdateSlot();
     }
 
     private void OnDestroy()
     {
-        inventory.OnChanged -= UpdateSlot;  
-        
-        for(int i = 0; i < slotList.Count; i++) 
-            slotList[i].OnClickSlot -= ClickSlot;     
+        inventory.OnChanged -= UpdateSlot;
+
+        for (int i = 0; i < slotList.Count; i++)
+            slotList[i].OnClickSlot -= ClickSlot;
     }
 
     public void UpdateSlot()
     {
-        for(int i = 0; i < slotList.Count; i++)
+        for (int i = 0; i < slotList.Count; i++)
         {
-            if(i < inventory.ItemList.Count) slotList[i].SetSlot(inventory.ItemList[i], i);
+            if (i < inventory.ItemList.Count) slotList[i].SetSlot(inventory.ItemList[i], i);
             else slotList[i].HideSlot();
         }
     }

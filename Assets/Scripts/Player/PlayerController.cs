@@ -32,16 +32,16 @@ public class PlayerController : MonoBehaviour
     public void SetDirection(Vector2 direction) { moveDirection = direction; }
     public void SetRun(bool state) { isRun = state; }
     public void SetSack(Sack sack) { currentSack = sack; }
-    
-    public void SetWeapon(Weapon weapon) 
-    { 
-        currentWeapon = weapon; 
+
+    public void SetWeapon(Weapon weapon)
+    {
+        currentWeapon = weapon;
         UpdateAmmo();
     }
 
     public void SetAimPoint(Vector3 point)
     {
-        if(currentWeapon is RangedWeapon rangedWeapon) 
+        if (currentWeapon is RangedWeapon rangedWeapon)
             rangedWeapon.SetAimPoint(point);
     }
 
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
         isGround = false;
         rigid.AddForce(Vector3.up * playerStats.JumpForce, ForceMode.Impulse);
     }
- 
+
     public bool GetEquippableItem(EquippableItem item)
     {
         if (item == null) return false;
@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
         if (prevItem is Sack prevSack && newItem is Sack newSack)
         {
             prevSack.MoveItems(newSack);
-            newSack.GetComponentInChildren<SackItemCount>(true).gameObject.SetActive(true);        
+            newSack.GetComponentInChildren<SackItemCount>(true).gameObject.SetActive(true);
         }
         Destroy(prevItem.gameObject);
         return equipped;
@@ -217,9 +217,9 @@ public class PlayerController : MonoBehaviour
 
     public void Reload()
     {
-        if(currentWeapon is RangedWeapon rangedWeapon) 
+        if (currentWeapon is RangedWeapon rangedWeapon)
         {
-            int amount = inventory.UseAmmo(rangedWeapon.Type, rangedWeapon.NeedAmmo());            
+            int amount = inventory.UseAmmo(rangedWeapon.Type, rangedWeapon.NeedAmmo());
             rangedWeapon.Reload(amount);
             UpdateAmmo();
         }
@@ -231,7 +231,7 @@ public class PlayerController : MonoBehaviour
         {
             rangedWeapon.SetTotalAmmo(inventory.GetAmmoCount(rangedWeapon.Type));
         }
-    }   
+    }
 
     private void UpdateUpperBodyWeight()
     {

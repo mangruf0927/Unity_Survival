@@ -5,11 +5,11 @@ public class SackItemCount : MonoBehaviour, IObserver
 {
     [SerializeField] private TextMeshProUGUI count;
     [SerializeField] private Sack sack;
-    
+
     private void Start()
     {
         sack.AddObserver(this);
-        Notify();       
+        Notify();
     }
 
     private void OnDestroy()

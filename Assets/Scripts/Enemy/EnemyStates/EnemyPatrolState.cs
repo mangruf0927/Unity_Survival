@@ -14,7 +14,7 @@ public class EnemyPatrolState : IEnemyState
     public void Enter()
     {
         enemyController.Patrol();
-    }   
+    }
 
     public void Update()
     {
@@ -24,11 +24,11 @@ public class EnemyPatrolState : IEnemyState
 
     public void FixedUpdate()
     {
-        
+
     }
 
     public void Exit()
     {
-        
+
     }
 }

@@ -6,13 +6,13 @@ public class AmmoCount : MonoBehaviour, IObserver
     [SerializeField] private TextMeshProUGUI ammoText;
 
     private RangedWeapon rangedWeapon;
-    
+
     public void SetWeapon(RangedWeapon weapon)
     {
-        if(rangedWeapon != null) rangedWeapon.RemoveObserver(this);
+        if (rangedWeapon != null) rangedWeapon.RemoveObserver(this);
         rangedWeapon = weapon;
 
-        if(rangedWeapon != null)
+        if (rangedWeapon != null)
         {
             rangedWeapon.AddObserver(this);
             Notify();
@@ -27,7 +27,7 @@ public class AmmoCount : MonoBehaviour, IObserver
 
     private void OnDestroy()
     {
-        if(rangedWeapon != null) rangedWeapon.RemoveObserver(this);
+        if (rangedWeapon != null) rangedWeapon.RemoveObserver(this);
     }
 
     public void Notify()

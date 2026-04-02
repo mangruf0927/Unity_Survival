@@ -15,17 +15,17 @@ public class Chest : MonoBehaviour
 
     public void Hold()
     {
-        if(isOpened || !isPlayerCollision) return;
+        if (isOpened || !isPlayerCollision) return;
 
         holdTime += Time.deltaTime;
 
-        if(holdTime >= openTime) Open();
+        if (holdTime >= openTime) Open();
     }
 
     private void Open()
     {
         isOpened = true;
-        holdTime = 0f;    
+        holdTime = 0f;
 
         animator.SetTrigger("Open");
         RandomItem();
@@ -33,7 +33,7 @@ public class Chest : MonoBehaviour
 
     private void RandomItem()
     {
-        if(itemList == null || itemList.Count == 0) return;
+        if (itemList == null || itemList.Count == 0) return;
 
         int idx = Random.Range(0, itemList.Count);
         Instantiate(itemList[idx], spawnPoint.position, Quaternion.identity);
@@ -41,13 +41,13 @@ public class Chest : MonoBehaviour
 
     public void Cancel()
     {
-        if(isOpened) return;
+        if (isOpened) return;
         holdTime = 0f;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             Debug.Log("E키를 3초 누르세요");
             isPlayerCollision = true;
@@ -56,7 +56,7 @@ public class Chest : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
             isPlayerCollision = false;
             holdTime = 0f;

@@ -5,7 +5,7 @@ public class CameraRotate : MonoBehaviour
     [SerializeField] private Transform target;
     [SerializeField] private float rotateSpeed;
     [SerializeField] private float zoomSpeed;
-    [SerializeField] private float distance; 
+    [SerializeField] private float distance;
     [SerializeField] private float minDistance;
     [SerializeField] private float maxDistance;
 

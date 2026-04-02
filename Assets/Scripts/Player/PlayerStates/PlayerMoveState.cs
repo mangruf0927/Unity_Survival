@@ -22,7 +22,7 @@ public class PlayerMoveState : IPlayerState
 
     public HashSet<PlayerStateEnums> LogicHash { get; } = new HashSet<PlayerStateEnums>()
     {
-        
+
     };
 
     public void Enter()
@@ -32,7 +32,7 @@ public class PlayerMoveState : IPlayerState
 
     public void Update()
     {
-        
+
     }
 
     public void FixedUpdate()

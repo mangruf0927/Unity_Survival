@@ -28,16 +28,16 @@ public class PlayerDeadState : IPlayerState
 
     public void Update()
     {
-        
+
     }
 
     public void FixedUpdate()
     {
-        
+
     }
 
     public void Exit()
     {
-        
+
     }
 }

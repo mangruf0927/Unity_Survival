@@ -49,7 +49,7 @@ public class EnemyController : MonoBehaviour
 
     public bool CheckArrive()
     {
-        if (navMesh.pathPending || !navMesh.hasPath ) return false;
+        if (navMesh.pathPending || !navMesh.hasPath) return false;
         if (navMesh.remainingDistance > 0.1f) return false;
 
         return true;
@@ -58,7 +58,7 @@ public class EnemyController : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (enemyStats.AttackDamage <= 0 || !other.CompareTag("Player")) return;
-        
+
         var player = other.GetComponent<IDamageable>();
         player.TakeDamage(enemyStats.AttackDamage);
     }

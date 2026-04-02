@@ -1,25 +1,27 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EnemyHPBar : MonoBehaviour, IObserver
+public class EnemyHPBar : MonoBehaviour
 {
     [SerializeField] private Slider hpSlider;
-    [SerializeField] private EnemyStats enemyStats;
 
-    private void Start()
+    private EnemyStats enemyStats;
+
+    public void SetHPBar(EnemyStats stats)
     {
-        enemyStats.AddObserver(this);
-        Notify();       
+        enemyStats = stats;
+        UpdateHPBar();
     }
 
-    private void OnDestroy()
-    {
-        enemyStats.RemoveObserver(this);
-    }
-
-    public void Notify()
+    public void UpdateHPBar()
     {
         hpSlider.maxValue = enemyStats.MaxHP;
         hpSlider.value = enemyStats.CurrentHP;
+    }
+
+    public void Clear()
+    {
+        enemyStats = null;
+        hpSlider.value = 0f;
     }
 }

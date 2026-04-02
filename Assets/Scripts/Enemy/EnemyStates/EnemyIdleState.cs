@@ -19,7 +19,7 @@ public class EnemyIdleState : IEnemyState
         enemyController.Stop();
 
         timer = 0f;
-        randomTime = enemyController.RandomTime(); 
+        randomTime = enemyController.RandomTime();
     }
 
     public void Update()
@@ -37,11 +37,11 @@ public class EnemyIdleState : IEnemyState
 
     public void FixedUpdate()
     {
-        
+
     }
 
     public void Exit()
     {
-        
+
     }
 }

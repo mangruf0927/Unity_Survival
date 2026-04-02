@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerJumpState :  IPlayerState
-{    
+public class PlayerJumpState : IPlayerState
+{
     private readonly PlayerController playerController;
     private readonly PlayerStateMachine stateMachine;
 

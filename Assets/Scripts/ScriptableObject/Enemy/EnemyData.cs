@@ -8,7 +8,7 @@ public class EnemyData : ScriptableObject
 
     [Header("공격력")]
     public int attackDamage;
-    
+
     [Header("적 탐지 범위")]
     public float scanRange;
 

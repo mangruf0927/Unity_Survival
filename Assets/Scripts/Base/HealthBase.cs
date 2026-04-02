@@ -19,7 +19,10 @@ public abstract class HealthBase : MonoBehaviour, IDamageable, ISubject
         CurrentHP = Mathf.Max(CurrentHP - dmg, 0);
         NotifyObservers();
 
-        if (CurrentHP <= 0) Die();
+        if (CurrentHP <= 0)
+        {
+            Die();
+        }
     }
 
     public void AddObserver(IObserver observer)
@@ -29,7 +32,7 @@ public abstract class HealthBase : MonoBehaviour, IDamageable, ISubject
 
     public void RemoveObserver(IObserver observer)
     {
-        if(observer == null) return;
+        if (observer == null) return;
         ObserverList.Remove(observer);
     }
 

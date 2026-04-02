@@ -4,8 +4,8 @@ using UnityEngine;
 public class EnemyStateMachine : MonoBehaviour
 {
     [SerializeField] private EnemyController enemyController;
-    
-    public IEnemyState CurState {get; private set;}
+
+    public IEnemyState CurState { get; private set; }
     private Dictionary<EnemyStateEnums, IEnemyState> stateDictionary;
 
     private void Awake()
@@ -13,7 +13,7 @@ public class EnemyStateMachine : MonoBehaviour
         stateDictionary = new Dictionary<EnemyStateEnums, IEnemyState>()
         {
             {EnemyStateEnums.IDLE, new EnemyIdleState(this, enemyController)},
-            {EnemyStateEnums.CHASE, new EnemyChaseState(this, enemyController)}, 
+            {EnemyStateEnums.CHASE, new EnemyChaseState(this, enemyController)},
             {EnemyStateEnums.PATROL, new EnemyPatrolState(this, enemyController)},
             {EnemyStateEnums.DEAD, new EnemyDeadState(this, enemyController)},
         };
@@ -25,20 +25,20 @@ public class EnemyStateMachine : MonoBehaviour
         {
             CurState = newState;
             CurState.Enter();
-        }        
+        }
     }
 
     private void Update()
     {
-        if (CurState != null) 
+        if (CurState != null)
             CurState.Update();
-        
+
         // Debug.Log(CurState);
     }
 
     private void FixedUpdate()
     {
-        if (CurState != null) 
+        if (CurState != null)
             CurState.FixedUpdate();
     }
 

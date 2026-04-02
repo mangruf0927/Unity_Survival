@@ -25,8 +25,8 @@ public class GameInput : MonoBehaviour
         int number = InputNumber();
         if (number != -1) playerController.EquipItem(number);
 
-        if(isOpened) chest.Hold();
-        
+        if (isOpened) chest.Hold();
+
         OnAttack();
     }
 
@@ -38,7 +38,7 @@ public class GameInput : MonoBehaviour
 
         Ray camRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(camRay, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide)) playerController.SetAimPoint(hit.point);
-        else playerController.SetAimPoint(camRay.origin + camRay.direction * 1000f);   
+        else playerController.SetAimPoint(camRay.origin + camRay.direction * 1000f);
 
         stateMachine.ChangeInputState(PlayerStateEnums.ATTACK);
     }
@@ -53,18 +53,18 @@ public class GameInput : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide))
         {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Equippable"))          
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Equippable"))
             {
                 nextEquip = hit.collider.GetComponentInParent<EquippableItem>();
                 if (nextEquip != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
             }
-            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Item"))   
+            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Item"))
             {
                 nextItem = hit.collider.GetComponentInParent<Item>();
                 if (nextItem != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
             }
         }
-        
+
         UpdateOutline(nextOutline);
 
         currentEquip = nextEquip;
@@ -74,7 +74,7 @@ public class GameInput : MonoBehaviour
     private void ClearTarget()
     {
         if (currentOutline != null) currentOutline.enabled = false;
-        
+
         currentOutline = null;
         currentEquip = null;
         currentItem = null;
@@ -93,12 +93,12 @@ public class GameInput : MonoBehaviour
 
     private int InputNumber()
     {
-        for(int i = 0; i < 9; i++)
+        for (int i = 0; i < 9; i++)
         {
             Key key = Key.Digit1 + i;
             Key numpadKey = Key.Numpad1 + i;
 
-            if(Keyboard.current[key].wasPressedThisFrame || Keyboard.current[numpadKey].wasPressedThisFrame) return i;
+            if (Keyboard.current[key].wasPressedThisFrame || Keyboard.current[numpadKey].wasPressedThisFrame) return i;
         }
         return -1;
     }
@@ -106,13 +106,13 @@ public class GameInput : MonoBehaviour
     public void OnPick(InputValue value)        // E키 (무기 + 자루)
     {
         isOpened = value.isPressed;
-        if(!isOpened)
+        if (!isOpened)
         {
             chest.Cancel();
             return;
         }
 
-        if(!value.isPressed) return;
+        if (!value.isPressed) return;
 
         if (currentItem is AmmoItem ammoItem)
         {
@@ -135,7 +135,7 @@ public class GameInput : MonoBehaviour
 
         if (currentItem != null)
         {
-            if (playerController.GetCollectibleItem(currentItem))     
+            if (playerController.GetCollectibleItem(currentItem))
             {
                 ClearTarget();
             }
@@ -169,13 +169,13 @@ public class GameInput : MonoBehaviour
     {
         if (!playerController.IsGround()) return;
 
-        if(direction == Vector2.zero) stateMachine.ChangeInputState(PlayerStateEnums.IDLE);
+        if (direction == Vector2.zero) stateMachine.ChangeInputState(PlayerStateEnums.IDLE);
         else stateMachine.ChangeInputState(isRun ? PlayerStateEnums.RUN : PlayerStateEnums.MOVE);
     }
 
     public void OnJump(InputValue value)
     {
-        if(value.isPressed && playerController.IsGround()) 
+        if (value.isPressed && playerController.IsGround())
         {
             stateMachine.ChangeInputState(PlayerStateEnums.JUMP);
         }
@@ -199,7 +199,7 @@ public class GameInput : MonoBehaviour
 
     public void OnReload(InputValue value)
     {
-        if(!value.isPressed || playerController.CurrentWeapon == null) return;
+        if (!value.isPressed || playerController.CurrentWeapon == null) return;
         playerController.Reload();
     }
 }
