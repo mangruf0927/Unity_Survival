@@ -28,8 +28,17 @@ public class EnemyHPBarController : MonoBehaviour
 
     private void UpdatePosition(RectTransform rectTransform, Vector3 worldPos)
     {
-        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(mainCamera, worldPos);
+        // 카메라 밖으로 나갔을 때
+        Vector3 viewportPos = mainCamera.WorldToViewportPoint(worldPos);
+        bool isInvisible = viewportPos.x < 0 || viewportPos.x > 1 || viewportPos.y < 0 || viewportPos.y > 1 || viewportPos.z < 0;
+        if (isInvisible)
+        {
+            rectTransform.gameObject.SetActive(false);
+            return;
+        }
+        rectTransform.gameObject.SetActive(true);
 
+        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(mainCamera, worldPos);
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, null, out Vector2 localPos))
         {
             rectTransform.localPosition = localPos;
