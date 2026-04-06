@@ -402,7 +402,7 @@ PrefabInstance:
     - target: {fileID: 5237301265010117455, guid: 9f319b9b0bddb4c6db6b7c47cfe3513d, type: 3}
       propertyPath: pool
       value: 
-      objectReference: {fileID: 1661564469}
+      objectReference: {fileID: 0}
     - target: {fileID: 7269081860486356923, guid: 9f319b9b0bddb4c6db6b7c47cfe3513d, type: 3}
       propertyPath: m_Name
       value: Revolver (2)
@@ -3187,6 +3187,59 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a5c342fa695e4347a073abd00a8e329, type: 3}
+--- !u!1 &634694065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 634694067}
+  - component: {fileID: 634694066}
+  m_Layer: 0
+  m_Name: ObjectPoolInitializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &634694066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634694065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dcdd45670dcf44808534b5254768070, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPoolInitializer
+  poolDataList:
+  - poolType: 0
+    prefab: {fileID: 2175682463181139635, guid: 32f482e32f77a4c7f80c5a21e0f5486e, type: 3}
+    parent: {fileID: 0}
+    size: 10
+  - poolType: 1
+    prefab: {fileID: 61090789528585601, guid: 26c8ac216b8914e99bb112da912156ed, type: 3}
+    parent: {fileID: 1775717918}
+    size: 10
+--- !u!4 &634694067
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634694065}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.9838, y: 0.5, z: 10.92254}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &685776878
 GameObject:
   m_ObjectHideFlags: 0
@@ -4149,7 +4202,7 @@ PrefabInstance:
     - target: {fileID: 8302510858908887859, guid: 0d86ba22c5286464a86f86d39815823d, type: 3}
       propertyPath: pool
       value: 
-      objectReference: {fileID: 1661564469}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6262,7 +6315,7 @@ PrefabInstance:
     - target: {fileID: 5237301265010117455, guid: 9f319b9b0bddb4c6db6b7c47cfe3513d, type: 3}
       propertyPath: pool
       value: 
-      objectReference: {fileID: 1661564469}
+      objectReference: {fileID: 0}
     - target: {fileID: 7269081860486356923, guid: 9f319b9b0bddb4c6db6b7c47cfe3513d, type: 3}
       propertyPath: m_Name
       value: Revolver (1)
@@ -7921,59 +7974,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eeb8ecbf86e0c4922b0af0734d87d1ac, type: 3}
---- !u!1 &1661564468
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1661564470}
-  - component: {fileID: 1661564469}
-  m_Layer: 0
-  m_Name: ObjectPool
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1661564469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1661564468}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87667d1d2abf4d249dd6adf10e479be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
-  poolDataList:
-  - poolType: 0
-    prefab: {fileID: 2175682463181139635, guid: 32f482e32f77a4c7f80c5a21e0f5486e, type: 3}
-    parent: {fileID: 0}
-    size: 10
-  - poolType: 1
-    prefab: {fileID: 61090789528585601, guid: 26c8ac216b8914e99bb112da912156ed, type: 3}
-    parent: {fileID: 1775717918}
-    size: 10
---- !u!4 &1661564470
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1661564468}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1717421985
 GameObject:
   m_ObjectHideFlags: 0
@@ -8873,7 +8873,7 @@ PrefabInstance:
     - target: {fileID: 8302510858908887859, guid: 0d86ba22c5286464a86f86d39815823d, type: 3}
       propertyPath: pool
       value: 
-      objectReference: {fileID: 1661564469}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9027,7 +9027,7 @@ PrefabInstance:
     - target: {fileID: 5237301265010117455, guid: 9f319b9b0bddb4c6db6b7c47cfe3513d, type: 3}
       propertyPath: pool
       value: 
-      objectReference: {fileID: 1661564469}
+      objectReference: {fileID: 0}
     - target: {fileID: 7269081860486356923, guid: 9f319b9b0bddb4c6db6b7c47cfe3513d, type: 3}
       propertyPath: m_Name
       value: Revolver
@@ -10935,7 +10935,7 @@ SceneRoots:
   - {fileID: 370338872}
   - {fileID: 910119761}
   - {fileID: 1112786011}
-  - {fileID: 1661564470}
+  - {fileID: 634694067}
   - {fileID: 317170721}
   - {fileID: 329913524}
   - {fileID: 1072211403}

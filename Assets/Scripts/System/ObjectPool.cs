@@ -1,48 +1,30 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPool : MonoBehaviour
+public class ObjectPool
 {
-    [SerializeField] private List<PoolData> poolDataList;
-
-    public static ObjectPool Instance { get; private set; }
-
-    private readonly List<Stack<GameObject>> poolList = new();
+    private readonly Dictionary<PoolTypeEnums, Stack<GameObject>> poolDictionary = new();
+    private readonly Dictionary<PoolTypeEnums, PoolData> dataDictionary = new();
     private readonly Dictionary<PoolTypeEnums, Transform> parentDictionary = new();
 
-    private void Awake()
+    public static ObjectPool Instance { get; } = new();
+
+    public void Register(PoolData data, Transform parent)
     {
-        // 싱글톤
-        if (Instance == null) Instance = this;
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (dataDictionary.ContainsKey(data.poolType)) return;
 
-        foreach (PoolTypeEnums type in Enum.GetValues(typeof(PoolTypeEnums)))
-        {
-            poolList.Add(new Stack<GameObject>());
-        }
+        dataDictionary.Add(data.poolType, data);
+        poolDictionary.Add(data.poolType, new Stack<GameObject>());
 
-        foreach (var data in poolDataList)
-        {
-            Transform parent = data.parent != null ? data.parent : transform;
+        Transform poolParent = data.parent != null ? data.parent : parent;
+        parentDictionary.Add(data.poolType, poolParent);
 
-            if (!parentDictionary.ContainsKey(data.poolType))
-            {
-                GameObject obj = new(data.poolType.ToString());
-                obj.transform.SetParent(parent, false);
-                parentDictionary.Add(data.poolType, obj.transform);
-            }
-            InitializePool(data.size, data.prefab, data.poolType, parentDictionary[data.poolType]);
-        }
+        InitializePool(data.size, data.prefab, data.poolType, poolParent);
     }
 
     private void InitializePool(int poolSize, GameObject prefab, PoolTypeEnums poolType, Transform parent = null)
     {
-        var pool = poolList[(int)poolType];
+        Stack<GameObject> pool = poolDictionary[poolType];
 
         for (int i = 0; i < poolSize; i++)
         {
@@ -52,16 +34,13 @@ public class ObjectPool : MonoBehaviour
 
     public GameObject GetFromPool(PoolTypeEnums poolType)
     {
-        var pool = poolList[(int)poolType];
+        if (!poolDictionary.TryGetValue(poolType, out Stack<GameObject> pool)) return null;
+        if (!dataDictionary.TryGetValue(poolType, out PoolData data)) return null;
 
         GameObject obj;
         if (pool.Count > 0) obj = pool.Pop();
-        else
-        {
-            var data = poolDataList.Find(x => x.poolType == poolType);
-            if (data == null) return null;
-            obj = CreatePool(data.prefab, parentDictionary[poolType]);
-        }
+        else obj = CreatePool(data.prefab, parentDictionary[poolType]);
+
         obj.transform.SetParent(parentDictionary[poolType], false);
         obj.SetActive(true);
         return obj;
@@ -69,15 +48,19 @@ public class ObjectPool : MonoBehaviour
 
     private GameObject CreatePool(GameObject prefab, Transform parent = null)
     {
-        GameObject obj = Instantiate(prefab, parent);
+        GameObject obj = Object.Instantiate(prefab, parent);
         obj.SetActive(false);
         return obj;
     }
 
     public void ReturnToPool(GameObject obj, PoolTypeEnums poolType)
     {
+        if (!poolDictionary.ContainsKey(poolType) ||
+            !dataDictionary.ContainsKey(poolType) ||
+            !parentDictionary.ContainsKey(poolType)) return;
+
         obj.SetActive(false);
         obj.transform.SetParent(parentDictionary[poolType], false);
-        poolList[(int)poolType].Push(obj);
+        poolDictionary[poolType].Push(obj);
     }
 }

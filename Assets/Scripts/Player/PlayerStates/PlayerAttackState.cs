@@ -55,7 +55,6 @@ public class PlayerAttackState : IPlayerState
 
     public void Exit()
     {
-        Debug.Log("Exit");
         if (playerController.CurrentWeapon != null) playerController.CurrentWeapon.ExitAttack();
     }
 }

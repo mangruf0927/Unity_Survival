@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EnemyStats : MonoBehaviour, IDamageable
@@ -15,9 +16,8 @@ public class EnemyStats : MonoBehaviour, IDamageable
     public int CurrentHP { get; private set; }
     public Transform HPBarPoint => hpBarPoint;
 
-    public delegate void OnStatHandler(EnemyStats stats);
-    public event OnStatHandler OnDamaged;
-    public event OnStatHandler OnDead;
+    public event Action<EnemyStats> OnDamaged;
+    public event Action<EnemyStats> OnDead;
 
     private void Awake()
     {
