@@ -7,10 +7,10 @@ public class ObjectPoolInitializer : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
         foreach (var data in poolDataList)
         {
             ObjectPool.Instance.Register(data, transform);
         }
-        DontDestroyOnLoad(gameObject);
     }
 }

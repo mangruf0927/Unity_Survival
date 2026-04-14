@@ -33,10 +33,18 @@ public class EnemyHPBarController : MonoBehaviour
         bool isInvisible = viewportPos.x < 0 || viewportPos.x > 1 || viewportPos.y < 0 || viewportPos.y > 1 || viewportPos.z < 0;
         if (isInvisible)
         {
-            rectTransform.gameObject.SetActive(false);
+            if (rectTransform.gameObject.activeSelf)        // 상태가 바뀔 때만 호출
+            {
+                rectTransform.gameObject.SetActive(false);
+            }
+
             return;
         }
-        rectTransform.gameObject.SetActive(true);
+
+        if (!rectTransform.gameObject.activeSelf)           // 상태가 바뀔 때만 호출
+        {
+            rectTransform.gameObject.SetActive(true);
+        }
 
         Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(mainCamera, worldPos);
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, null, out Vector2 localPos))
