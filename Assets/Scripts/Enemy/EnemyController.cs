@@ -7,6 +7,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private NavMeshAgent navMesh;
     [SerializeField] private EnemyStats enemyStats;
 
+    public Animator animator;
+
     public void Stop()
     {
         navMesh.isStopped = true;

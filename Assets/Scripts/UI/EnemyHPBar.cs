@@ -22,6 +22,6 @@ public class EnemyHPBar : MonoBehaviour
     public void Clear()
     {
         enemyStats = null;
-        hpSlider.value = 0f;
+        if (hpSlider != null) hpSlider.value = 0f;
     }
 }

@@ -14,6 +14,7 @@ public class EnemyPatrolState : IEnemyState
     public void Enter()
     {
         enemyController.Patrol();
+        enemyController.animator.SetFloat("speed", 1f);
     }
 
     public void Update()

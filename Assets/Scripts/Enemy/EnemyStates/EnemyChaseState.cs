@@ -13,7 +13,7 @@ public class EnemyChaseState : IEnemyState
 
     public void Enter()
     {
-
+        enemyController.animator.SetFloat("speed", 2f);
     }
 
     public void Update()
