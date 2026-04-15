@@ -29,9 +29,9 @@ public class CampFire : MonoBehaviour
     {
         Item item = other.GetComponent<Item>();
         if (item == null) return;
-        if (item.ItemType != ItemType.FUEL) return;
+        // if (item.ItemType != ItemType.FUEL) return;
 
-        AddFuel(item.Value);
+        // AddFuel(item.Value);
         Destroy(other.gameObject);
     }
 }

@@ -111,13 +111,12 @@ public class GameInput : MonoBehaviour
             chest.Cancel();
             return;
         }
-
         if (!value.isPressed) return;
 
-        if (currentItem is AmmoItem ammoItem)
+        if (currentItem != null && currentItem.Data.ItemType == ItemType.AMMO)
         {
-            playerController.AddAmmo(ammoItem.AmmoType, ammoItem.Value);
-            Destroy(ammoItem.gameObject);
+            playerController.AddAmmo(currentItem.Data.AmmoData.AmmoType, currentItem.Data.AmmoData.Amount);
+            Destroy(currentItem.gameObject);
             ClearTarget();
             return;
         }
