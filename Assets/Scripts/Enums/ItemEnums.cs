@@ -3,6 +3,7 @@ public enum MeleeLevel { OLD, GOOD, STRONG }
 public enum SackLevel { OLD, GOOD, GIANT }
 public enum AmmoType { REVOLVER, RIFLE }
 public enum ItemType { FOOD, FUEL, MATERIAL, AMMO }
+public enum MaterialType { NONE, WOOD, IRON }
 
 [System.Flags]
 public enum ItemProperty

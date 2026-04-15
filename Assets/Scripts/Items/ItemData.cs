@@ -24,7 +24,10 @@ public struct FoodData
 public struct MaterialData
 {
     [SerializeField] private int grindCount;
+    [SerializeField] private MaterialType materialType;
+
     public int GrindCount => grindCount;
+    public MaterialType Type => materialType;
 }
 
 [Serializable]
