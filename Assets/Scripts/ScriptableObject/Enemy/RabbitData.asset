@@ -15,4 +15,5 @@ MonoBehaviour:
   maxHP: 45
   attackDamage: 0
   scanRange: 8
+  canChase: 0
   patrolRange: 5

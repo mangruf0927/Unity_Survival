@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   maxHP: 300
   attackDamage: 40
-  scanRange: 8
+  scanRange: 17
   canChase: 1
-  patrolRange: 5
+  patrolRange: 8

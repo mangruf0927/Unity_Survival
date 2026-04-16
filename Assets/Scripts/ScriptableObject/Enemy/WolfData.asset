@@ -16,4 +16,4 @@ MonoBehaviour:
   attackDamage: 20
   scanRange: 8
   canChase: 1
-  patrolRange: 5
+  patrolRange: 10

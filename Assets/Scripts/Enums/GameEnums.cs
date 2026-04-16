@@ -1,2 +1,2 @@
 public enum Phase { DAY, NIGHT }
-public enum PoolTypeEnums { BULLET, HPBAR }
+public enum PoolTypeEnums { BULLET, HPBAR, RABBIT, WOLF }

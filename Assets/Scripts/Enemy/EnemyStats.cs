@@ -21,7 +21,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-        CurrentHP = MaxHP;
+        Initialize();
     }
 
     private void Start()
@@ -32,6 +32,11 @@ public class EnemyStats : MonoBehaviour, IDamageable
     private void OnDestroy()
     {
         hpBarController.UnRegister(this);
+    }
+
+    public void Initialize()
+    {
+        CurrentHP = MaxHP;
     }
 
     public void TakeDamage(int dmg)
