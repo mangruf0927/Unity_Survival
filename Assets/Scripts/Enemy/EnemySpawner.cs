@@ -29,9 +29,6 @@ public class EnemySpawner : MonoBehaviour
 
                 GameObject enemy = ObjectPool.Instance.GetFromPool(info.enemyType);
                 enemy.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
-
-                EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();
-                enemyStats.Initialize();
             }
         }
     }

@@ -14,14 +14,15 @@ public class EnemyStats : MonoBehaviour, IDamageable
     public bool CanChase => enemyData.canChase;
     public float PatrolRange => enemyData.patrolRange;
     public int CurrentHP { get; private set; }
+    public PoolTypeEnums EnemyType => enemyData.enemyType;
     public Transform HPBarPoint => hpBarPoint;
 
     public event Action<EnemyStats> OnDamaged;
     public event Action<EnemyStats> OnDead;
 
-    private void Awake()
+    private void OnEnable()
     {
-        Initialize();
+        CurrentHP = MaxHP;
     }
 
     private void Start()
@@ -32,11 +33,6 @@ public class EnemyStats : MonoBehaviour, IDamageable
     private void OnDestroy()
     {
         hpBarController.UnRegister(this);
-    }
-
-    public void Initialize()
-    {
-        CurrentHP = MaxHP;
     }
 
     public void TakeDamage(int dmg)

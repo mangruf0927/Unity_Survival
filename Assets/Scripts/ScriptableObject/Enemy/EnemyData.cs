@@ -17,4 +17,7 @@ public class EnemyData : ScriptableObject
 
     [Header("순찰 범위")]
     public float patrolRange;
+
+    [Header("Enemy Type")]
+    public PoolTypeEnums enemyType;
 }

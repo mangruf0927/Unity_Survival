@@ -13,7 +13,8 @@ public class EnemyDeadState : IEnemyState
 
     public void Enter()
     {
-        Debug.Log("Dead State");
+        // Debug.Log("Dead State");
+        ObjectPool.Instance.ReturnToPool(enemyController.gameObject, enemyController.EnemyType);
     }
 
     public void Update()

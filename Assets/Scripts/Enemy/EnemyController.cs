@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private NavMeshAgent navMesh;
     [SerializeField] private EnemyStats enemyStats;
 
+    public PoolTypeEnums EnemyType => enemyStats.EnemyType;
     public Animator animator;
 
     public void Stop()
