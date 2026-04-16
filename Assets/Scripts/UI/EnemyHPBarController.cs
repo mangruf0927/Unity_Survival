@@ -87,7 +87,7 @@ public class EnemyHPBarController : MonoBehaviour
         if (!hpBarDictionary.TryGetValue(enemyStats, out EnemyHPBar hpBar)) return;
         hpBarDictionary.Remove(enemyStats);
 
-        if (!hpBar.gameObject.activeSelf) return;
+        if (hpBar == null || !hpBar.gameObject.activeSelf) return;
         hpBar.Clear();
         ObjectPool.Instance.ReturnToPool(hpBar.gameObject, PoolTypeEnums.HPBAR);
     }

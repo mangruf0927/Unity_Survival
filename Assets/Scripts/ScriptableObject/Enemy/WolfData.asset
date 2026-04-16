@@ -17,3 +17,4 @@ MonoBehaviour:
   scanRange: 8
   canChase: 1
   patrolRange: 10
+  enemyType: 3

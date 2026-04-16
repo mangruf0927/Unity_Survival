@@ -4780,7 +4780,7 @@ Transform:
   m_GameObject: {fileID: 1167997875}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 24.9, y: 0.5, z: -3}
+  m_LocalPosition: {x: -23, y: 0.5, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9597,13 +9597,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   spawnInfoList:
   - enemyType: 2
-    enemyCount: 3
+    enemyCount: 1
+    respawnTime: 5
     spawnPointList:
     - {fileID: 352322249}
     - {fileID: 960821762}
     - {fileID: 79532149}
   - enemyType: 3
-    enemyCount: 3
+    enemyCount: 0
+    respawnTime: 5
     spawnPointList:
     - {fileID: 725028769}
     - {fileID: 299345911}
@@ -10849,8 +10851,8 @@ SceneRoots:
   - {fileID: 1854888793}
   - {fileID: 114906568}
   - {fileID: 1112786011}
-  - {fileID: 634694067}
   - {fileID: 2047334736}
+  - {fileID: 634694067}
   - {fileID: 317170721}
   - {fileID: 329913524}
   - {fileID: 1072211403}

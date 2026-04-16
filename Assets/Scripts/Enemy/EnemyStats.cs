@@ -23,14 +23,11 @@ public class EnemyStats : MonoBehaviour, IDamageable
     private void OnEnable()
     {
         CurrentHP = MaxHP;
-    }
-
-    private void Start()
-    {
         hpBarController.Register(this);
+        enemyStateMachine.ChangeState(EnemyStateEnums.IDLE);
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         hpBarController.UnRegister(this);
     }
