@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using System;
 
 public class GameInput : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class GameInput : MonoBehaviour
     private Outline currentOutline;
     private EquippableItem currentEquip;
     private Item currentItem;
+
+    public event Action<Item> OnHoverItem;
+    public event Action OnExitItem;
 
     private void Update()
     {
@@ -51,7 +55,7 @@ public class GameInput : MonoBehaviour
 
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out RaycastHit hit, 15f, ~0, QueryTriggerInteraction.Collide))
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Equippable"))
             {
@@ -67,6 +71,12 @@ public class GameInput : MonoBehaviour
 
         UpdateOutline(nextOutline);
 
+        if (currentItem != nextItem)
+        {
+            if (nextItem != null) OnHoverItem?.Invoke(nextItem);
+            else OnExitItem?.Invoke();
+        }
+
         currentEquip = nextEquip;
         currentItem = nextItem;
     }
@@ -78,6 +88,8 @@ public class GameInput : MonoBehaviour
         currentOutline = null;
         currentEquip = null;
         currentItem = null;
+
+        OnExitItem?.Invoke();
     }
 
     private void UpdateOutline(Outline nextOutline)

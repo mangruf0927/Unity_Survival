@@ -44,6 +44,7 @@ public struct AmmoData
 public class ItemData
 {
     [SerializeField] private string itemName;
+    [SerializeField] private int value;
     [SerializeField] private ItemType itemType;
     [SerializeField] private ItemProperty itemProperty;
 
@@ -53,6 +54,7 @@ public class ItemData
     [SerializeField] private AmmoData ammoData;
 
     public string ItemName => itemName;
+    public int Value => value;
     public ItemType ItemType => itemType;
     public ItemProperty ItemProperty => itemProperty;
 
