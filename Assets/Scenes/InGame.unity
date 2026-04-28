@@ -4441,8 +4441,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba0b6fff06a44ebcbad6fbef66d9793, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlacementTest
-  testPrefab: {fileID: 0}
   player: {fileID: 1167997880}
+  testPrefab: {fileID: 0}
 --- !u!4 &1073054018
 Transform:
   m_ObjectHideFlags: 0
