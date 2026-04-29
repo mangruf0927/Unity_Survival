@@ -15,8 +15,8 @@ public class EnemyHPBar : MonoBehaviour
 
     public void UpdateHPBar()
     {
-        hpSlider.maxValue = enemyStats.MaxHP;
-        hpSlider.value = enemyStats.CurrentHP;
+        hpSlider.maxValue = enemyStats.MaxHp;
+        hpSlider.value = enemyStats.CurrentHp;
     }
 
     public void Clear()

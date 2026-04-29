@@ -3,26 +3,37 @@ using UnityEngine;
 
 public class EnemyStats : MonoBehaviour, IDamageable
 {
-    [SerializeField] private EnemyDataSO enemyData;
+    [SerializeField] int enemyId;
     [SerializeField] private EnemyStateMachine enemyStateMachine;
     [SerializeField] private Transform hpBarPoint;
     [SerializeField] private EnemyHPBarController hpBarController;
 
-    public int MaxHP => enemyData.maxHP;
-    public int AttackDamage => enemyData.attackDamage;
-    public float ScanRange => enemyData.scanRange;
-    public bool CanChase => enemyData.canChase;
-    public float PatrolRange => enemyData.patrolRange;
-    public int CurrentHP { get; private set; }
-    public PoolTypeEnums EnemyType => enemyData.enemyType;
+    private string enemyName;
+    private int maxHp;
+    private int attackDamage;
+    private float scanRange;
+    private bool canChase;
+    private float patrolRange;
+    private PoolTypeEnums enemyType;
+
+    public int EnemyId => enemyId;
+    public string EnemyName => enemyName;
+    public int MaxHp => maxHp;
+    public int AttackDamage => attackDamage;
+    public float ScanRange => scanRange;
+    public bool CanChase => canChase;
+    public float PatrolRange => patrolRange;
+    public PoolTypeEnums EnemyType => enemyType;
     public Transform HPBarPoint => hpBarPoint;
+
+    public int CurrentHp { get; private set; }
 
     public event Action<EnemyStats> OnDamaged;
     public event Action<EnemyStats> OnDead;
 
     private void OnEnable()
     {
-        CurrentHP = MaxHP;
+        CurrentHp = MaxHp;
         hpBarController.Register(this);
         enemyStateMachine.ChangeState(EnemyStateEnums.IDLE);
     }
@@ -32,14 +43,25 @@ public class EnemyStats : MonoBehaviour, IDamageable
         hpBarController.UnRegister(this);
     }
 
+    public void SetUp(EnemyDataTable data)
+    {
+        enemyName = data.Name;
+        maxHp = data.MaxHp;
+        attackDamage = data.AttackDamage;
+        scanRange = data.ScanRange;
+        canChase = data.CanChase;
+        patrolRange = data.PatrolRange;
+        enemyType = data.EnemyType;
+    }
+
     public void TakeDamage(int dmg)
     {
-        if (dmg <= 0 || CurrentHP <= 0) return;
+        if (dmg <= 0 || CurrentHp <= 0) return;
 
-        CurrentHP = Mathf.Max(CurrentHP - dmg, 0);
+        CurrentHp = Mathf.Max(CurrentHp - dmg, 0);
         OnDamaged?.Invoke(this);
 
-        if (CurrentHP <= 0)
+        if (CurrentHp <= 0)
         {
             OnDead?.Invoke(this);
             Die();
