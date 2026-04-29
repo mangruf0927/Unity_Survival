@@ -9,7 +9,6 @@ public class PlayerHPBar : MonoBehaviour, IObserver
     private void Start()
     {
         playerStats.AddObserver(this);
-        Notify();
     }
 
     private void OnDestroy()
@@ -19,8 +18,7 @@ public class PlayerHPBar : MonoBehaviour, IObserver
 
     public void Notify()
     {
-        hpSlider.maxValue = playerStats.MaxHP;
-        hpSlider.value = playerStats.CurrentHP;
-        // Debug.Log(playerStat.MaxHP + " " + playerStat.CurrentHP);
+        hpSlider.maxValue = playerStats.MaxHp;
+        hpSlider.value = playerStats.CurrentHp;
     }
 }

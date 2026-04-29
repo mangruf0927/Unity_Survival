@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class EnemyDataTable : IDataTable
 {
     public int Id { get; set; }

@@ -33,7 +33,6 @@ public class EnemyStats : MonoBehaviour, IDamageable
 
     private void OnEnable()
     {
-        CurrentHp = MaxHp;
         hpBarController.Register(this);
         enemyStateMachine.ChangeState(EnemyStateEnums.IDLE);
     }
@@ -52,6 +51,8 @@ public class EnemyStats : MonoBehaviour, IDamageable
         canChase = data.CanChase;
         patrolRange = data.PatrolRange;
         enemyType = data.EnemyType;
+
+        CurrentHp = MaxHp;
     }
 
     public void TakeDamage(int dmg)

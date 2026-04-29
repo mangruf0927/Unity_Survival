@@ -1184,7 +1184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571199f623554497ab9ef9233673b383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
-  enemyId: 0
+  enemyId: 2003
   enemyStateMachine: {fileID: 208183963}
   hpBarPoint: {fileID: 728613824}
   hpBarController: {fileID: 1050484675}
@@ -4492,7 +4492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571199f623554497ab9ef9233673b383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
-  enemyId: 0
+  enemyId: 2004
   enemyStateMachine: {fileID: 1081084398}
   hpBarPoint: {fileID: 1560019133}
   hpBarController: {fileID: 1050484675}
@@ -10235,15 +10235,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   spawnInfoList:
-  - enemyId: 1001
+  - enemyId: 2001
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
     - {fileID: 352322249}
     - {fileID: 960821762}
     - {fileID: 79532149}
-  - enemyId: 1002
-    enemyCount: 3
+  - enemyId: 2002
+    enemyCount: 0
     respawnTime: 5
     spawnPointList:
     - {fileID: 725028769}

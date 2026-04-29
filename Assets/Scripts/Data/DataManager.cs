@@ -8,11 +8,13 @@ public class DataManager
     public static DataManager Instance { get; } = new();
 
     public DataTable<EnemyDataTable> EnemyTable { get; } = new();
+    public DataTable<PlayerDataTable> PlayerTable { get; } = new();
 
     public bool IsLoaded { get; private set; }
     public IEnumerator LoadAll()
     {
         yield return LoadTable("EnemyTable", EnemyTable);
+        yield return LoadTable("PlayerTable", PlayerTable);
         IsLoaded = true;
     }
 
