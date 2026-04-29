@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyStats : MonoBehaviour, IDamageable
 {
-    [SerializeField] private EnemyData enemyData;
+    [SerializeField] private EnemyDataSO enemyData;
     [SerializeField] private EnemyStateMachine enemyStateMachine;
     [SerializeField] private Transform hpBarPoint;
     [SerializeField] private EnemyHPBarController hpBarController;

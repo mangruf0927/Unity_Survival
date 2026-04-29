@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu]
-public class EnemyData : ScriptableObject
+public class EnemyDataSO : ScriptableObject
 {
     [Header("체력")]
     public int maxHP;

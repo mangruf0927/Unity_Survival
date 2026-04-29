@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerStats : HealthBase
 {
     [SerializeField] private PlayerStateMachine playerStateMachine;
-    [SerializeField] private PlayerData playerData;
+    [SerializeField] private PlayerDataSO playerData;
 
     public override int MaxHP => playerData.maxHP;
     public float MoveSpeed => playerData.moveSpeed;

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu]
-public class RangedWeaponData : ScriptableObject
+public class RangedWeaponDataSO : ScriptableObject
 {
     [Header("총 타입")]
     public AmmoType ammoType;

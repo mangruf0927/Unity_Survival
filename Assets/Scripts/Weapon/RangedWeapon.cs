@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RangedWeapon : Weapon, ISubject
 {
-    [SerializeField] private RangedWeaponData weaponData;
+    [SerializeField] private RangedWeaponDataSO weaponData;
     [SerializeField] private Transform shootPosition;
 
     private readonly List<IObserver> ObserverList = new();
