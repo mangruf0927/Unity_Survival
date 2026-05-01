@@ -22,7 +22,6 @@ public class DataManager
         yield return LoadTable("SackTable", SackTable);
         yield return LoadTable("MeleeTable", MeleeTable);
         yield return LoadTable("RangedTable", RangedTable);
-        yield return LoadTable("RangedTable", RangedTable);
         yield return LoadTable("ItemTable", ItemTable);
 
         IsLoaded = true;

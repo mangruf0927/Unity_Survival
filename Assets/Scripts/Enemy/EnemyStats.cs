@@ -40,6 +40,8 @@ public class EnemyStats : MonoBehaviour, IDamageable
     private void OnDisable()
     {
         hpBarController.UnRegister(this);
+        OnDamaged = null;
+        OnDead = null;
     }
 
     public void SetUp(EnemyDataTable data)

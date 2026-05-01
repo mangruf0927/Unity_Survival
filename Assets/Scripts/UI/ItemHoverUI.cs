@@ -86,11 +86,7 @@ public class ItemHoverUI : MonoBehaviour
         currentItem = null;
         itemName.text = "";
 
-        foreach (Image image in imageList)
-        {
-            image.gameObject.SetActive(false);
-        }
-
+        HideImages();
         HoverUI.SetActive(false);
     }
 

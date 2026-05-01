@@ -21,6 +21,7 @@ public class Grinder : MonoBehaviour
             else if (data.MaterialData.Type == MaterialType.IRON) iron += count;
             else return;
 
+            // pool 쓰는 경우 수정
             Destroy(item.gameObject);
             Debug.Log("나무 : " + wood + ", 철 : " + iron);
         }
