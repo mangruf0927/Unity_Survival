@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Default Local Group
+  m_GUID: 94488463119f346be8d72b91c588e0c0
+  m_SerializeEntries:
+  - m_GUID: 09c9ed8c8c68a42b3a1d1a20ad2d39a1
+    m_Address: Assets/Test/Cube.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a153358fdc0b34e1ba975fa637797735
+    m_Address: Assets/Test/Sphere.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc8bcdf2252b645bbadf3486a96b288f
+    m_Address: Assets/Test/keyboard_win 1.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1a3e2ad59bb54c24b3229602c8c8a5f
+    m_Address: Assets/Test/Capsule.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 188d8970cddd74676adf1cdeea6b7773, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 334bd52da76a948e5ab06cf49f1ac7a2, type: 2}
+    - {fileID: 11400000, guid: d6be2e511793b441fac651a745d8a11c, type: 2}
