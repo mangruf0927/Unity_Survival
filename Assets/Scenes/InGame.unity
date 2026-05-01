@@ -313,7 +313,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -380,7 +380,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &62794734
@@ -2160,7 +2160,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2227,7 +2227,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &359768813
@@ -2685,23 +2685,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemData:
-    itemName: RevolverAmmo
-    value: 0
-    itemType: 3
-    itemProperty: 0
-    fuelData:
-      burnPower: 0
-    foodData:
-      hungerAmount: 0
-      hpAmount: 0
-      needCook: 0
-    materialData:
-      grindCount: 0
-      materialType: 0
-    ammoData:
-      ammoType: 0
-      amount: 6
+  itemId: 6301
 --- !u!4 &566609037 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 145434502484616043, guid: 9856752a9aa24416998136ffabec76c1, type: 3}
@@ -2803,7 +2787,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -2870,7 +2854,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &603759424
@@ -3068,23 +3052,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemData:
-    itemName: Bolt
-    value: 1
-    itemType: 2
-    itemProperty: 1
-    fuelData:
-      burnPower: 0
-    foodData:
-      hungerAmount: 0
-      hpAmount: 0
-      needCook: 0
-    materialData:
-      grindCount: 1
-      materialType: 2
-    ammoData:
-      ammoType: 0
-      amount: 0
+  itemId: 6101
 --- !u!114 &684713098
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3393,7 +3361,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3460,7 +3428,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &760676472
@@ -3800,23 +3768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemData:
-    itemName: RevolverAmmo
-    value: 0
-    itemType: 3
-    itemProperty: 0
-    fuelData:
-      burnPower: 0
-    foodData:
-      hungerAmount: 0
-      hpAmount: 0
-      needCook: 0
-    materialData:
-      grindCount: 0
-      materialType: 0
-    ammoData:
-      ammoType: 0
-      amount: 6
+  itemId: 6301
 --- !u!1 &891912647
 GameObject:
   m_ObjectHideFlags: 0
@@ -3876,7 +3828,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3943,7 +3895,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &891912650
@@ -4661,23 +4613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemData:
-    itemName: Radio
-    value: 2
-    itemType: 2
-    itemProperty: 1
-    fuelData:
-      burnPower: 0
-    foodData:
-      hungerAmount: 0
-      hpAmount: 0
-      needCook: 0
-    materialData:
-      grindCount: 3
-      materialType: 2
-    ammoData:
-      ammoType: 0
-      amount: 0
+  itemId: 6102
 --- !u!114 &1096556386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4868,7 +4804,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStat
   playerStateMachine: {fileID: 1167997877}
-  playerData: {fileID: 11400000, guid: 7858cf26672014efca3e81bc8d353e2a, type: 2}
 --- !u!114 &1167997877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5256,8 +5191,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
+  m_sharedMaterial: {fileID: 5945985407853206585, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5393,8 +5328,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
+  m_sharedMaterial: {fileID: 5945985407853206585, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5674,23 +5609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemData:
-    itemName: RevolverAmmo
-    value: 0
-    itemType: 3
-    itemProperty: 0
-    fuelData:
-      burnPower: 0
-    foodData:
-      hungerAmount: 0
-      hpAmount: 0
-      needCook: 0
-    materialData:
-      grindCount: 0
-      materialType: 0
-    ammoData:
-      ammoType: 0
-      amount: 6
+  itemId: 6301
 --- !u!1 &1331726766
 GameObject:
   m_ObjectHideFlags: 0
@@ -6104,23 +6023,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemData:
-    itemName: RifleAmmo
-    value: 0
-    itemType: 3
-    itemProperty: 0
-    fuelData:
-      burnPower: 0
-    foodData:
-      hungerAmount: 0
-      hpAmount: 0
-      needCook: 0
-    materialData:
-      grindCount: 0
-      materialType: 0
-    ammoData:
-      ammoType: 1
-      amount: 6
+  itemId: 6302
 --- !u!1 &1368694980
 GameObject:
   m_ObjectHideFlags: 0
@@ -6434,8 +6337,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
+  m_sharedMaterial: {fileID: 5945985407853206585, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6743,7 +6646,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -6810,7 +6713,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1531821463
@@ -7211,23 +7114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemData:
-    itemName: RevolverAmmo
-    value: 0
-    itemType: 3
-    itemProperty: 0
-    fuelData:
-      burnPower: 0
-    foodData:
-      hungerAmount: 0
-      hpAmount: 0
-      needCook: 0
-    materialData:
-      grindCount: 0
-      materialType: 0
-    ammoData:
-      ammoType: 0
-      amount: 6
+  itemId: 6301
 --- !u!1 &1591169891
 GameObject:
   m_ObjectHideFlags: 0
@@ -7378,7 +7265,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -7445,7 +7332,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1597320612
@@ -7832,23 +7719,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemData:
-    itemName: Cake
-    value: 2
-    itemType: 0
-    itemProperty: 2
-    fuelData:
-      burnPower: 0
-    foodData:
-      hungerAmount: 15
-      hpAmount: 15
-      needCook: 1
-    materialData:
-      grindCount: 0
-      materialType: 0
-    ammoData:
-      ammoType: 0
-      amount: 0
+  itemId: 6202
 --- !u!114 &1658201095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8449,8 +8320,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
+  m_sharedMaterial: {fileID: 5945985407853206585, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -8866,7 +8737,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -8933,7 +8804,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1802806128
@@ -9064,8 +8935,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0 / 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
+  m_sharedMaterial: {fileID: 5945985407853206585, guid: 7cd39ddece2ab49999cd6add2de48eef, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9501,23 +9372,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemData:
-    itemName: RifleAmmo
-    value: 0
-    itemType: 3
-    itemProperty: 0
-    fuelData:
-      burnPower: 0
-    foodData:
-      hungerAmount: 0
-      hpAmount: 0
-      needCook: 0
-    materialData:
-      grindCount: 0
-      materialType: 0
-    ammoData:
-      ammoType: 1
-      amount: 6
+  itemId: 6302
 --- !u!1001 &1920911747
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9723,23 +9578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemData:
-    itemName: Coal
-    value: 2
-    itemType: 1
-    itemProperty: 0
-    fuelData:
-      burnPower: 20
-    foodData:
-      hungerAmount: 0
-      hpAmount: 0
-      needCook: 0
-    materialData:
-      grindCount: 0
-      materialType: 0
-    ammoData:
-      ammoType: 0
-      amount: 0
+  itemId: 6002
 --- !u!114 &1926045994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10511,23 +10350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemData:
-    itemName: Steak
-    value: 1
-    itemType: 0
-    itemProperty: 2
-    fuelData:
-      burnPower: 0
-    foodData:
-      hungerAmount: 15
-      hpAmount: 0
-      needCook: 1
-    materialData:
-      grindCount: 0
-      materialType: 0
-    ammoData:
-      ammoType: 0
-      amount: 0
+  itemId: 6201
 --- !u!1001 &2070549624
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11088,6 +10911,10 @@ PrefabInstance:
     - target: {fileID: 2156131655249105844, guid: 9856752a9aa24416998136ffabec76c1, type: 3}
       propertyPath: m_Name
       value: Log
+      objectReference: {fileID: 0}
+    - target: {fileID: 4130831382163440775, guid: 9856752a9aa24416998136ffabec76c1, type: 3}
+      propertyPath: itemId
+      value: 6001
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

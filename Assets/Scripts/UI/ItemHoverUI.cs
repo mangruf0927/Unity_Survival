@@ -66,7 +66,7 @@ public class ItemHoverUI : MonoBehaviour
             }
         }
 
-        itemName.text = currentItem.Data.ItemName;
+        itemName.text = currentItem.Data.Name;
         UpdatePosition();
     }
 

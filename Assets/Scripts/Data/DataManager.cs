@@ -12,6 +12,7 @@ public class DataManager
     public DataTable<SackDataTable> SackTable { get; } = new();
     public DataTable<MeleeWeaponDataTable> MeleeTable { get; } = new();
     public DataTable<RangedWeaponDataTable> RangedTable { get; } = new();
+    public DataTable<ItemDataTable> ItemTable { get; } = new();
 
     public bool IsLoaded { get; private set; }
     public IEnumerator LoadAll()
@@ -21,6 +22,9 @@ public class DataManager
         yield return LoadTable("SackTable", SackTable);
         yield return LoadTable("MeleeTable", MeleeTable);
         yield return LoadTable("RangedTable", RangedTable);
+        yield return LoadTable("RangedTable", RangedTable);
+        yield return LoadTable("ItemTable", ItemTable);
+
         IsLoaded = true;
     }
 
