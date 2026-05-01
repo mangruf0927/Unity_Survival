@@ -1,20 +1,44 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Sack : EquippableItem, ISubject
 {
-    [SerializeField] private SackData sackData;
+    [SerializeField] private int sackId;
+
+    private string sackName;
+    private SackLevel sackLevel;
+    private int capacity;
 
     private Stack<Item> itemStack = new();
     private readonly List<IObserver> ObserverList = new();
 
-    public SackLevel Level => sackData.level;
-    public override bool CanDrop => false;
+    public SackLevel Level => sackLevel;
+    public int Capacity => capacity;
+    public override bool CanDrop => canDrop;
 
-    public int Capacity => sackData.capacity;
     public int Count => itemStack.Count;
     public bool IsFull => itemStack.Count >= Capacity;
     public bool IsEmpty => itemStack.Count == 0;
+
+    private IEnumerator Start()
+    {
+        if (!DataManager.Instance.IsLoaded)
+        {
+            yield return DataManager.Instance.LoadAll();
+        }
+
+        SackDataTable data = DataManager.Instance.SackTable.Get(sackId);
+        SetUp(data);
+    }
+
+    public void SetUp(SackDataTable data)
+    {
+        sackName = data.Name;
+        sackLevel = data.Level;
+        capacity = data.Capacity;
+        canDrop = data.CanDrop;
+    }
 
     public override void OnEquip(PlayerController player)
     {

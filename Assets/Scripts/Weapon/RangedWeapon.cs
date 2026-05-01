@@ -1,9 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class RangedWeapon : Weapon, ISubject
 {
-    [SerializeField] private RangedWeaponDataSO weaponData;
+    [SerializeField] private int weaponId;
     [SerializeField] private Transform shootPosition;
 
     private readonly List<IObserver> ObserverList = new();
@@ -11,13 +12,46 @@ public class RangedWeapon : Weapon, ISubject
     private int totalAmmo = 0;
     private int currentAmmo;
 
+    private string weaponName;
+    private AmmoType ammoType;
+    private int attackDamage;
+    private int magSize;
+    private float bulletSpeed;
+
     public int CurrentAmmo => currentAmmo;
     public int TotalAmmo => totalAmmo;
-    public int MagSize => weaponData.magSize;
-    public AmmoType Type => weaponData.ammoType;
+    public int MagSize => magSize;
+    public AmmoType Type => ammoType;
+    public override bool CanDrop => canDrop;
 
     private Vector3 aimPos;
     public void SetAimPoint(Vector3 pos) { aimPos = pos; }
+
+    private IEnumerator Start()
+    {
+        if (!DataManager.Instance.IsLoaded)
+        {
+            yield return DataManager.Instance.LoadAll();
+        }
+
+        RangedWeaponDataTable data = DataManager.Instance.RangedTable.Get(weaponId);
+        SetUp(data);
+    }
+
+    public void SetUp(RangedWeaponDataTable data)
+    {
+        weaponName = data.Name;
+        ammoType = data.Type;
+        attackDamage = data.AttackDamage;
+        magSize = data.MagSize;
+        bulletSpeed = data.BulletSpeed;
+        canDrop = data.CanDrop;
+
+        currentAmmo = 0;
+        totalAmmo = 0;
+
+        NotifyObservers();
+    }
 
     public override void Attack()
     {
@@ -28,7 +62,7 @@ public class RangedWeapon : Weapon, ISubject
 
         if (bulletObj.TryGetComponent<Bullet>(out var bullet))
         {
-            bullet.SetData(weaponData.attackDamage, weaponData.bulletSpeed);
+            bullet.SetData(attackDamage, bulletSpeed);
             bullet.Fire(aimPos - shootPosition.position);
 
             currentAmmo--;

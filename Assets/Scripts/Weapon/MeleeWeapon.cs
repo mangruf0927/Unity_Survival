@@ -1,15 +1,40 @@
+using System.Collections;
 using UnityEngine;
 
 public class MeleeWeapon : Weapon
 {
-    [SerializeField] private MeleeWeaponDataSO weaponData;
+    [SerializeField] private int weaponId;
     [SerializeField] private Collider hitCollider;
 
-    public MeleeLevel Level => weaponData.level;
-    private int AttackDamage => weaponData.attackDamage;
-    private int TreeDamage => weaponData.treeDamage;
-
     private bool hasHit;
+
+    private string weaponName;
+    private MeleeLevel meleeLevel;
+    private int attackDamage;
+    private int treeDamage;
+
+    public MeleeLevel Level => meleeLevel;
+    public override bool CanDrop => canDrop;
+
+    private IEnumerator Start()
+    {
+        if (!DataManager.Instance.IsLoaded)
+        {
+            yield return DataManager.Instance.LoadAll();
+        }
+
+        MeleeWeaponDataTable data = DataManager.Instance.MeleeTable.Get(weaponId);
+        SetUp(data);
+    }
+
+    public void SetUp(MeleeWeaponDataTable data)
+    {
+        weaponName = data.Name;
+        meleeLevel = data.MeleeLevel;
+        attackDamage = data.AttackDamage;
+        treeDamage = data.TreeDamage;
+        canDrop = data.CanDrop;
+    }
 
     public override void Attack()
     {
@@ -29,18 +54,18 @@ public class MeleeWeapon : Weapon
         TreeObject tree = other.GetComponentInParent<TreeObject>();
         if (tree != null)
         {
-            if (ItemType != ToolType.AXE || TreeDamage <= 0) return;
+            if (ItemType != ToolType.AXE || treeDamage <= 0) return;
 
             hasHit = true;
-            tree.TakeDamage(TreeDamage);
+            tree.TakeDamage(treeDamage);
             return;
         }
 
-        if (!other.CompareTag("Enemy") || AttackDamage <= 0) return;
+        if (!other.CompareTag("Enemy") || attackDamage <= 0) return;
         if (other.TryGetComponent<IDamageable>(out var enemy))
         {
             hasHit = true;
-            enemy.TakeDamage(AttackDamage);
+            enemy.TakeDamage(attackDamage);
         }
     }
 }

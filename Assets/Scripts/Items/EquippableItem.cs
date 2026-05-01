@@ -11,7 +11,9 @@ public abstract class EquippableItem : MonoBehaviour
 
     public ToolType ItemType => itemType;
     public Sprite ItemIcon => itemIcon;
-    public virtual bool CanDrop => true;
+
+    protected bool canDrop = true;
+    public virtual bool CanDrop => canDrop;
 
     private void Awake()
     {

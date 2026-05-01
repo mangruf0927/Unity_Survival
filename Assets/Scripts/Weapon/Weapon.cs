@@ -2,8 +2,6 @@ using UnityEngine;
 
 public abstract class Weapon : EquippableItem
 {
-    [SerializeField] private bool canDrop;
-    public override bool CanDrop => canDrop;
 
     public override void OnEquip(PlayerController player)
     {
