@@ -23,10 +23,7 @@ public class Sack : EquippableItem, ISubject
 
     private IEnumerator Start()
     {
-        if (!DataManager.Instance.IsLoaded)
-        {
-            yield return DataManager.Instance.LoadAll();
-        }
+        yield return DataManager.Instance.WaitUntilLoaded();
 
         SackDataTable data = DataManager.Instance.SackTable.Get(sackId);
         SetUp(data);
