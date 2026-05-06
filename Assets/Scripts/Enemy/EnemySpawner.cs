@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [Serializable]
@@ -16,12 +17,18 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private List<EnemySpawnInfo> spawnInfoList;
 
+    private Dictionary<PoolTypeEnums, EnemySpawnInfo> typeToInfo;
+
     private IEnumerator Start()
     {
         if (!DataManager.Instance.IsLoaded)
         {
             yield return DataManager.Instance.LoadAll();
         }
+
+        typeToInfo = spawnInfoList.ToDictionary(
+            info => DataManager.Instance.EnemyTable.Get(info.enemyId).EnemyType
+        );
 
         foreach (EnemySpawnInfo info in spawnInfoList)
         {
@@ -36,7 +43,7 @@ public class EnemySpawner : MonoBehaviour
     {
         EnemyDataTable data = DataManager.Instance.EnemyTable.Get(info.enemyId);
 
-        Transform spawnPoint = RandomSpwanPoint(info.spawnPointList);
+        Transform spawnPoint = RandomSpawnPoint(info.spawnPointList);
 
         GameObject enemy = ObjectPool.Instance.GetFromPool(data.EnemyType);
         enemy.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
@@ -50,16 +57,9 @@ public class EnemySpawner : MonoBehaviour
 
     private void EnemyDead(EnemyStats enemyStats)
     {
-        foreach (EnemySpawnInfo info in spawnInfoList)
+        if (typeToInfo.TryGetValue(enemyStats.EnemyType, out EnemySpawnInfo info))
         {
-            EnemyDataTable data = DataManager.Instance.EnemyTable.Get(info.enemyId);
-            if (data == null) continue;
-
-            if (data.EnemyType == enemyStats.EnemyType)
-            {
-                StartCoroutine(Respawn(info));
-                break;
-            }
+            StartCoroutine(Respawn(info));
         }
     }
 
@@ -69,7 +69,7 @@ public class EnemySpawner : MonoBehaviour
         SpawnEnemy(info);
     }
 
-    private Transform RandomSpwanPoint(List<Transform> spawnList)
+    private Transform RandomSpawnPoint(List<Transform> spawnList)
     {
         int idx = UnityEngine.Random.Range(0, spawnList.Count);
         return spawnList[idx];

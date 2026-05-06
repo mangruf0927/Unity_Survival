@@ -1,0 +1,42 @@
+[
+    {
+        "Id": 3001,
+        "Name": "낡은 도끼",
+        "MeleeLevel": "OLD",
+        "AttackDamage": 10,
+        "TreeDamage": 8,
+        "CanDrop": false
+    },
+    {
+        "Id": 3002,
+        "Name": "좋은 도끼",
+        "MeleeLevel": "GOOD",
+        "AttackDamage": 16,
+        "TreeDamage": 20,
+        "CanDrop": false
+    },
+    {
+        "Id": 3003,
+        "Name": "강력한 도끼",
+        "MeleeLevel": "STRONG",
+        "AttackDamage": 24,
+        "TreeDamage": 100,
+        "CanDrop": false
+    },
+    {
+        "Id": 3004,
+        "Name": "창",
+        "MeleeLevel": "GOOD",
+        "AttackDamage": 25,
+        "TreeDamage": 0,
+        "CanDrop": true
+    },
+    {
+        "Id": 3005,
+        "Name": "철퇴",
+        "MeleeLevel": "STRONG",
+        "AttackDamage": 70,
+        "TreeDamage": 0,
+        "CanDrop": true
+    }
+]

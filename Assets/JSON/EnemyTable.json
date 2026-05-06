@@ -1,0 +1,42 @@
+[
+    {
+        "Id": 2001,
+        "Name": "Rabbit",
+        "MaxHp": 45,
+        "AttackDamage": 0,
+        "ScanRange": 8.0,
+        "CanChase": false,
+        "PatrolRange": 5.0,
+        "EnemyType": "RABBIT"
+    },
+    {
+        "Id": 2002,
+        "Name": "Wolf",
+        "MaxHp": 75,
+        "AttackDamage": 20,
+        "ScanRange": 8.0,
+        "CanChase": true,
+        "PatrolRange": 10.0,
+        "EnemyType": "WOLF"
+    },
+    {
+        "Id": 2003,
+        "Name": "AlphaWolf",
+        "MaxHp": 125,
+        "AttackDamage": 25,
+        "ScanRange": 24.0,
+        "CanChase": true,
+        "PatrolRange": 10.0,
+        "EnemyType": "ALPHAWOLF"
+    },
+    {
+        "Id": 2004,
+        "Name": "Bear",
+        "MaxHp": 100,
+        "AttackDamage": 40,
+        "ScanRange": 17.0,
+        "CanChase": true,
+        "PatrolRange": 8.0,
+        "EnemyType": "BEAR"
+    }
+]

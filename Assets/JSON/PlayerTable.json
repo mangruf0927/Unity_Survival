@@ -1,0 +1,10 @@
+[
+    {
+        "Id": 1001,
+        "MaxHp": 100,
+        "MoveSpeed": 3.0,
+        "RunSpeed": 5.0,
+        "JumpForce": 5.0,
+        "RotateSpeed": 6.0
+    }
+]
