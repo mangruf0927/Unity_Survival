@@ -29,10 +29,7 @@ public class RangedWeapon : Weapon, ISubject
 
     private IEnumerator Start()
     {
-        if (!DataManager.Instance.IsLoaded)
-        {
-            yield return DataManager.Instance.LoadAll();
-        }
+        yield return DataManager.Instance.WaitUntilLoaded();
 
         RangedWeaponDataTable data = DataManager.Instance.RangedTable.Get(weaponId);
         SetUp(data);

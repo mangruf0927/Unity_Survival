@@ -24,7 +24,7 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
 
     private IEnumerator Start()
     {
-        if (!DataManager.Instance.IsLoaded) yield return DataManager.Instance.LoadAll();
+        yield return DataManager.Instance.WaitUntilLoaded();
 
         PlayerDataTable data = DataManager.Instance.PlayerTable.Get(1001);
         SetUp(data);

@@ -44,4 +44,12 @@ public class DataManager
             table.Load(records);
         });
     }
+
+    public IEnumerator WaitUntilLoaded()
+    {
+        while (!IsLoaded)
+        {
+            yield return null;
+        }
+    }
 }

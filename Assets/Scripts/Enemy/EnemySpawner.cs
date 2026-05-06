@@ -21,10 +21,7 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator Start()
     {
-        if (!DataManager.Instance.IsLoaded)
-        {
-            yield return DataManager.Instance.LoadAll();
-        }
+        yield return DataManager.Instance.WaitUntilLoaded();
 
         typeToInfo = spawnInfoList.ToDictionary(
             info => DataManager.Instance.EnemyTable.Get(info.enemyId).EnemyType

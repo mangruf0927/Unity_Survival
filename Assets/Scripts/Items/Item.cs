@@ -10,10 +10,7 @@ public class Item : MonoBehaviour
 
     private IEnumerator Start()
     {
-        if (!DataManager.Instance.IsLoaded)
-        {
-            yield return DataManager.Instance.LoadAll();
-        }
+        yield return DataManager.Instance.WaitUntilLoaded();
 
         ItemDataTable data = DataManager.Instance.ItemTable.Get(itemId);
         SetUp(data);

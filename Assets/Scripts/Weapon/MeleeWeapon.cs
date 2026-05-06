@@ -18,10 +18,7 @@ public class MeleeWeapon : Weapon
 
     private IEnumerator Start()
     {
-        if (!DataManager.Instance.IsLoaded)
-        {
-            yield return DataManager.Instance.LoadAll();
-        }
+        yield return DataManager.Instance.WaitUntilLoaded();
 
         MeleeWeaponDataTable data = DataManager.Instance.MeleeTable.Get(weaponId);
         SetUp(data);
