@@ -1,4 +1,7 @@
-public class EnemyDataTable : IDataTable
+using System;
+using UnityEngine;
+
+public class EnemyDataTable : IDataTable, IValidatable
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -9,4 +12,45 @@ public class EnemyDataTable : IDataTable
     public float ScanRange { get; set; }
     public float PatrolRange { get; set; }
     public PoolTypeEnums EnemyType { get; set; }
+
+    public bool Validate()
+    {
+        if (Id <= 0)
+        {
+            Debug.LogError($"Enemy Id is invalid. Id: {Id}");
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(Name))
+        {
+            Debug.LogError($"Enemy Name is empty. Id: {Id}");
+            return false;
+        }
+
+        if (MaxHp <= 0)
+        {
+            Debug.LogError($"Enemy MaxHp is invalid. Id: {Id}, MaxHp: {MaxHp}");
+            return false;
+        }
+
+        if (AttackDamage < 0)
+        {
+            Debug.LogError($"Enemy AttackDamage is invalid. Id: {Id}, AttackDamage: {AttackDamage}");
+            return false;
+        }
+
+        if (ScanRange < 0 || PatrolRange < 0)
+        {
+            Debug.LogError($"Enemy Range is invalid. Id: {Id}, ScanRange: {ScanRange}, PatrolRange: {PatrolRange}");
+            return false;
+        }
+
+        if (!Enum.IsDefined(typeof(PoolTypeEnums), EnemyType))
+        {
+            Debug.LogError($"EnemyType is invalid. Id: {Id}, EnemyType: {EnemyType}");
+            return false;
+        }
+
+        return true;
+    }
 }

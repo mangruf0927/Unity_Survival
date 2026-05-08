@@ -11,6 +11,12 @@ public class DataTable<T> where T : IDataTable
         _table.Clear();
         foreach (var record in records)
         {
+            if (record is IValidatable validatable && !validatable.Validate())
+            {
+                Debug.LogError($"Invalid data skipped: {typeof(T).Name} - Id: {record.Id}");
+                continue;
+            }
+
             if (_table.ContainsKey(record.Id))
             {
                 Debug.LogError($"Duplicate id: {typeof(T).Name} - {record.Id}");

@@ -1,4 +1,6 @@
-public class ItemDataTable : IDataTable
+using UnityEngine;
+
+public class ItemDataTable : IDataTable, IValidatable
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -15,6 +17,29 @@ public class ItemDataTable : IDataTable
     public bool HasProperty(ItemProperty property)
     {
         return (ItemProperty & property) != 0;
+    }
+
+    public bool Validate()
+    {
+        if (Id <= 0)
+        {
+            Debug.LogError($"Item Id is invalid. Id: {Id}");
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(Name))
+        {
+            Debug.LogError($"Item Name is empty. Id: {Id}");
+            return false;
+        }
+
+        if (Value < 0)
+        {
+            Debug.LogError($"Item Value is invalid. Id: {Id}, Value: {Value}");
+            return false;
+        }
+
+        return true;
     }
 }
 
