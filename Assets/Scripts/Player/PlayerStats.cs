@@ -13,14 +13,21 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
     private float runSpeed;
     private float jumpForce;
     private float rotateSpeed;
+    private float maxHunger;
+    private int decreaseInterval;
+
+    private bool isSetUp;
+    private float timer;
 
     public int MaxHp => maxHp;
     public float MoveSpeed => moveSpeed;
     public float RunSpeed => runSpeed;
     public float JumpForce => jumpForce;
     public float RotateSpeed => rotateSpeed;
+    public float MaxHunger => maxHunger;
 
     public int CurrentHp { get; private set; }
+    public float CurrentHunger { get; private set; }
 
     private IEnumerator Start()
     {
@@ -30,6 +37,11 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
         SetUp(data);
     }
 
+    private void Update()
+    {
+        if (isSetUp) UpdateHunger();
+    }
+
     public void SetUp(PlayerDataTable data)
     {
         maxHp = data.MaxHp;
@@ -37,11 +49,30 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
         runSpeed = data.RunSpeed;
         jumpForce = data.JumpForce;
         rotateSpeed = data.RotateSpeed;
+        maxHunger = data.MaxHunger;
+        decreaseInterval = data.DecreaseInterval;
 
         CurrentHp = maxHp;
+        CurrentHunger = maxHunger;
+
+        isSetUp = true;
         NotifyObservers();
     }
 
+    private void UpdateHunger()
+    {
+        if (CurrentHunger <= 0f) return;
+
+        timer += Time.deltaTime;
+
+        if (timer < decreaseInterval) return;
+
+        timer = 0;
+        CurrentHunger = Mathf.Max(CurrentHunger - 1, 0);
+        NotifyObservers();
+
+        if (CurrentHunger <= 0f) Debug.Log("Player is starving.");
+    }
 
     public void TakeDamage(int dmg)
     {

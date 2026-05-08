@@ -9,6 +9,8 @@ public class PlayerDataTable : IDataTable, IValidatable
     public float RunSpeed { get; set; }
     public float JumpForce { get; set; }
     public float RotateSpeed { get; set; }
+    public float MaxHunger { get; set; }
+    public int DecreaseInterval { get; set; }
 
     public bool Validate()
     {
@@ -47,6 +49,19 @@ public class PlayerDataTable : IDataTable, IValidatable
             Debug.LogError($"Player RotateSpeed is invalid. RoateSpeed: {RotateSpeed}");
             return false;
         }
+
+        if (MaxHunger <= 0)
+        {
+            Debug.LogError($"Player MaxHunger is invalid. MaxHunger: {MaxHunger}");
+            return false;
+        }
+
+        if (DecreaseInterval <= 0)
+        {
+            Debug.LogError($"Player DecreaseInterval is invalid. DecreaseInterval: {DecreaseInterval}");
+            return false;
+        }
+
 
         return true;
     }
