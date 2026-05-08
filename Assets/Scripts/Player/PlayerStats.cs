@@ -74,6 +74,16 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
         if (CurrentHunger <= 0f) Debug.Log("Player is starving.");
     }
 
+    public void EatFood(int hunger, int hp)
+    {
+        if (hunger <= 0 && hp <= 0) return;
+
+        if (hunger > 0) CurrentHunger = Mathf.Min(CurrentHunger + hunger, MaxHunger);
+        if (hp > 0) CurrentHp = Mathf.Min(CurrentHp + hp, MaxHp);
+
+        NotifyObservers();
+    }
+
     public void TakeDamage(int dmg)
     {
         if (dmg <= 0 || CurrentHp <= 0) return;

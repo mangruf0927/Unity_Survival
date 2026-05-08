@@ -101,6 +101,11 @@ public class PlayerController : MonoBehaviour
         rigid.AddForce(Vector3.up * playerStats.JumpForce, ForceMode.Impulse);
     }
 
+    public void Eat(int hunger, int hp)
+    {
+        playerStats.EatFood(hunger, hp);
+    }
+
     public bool GetEquippableItem(EquippableItem item)
     {
         if (item == null) return false;

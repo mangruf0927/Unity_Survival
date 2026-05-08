@@ -132,6 +132,13 @@ public class GameInput : MonoBehaviour
             ClearTarget();
             return;
         }
+        else if (currentItem != null && currentItem.Data.ItemType == ItemType.FOOD)
+        {
+            playerController.Eat(currentItem.Data.FoodData.HungerAmount, currentItem.Data.FoodData.HpAmount);
+            Destroy(currentItem.gameObject);
+            ClearTarget();
+            return;
+        }
 
         if (currentEquip != null)
         {

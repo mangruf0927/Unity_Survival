@@ -43,6 +43,7 @@ public class PlayerJumpState : IPlayerState
     public void FixedUpdate()
     {
         playerController.Move();
+        playerController.Look();
     }
 
     public void Exit()
