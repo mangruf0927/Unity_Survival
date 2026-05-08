@@ -18,6 +18,9 @@ public class DataManager
     public DataTable<ItemDataTable> ItemTable { get; } = new();
 
     public bool IsLoaded { get; private set; }
+
+    private readonly DataTableValidator validator = new();
+
     public IEnumerator LoadAll()
     {
         // yield return LoadTable("EnemyTable", EnemyTable);
@@ -31,6 +34,11 @@ public class DataManager
         foreach (TextAsset textAsset in textAssets)
         {
             yield return LoadTable(textAsset);
+        }
+
+        if (!validator.Validate())
+        {
+            Debug.LogError("DataTable validation failed");
         }
 
         IsLoaded = true;
