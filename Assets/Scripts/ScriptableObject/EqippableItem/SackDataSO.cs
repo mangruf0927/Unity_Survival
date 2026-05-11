@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu]
-public class SackData : ScriptableObject
+public class SackDataSO : ScriptableObject
 {
     [Header("등급")]
     public SackLevel level;

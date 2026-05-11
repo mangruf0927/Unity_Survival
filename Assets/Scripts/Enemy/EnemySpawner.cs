@@ -38,7 +38,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy(EnemySpawnInfo info)
     {
-        EnemyDataTable data = DataManager.Instance.EnemyTable.Get(info.enemyId);
+        EnemyData data = DataManager.Instance.EnemyTable.Get(info.enemyId);
 
         Transform spawnPoint = RandomSpawnPoint(info.spawnPointList);
 

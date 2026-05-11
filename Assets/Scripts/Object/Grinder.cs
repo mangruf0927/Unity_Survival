@@ -12,7 +12,7 @@ public class Grinder : MonoBehaviour
         Item item = other.GetComponent<Item>();
         if (item == null) return;
 
-        ItemDataTable data = item.Data;
+        ItemData data = item.Data;
         if (data.ItemType == ItemType.MATERIAL || data.HasProperty(ItemProperty.MATERIAL))
         {
             int count = data.MaterialData.GrindCount;

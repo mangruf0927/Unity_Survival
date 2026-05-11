@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class MeleeWeaponDataTable : IDataTable, IValidatable
+public class MeleeWeaponData : IDataTable, IValidatable
 {
     public int Id { get; set; }
     public string Name { get; set; }

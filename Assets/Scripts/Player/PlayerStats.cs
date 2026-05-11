@@ -33,7 +33,7 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
     {
         yield return DataManager.Instance.WaitUntilLoaded();
 
-        PlayerDataTable data = DataManager.Instance.PlayerTable.Get(1001);
+        PlayerData data = DataManager.Instance.PlayerTable.Get(1001);
         SetUp(data);
     }
 
@@ -42,7 +42,7 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
         if (isSetUp) UpdateHunger();
     }
 
-    public void SetUp(PlayerDataTable data)
+    public void SetUp(PlayerData data)
     {
         maxHp = data.MaxHp;
         moveSpeed = data.MoveSpeed;
@@ -65,11 +65,12 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
 
         timer += Time.deltaTime;
 
-        if (timer < decreaseInterval) return;
-
-        timer = 0;
-        CurrentHunger = Mathf.Max(CurrentHunger - 1, 0);
-        NotifyObservers();
+        while (timer >= decreaseInterval && CurrentHunger > 0f)
+        {
+            timer -= decreaseInterval;
+            CurrentHunger = Mathf.Max(CurrentHunger - 1, 0);
+            NotifyObservers();
+        }
 
         if (CurrentHunger <= 0f) Debug.Log("Player is starving.");
     }

@@ -31,11 +31,11 @@ public class RangedWeapon : Weapon, ISubject
     {
         yield return DataManager.Instance.WaitUntilLoaded();
 
-        RangedWeaponDataTable data = DataManager.Instance.RangedTable.Get(weaponId);
+        RangedWeaponData data = DataManager.Instance.RangedTable.Get(weaponId);
         SetUp(data);
     }
 
-    public void SetUp(RangedWeaponDataTable data)
+    public void SetUp(RangedWeaponData data)
     {
         weaponName = data.Name;
         ammoType = data.Type;

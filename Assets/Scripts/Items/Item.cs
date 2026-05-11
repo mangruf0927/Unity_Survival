@@ -5,18 +5,18 @@ public class Item : MonoBehaviour
 {
     [SerializeField] private int itemId;
 
-    private ItemDataTable itemData;
-    public ItemDataTable Data => itemData;
+    private ItemData itemData;
+    public ItemData Data => itemData;
 
     private IEnumerator Start()
     {
         yield return DataManager.Instance.WaitUntilLoaded();
 
-        ItemDataTable data = DataManager.Instance.ItemTable.Get(itemId);
+        ItemData data = DataManager.Instance.ItemTable.Get(itemId);
         SetUp(data);
     }
 
-    public void SetUp(ItemDataTable data)
+    public void SetUp(ItemData data)
     {
         itemData = data;
     }

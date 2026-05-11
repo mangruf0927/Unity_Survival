@@ -44,7 +44,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
         OnDead = null;
     }
 
-    public void SetUp(EnemyDataTable data)
+    public void SetUp(EnemyData data)
     {
         enemyName = data.Name;
         maxHp = data.MaxHp;

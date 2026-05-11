@@ -13,11 +13,11 @@ public class DataTableValidator
 
     private bool ValidateSackTable()
     {
-        SackDataTable oldSack = null;
-        SackDataTable goodSack = null;
-        SackDataTable giantSack = null;
+        SackData oldSack = null;
+        SackData goodSack = null;
+        SackData giantSack = null;
 
-        foreach (SackDataTable sack in DataManager.Instance.SackTable.All.Values)
+        foreach (SackData sack in DataManager.Instance.SackTable.All.Values)
         {
             if (sack.Level == SackLevel.OLD)
             {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class EnemyDataTable : IDataTable, IValidatable
+public class EnemyData : IDataTable, IValidatable
 {
     public int Id { get; set; }
     public string Name { get; set; }

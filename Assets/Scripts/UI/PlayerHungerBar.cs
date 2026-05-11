@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class PlayerHungerBar : MonoBehaviour, IObserver
 {
-    [SerializeField] private Slider hpSlider;
+    [SerializeField] private Slider hungerSlider;
     [SerializeField] private PlayerStats playerStats;
 
     private void Start()
@@ -18,7 +18,7 @@ public class PlayerHungerBar : MonoBehaviour, IObserver
 
     public void Notify()
     {
-        hpSlider.maxValue = playerStats.MaxHunger;
-        hpSlider.value = playerStats.CurrentHunger;
+        hungerSlider.maxValue = playerStats.MaxHunger;
+        hungerSlider.value = playerStats.CurrentHunger;
     }
 }

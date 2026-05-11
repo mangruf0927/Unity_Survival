@@ -20,11 +20,11 @@ public class MeleeWeapon : Weapon
     {
         yield return DataManager.Instance.WaitUntilLoaded();
 
-        MeleeWeaponDataTable data = DataManager.Instance.MeleeTable.Get(weaponId);
+        MeleeWeaponData data = DataManager.Instance.MeleeTable.Get(weaponId);
         SetUp(data);
     }
 
-    public void SetUp(MeleeWeaponDataTable data)
+    public void SetUp(MeleeWeaponData data)
     {
         weaponName = data.Name;
         meleeLevel = data.MeleeLevel;

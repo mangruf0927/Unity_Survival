@@ -10,12 +10,12 @@ public class DataManager
 {
     public static DataManager Instance { get; } = new();
 
-    public DataTable<EnemyDataTable> EnemyTable { get; } = new();
-    public DataTable<PlayerDataTable> PlayerTable { get; } = new();
-    public DataTable<SackDataTable> SackTable { get; } = new();
-    public DataTable<MeleeWeaponDataTable> MeleeTable { get; } = new();
-    public DataTable<RangedWeaponDataTable> RangedTable { get; } = new();
-    public DataTable<ItemDataTable> ItemTable { get; } = new();
+    public DataTable<EnemyData> EnemyTable { get; } = new();
+    public DataTable<PlayerData> PlayerTable { get; } = new();
+    public DataTable<SackData> SackTable { get; } = new();
+    public DataTable<MeleeWeaponData> MeleeTable { get; } = new();
+    public DataTable<RangedWeaponData> RangedTable { get; } = new();
+    public DataTable<ItemData> ItemTable { get; } = new();
 
     public bool IsLoaded { get; private set; }
 

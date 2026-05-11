@@ -25,11 +25,11 @@ public class Sack : EquippableItem, ISubject
     {
         yield return DataManager.Instance.WaitUntilLoaded();
 
-        SackDataTable data = DataManager.Instance.SackTable.Get(sackId);
+        SackData data = DataManager.Instance.SackTable.Get(sackId);
         SetUp(data);
     }
 
-    public void SetUp(SackDataTable data)
+    public void SetUp(SackData data)
     {
         sackName = data.Name;
         sackLevel = data.Level;

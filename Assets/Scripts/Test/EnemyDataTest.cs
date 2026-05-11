@@ -6,7 +6,7 @@ public class EnemyDataTest : MonoBehaviour
     private int _maxHP;
     private int _attackDamage;
 
-    public void SetUp(EnemyDataTable data)
+    public void SetUp(EnemyData data)
     {
         _name = data.Name;
         _maxHP = data.MaxHp;

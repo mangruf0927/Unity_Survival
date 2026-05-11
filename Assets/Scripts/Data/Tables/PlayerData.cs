@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerDataTable : IDataTable, IValidatable
+public class PlayerData : IDataTable, IValidatable
 {
     public int Id { get; set; }
 
