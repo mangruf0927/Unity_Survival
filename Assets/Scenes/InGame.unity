@@ -1855,8 +1855,9 @@ GameObject:
   - component: {fileID: 288484890}
   - component: {fileID: 288484889}
   - component: {fileID: 288484888}
+  - component: {fileID: 288484891}
   m_Layer: 0
-  m_Name: Model
+  m_Name: WorkTableInventory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1870,13 +1871,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 288484886}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 6, y: 1.1, z: 0.5}
   m_LocalScale: {x: 2, y: 1.2, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 626403895}
-  m_Father: {fileID: 1812936919}
+  m_Father: {fileID: 910119761}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &288484888
 BoxCollider:
@@ -1956,6 +1957,31 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 288484886}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &288484891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288484886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba3d92f4c3f8a4a8cb73e7f4f31d0e6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorkTableInventory
+  itemList:
+  - itemName: Cube
+    prefab: {fileID: 4507558522682945052, guid: 19147faeff5d1470ca7b0fbdc0dc9a1f, type: 3}
+    needWood: 3
+    needIron: 1
+  - itemName: Cylinder
+    prefab: {fileID: 7543647961251316097, guid: 4a5ed26df01ce4ef1a09666db6b6e953, type: 3}
+    needWood: 3
+    needIron: 0
+  - itemName: Sphere
+    prefab: {fileID: 2360981644525255646, guid: 9ef26db7208dc47df956537c7e1c3655, type: 3}
+    needWood: 0
+    needIron: 3
 --- !u!1 &299345910
 GameObject:
   m_ObjectHideFlags: 0
@@ -4288,7 +4314,7 @@ Transform:
   - {fileID: 505351168}
   - {fileID: 2216645238573800788}
   - {fileID: 1184107775}
-  - {fileID: 1812936919}
+  - {fileID: 288484887}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &911195304
@@ -5096,7 +5122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f392177ca73b44023a6b2a957dab30d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MaterialUI
-  grinder: {fileID: 2128122446}
+  inventory: {fileID: 288484891}
   woodText: {fileID: 940038524}
   ironText: {fileID: 2071105772}
 --- !u!1 &1096556383
@@ -9545,38 +9571,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1802806125}
   m_CullTransparentMesh: 1
---- !u!1 &1812936918
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1812936919}
-  m_Layer: 0
-  m_Name: WorkBench
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1812936919
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1812936918}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 288484887}
-  m_Father: {fileID: 910119761}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1813645259
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11491,6 +11485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5245c569a52e44c55aefe7bfd187520f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Grinder
+  inventory: {fileID: 288484891}
 --- !u!54 &2128122447
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -12118,11 +12113,11 @@ SceneRoots:
   - {fileID: 208183970}
   - {fileID: 1081084405}
   - {fileID: 1794021000}
+  - {fileID: 1717421987}
   - {fileID: 585098446}
   - {fileID: 1766571644}
   - {fileID: 179897117}
   - {fileID: 1185434202}
-  - {fileID: 1717421987}
   - {fileID: 1394780}
   - {fileID: 685776879}
   - {fileID: 323360877}
