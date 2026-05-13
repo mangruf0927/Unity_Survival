@@ -11,6 +11,7 @@ public class WorkTableInventory : MonoBehaviour, ISubject
     public int Wood => wood;
     public int Iron => iron;
 
+    public WorkTableItem[] ItemList => itemList;
     private readonly List<IObserver> ObserverList = new();
 
     public void AddMaterial(MaterialType type, int amount)
@@ -23,21 +24,22 @@ public class WorkTableInventory : MonoBehaviour, ISubject
         {
             iron += amount;
         }
+        else return;
 
         NotifyObservers();
     }
 
-    public bool CanUse(int needWood, int needIron)
+    public bool CanBuy(WorkTableItem item)
     {
-        return wood >= needWood && iron >= needIron;
+        return wood >= item.needWood && iron >= item.needIron;
     }
 
-    public bool UseMaterial(int needWood, int needIron)
+    public bool BuyItem(WorkTableItem item)
     {
-        if (!CanUse(needWood, needIron)) return false;
+        if (!CanBuy(item)) return false;
 
-        wood -= needWood;
-        iron -= needIron;
+        wood -= item.needWood;
+        iron -= item.needIron;
 
         NotifyObservers();
         return true;
