@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 [Serializable]
@@ -23,17 +24,42 @@ public class EnemySpawner : MonoBehaviour
     {
         yield return DataManager.Instance.WaitUntilLoaded();
 
-        typeToInfo = spawnInfoList.ToDictionary(
-            info => DataManager.Instance.EnemyTable.Get(info.enemyId).EnemyType
-        );
+        typeToInfo = new Dictionary<PoolTypeEnums, EnemySpawnInfo>();
 
         foreach (EnemySpawnInfo info in spawnInfoList)
         {
+            if (info == null)
+            {
+                Debug.LogError("SpawnInfo가 비어있습니다.");
+                continue;
+            }
+
+            if (!GetEnemyType(info.enemyId, out PoolTypeEnums enemyType)) continue;
+
+            if (typeToInfo.ContainsKey(enemyType))
+            {
+                Debug.LogError("중복된 EnemyType 입니다.");
+                continue;
+            }
+
+            typeToInfo.Add(enemyType, info);
+
             for (int i = 0; i < info.enemyCount; i++)
             {
                 SpawnEnemy(info);
             }
         }
+    }
+
+    private bool GetEnemyType(int enemyId, out PoolTypeEnums ememyType)
+    {
+        ememyType = default;
+
+        if (enemyId <= 0) return false;
+        if (!DataManager.Instance.EnemyTable.TryGet(enemyId, out EnemyData enemyData)) return false;
+
+        ememyType = enemyData.EnemyType;
+        return true;
     }
 
     private void SpawnEnemy(EnemySpawnInfo info)
