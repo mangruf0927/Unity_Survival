@@ -20,10 +20,8 @@ public class EnemySpawner : MonoBehaviour
 
     private Dictionary<PoolTypeEnums, EnemySpawnInfo> typeToInfo;
 
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return DataManager.Instance.WaitUntilLoaded();
-
         typeToInfo = new Dictionary<PoolTypeEnums, EnemySpawnInfo>();
 
         foreach (EnemySpawnInfo info in spawnInfoList)

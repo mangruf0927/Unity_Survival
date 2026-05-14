@@ -5,10 +5,8 @@ public class DataLoadTest : MonoBehaviour
 {
     [SerializeField] private EnemyDataTest enemyDataTest;
 
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return DataManager.Instance.LoadAll();
-
         EnemyData slime = DataManager.Instance.EnemyTable.Get(1001);
         Debug.Log($"Id: {slime.Id}, Name: {slime.Name}, MaxHp: {slime.MaxHp}, AttackDamage: {slime.AttackDamage}");
 

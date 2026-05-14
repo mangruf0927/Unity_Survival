@@ -29,10 +29,8 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
     public int CurrentHp { get; private set; }
     public float CurrentHunger { get; private set; }
 
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return DataManager.Instance.WaitUntilLoaded();
-
         PlayerData data = DataManager.Instance.PlayerTable.Get(1001);
         SetUp(data);
     }

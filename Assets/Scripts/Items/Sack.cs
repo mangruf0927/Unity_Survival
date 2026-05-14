@@ -21,10 +21,8 @@ public class Sack : EquippableItem, ISubject
     public bool IsFull => itemStack.Count >= Capacity;
     public bool IsEmpty => itemStack.Count == 0;
 
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return DataManager.Instance.WaitUntilLoaded();
-
         SackData data = DataManager.Instance.SackTable.Get(sackId);
         SetUp(data);
     }

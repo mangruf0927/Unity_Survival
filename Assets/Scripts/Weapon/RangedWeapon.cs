@@ -27,10 +27,8 @@ public class RangedWeapon : Weapon, ISubject
     private Vector3 aimPos;
     public void SetAimPoint(Vector3 pos) { aimPos = pos; }
 
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return DataManager.Instance.WaitUntilLoaded();
-
         RangedWeaponData data = DataManager.Instance.RangedTable.Get(weaponId);
         SetUp(data);
     }

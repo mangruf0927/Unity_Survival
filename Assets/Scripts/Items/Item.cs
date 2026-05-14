@@ -8,10 +8,8 @@ public class Item : MonoBehaviour
     private ItemData itemData;
     public ItemData Data => itemData;
 
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return DataManager.Instance.WaitUntilLoaded();
-
         ItemData data = DataManager.Instance.ItemTable.Get(itemId);
         SetUp(data);
     }

@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
 using System;
@@ -21,19 +19,20 @@ public class DataManager
 
     private readonly DataTableValidator validator = new();
 
-    public IEnumerator LoadAll()
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void InitializeBeforeSceneLoad()
     {
-        // yield return LoadTable("EnemyTable", EnemyTable);
-        // yield return LoadTable("PlayerTable", PlayerTable);
-        // yield return LoadTable("SackTable", SackTable);
-        // yield return LoadTable("MeleeTable", MeleeTable);
-        // yield return LoadTable("RangedTable", RangedTable);
-        // yield return LoadTable("ItemTable", ItemTable);
+        Instance.LoadAll();
+    }
+
+    public void LoadAll()
+    {
+        if (IsLoaded) return;
 
         TextAsset[] textAssets = JsonDataLoader.LoadAll("JSON");
         foreach (TextAsset textAsset in textAssets)
         {
-            yield return LoadTable(textAsset);
+            LoadTable(textAsset);
         }
 
         if (!validator.Validate())
@@ -42,21 +41,22 @@ public class DataManager
         }
 
         IsLoaded = true;
+        Debug.Log("DataManager Load Complete");
     }
 
-    private IEnumerator LoadTable(TextAsset textAsset)
+    private void LoadTable(TextAsset textAsset)
     {
         if (textAsset == null)
         {
             Debug.LogError("JSON file is null");
-            yield break;
+            return;
         }
 
         string json = textAsset.text;
         if (string.IsNullOrEmpty(json))
         {
             Debug.LogError($"JSON is empty: {textAsset.name}");
-            yield break;
+            return;
         }
 
         // tableName, records 꺼내기
@@ -67,7 +67,7 @@ public class DataManager
         if (string.IsNullOrEmpty(tableName) || recordsToken == null)
         {
             Debug.LogError($"tableName or records is missing: {textAsset.name}");
-            yield break;
+            return;
         }
 
         // DataManager에서 tableName과 같은 이름의 프로퍼티 찾기
@@ -75,7 +75,7 @@ public class DataManager
         if (tableProperty == null)
         {
             Debug.LogError($"Table property not found : {tableName}");
-            yield break;
+            return;
         }
 
         // DataTable<T> 타입인지 확인
@@ -83,7 +83,7 @@ public class DataManager
         if (!tableType.IsGenericType || tableType.GetGenericTypeDefinition() != typeof(DataTable<>))
         {
             Debug.LogError($"{tableName} is not DataTable<T>");
-            yield break;
+            return;
         }
 
         // List<T> 타입 만들기
@@ -94,7 +94,7 @@ public class DataManager
         if (records == null)
         {
             Debug.LogError($"JSON Deserialize failed: {textAsset.name}");
-            yield break;
+            return;
         }
 
         // Load 메서드 호출
@@ -104,36 +104,8 @@ public class DataManager
         if (method == null)
         {
             Debug.LogError($"Load method not found: {tableName}");
-            yield break;
+            return;
         }
         method.Invoke(table, new object[] { records });
-
-        yield return null;
-    }
-
-    private IEnumerator LoadTable<T>(string fileName, DataTable<T> table) where T : IDataTable
-    {
-        yield return JsonDataLoader.LoadText(fileName, json =>
-        {
-            if (string.IsNullOrEmpty(json)) return;
-
-            List<T> records = JsonConvert.DeserializeObject<List<T>>(json);
-
-            if (records == null)
-            {
-                Debug.LogError($"JSON Deserialize failed: {fileName}");
-                return;
-            }
-
-            table.Load(records);
-        });
-    }
-
-    public IEnumerator WaitUntilLoaded()
-    {
-        while (!IsLoaded)
-        {
-            yield return null;
-        }
     }
 }

@@ -16,10 +16,8 @@ public class MeleeWeapon : Weapon
     public MeleeLevel Level => meleeLevel;
     public override bool CanDrop => canDrop;
 
-    private IEnumerator Start()
+    private void Start()
     {
-        yield return DataManager.Instance.WaitUntilLoaded();
-
         MeleeWeaponData data = DataManager.Instance.MeleeTable.Get(weaponId);
         SetUp(data);
     }
