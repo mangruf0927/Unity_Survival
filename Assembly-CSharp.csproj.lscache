@@ -88,6 +88,7 @@ Assets/
    IDamageable.cs
    IEnemyState.cs
    IGameData.cs
+   IInteractable.cs
    IObserver.cs
    IPlayerState.cs
    ISubject.cs
@@ -139,6 +140,7 @@ Assets/
    EnemyHPBarController.cs
    EquippedItemUI.cs
    HUDController.cs
+   InteractionUI.cs
    InventorySlot.cs
    InventoryUI.cs
    ItemHoverUI.cs

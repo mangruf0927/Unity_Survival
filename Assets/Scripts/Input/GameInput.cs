@@ -8,10 +8,8 @@ public class GameInput : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private PlayerStateMachine stateMachine;
     [SerializeField] private CameraRotate cameraRotate;
-    [SerializeField] private Chest chest;
 
     private bool isRun;
-    private bool isOpened;
     private Vector2 direction;
 
     private Outline currentOutline;
@@ -28,8 +26,6 @@ public class GameInput : MonoBehaviour
 
         int number = InputNumber();
         if (number != -1) playerController.EquipItem(number);
-
-        if (isOpened) chest.Hold();
 
         OnAttack();
     }
@@ -117,12 +113,6 @@ public class GameInput : MonoBehaviour
 
     public void OnPick(InputValue value)        // E키 (무기 + 자루)
     {
-        isOpened = value.isPressed;
-        if (!isOpened)
-        {
-            chest.Cancel();
-            return;
-        }
         if (!value.isPressed) return;
 
         if (currentItem != null && currentItem.Data.ItemType == ItemType.AMMO)
@@ -147,8 +137,20 @@ public class GameInput : MonoBehaviour
         }
     }
 
-    public void OnCollect(InputValue value)     // F키 (자루 아이템)
+    public void OnCollect(InputValue value)     // F키 (자루 아이템) + 상호작용
     {
+        if (!value.isPressed)
+        {
+            playerController.SetHolding(false);
+            return;
+        }
+
+        if (playerController.HasInteractable())
+        {
+            playerController.SetHolding(value.isPressed);
+            return;
+        }
+
         if (!value.isPressed) return;
 
         if (currentItem != null)

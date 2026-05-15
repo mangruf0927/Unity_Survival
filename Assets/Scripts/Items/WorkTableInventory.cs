@@ -1,9 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorkTableInventory : MonoBehaviour, ISubject
+public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
 {
     [SerializeField] private WorkTableItem[] itemList;
+    [SerializeField] private WorkTableInventoryUI inventoryUI;
+
+    [SerializeField] private float openTime = 3f;
+    [SerializeField] private Transform uiPoint;
 
     private int wood = 0;
     private int iron = 0;
@@ -12,6 +16,10 @@ public class WorkTableInventory : MonoBehaviour, ISubject
     public int Iron => iron;
 
     public WorkTableItem[] ItemList => itemList;
+
+    public float HoldTime => openTime;
+    public Vector3 UIPosition => uiPoint != null ? uiPoint.position : transform.position + Vector3.up * 3f;
+
     private readonly List<IObserver> ObserverList = new();
 
     public void AddMaterial(MaterialType type, int amount)
@@ -43,6 +51,16 @@ public class WorkTableInventory : MonoBehaviour, ISubject
 
         NotifyObservers();
         return true;
+    }
+
+    public bool CanInteract(PlayerController player)
+    {
+        return inventoryUI != null && !inventoryUI.IsOpen;
+    }
+
+    public void Interact(PlayerController player)
+    {
+        inventoryUI.OpenUI();
     }
 
     public void AddObserver(IObserver observer)

@@ -234,7 +234,7 @@
                     "name": "",
                     "id": "dd9a84c5-e968-4947-81f2-ab02d9ec9bbb",
                     "path": "<Keyboard>/f",
-                    "interactions": "Press",
+                    "interactions": "Press(behavior=2)",
                     "processors": "",
                     "groups": "",
                     "action": "Collect",

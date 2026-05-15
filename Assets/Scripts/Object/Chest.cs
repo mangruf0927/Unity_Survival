@@ -1,65 +1,50 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
-public class Chest : MonoBehaviour
+public class Chest : MonoBehaviour, IInteractable
 {
-    [SerializeField] private float openTime;
+    [SerializeField] private float openTime = 3f;
     [SerializeField] private Animator animator;
 
     [SerializeField] private List<GameObject> itemList;
     [SerializeField] private Transform spawnPoint;
 
-    private float holdTime;
-    private bool isOpened = false;
-    private bool isPlayerCollision = false;
+    [SerializeField] private Transform uiPoint;
 
-    public void Hold()
+    private bool isOpened;
+
+    public float HoldTime => openTime;
+    public Vector3 UIPosition => uiPoint != null ? uiPoint.position : transform.position + Vector3.up * 3f;
+
+    public bool CanInteract(PlayerController player)
     {
-        if (isOpened || !isPlayerCollision) return;
+        return !isOpened;
+    }
 
-        holdTime += Time.deltaTime;
-
-        if (holdTime >= openTime) Open();
+    public void Interact(PlayerController player)
+    {
+        if (isOpened) return;
+        Open();
     }
 
     private void Open()
     {
         isOpened = true;
-        holdTime = 0f;
 
-        animator.SetTrigger("Open");
+        if (animator != null)
+        {
+            animator.SetTrigger("Open");
+        }
+
         RandomItem();
     }
 
     private void RandomItem()
     {
         if (itemList == null || itemList.Count == 0) return;
+        if (spawnPoint == null) return;
 
         int idx = Random.Range(0, itemList.Count);
         Instantiate(itemList[idx], spawnPoint.position, Quaternion.identity);
-    }
-
-    public void Cancel()
-    {
-        if (isOpened) return;
-        holdTime = 0f;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("E키를 3초 누르세요");
-            isPlayerCollision = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            isPlayerCollision = false;
-            holdTime = 0f;
-        }
     }
 }

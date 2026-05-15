@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class WorkTableInventoryUI : MonoBehaviour
 {
@@ -13,6 +12,7 @@ public class WorkTableInventoryUI : MonoBehaviour
     [SerializeField] private Transform slotParent;
 
     private bool isOpen;
+    public bool IsOpen => isOpen;
 
     private void Awake()
     {
@@ -20,18 +20,10 @@ public class WorkTableInventoryUI : MonoBehaviour
         inventoryPanel.SetActive(false);
     }
 
-    private void Update()
+    public void OpenUI()
     {
-        if (Keyboard.current.lKey.wasPressedThisFrame)
-        {
-            ToggleUI();
-        }
-    }
-
-    private void ToggleUI()
-    {
-        isOpen = !isOpen;
-        inventoryPanel.SetActive(isOpen);
+        isOpen = true;
+        inventoryPanel.SetActive(true);
     }
 
     public void CloseUI()
