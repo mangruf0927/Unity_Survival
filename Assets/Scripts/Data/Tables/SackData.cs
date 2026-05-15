@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class SackData : IDataTable, IValidatable
+public class SackData : IGameData, IValidatable
 {
     public int Id { get; set; }
     public string Name { get; set; }

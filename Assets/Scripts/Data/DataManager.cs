@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json.Linq;
-using System.Reflection;
 using System;
+using Newtonsoft.Json;
 
 public class DataManager
 {
@@ -18,6 +18,7 @@ public class DataManager
     public bool IsLoaded { get; private set; }
 
     private readonly DataTableValidator validator = new();
+    private readonly Dictionary<string, Action<JToken>> tableLoaderDictionary = new();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitializeBeforeSceneLoad()
@@ -25,11 +26,22 @@ public class DataManager
         Instance.LoadAll();
     }
 
+    private DataManager()
+    {
+        tableLoaderDictionary.Add("EnemyTable", records => EnemyTable.LoadFromToken(records));
+        tableLoaderDictionary.Add("PlayerTable", records => PlayerTable.LoadFromToken(records));
+        tableLoaderDictionary.Add("SackTable", records => SackTable.LoadFromToken(records));
+        tableLoaderDictionary.Add("MeleeTable", records => MeleeTable.LoadFromToken(records));
+        tableLoaderDictionary.Add("RangedTable", records => RangedTable.LoadFromToken(records));
+        tableLoaderDictionary.Add("ItemTable", records => ItemTable.LoadFromToken(records));
+    }
+
     public void LoadAll()
     {
         if (IsLoaded) return;
 
         TextAsset[] textAssets = JsonDataLoader.LoadAll("JSON");
+
         foreach (TextAsset textAsset in textAssets)
         {
             LoadTable(textAsset);
@@ -52,60 +64,84 @@ public class DataManager
             return;
         }
 
-        string json = textAsset.text;
-        if (string.IsNullOrEmpty(json))
+        if (string.IsNullOrEmpty(textAsset.text))
         {
             Debug.LogError($"JSON is empty: {textAsset.name}");
             return;
         }
 
-        // tableName, records 꺼내기
-        JObject root = JObject.Parse(json);
-        string tableName = root["tableName"]?.ToString();
-        JToken recordsToken = root["records"];
+        BaseGameData baseData = JsonConvert.DeserializeObject<BaseGameData>(textAsset.text);
 
-        if (string.IsNullOrEmpty(tableName) || recordsToken == null)
+        if (baseData == null)
+        {
+            Debug.LogError($"JSON Deserialize failed : {textAsset.name}");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(baseData.tableName) || baseData.records == null)
         {
             Debug.LogError($"tableName or records is missing: {textAsset.name}");
             return;
         }
 
-        // DataManager에서 tableName과 같은 이름의 프로퍼티 찾기
-        PropertyInfo tableProperty = GetType().GetProperty(tableName);
-        if (tableProperty == null)
+        if (!tableLoaderDictionary.TryGetValue(baseData.tableName, out Action<JToken> loader))
         {
-            Debug.LogError($"Table property not found : {tableName}");
+            Debug.LogError($"Table loader not fount : {baseData.tableName}");
             return;
         }
 
-        // DataTable<T> 타입인지 확인
-        Type tableType = tableProperty.PropertyType;
-        if (!tableType.IsGenericType || tableType.GetGenericTypeDefinition() != typeof(DataTable<>))
-        {
-            Debug.LogError($"{tableName} is not DataTable<T>");
-            return;
-        }
-
-        // List<T> 타입 만들기
-        Type dataType = tableType.GetGenericArguments()[0];
-        Type listType = typeof(List<>).MakeGenericType(dataType);
-
-        object records = recordsToken.ToObject(listType);
-        if (records == null)
-        {
-            Debug.LogError($"JSON Deserialize failed: {textAsset.name}");
-            return;
-        }
-
-        // Load 메서드 호출
-        object table = tableProperty.GetValue(this);
-        MethodInfo method = tableType.GetMethod("Load");
-
-        if (method == null)
-        {
-            Debug.LogError($"Load method not found: {tableName}");
-            return;
-        }
-        method.Invoke(table, new object[] { records });
+        loader.Invoke(baseData.records);
     }
 }
+
+// 데이터 매니저 로드를 RunTimeInitializeOnLoadMethod 기반으로 하면 좋을 것 같다.
+// 씬 로드전에 데이터 매니저의 세팅을 보장할 수 있기 때문에 WaitUntilLoaded라는 보일러 플레이트가 없어짐
+
+/*
+using Newtonsoft.Json;
+
+Console.WriteLine("Hello, World!");
+
+string jsonText = @"{
+  ""TableName"" : ""EquipmentTable"",
+  ""Records"": [
+    {
+      ""Id"": 1,
+      ""Name"": ""칼""
+    },
+    {
+      ""Id"": 2,
+      ""Name"": ""긴칼""
+    },
+    {
+      ""Id"": 3,
+      ""Name"": ""짧은칼""
+    }
+  ]
+}";
+
+
+var json = JsonConvert.DeserializeObject<BaseGameData>(jsonText);
+Console.WriteLine(json.TableName);
+
+// json
+
+public class BaseGameData
+{
+    public string TableName { get; set; }
+    public List<EquipmentData>  Records { get; set; }
+}
+
+
+public class EquipmentData : IGameData
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+
+interface IGameData
+{
+    public int Id { get; set; }
+}
+
+*/

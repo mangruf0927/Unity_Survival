@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ItemData : IDataTable, IValidatable
+public class ItemData : IGameData, IValidatable
 {
     public int Id { get; set; }
     public string Name { get; set; }

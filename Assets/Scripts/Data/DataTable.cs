@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-public class DataTable<T> where T : IDataTable
+public class DataTable<T> where T : IGameData
 {
     private readonly Dictionary<int, T> _table = new();
     public IReadOnlyDictionary<int, T> All => _table;
@@ -9,6 +10,7 @@ public class DataTable<T> where T : IDataTable
     public void Load(IEnumerable<T> records)
     {
         _table.Clear();
+
         foreach (var record in records)
         {
             if (record is IValidatable validatable && !validatable.Validate())
@@ -24,6 +26,18 @@ public class DataTable<T> where T : IDataTable
             }
             _table.Add(record.Id, record);
         }
+    }
+
+    public void LoadFromToken(JToken records)
+    {
+        List<T> recordList = records.ToObject<List<T>>();
+
+        if (recordList == null)
+        {
+            Debug.LogError($"JSON Deserialize failed : {typeof(T).Name}");
+            return;
+        }
+        Load(recordList);
     }
 
     public T Get(int id)

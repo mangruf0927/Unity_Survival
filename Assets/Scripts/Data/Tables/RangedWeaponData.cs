@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class RangedWeaponData : IDataTable, IValidatable
+public class RangedWeaponData : IGameData, IValidatable
 {
     public int Id { get; set; }
     public string Name { get; set; }
