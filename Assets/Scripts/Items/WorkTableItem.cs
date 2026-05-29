@@ -1,11 +1,10 @@
 using System;
-using UnityEngine;
 
 [Serializable]
 public class WorkTableItem
 {
     public string itemName;
-    public GameObject prefab;
+    public PlaceableItem itemPrefab;
     public int needWood;
     public int needIron;
 }

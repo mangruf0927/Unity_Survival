@@ -26,20 +26,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a153358fdc0b34e1ba975fa637797735
-    m_Address: Assets/Test/Sphere.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cc8bcdf2252b645bbadf3486a96b288f
     m_Address: Assets/Test/keyboard_win 1.png
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e1a3e2ad59bb54c24b3229602c8c8a5f
-    m_Address: Assets/Test/Capsule.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - default

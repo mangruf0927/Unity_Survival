@@ -2084,15 +2084,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WorkTableInventory
   itemList:
   - itemName: Cube
-    prefab: {fileID: 4507558522682945052, guid: 19147faeff5d1470ca7b0fbdc0dc9a1f, type: 3}
+    itemPrefab: {fileID: -2267669233372935020, guid: 09c9ed8c8c68a42b3a1d1a20ad2d39a1, type: 3}
     needWood: 3
     needIron: 1
-  - itemName: Cylinder
-    prefab: {fileID: 7543647961251316097, guid: 4a5ed26df01ce4ef1a09666db6b6e953, type: 3}
+  - itemName: Capsule
+    itemPrefab: {fileID: -2267669233372935020, guid: 09c9ed8c8c68a42b3a1d1a20ad2d39a1, type: 3}
     needWood: 3
     needIron: 0
   - itemName: Sphere
-    prefab: {fileID: 2360981644525255646, guid: 9ef26db7208dc47df956537c7e1c3655, type: 3}
+    itemPrefab: {fileID: -2267669233372935020, guid: 09c9ed8c8c68a42b3a1d1a20ad2d39a1, type: 3}
     needWood: 0
     needIron: 3
   inventoryUI: {fileID: 1118487379}

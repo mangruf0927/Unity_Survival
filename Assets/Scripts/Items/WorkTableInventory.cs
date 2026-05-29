@@ -9,6 +9,8 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
     [SerializeField] private float openTime = 3f;
     [SerializeField] private Transform uiPoint;
 
+    private PlayerController currentPlayer;
+
     private int wood = 0;
     private int iron = 0;
 
@@ -45,6 +47,15 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
     public bool BuyItem(WorkTableItem item)
     {
         if (!CanBuy(item)) return false;
+        if (item.itemPrefab == null || currentPlayer == null) return false;
+
+        PlaceableItem newItem = Instantiate(item.itemPrefab);
+
+        if (!currentPlayer.GetEquippableItem(newItem))
+        {
+            Destroy(newItem.gameObject);
+            return false;
+        }
 
         wood -= item.needWood;
         iron -= item.needIron;
@@ -60,6 +71,7 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
 
     public void Interact(PlayerController player)
     {
+        currentPlayer = player;
         inventoryUI.OpenUI();
     }
 

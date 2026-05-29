@@ -29,6 +29,13 @@ public class Inventory : MonoBehaviour
         prevItem = null;
         if (newItem == null) return false;
 
+        if (newItem is PlaceableItem)
+        {
+            itemList.Add(newItem);
+            OnChanged?.Invoke();
+            return true;
+        }
+
         for (int i = 0; i < itemList.Count; i++)
         {
             EquippableItem item = itemList[i];
