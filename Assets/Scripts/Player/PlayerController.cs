@@ -235,6 +235,24 @@ public class PlayerController : MonoBehaviour
         OnEquipped?.Invoke(currentEquipped);
     }
 
+    public void ConsumeEquippedItem(EquippableItem item)
+    {
+        if (item == null) return;
+        if (currentEquipped != item) return;
+
+        item.OnUnequip(this);
+        inventory.RemoveItem(item);
+
+        currentEquipped = null;
+        currentWeapon = null;
+        currentSack = null;
+
+        UpdateUpperBodyWeight();
+        OnEquipped?.Invoke(currentEquipped);
+
+        Destroy(item.gameObject);
+    }
+
     public void EquipItem(int idx)
     {
         EquippableItem nextItem = inventory.SelectItem(idx);

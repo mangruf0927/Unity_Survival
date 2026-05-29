@@ -3,31 +3,33 @@ using UnityEngine.InputSystem;
 
 public class ObjectPlacement : MonoBehaviour
 {
-    [SerializeField] private Transform player;
-    [SerializeField] private GameObject prefab;
+    [SerializeField] private float placeDistance = 2f;
 
-    [SerializeField] private float placeDistance;
-
+    private PlayerController currentPlayer;
+    private PlaceableItem currentItem;
     private GameObject preview;
     private bool isPlacing;
     private bool canPlace;
 
     private void Update()
     {
-        if (Keyboard.current.pKey.wasPressedThisFrame) StartPlacement();
         if (!isPlacing) return;
 
         UpdatePosition();
 
         if (Mouse.current.leftButton.wasPressedThisFrame) PlaceObject();
-        if (Keyboard.current.escapeKey.wasPressedThisFrame) CanclePlacement();
+        if (Keyboard.current.escapeKey.wasPressedThisFrame) CancelPlacement();
     }
 
-    private void StartPlacement()
+    public void StartPlacement(PlaceableItem item, PlayerController player)
     {
         if (isPlacing) return;
+        if (item == null || item.PlacePrefab == null || player == null) return;
 
-        preview = Instantiate(prefab);
+        currentItem = item;
+        currentPlayer = player;
+
+        preview = Instantiate(currentItem.PlacePrefab);
         SetPreviewObject(preview);
 
         isPlacing = true;
@@ -35,11 +37,13 @@ public class ObjectPlacement : MonoBehaviour
 
     private void UpdatePosition()
     {
-        Vector3 forward = player.forward;
+        if (currentPlayer == null || preview == null) return;
+
+        Vector3 forward = currentPlayer.transform.forward;
         forward.y = 0f;
         forward.Normalize();
 
-        Vector3 targetPosition = player.position + forward * placeDistance;
+        Vector3 targetPosition = currentPlayer.transform.position + forward * placeDistance;
         Vector3 rayOrigin = new Vector3(targetPosition.x, 50f, targetPosition.z);
 
         if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 100f))
@@ -51,6 +55,7 @@ public class ObjectPlacement : MonoBehaviour
             }
 
             preview.transform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(forward));
+            SnapToGround(preview, hit.point.y);
             canPlace = true;
         }
         else
@@ -63,19 +68,26 @@ public class ObjectPlacement : MonoBehaviour
     {
         if (!canPlace) return;
 
-        Instantiate(prefab, preview.transform.position, preview.transform.rotation);
-        Destroy(preview);
+        PlayerController player = currentPlayer;
+        PlaceableItem item = currentItem;
+
+        Instantiate(item.PlacePrefab, preview.transform.position, preview.transform.rotation);
+        if (preview != null) Destroy(preview);
         ClearPlacement();
+
+        player.ConsumeEquippedItem(item);
     }
 
-    private void CanclePlacement()
+    public void CancelPlacement()
     {
-        Destroy(preview);
+        if (preview != null) Destroy(preview);
         ClearPlacement();
     }
 
     private void ClearPlacement()
     {
+        currentPlayer = null;
+        currentItem = null;
         preview = null;
         isPlacing = false;
         canPlace = false;
@@ -86,5 +98,20 @@ public class ObjectPlacement : MonoBehaviour
         Collider[] colliders = obj.GetComponentsInChildren<Collider>();
 
         foreach (Collider col in colliders) col.enabled = false;
+    }
+
+    private void SnapToGround(GameObject obj, float groundY)
+    {
+        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+        if (renderers.Length == 0) return;
+
+        Bounds bounds = renderers[0].bounds;
+        for (int i = 1; i < renderers.Length; i++)
+        {
+            bounds.Encapsulate(renderers[i].bounds);
+        }
+
+        float yOffset = groundY - bounds.min.y;
+        obj.transform.position += Vector3.up * yOffset;
     }
 }
