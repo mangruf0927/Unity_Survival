@@ -11,7 +11,7 @@ public class CampFire : MonoBehaviour, ISubject
     [SerializeField] private int decreaseAmount;
 
     private readonly List<IObserver> observerList = new();
-    private const int maxLevel = 6;
+    private const int MaxLevel = 6;
 
     private int currentLevel = 0;
     private int currentFuel = 0;
@@ -61,12 +61,13 @@ public class CampFire : MonoBehaviour, ISubject
             yield return new WaitForSeconds(intervalTime);
 
             currentFuel -= decreaseAmount;
-            Debug.Log(currentFuel);
+            // Debug.Log(currentFuel);
 
             if (currentFuel <= 0)
             {
                 currentFuel = 0;
                 OffFire();
+                NotifyObservers();
                 break;
             }
 
@@ -77,7 +78,7 @@ public class CampFire : MonoBehaviour, ISubject
 
     private bool CanLevelUp()
     {
-        if (currentLevel >= maxLevel) return false;
+        if (currentLevel >= MaxLevel) return false;
         if (currentLevel >= fuelLevelList.Length) return false;
 
         return currentFuel >= fuelLevelList[currentLevel];
@@ -101,12 +102,14 @@ public class CampFire : MonoBehaviour, ISubject
 
     private void OffFire()
     {
+        if (fire == null) return;
         fire.Stop(true, ParticleSystemStopBehavior.StopEmitting);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.TryGetComponent<Item>(out var item)) return;
+        if (item.Data == null || item.Data.FuelData == null) return;
         if (item.Data.ItemType != ItemType.FUEL) return;
 
         AddFuel(item.Data.FuelData.BurnPower);

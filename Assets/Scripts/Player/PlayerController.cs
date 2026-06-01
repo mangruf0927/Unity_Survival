@@ -1,8 +1,8 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private Animator animator;
     [SerializeField] private Transform cameraPivot;
     [SerializeField] private Inventory inventory;
     [SerializeField] private Transform equipPosition;
@@ -11,21 +11,23 @@ public class PlayerController : MonoBehaviour
 
     private PlayerStats playerStats;
     private Rigidbody rigid;
-    public Animator animator;
 
     private Vector2 moveDirection;
     private Vector3 lookDirection = Vector3.forward;
+
     private bool isRun;
     private bool isGround;
 
     private EquippableItem currentEquipped;
     private Weapon currentWeapon;
-    public Weapon CurrentWeapon => currentWeapon;
     private Sack currentSack;
     private IInteractable currentInteractable;
 
     private bool isHolding;
     private float holdTimer;
+
+    public Animator Animator => animator;
+    public Weapon CurrentWeapon => currentWeapon;
 
     public delegate void EquippedHandler(EquippableItem item);
     public event EquippedHandler OnEquipped;
@@ -40,63 +42,6 @@ public class PlayerController : MonoBehaviour
     {
         FindInteractable();
         UpdateHoldTimer();
-    }
-
-    private void FindInteractable()
-    {
-        IInteractable prev = currentInteractable;
-        currentInteractable = null;
-
-        Collider[] hitArray = Physics.OverlapSphere(transform.position, interactDistance, ~0, QueryTriggerInteraction.Collide);
-
-        float closestDistance = float.MaxValue;
-        foreach (Collider hit in hitArray)
-        {
-            IInteractable interactable = hit.GetComponentInParent<IInteractable>();
-
-            if (interactable == null) continue;
-            if (!interactable.CanInteract(this)) continue;
-
-            float distance = Vector3.Distance(transform.position, hit.transform.position);
-
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                currentInteractable = interactable;
-            }
-        }
-
-        if (prev != currentInteractable) holdTimer = 0f;
-
-        if (interactionUI == null) return;
-
-        if (currentInteractable != null) interactionUI.Show(currentInteractable.UIPosition);
-        else interactionUI.Hide();
-    }
-
-    private void UpdateHoldTimer()
-    {
-        if (!isHolding || currentInteractable == null) return;
-
-        holdTimer += Time.deltaTime;
-        if (holdTimer >= currentInteractable.HoldTime)
-        {
-            currentInteractable.Interact(this);
-
-            holdTimer = 0f;
-            isHolding = false;
-        }
-    }
-
-    public bool HasInteractable()
-    {
-        return currentInteractable != null;
-    }
-
-    public void SetHolding(bool state)
-    {
-        isHolding = state;
-        if (!isHolding) holdTimer = 0f;
     }
 
     public void SetDirection(Vector2 direction) { moveDirection = direction; }
@@ -324,6 +269,63 @@ public class PlayerController : MonoBehaviour
         {
             rangedWeapon.SetTotalAmmo(inventory.GetAmmoCount(rangedWeapon.Type));
         }
+    }
+
+    private void FindInteractable()
+    {
+        IInteractable prev = currentInteractable;
+        currentInteractable = null;
+
+        Collider[] hitArray = Physics.OverlapSphere(transform.position, interactDistance, ~0, QueryTriggerInteraction.Collide);
+
+        float closestDistance = float.MaxValue;
+        foreach (Collider hit in hitArray)
+        {
+            IInteractable interactable = hit.GetComponentInParent<IInteractable>();
+
+            if (interactable == null) continue;
+            if (!interactable.CanInteract(this)) continue;
+
+            float distance = Vector3.Distance(transform.position, hit.transform.position);
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                currentInteractable = interactable;
+            }
+        }
+
+        if (prev != currentInteractable) holdTimer = 0f;
+
+        if (interactionUI == null) return;
+
+        if (currentInteractable != null) interactionUI.Show(currentInteractable.UIPosition);
+        else interactionUI.Hide();
+    }
+
+    private void UpdateHoldTimer()
+    {
+        if (!isHolding || currentInteractable == null) return;
+
+        holdTimer += Time.deltaTime;
+        if (holdTimer >= currentInteractable.HoldTime)
+        {
+            currentInteractable.Interact(this);
+
+            holdTimer = 0f;
+            isHolding = false;
+        }
+    }
+
+    public bool HasInteractable()
+    {
+        return currentInteractable != null;
+    }
+
+    public void SetHolding(bool state)
+    {
+        isHolding = state;
+        if (!isHolding) holdTimer = 0f;
     }
 
     private void UpdateUpperBodyWeight()

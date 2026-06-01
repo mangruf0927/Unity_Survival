@@ -62,7 +62,7 @@ public class EnemyController : MonoBehaviour
     {
         if (enemyStats.AttackDamage <= 0 || !other.CompareTag("Player")) return;
 
-        var player = other.GetComponent<IDamageable>();
+        if (!other.TryGetComponent<IDamageable>(out var player)) return;
         player.TakeDamage(enemyStats.AttackDamage);
     }
 }

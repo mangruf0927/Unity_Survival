@@ -16,12 +16,19 @@ public class GameInput : MonoBehaviour
     private EquippableItem currentEquip;
     private Item currentItem;
 
+    private Camera mainCamera;
+
     public event Action<Item> OnHoverItem;
     public event Action OnExitItem;
 
+    private void Awake()
+    {
+        mainCamera = Camera.main;
+    }
+
     private void Update()
     {
-        if (Camera.main == null || Mouse.current == null) return;
+        if (mainCamera == null || Mouse.current == null) return;
         UpdateTarget();
 
         int number = InputNumber();
@@ -36,7 +43,7 @@ public class GameInput : MonoBehaviour
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
         if (EventSystem.current == null || EventSystem.current.IsPointerOverGameObject()) return;
 
-        Ray camRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Ray camRay = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(camRay, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide)) playerController.SetAimPoint(hit.point);
         else playerController.SetAimPoint(camRay.origin + camRay.direction * 1000f);
 
@@ -49,7 +56,7 @@ public class GameInput : MonoBehaviour
         Item nextItem = null;
         Outline nextOutline = null;
 
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
         if (Physics.Raycast(ray, out RaycastHit hit, 15f, ~0, QueryTriggerInteraction.Collide))
         {

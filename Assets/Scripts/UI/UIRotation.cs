@@ -6,6 +6,7 @@ public class UIRotation : MonoBehaviour
 
     private void Start()
     {
+        if (cam == null) return;
         cam = Camera.main;
     }
 

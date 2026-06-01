@@ -26,9 +26,9 @@ public class PlayerAttackState : IPlayerState
     public void Enter()
     {
         if (playerController.CurrentWeapon is MeleeWeapon)
-            playerController.animator.SetTrigger("MeleeAttack");
+            playerController.Animator.SetTrigger("MeleeAttack");
         else if (playerController.CurrentWeapon is RangedWeapon)
-            playerController.animator.SetTrigger("RangedAttack");
+            playerController.Animator.SetTrigger("RangedAttack");
 
         playerController.CurrentWeapon.Attack();
     }
@@ -36,7 +36,7 @@ public class PlayerAttackState : IPlayerState
     public void Update()
     {
         playerController.UpdateAnimation();
-        var state = playerController.animator.GetCurrentAnimatorStateInfo(1);
+        var state = playerController.Animator.GetCurrentAnimatorStateInfo(1);
 
         if ((state.IsName("attack_melee") || state.IsName("attack_ranged")) && state.normalizedTime >= 1.0f)
         {

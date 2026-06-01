@@ -10,12 +10,14 @@ public class CampFireProgressUI : MonoBehaviour, IObserver
 
     private void Start()
     {
+        if (campFire == null) return;
         campFire.AddObserver(this);
         Notify();
     }
 
     private void OnDestroy()
     {
+        if (campFire == null) return;
         campFire.RemoveObserver(this);
     }
 
@@ -26,8 +28,11 @@ public class CampFireProgressUI : MonoBehaviour, IObserver
         float ratio = campFire.NeedFuel <= 0 ? 0f : Mathf.Clamp01((float)campFire.CurrentFuel / campFire.NeedFuel);
         int displayFuel = Mathf.RoundToInt(ratio * 100);
 
-        fuelSlider.maxValue = 100;
-        fuelSlider.value = displayFuel;
+        if (fuelSlider != null)
+        {
+            fuelSlider.maxValue = 100;
+            fuelSlider.value = displayFuel;
+        }
 
         if (fuelText != null)
         {

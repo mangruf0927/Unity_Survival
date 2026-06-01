@@ -8,7 +8,7 @@ public class Item : MonoBehaviour
     private ItemData itemData;
     public ItemData Data => itemData;
 
-    private void Start()
+    private void Awake()
     {
         ItemData data = DataManager.Instance.ItemTable.Get(itemId);
         SetUp(data);

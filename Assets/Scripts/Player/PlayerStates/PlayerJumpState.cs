@@ -27,7 +27,7 @@ public class PlayerJumpState : IPlayerState
     public void Enter()
     {
         playerController.Jump();
-        playerController.animator.SetBool("isJump", true);
+        playerController.Animator.SetBool("isJump", true);
     }
 
     public void Update()
@@ -48,6 +48,6 @@ public class PlayerJumpState : IPlayerState
 
     public void Exit()
     {
-        playerController.animator.SetBool("isJump", false);
+        playerController.Animator.SetBool("isJump", false);
     }
 }

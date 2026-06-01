@@ -27,7 +27,7 @@ public class PlayerMoveState : IPlayerState
 
     public void Enter()
     {
-        playerController.animator.SetFloat("speed", 1f);
+        playerController.Animator.SetFloat("speed", 1f);
     }
 
     public void Update()
