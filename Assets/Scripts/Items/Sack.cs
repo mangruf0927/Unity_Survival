@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ public class Sack : EquippableItem, ISubject
     private SackLevel sackLevel;
     private int capacity;
 
-    private Stack<Item> itemStack = new();
+    private readonly Stack<Item> itemStack = new();
     private readonly List<IObserver> ObserverList = new();
 
     public SackLevel Level => sackLevel;

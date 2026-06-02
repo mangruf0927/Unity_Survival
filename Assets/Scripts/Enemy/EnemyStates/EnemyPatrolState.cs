@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class EnemyPatrolState : IEnemyState
 {
     private readonly EnemyController enemyController;
@@ -14,7 +12,7 @@ public class EnemyPatrolState : IEnemyState
     public void Enter()
     {
         enemyController.Patrol();
-        enemyController.animator.SetFloat("speed", 1f);
+        enemyController.Animator.SetFloat("speed", 1f);
     }
 
     public void Update()

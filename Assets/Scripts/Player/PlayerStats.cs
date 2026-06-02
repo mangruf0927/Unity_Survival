@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Collections;
 
 public class PlayerStats : MonoBehaviour, IDamageable, ISubject
 {
@@ -13,6 +12,7 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
     private float runSpeed;
     private float jumpForce;
     private float rotateSpeed;
+    private float interactDistance;
     private float maxHunger;
     private int decreaseInterval;
 
@@ -25,6 +25,7 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
     public float JumpForce => jumpForce;
     public float RotateSpeed => rotateSpeed;
     public float MaxHunger => maxHunger;
+    public float InteractDistance => interactDistance;
 
     public int CurrentHp { get; private set; }
     public float CurrentHunger { get; private set; }
@@ -47,6 +48,7 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
         runSpeed = data.RunSpeed;
         jumpForce = data.JumpForce;
         rotateSpeed = data.RotateSpeed;
+        interactDistance = data.InteractDistance;
         maxHunger = data.MaxHunger;
         decreaseInterval = data.DecreaseInterval;
 

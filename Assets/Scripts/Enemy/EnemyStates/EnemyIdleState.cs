@@ -20,7 +20,7 @@ public class EnemyIdleState : IEnemyState
 
         timer = 0f;
         randomTime = enemyController.RandomTime();
-        enemyController.animator.SetFloat("speed", 0f);
+        enemyController.Animator.SetFloat("speed", 0f);
     }
 
     public void Update()

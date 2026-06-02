@@ -55,7 +55,6 @@ public class FoodData
     public bool NeedCook { get; set; }
 }
 
-
 public class MaterialData
 {
     public int GrindCount { get; set; }

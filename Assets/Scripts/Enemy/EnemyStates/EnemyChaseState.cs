@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class EnemyChaseState : IEnemyState
 {
     private readonly EnemyController enemyController;
@@ -13,7 +11,7 @@ public class EnemyChaseState : IEnemyState
 
     public void Enter()
     {
-        enemyController.animator.SetFloat("speed", 2f);
+        enemyController.Animator.SetFloat("speed", 2f);
     }
 
     public void Update()

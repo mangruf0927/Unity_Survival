@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using UnityEngine;
 
 [Serializable]
@@ -18,11 +16,11 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private List<EnemySpawnInfo> spawnInfoList;
 
-    private Dictionary<PoolTypeEnums, EnemySpawnInfo> typeToInfo;
+    private Dictionary<PoolTypeEnums, EnemySpawnInfo> typeToInfoDictionary;
 
     private void Start()
     {
-        typeToInfo = new Dictionary<PoolTypeEnums, EnemySpawnInfo>();
+        typeToInfoDictionary = new Dictionary<PoolTypeEnums, EnemySpawnInfo>();
 
         foreach (EnemySpawnInfo info in spawnInfoList)
         {
@@ -34,13 +32,13 @@ public class EnemySpawner : MonoBehaviour
 
             if (!GetEnemyType(info.enemyId, out PoolTypeEnums enemyType)) continue;
 
-            if (typeToInfo.ContainsKey(enemyType))
+            if (typeToInfoDictionary.ContainsKey(enemyType))
             {
                 Debug.LogError("중복된 EnemyType 입니다.");
                 continue;
             }
 
-            typeToInfo.Add(enemyType, info);
+            typeToInfoDictionary.Add(enemyType, info);
 
             for (int i = 0; i < info.enemyCount; i++)
             {
@@ -78,7 +76,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void EnemyDead(EnemyStats enemyStats)
     {
-        if (typeToInfo.TryGetValue(enemyStats.EnemyType, out EnemySpawnInfo info))
+        if (typeToInfoDictionary.TryGetValue(enemyStats.EnemyType, out EnemySpawnInfo info))
         {
             StartCoroutine(Respawn(info));
         }

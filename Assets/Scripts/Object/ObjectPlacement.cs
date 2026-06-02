@@ -7,7 +7,7 @@ public class ObjectPlacement : MonoBehaviour
 
     private PlayerController currentPlayer;
     private PlaceableItem currentItem;
-    private GameObject preview;
+    private GameObject previewPrefab;
     private bool isPlacing;
     private bool canPlace;
 
@@ -29,22 +29,22 @@ public class ObjectPlacement : MonoBehaviour
         currentItem = item;
         currentPlayer = player;
 
-        preview = Instantiate(currentItem.PlacePrefab);
-        SetPreviewObject(preview);
+        previewPrefab = Instantiate(currentItem.PlacePrefab);
+        SetPreviewObject(previewPrefab);
 
         isPlacing = true;
     }
 
     private void UpdatePosition()
     {
-        if (currentPlayer == null || preview == null) return;
+        if (currentPlayer == null || previewPrefab == null) return;
 
         Vector3 forward = currentPlayer.transform.forward;
         forward.y = 0f;
         forward.Normalize();
 
         Vector3 targetPosition = currentPlayer.transform.position + forward * placeDistance;
-        Vector3 rayOrigin = new Vector3(targetPosition.x, 50f, targetPosition.z);
+        Vector3 rayOrigin = new(targetPosition.x, 50f, targetPosition.z);
 
         if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 100f))
         {
@@ -54,8 +54,8 @@ public class ObjectPlacement : MonoBehaviour
                 return;
             }
 
-            preview.transform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(forward));
-            SnapToGround(preview, hit.point.y);
+            previewPrefab.transform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(forward));
+            SnapToGround(previewPrefab, hit.point.y);
             canPlace = true;
         }
         else
@@ -71,8 +71,8 @@ public class ObjectPlacement : MonoBehaviour
         PlayerController player = currentPlayer;
         PlaceableItem item = currentItem;
 
-        Instantiate(item.PlacePrefab, preview.transform.position, preview.transform.rotation);
-        if (preview != null) Destroy(preview);
+        Instantiate(item.PlacePrefab, previewPrefab.transform.position, previewPrefab.transform.rotation);
+        if (previewPrefab != null) Destroy(previewPrefab);
         ClearPlacement();
 
         player.ConsumeEquippedItem(item);
@@ -80,7 +80,7 @@ public class ObjectPlacement : MonoBehaviour
 
     public void CancelPlacement()
     {
-        if (preview != null) Destroy(preview);
+        if (previewPrefab != null) Destroy(previewPrefab);
         ClearPlacement();
     }
 
@@ -88,7 +88,7 @@ public class ObjectPlacement : MonoBehaviour
     {
         currentPlayer = null;
         currentItem = null;
-        preview = null;
+        previewPrefab = null;
         isPlacing = false;
         canPlace = false;
     }

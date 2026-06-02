@@ -15,7 +15,6 @@ public class GameInput : MonoBehaviour
     private Outline currentOutline;
     private EquippableItem currentEquip;
     private Item currentItem;
-
     private Camera mainCamera;
 
     public event Action<Item> OnHoverItem;

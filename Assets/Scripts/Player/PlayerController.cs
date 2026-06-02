@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Inventory inventory;
     [SerializeField] private Transform equipPosition;
     [SerializeField] private InteractionUI interactionUI;
-    [SerializeField] private float interactDistance;
 
     private PlayerStats playerStats;
     private Rigidbody rigid;
@@ -276,7 +275,7 @@ public class PlayerController : MonoBehaviour
         IInteractable prev = currentInteractable;
         currentInteractable = null;
 
-        Collider[] hitArray = Physics.OverlapSphere(transform.position, interactDistance, ~0, QueryTriggerInteraction.Collide);
+        Collider[] hitArray = Physics.OverlapSphere(transform.position, playerStats.InteractDistance, ~0, QueryTriggerInteraction.Collide);
 
         float closestDistance = float.MaxValue;
         foreach (Collider hit in hitArray)

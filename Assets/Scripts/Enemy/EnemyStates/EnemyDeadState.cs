@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class EnemyDeadState : IEnemyState
 {
     private readonly EnemyController enemyController;

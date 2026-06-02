@@ -9,6 +9,7 @@ public class PlayerData : IGameData, IValidatable
     public float RunSpeed { get; set; }
     public float JumpForce { get; set; }
     public float RotateSpeed { get; set; }
+    public float InteractDistance { get; set; }
     public float MaxHunger { get; set; }
     public int DecreaseInterval { get; set; }
 
@@ -50,6 +51,12 @@ public class PlayerData : IGameData, IValidatable
             return false;
         }
 
+        if (InteractDistance <= 0)
+        {
+            Debug.LogError($"Player InteractDistance is invalid. InteractDistance: {InteractDistance}");
+            return false;
+        }
+
         if (MaxHunger <= 0)
         {
             Debug.LogError($"Player MaxHunger is invalid. MaxHunger: {MaxHunger}");
@@ -61,7 +68,6 @@ public class PlayerData : IGameData, IValidatable
             Debug.LogError($"Player DecreaseInterval is invalid. DecreaseInterval: {DecreaseInterval}");
             return false;
         }
-
 
         return true;
     }
