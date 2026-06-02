@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class TimeSystem : MonoBehaviour, ISubject
 {
-    private readonly float dayTime = 180f;
-    private readonly float nightTime = 90f;
+    [SerializeField] private float dayTime = 180f;
+    [SerializeField] private float nightTime = 90f;
 
     private float timeElapsed;
     private Phase curPhase;
@@ -18,6 +18,7 @@ public class TimeSystem : MonoBehaviour, ISubject
     public int DayCount => dayCount;
     public int Minutes => minutes;
     public int Seconds => seconds;
+    public Phase CurPhase => curPhase;
 
     void Start()
     {
