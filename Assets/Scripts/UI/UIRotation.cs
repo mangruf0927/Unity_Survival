@@ -6,12 +6,12 @@ public class UIRotation : MonoBehaviour
 
     private void Start()
     {
-        if (cam == null) return;
         cam = Camera.main;
     }
 
     private void LateUpdate()
     {
+        if (cam == null) return;
         transform.LookAt(transform.position + cam.transform.rotation * Vector3.forward, cam.transform.rotation * Vector3.up);
     }
 }
