@@ -1,21 +1,33 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CultistController : MonoBehaviour
+public class CultistController : MonoBehaviour, IDamageable
 {
     [SerializeField] private Transform target;
     [SerializeField] private CampFire campFire;
     [SerializeField] private NavMeshAgent navMesh;
     [SerializeField] private Animator animator;
+    [SerializeField] private CultistStateMachine cultistStateMachine;
 
     // >>
     [SerializeField] private float scanRange;          // 플레이어 감지 범위
     [SerializeField] private float maxCampDistance;    // 플레이어를 놓쳤을 때 복귀를 판단하는 캠프 기준 거리
     [SerializeField] private float returnDistance;     // 캠프파이어 중심에서 떨어져 멈출 거리
     [SerializeField] private float returnSearchRange;  // 복귀 위치 주변에서 NavMesh 지점을 찾는 범위
+
+    [SerializeField] private int maxHP = 125;
+    [SerializeField] private CultistWeapon weapon;
     // <<
 
     public Animator Animator => animator;
+    private int currentHp;
+    private float lastAttackTime = float.NegativeInfinity;
+
+    private void Awake()
+    {
+        currentHp = maxHP;
+        animator.SetLayerWeight(1, 1f);
+    }
 
     public void Stop()
     {
@@ -68,5 +80,41 @@ public class CultistController : MonoBehaviour
 
         float distance = (campFire.transform.position - transform.position).sqrMagnitude;
         return distance > maxCampDistance * maxCampDistance;
+    }
+
+    public bool CheckAttackRange()
+    {
+        if (target == null || weapon == null) return false;
+
+        float distance = (target.transform.position - transform.position).sqrMagnitude;
+        return distance <= weapon.AttackRange * weapon.AttackRange;
+    }
+
+    public bool CanAttack()
+    {
+        if (weapon == null) return false;
+        return Time.time >= lastAttackTime + weapon.AttackCoolTime;
+    }
+
+    public void Attack()
+    {
+        if (!CanAttack()) return;
+
+        lastAttackTime = Time.time;
+        weapon.Attack();
+    }
+
+    public void EndAttack()
+    {
+        if (weapon == null) return;
+        weapon.EndAttack();
+    }
+
+    public void TakeDamage(int dmg)
+    {
+        if (dmg <= 0 || currentHp <= 0) return;
+
+        currentHp = Mathf.Max(currentHp - dmg, 0);
+        if (currentHp <= 0) cultistStateMachine.ChangeState(CultistStateEnums.DEAD);
     }
 }

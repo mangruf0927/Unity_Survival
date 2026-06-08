@@ -24,6 +24,8 @@ public class InventorySlot : MonoBehaviour, IPointerClickHandler, IBeginDragHand
     public void HideSlot()
     {
         slotIndex = -1;
+        iconImage.sprite = null;
+        slotNumber.text = string.Empty;
         gameObject.SetActive(false);
     }
 

@@ -14,6 +14,7 @@ public class CultistStateMachine : MonoBehaviour
         {
             {CultistStateEnums.IDLE, new CultistIdleState(this, cultistController)},
             {CultistStateEnums.CHASE, new CultistChaseState(this, cultistController)},
+            {CultistStateEnums.ATTACK, new CultistAttackState(this, cultistController)},
             {CultistStateEnums.RETURN, new CultistReturnState(this, cultistController)},
             {CultistStateEnums.DEAD, new CultistDeadState(this, cultistController)},
         };

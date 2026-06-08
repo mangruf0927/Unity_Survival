@@ -29,6 +29,12 @@ public class CultistChaseState : ICultistState
             return;
         }
 
+        if (cultistController.CheckAttackRange() && cultistController.CanAttack())
+        {
+            cultistStateMachine.ChangeState(CultistStateEnums.ATTACK);
+            return;
+        }
+
         cultistController.Chase();
     }
 
