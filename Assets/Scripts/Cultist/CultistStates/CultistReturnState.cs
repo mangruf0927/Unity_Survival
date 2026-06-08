@@ -1,9 +1,9 @@
-public class CultistIdleState : ICultistState
+public class CultistReturnState : ICultistState
 {
     private readonly CultistStateMachine cultistStateMachine;
     private readonly CultistController cultistController;
 
-    public CultistIdleState(CultistStateMachine _stateMachine, CultistController _cultistController)
+    public CultistReturnState(CultistStateMachine _stateMachine, CultistController _cultistController)
     {
         cultistStateMachine = _stateMachine;
         cultistController = _cultistController;
@@ -11,15 +11,21 @@ public class CultistIdleState : ICultistState
 
     public void Enter()
     {
-        cultistController.Stop();
+        cultistController.Animator.SetFloat("speed", 1f);
+        cultistController.ReturnToCamp();
     }
 
     public void Update()
     {
+        if (cultistController.CheckArrive())
+        {
+            cultistStateMachine.ChangeState(CultistStateEnums.IDLE);
+            return;
+        }
+
         if (cultistController.CheckRange())
         {
             cultistStateMachine.ChangeState(CultistStateEnums.CHASE);
-            return;
         }
     }
 

@@ -16,16 +16,19 @@ public class EnemyController : MonoBehaviour
         navMesh.isStopped = true;
         navMesh.ResetPath();
         navMesh.velocity = Vector3.zero;
+        animator.SetFloat("speed", 0f);
     }
 
     public bool CanChasePlayer()
     {
         if (!enemyStats.CanChase) return false;
-        return RangeCheck();
+        return CheckRange();
     }
 
-    public bool RangeCheck()
+    public bool CheckRange()
     {
+        if (target == null) return false;
+
         float distance = (target.position - transform.position).sqrMagnitude;
         return distance <= enemyStats.ScanRange * enemyStats.ScanRange;
     }
@@ -54,9 +57,7 @@ public class EnemyController : MonoBehaviour
     public bool CheckArrive()
     {
         if (navMesh.pathPending || !navMesh.hasPath) return false;
-        if (navMesh.remainingDistance > 0.1f) return false;
-
-        return true;
+        return navMesh.remainingDistance <= 0.1f;
     }
 
     void OnTriggerEnter(Collider other)

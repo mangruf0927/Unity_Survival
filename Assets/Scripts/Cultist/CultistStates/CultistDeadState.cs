@@ -1,9 +1,9 @@
-public class CultistIdleState : ICultistState
+public class CultistDeadState : ICultistState
 {
     private readonly CultistStateMachine cultistStateMachine;
     private readonly CultistController cultistController;
 
-    public CultistIdleState(CultistStateMachine _stateMachine, CultistController _cultistController)
+    public CultistDeadState(CultistStateMachine _stateMachine, CultistController _cultistController)
     {
         cultistStateMachine = _stateMachine;
         cultistController = _cultistController;
@@ -11,16 +11,12 @@ public class CultistIdleState : ICultistState
 
     public void Enter()
     {
+        cultistController.Animator.SetTrigger("Dead");
         cultistController.Stop();
     }
 
     public void Update()
     {
-        if (cultistController.CheckRange())
-        {
-            cultistStateMachine.ChangeState(CultistStateEnums.CHASE);
-            return;
-        }
     }
 
     public void FixedUpdate()

@@ -13,6 +13,9 @@ public class CultistStateMachine : MonoBehaviour
         stateDictionary = new Dictionary<CultistStateEnums, ICultistState>()
         {
             {CultistStateEnums.IDLE, new CultistIdleState(this, cultistController)},
+            {CultistStateEnums.CHASE, new CultistChaseState(this, cultistController)},
+            {CultistStateEnums.RETURN, new CultistReturnState(this, cultistController)},
+            {CultistStateEnums.DEAD, new CultistDeadState(this, cultistController)},
         };
     }
 

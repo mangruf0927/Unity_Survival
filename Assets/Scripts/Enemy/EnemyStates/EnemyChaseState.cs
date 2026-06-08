@@ -16,7 +16,7 @@ public class EnemyChaseState : IEnemyState
 
     public void Update()
     {
-        if (enemyController.RangeCheck()) enemyController.Chase();
+        if (enemyController.CheckRange()) enemyController.Chase();
         else stateMachine.ChangeState(EnemyStateEnums.IDLE);
     }
 
