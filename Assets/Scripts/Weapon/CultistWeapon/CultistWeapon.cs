@@ -1,8 +1,7 @@
 using UnityEngine;
 
-public class CultistWeapon : MonoBehaviour
+public abstract class CultistWeapon : MonoBehaviour
 {
-    [SerializeField] private Collider hitCollider;
     [SerializeField] private float attackRange;
     [SerializeField] private int attackDamage;
     [SerializeField] private float attackCoolTime;
@@ -10,32 +9,9 @@ public class CultistWeapon : MonoBehaviour
     public float AttackRange => attackRange;
     public int AttackDamage => attackDamage;
     public float AttackCoolTime => attackCoolTime;
+    public virtual string AttackTrigger => "MeleeAttack";
+    public virtual string AttackStateName => "attack_melee";
 
-    private bool hasHit;
-
-    private void Awake()
-    {
-        hitCollider.enabled = false;
-    }
-
-    public void Attack()
-    {
-        hasHit = false;
-        hitCollider.enabled = true;
-    }
-
-    public void EndAttack()
-    {
-        hitCollider.enabled = false;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (hasHit) return;
-        if (!other.CompareTag("Player")) return;
-        if (!other.TryGetComponent<IDamageable>(out var damageable)) return;
-
-        hasHit = true;
-        damageable.TakeDamage(attackDamage);
-    }
+    public abstract void Attack(Transform target);
+    public virtual void EndAttack() { }
 }

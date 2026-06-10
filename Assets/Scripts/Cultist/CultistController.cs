@@ -20,6 +20,7 @@ public class CultistController : MonoBehaviour, IDamageable
     // <<
 
     public Animator Animator => animator;
+    public CultistWeapon Weapon => weapon;
     private int currentHp;
     private float lastAttackTime = float.NegativeInfinity;
 
@@ -101,7 +102,7 @@ public class CultistController : MonoBehaviour, IDamageable
         if (!CanAttack()) return;
 
         lastAttackTime = Time.time;
-        weapon.Attack();
+        weapon.Attack(target);
     }
 
     public void EndAttack()

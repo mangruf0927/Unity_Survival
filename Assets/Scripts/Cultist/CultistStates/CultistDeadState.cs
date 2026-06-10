@@ -11,8 +11,8 @@ public class CultistDeadState : ICultistState
 
     public void Enter()
     {
-        cultistController.Animator.SetTrigger("Dead");
         cultistController.Stop();
+        cultistController.Animator.SetTrigger("Dead");
     }
 
     public void Update()

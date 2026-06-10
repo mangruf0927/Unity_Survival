@@ -11,7 +11,7 @@ public class CultistAttackState : ICultistState
 
     public void Enter()
     {
-        cultistController.Animator.SetTrigger("MeleeAttack");
+        cultistController.Animator.SetTrigger(cultistController.Weapon.AttackTrigger);
         cultistController.Attack();
     }
 
@@ -19,7 +19,7 @@ public class CultistAttackState : ICultistState
     {
         var state = cultistController.Animator.GetCurrentAnimatorStateInfo(1);
 
-        if (state.IsName("attack_melee") && state.normalizedTime >= 1.0f)
+        if (state.IsName(cultistController.Weapon.AttackStateName) && state.normalizedTime >= 1.0f)
         {
             if (!cultistController.CheckRange())
             {

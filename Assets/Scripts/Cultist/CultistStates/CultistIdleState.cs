@@ -12,6 +12,7 @@ public class CultistIdleState : ICultistState
     public void Enter()
     {
         cultistController.Stop();
+        cultistController.Animator.SetFloat("speed", 0f);
     }
 
     public void Update()
