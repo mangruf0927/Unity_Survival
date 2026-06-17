@@ -3,16 +3,21 @@ using UnityEngine;
 public class HUDController : MonoBehaviour
 {
     [SerializeField] private PlayerController player;
-    [SerializeField] private EquippedItemUI itemUI;
+    [SerializeField] private ItemGuideUI itemGuideUI;
     [SerializeField] private AmmoCount ammoCount;
     [SerializeField] private InventoryUI inventoryUI;
 
     [SerializeField] private GameInput gameInput;
     [SerializeField] private ItemHoverUI itemHoverUI;
 
+    private EquippableItem currentEquipped;
+    private Item currentItem;
+
     private void Start()
     {
         player.OnEquipped += EquippedItem;
+        player.OnSackChanged += RefreshItemGuideUI;
+
         inventoryUI.OnSelectSlot += SelectSlot;
 
         gameInput.OnHoverItem += ShowItem;
@@ -22,6 +27,8 @@ public class HUDController : MonoBehaviour
     private void OnDestroy()
     {
         player.OnEquipped -= EquippedItem;
+        player.OnSackChanged -= RefreshItemGuideUI;
+
         inventoryUI.OnSelectSlot -= SelectSlot;
 
         gameInput.OnHoverItem -= ShowItem;
@@ -30,7 +37,8 @@ public class HUDController : MonoBehaviour
 
     private void EquippedItem(EquippableItem item)
     {
-        itemUI.UpdateUI(item);
+        currentEquipped = item;
+        RefreshItemGuideUI();
 
         if (item is RangedWeapon rangedWeapon) ammoCount.SetWeapon(rangedWeapon);
         else ammoCount.SetWeapon(null);
@@ -43,11 +51,22 @@ public class HUDController : MonoBehaviour
 
     private void ShowItem(Item item)
     {
+        currentItem = item;
+
         itemHoverUI.ShowUI(item);
+        RefreshItemGuideUI();
     }
 
     private void HideItem()
     {
+        currentItem = null;
+
         itemHoverUI.HideUI();
+        RefreshItemGuideUI();
+    }
+
+    private void RefreshItemGuideUI()
+    {
+        itemGuideUI.UpdateUI(currentEquipped, currentItem);
     }
 }

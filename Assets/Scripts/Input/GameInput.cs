@@ -13,7 +13,7 @@ public class GameInput : MonoBehaviour
     private Vector2 direction;
 
     private Outline currentOutline;
-    private EquippableItem currentEquip;
+    private EquippableItem currentEquipped;
     private Item currentItem;
     private Camera mainCamera;
 
@@ -79,7 +79,7 @@ public class GameInput : MonoBehaviour
             else OnExitItem?.Invoke();
         }
 
-        currentEquip = nextEquip;
+        currentEquipped = nextEquip;
         currentItem = nextItem;
     }
 
@@ -88,7 +88,7 @@ public class GameInput : MonoBehaviour
         if (currentOutline != null) currentOutline.enabled = false;
 
         currentOutline = null;
-        currentEquip = null;
+        currentEquipped = null;
         currentItem = null;
 
         OnExitItem?.Invoke();
@@ -136,9 +136,9 @@ public class GameInput : MonoBehaviour
             return;
         }
 
-        if (currentEquip != null)
+        if (currentEquipped != null)
         {
-            if (!playerController.GetEquippableItem(currentEquip)) return;
+            if (!playerController.GetEquippableItem(currentEquipped)) return;
             ClearTarget();
         }
     }

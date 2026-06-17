@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
     public delegate void EquippedHandler(EquippableItem item);
     public event EquippedHandler OnEquipped;
+    public event Action OnSackChanged;
 
     private void Awake()
     {
@@ -233,7 +235,15 @@ public class PlayerController : MonoBehaviour
     public bool GetCollectibleItem(Item item)
     {
         if (currentSack == null) return false;
-        return currentSack.AddItem(item);
+
+        bool added = currentSack.AddItem(item);
+
+        if (added)
+        {
+            OnSackChanged?.Invoke();
+        }
+
+        return added;
     }
 
     public void DropCollectibleItem()
@@ -244,6 +254,7 @@ public class PlayerController : MonoBehaviour
         if (item == null) return;
 
         item.transform.position = transform.position + transform.forward * 1.5f + Vector3.up;
+        OnSackChanged?.Invoke();
     }
 
     public void AddAmmo(AmmoType ammoType, int amount)
