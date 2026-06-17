@@ -24,7 +24,7 @@ public class EnemyIdleState : IEnemyState
 
     public void Update()
     {
-        if (enemyController.CanChasePlayer())
+        if (enemyController.ShouldChasePlayer())
         {
             stateMachine.ChangeState(EnemyStateEnums.CHASE);
             return;
@@ -32,7 +32,10 @@ public class EnemyIdleState : IEnemyState
 
         timer += Time.deltaTime;
 
-        if (timer >= randomTime) stateMachine.ChangeState(EnemyStateEnums.PATROL);
+        if (timer >= randomTime)
+        {
+            stateMachine.ChangeState(EnemyStateEnums.PATROL);
+        }
     }
 
     public void FixedUpdate()

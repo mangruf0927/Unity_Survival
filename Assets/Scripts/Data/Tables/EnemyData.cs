@@ -11,6 +11,7 @@ public class EnemyData : IGameData, IValidatable
     public bool CanChase { get; set; }
     public float ScanRange { get; set; }
     public float PatrolRange { get; set; }
+    public float AlertDuration { get; set; }
     public PoolTypeEnums EnemyType { get; set; }
 
     public bool Validate()
@@ -42,6 +43,12 @@ public class EnemyData : IGameData, IValidatable
         if (ScanRange < 0 || PatrolRange < 0)
         {
             Debug.LogError($"Enemy Range is invalid. Id: {Id}, ScanRange: {ScanRange}, PatrolRange: {PatrolRange}");
+            return false;
+        }
+
+        if (AlertDuration < 0)
+        {
+            Debug.LogError($"AlertDuration is invalid. Id: {Id}, AlertDuration: {AlertDuration}");
             return false;
         }
 

@@ -14,6 +14,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
     private float scanRange;
     private bool canChase;
     private float patrolRange;
+    private float alertDuration;
     private PoolTypeEnums enemyType;
 
     public int EnemyId => enemyId;
@@ -23,6 +24,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
     public float ScanRange => scanRange;
     public bool CanChase => canChase;
     public float PatrolRange => patrolRange;
+    public float AlertDuration => alertDuration;
     public PoolTypeEnums EnemyType => enemyType;
     public Transform HPBarPoint => hpBarPoint;
 
@@ -46,6 +48,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
         scanRange = data.ScanRange;
         canChase = data.CanChase;
         patrolRange = data.PatrolRange;
+        alertDuration = data.AlertDuration;
         enemyType = data.EnemyType;
 
         CurrentHp = MaxHp;

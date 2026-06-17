@@ -8,8 +8,29 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private EnemyStats enemyStats;
     [SerializeField] private Animator animator;
 
+    private float alertEndTime;
+    public bool IsAlerted => Time.time < alertEndTime;
+
     public PoolTypeEnums EnemyType => enemyStats.EnemyType;
     public Animator Animator => animator;
+
+    private void OnEnable()
+    {
+        enemyStats.OnDamaged += OnDamaged;
+    }
+
+    private void OnDisable()
+    {
+        enemyStats.OnDamaged -= OnDamaged;
+        alertEndTime = 0f;
+    }
+
+    private void OnDamaged(EnemyStats stats)
+    {
+        if (stats.CurrentHp <= 0) return;
+        if (!stats.CanChase) return;
+        Alert();
+    }
 
     public void Stop()
     {
@@ -19,10 +40,17 @@ public class EnemyController : MonoBehaviour
         animator.SetFloat("speed", 0f);
     }
 
-    public bool CanChasePlayer()
+    public void Alert()
     {
+        alertEndTime = Time.time + enemyStats.AlertDuration;
+    }
+
+    public bool ShouldChasePlayer()
+    {
+        if (target == null) return false;
         if (!enemyStats.CanChase) return false;
-        return CheckRange();
+
+        return IsAlerted || CheckRange();
     }
 
     public bool CheckRange()

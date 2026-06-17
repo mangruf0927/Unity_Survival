@@ -12773,7 +12773,7 @@ MonoBehaviour:
     - {fileID: 960821762}
     - {fileID: 79532149}
   - enemyId: 2002
-    enemyCount: 0
+    enemyCount: 2
     respawnTime: 5
     spawnPointList:
     - {fileID: 725028769}
@@ -14234,7 +14234,6 @@ SceneRoots:
   - {fileID: 1854888793}
   - {fileID: 114906568}
   - {fileID: 1112786011}
-  - {fileID: 2047334736}
   - {fileID: 634694067}
   - {fileID: 2023553406}
   - {fileID: 1199011575}
@@ -14247,6 +14246,7 @@ SceneRoots:
   - {fileID: 291109562}
   - {fileID: 183946492}
   - {fileID: 235259823}
+  - {fileID: 2047334736}
   - {fileID: 1599724066}
   - {fileID: 950727394}
   - {fileID: 3546641203814143749}
