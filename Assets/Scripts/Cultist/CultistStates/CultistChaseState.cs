@@ -16,7 +16,7 @@ public class CultistChaseState : ICultistState
 
     public void Update()
     {
-        if (!cultistController.CheckRange())
+        if (!cultistController.ShouldChasePlayer())
         {
             if (cultistController.IsAwayFromCamp())
             {

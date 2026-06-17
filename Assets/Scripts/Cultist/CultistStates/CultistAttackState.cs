@@ -21,7 +21,7 @@ public class CultistAttackState : ICultistState
 
         if (state.IsName(cultistController.Weapon.AttackStateName) && state.normalizedTime >= 1.0f)
         {
-            if (!cultistController.CheckRange())
+            if (!cultistController.ShouldChasePlayer())
             {
                 if (cultistController.IsAwayFromCamp())
                 {

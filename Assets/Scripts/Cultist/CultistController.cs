@@ -14,15 +14,19 @@ public class CultistController : MonoBehaviour, IDamageable
     [SerializeField] private float maxCampDistance;    // 플레이어를 놓쳤을 때 복귀를 판단하는 캠프 기준 거리
     [SerializeField] private float returnDistance;     // 캠프파이어 중심에서 떨어져 멈출 거리
     [SerializeField] private float returnSearchRange;  // 복귀 위치 주변에서 NavMesh 지점을 찾는 범위
+    [SerializeField] private float alertDuration;
 
     [SerializeField] private int maxHP = 125;
     [SerializeField] private CultistWeapon weapon;
     // <<
 
-    public Animator Animator => animator;
-    public CultistWeapon Weapon => weapon;
     private int currentHp;
     private float lastAttackTime = float.NegativeInfinity;
+    private float alertEndTime;
+
+    public Animator Animator => animator;
+    public CultistWeapon Weapon => weapon;
+    public bool IsAlerted => Time.time < alertEndTime;
 
     private void Awake()
     {
@@ -36,6 +40,18 @@ public class CultistController : MonoBehaviour, IDamageable
         navMesh.velocity = Vector3.zero;
         navMesh.ResetPath();
         animator.SetFloat("speed", 0f);
+    }
+
+    public void Alert()
+    {
+        alertEndTime = Time.time + alertDuration;
+    }
+
+    public bool ShouldChasePlayer()
+    {
+        if (target == null) return false;
+
+        return IsAlerted || CheckRange();
     }
 
     public bool CheckRange()
@@ -116,6 +132,13 @@ public class CultistController : MonoBehaviour, IDamageable
         if (dmg <= 0 || currentHp <= 0) return;
 
         currentHp = Mathf.Max(currentHp - dmg, 0);
-        if (currentHp <= 0) cultistStateMachine.ChangeState(CultistStateEnums.DEAD);
+        if (currentHp <= 0)
+        {
+            cultistStateMachine.ChangeState(CultistStateEnums.DEAD);
+            return;
+        }
+
+        Alert();
+        cultistStateMachine.ChangeState(CultistStateEnums.CHASE);
     }
 }

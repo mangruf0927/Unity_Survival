@@ -23,7 +23,7 @@ public class CultistReturnState : ICultistState
             return;
         }
 
-        if (cultistController.CheckRange())
+        if (cultistController.ShouldChasePlayer())
         {
             cultistStateMachine.ChangeState(CultistStateEnums.CHASE);
         }

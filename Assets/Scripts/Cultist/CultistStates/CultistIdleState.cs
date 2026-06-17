@@ -17,7 +17,7 @@ public class CultistIdleState : ICultistState
 
     public void Update()
     {
-        if (cultistController.CheckRange())
+        if (cultistController.ShouldChasePlayer())
         {
             cultistStateMachine.ChangeState(CultistStateEnums.CHASE);
             return;
