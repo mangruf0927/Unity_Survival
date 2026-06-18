@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// { 1, 100, 200, 750, 2300, 5000 }
 public class CampFire : MonoBehaviour, ISubject
 {
     [SerializeField] private ParticleSystem fire;
@@ -15,6 +17,7 @@ public class CampFire : MonoBehaviour, ISubject
 
     private int currentLevel = 0;
     private int currentFuel = 0;
+    private Coroutine decreaseCoroutine;
 
     public int CurrentLevel => currentLevel;
     public int CurrentFuel => currentFuel;
@@ -27,7 +30,7 @@ public class CampFire : MonoBehaviour, ISubject
         }
     }
 
-    private Coroutine decreaseCoroutine;
+    public event Action<int> OnLevelUp;
 
     private void Start()
     {
@@ -86,13 +89,13 @@ public class CampFire : MonoBehaviour, ISubject
 
     private void LevelUp()
     {
-        int prevLevel = currentLevel;
-
         currentLevel += 1;
 
-        if (prevLevel == 0) return;
-
-        currentFuel = Mathf.CeilToInt(currentFuel * 0.25f);
+        if (currentLevel < fuelLevelList.Length)
+        {
+            currentFuel = Mathf.CeilToInt(fuelLevelList[currentLevel] * 0.29f);
+        }
+        OnLevelUp?.Invoke(currentLevel);
     }
 
     private void OnFire()

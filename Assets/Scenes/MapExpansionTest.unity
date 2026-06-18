@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d18e42ec1d94a31a949216e36cb9331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapExpansionTest
-  ringCount: 5
+  boundaryCount: 5
   wallCount: 24
   radiusGap: 5
 --- !u!1 &168846064
@@ -421,5 +421,5 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 168846068}
-  - {fileID: 1001}
   - {fileID: 1332590181}
+  - {fileID: 1001}
