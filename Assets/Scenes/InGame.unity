@@ -1042,7 +1042,7 @@ GameObject:
   - component: {fileID: 183946489}
   - component: {fileID: 183946488}
   - component: {fileID: 183946487}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: CrossbowCultist
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -2260,7 +2260,7 @@ GameObject:
   - component: {fileID: 291109565}
   - component: {fileID: 291109564}
   - component: {fileID: 291109563}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: MeleeCultist
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -3872,15 +3872,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7134394785105016132, guid: 9784ff6f32e7c4f97bd6bd0abf029d0d, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: -5151492872390713093, guid: 9784ff6f32e7c4f97bd6bd0abf029d0d, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: -5069531478518834764, guid: 9784ff6f32e7c4f97bd6bd0abf029d0d, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9784ff6f32e7c4f97bd6bd0abf029d0d, type: 3}
       propertyPath: m_Name
@@ -3888,23 +3888,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9784ff6f32e7c4f97bd6bd0abf029d0d, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3250163066507786643, guid: 9784ff6f32e7c4f97bd6bd0abf029d0d, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 5788240856288092216, guid: 9784ff6f32e7c4f97bd6bd0abf029d0d, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8303906797054990637, guid: 9784ff6f32e7c4f97bd6bd0abf029d0d, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8908311948669537042, guid: 9784ff6f32e7c4f97bd6bd0abf029d0d, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4035,7 +4035,7 @@ GameObject:
   m_Component:
   - component: {fileID: 545975214}
   - component: {fileID: 545975215}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: Crossbow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4679,7 +4679,7 @@ GameObject:
   m_Component:
   - component: {fileID: 638318996}
   - component: {fileID: 638318997}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: Spear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5349,7 +5349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 782954986}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: ShootPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6803,15 +6803,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7134394785105016132, guid: 19a85d19692bf4609ba76d381c8dabc0, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: -5151492872390713093, guid: 19a85d19692bf4609ba76d381c8dabc0, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: -5069531478518834764, guid: 19a85d19692bf4609ba76d381c8dabc0, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 19a85d19692bf4609ba76d381c8dabc0, type: 3}
       propertyPath: m_Name
@@ -6819,23 +6819,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 19a85d19692bf4609ba76d381c8dabc0, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 3250163066507786643, guid: 19a85d19692bf4609ba76d381c8dabc0, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 5788240856288092216, guid: 19a85d19692bf4609ba76d381c8dabc0, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8303906797054990637, guid: 19a85d19692bf4609ba76d381c8dabc0, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8908311948669537042, guid: 19a85d19692bf4609ba76d381c8dabc0, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10400,7 +10400,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1581343394}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: equipPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13308,7 +13308,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1951312132}
   - component: {fileID: 1951312133}
-  m_Layer: 8
+  m_Layer: 12
   m_Name: HitCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
