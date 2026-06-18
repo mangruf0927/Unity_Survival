@@ -17,10 +17,12 @@ public class CampFire : MonoBehaviour, ISubject
 
     private int currentLevel = 0;
     private int currentFuel = 0;
+    private bool isBurning;
     private Coroutine decreaseCoroutine;
 
     public int CurrentLevel => currentLevel;
     public int CurrentFuel => currentFuel;
+    public bool IsBurning => isBurning;
     public int NeedFuel
     {
         get
@@ -31,6 +33,7 @@ public class CampFire : MonoBehaviour, ISubject
     }
 
     public event Action<int> OnLevelUp;
+    public event Action<bool> OnFireChanged;
 
     private void Start()
     {
@@ -100,13 +103,27 @@ public class CampFire : MonoBehaviour, ISubject
 
     private void OnFire()
     {
+        if (isBurning) return;
+
+        isBurning = true;
         if (fire != null && !fire.isPlaying) fire.Play();
+        OnFireChanged?.Invoke(true);
     }
 
     private void OffFire()
     {
-        if (fire == null) return;
-        fire.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        bool wasBurning = isBurning;
+        isBurning = false;
+
+        if (fire != null)
+        {
+            fire.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        }
+
+        if (wasBurning)
+        {
+            OnFireChanged?.Invoke(false);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
