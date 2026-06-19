@@ -1113,7 +1113,9 @@ MonoBehaviour:
   boundaryCount: 5
   wallCount: 24
   radiusGap: 70
-  level2Spawner: {fileID: 2100000021}
+  enemySpawnerList:
+  - {fileID: 2047334735}
+  - {fileID: 2100000023}
 --- !u!1 &195565908
 GameObject:
   m_ObjectHideFlags: 0
@@ -13056,6 +13058,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad6d9617ff1943d6a6c27971b8f19bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  requiredLevel: 0
   spawnInfoList:
   - enemyId: 2001
     enemyCount: 2
@@ -13686,8 +13689,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ad6d9617ff1943d6a6c27971b8f19bf, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  requiredLevel: 2
   spawnInfoList:
   - enemyId: 2001
     enemyCount: 1

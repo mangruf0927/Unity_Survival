@@ -9,16 +9,13 @@ public class MapBoundary : MonoBehaviour
     [SerializeField] private int boundaryCount;
     [SerializeField] private int wallCount;
     [SerializeField] private float radiusGap;
-    [SerializeField] private GameObject level2Spawner;
+    [SerializeField] private List<EnemySpawner> enemySpawnerList;
 
     private readonly List<GameObject> boundaryList = new();
 
     private void Awake()
     {
-        if (level2Spawner != null)
-        {
-            level2Spawner.SetActive(campFire.CurrentLevel >= 2);
-        }
+        UpdateSpawners(campFire.CurrentLevel);
     }
 
     private void Start()
@@ -28,13 +25,13 @@ public class MapBoundary : MonoBehaviour
             CreateBoundary(level);
         }
         campFire.OnLevelUp += RemoveBoundary;
-        campFire.OnLevelUp += UnlockSpawner;
+        campFire.OnLevelUp += UpdateSpawners;
     }
 
     private void OnDestroy()
     {
         campFire.OnLevelUp -= RemoveBoundary;
-        campFire.OnLevelUp -= UnlockSpawner;
+        campFire.OnLevelUp -= UpdateSpawners;
     }
 
     private void CreateBoundary(int level)
@@ -79,10 +76,13 @@ public class MapBoundary : MonoBehaviour
         boundaryList[index].SetActive(false);
     }
 
-    private void UnlockSpawner(int level)
+    private void UpdateSpawners(int level)
     {
-        if (level < 2 || level2Spawner == null) return;
+        foreach (EnemySpawner spawner in enemySpawnerList)
+        {
+            if (spawner == null) continue;
 
-        level2Spawner.SetActive(true);
+            spawner.gameObject.SetActive(level >= spawner.RequiredLevel);
+        }
     }
 }

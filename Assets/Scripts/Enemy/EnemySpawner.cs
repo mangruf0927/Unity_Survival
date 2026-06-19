@@ -14,9 +14,11 @@ public class EnemySpawnInfo
 
 public class EnemySpawner : MonoBehaviour
 {
+    [SerializeField] private int requiredLevel;
     [SerializeField] private List<EnemySpawnInfo> spawnInfoList;
 
     private Dictionary<PoolTypeEnums, EnemySpawnInfo> typeToInfoDictionary;
+    public int RequiredLevel => requiredLevel;
 
     private void Start()
     {
