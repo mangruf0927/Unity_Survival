@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ public class TimeSystem : MonoBehaviour, ISubject
     public int Seconds => seconds;
     public Phase CurPhase => curPhase;
 
+    public event Action<Phase, int> OnPhaseChanged;
+
     void Start()
     {
         SetPhase(Phase.DAY);
@@ -37,7 +40,7 @@ public class TimeSystem : MonoBehaviour, ISubject
             }
             else
             {
-                dayCount += 1;
+                dayCount++;
                 SetPhase(Phase.DAY);
             }
             return;
@@ -56,7 +59,9 @@ public class TimeSystem : MonoBehaviour, ISubject
     {
         curPhase = phase;
         timeElapsed = (phase == Phase.DAY) ? dayTime : nightTime;
+
         UpdateTimer();
+        OnPhaseChanged?.Invoke(curPhase, dayCount);
     }
 
     public void AddObserver(IObserver observer)

@@ -1527,6 +1527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SafeZone
   campFire: {fileID: 370338873}
+  linePrefab: {fileID: 8873408522036913658, guid: 51ea8f7c204d84258ad9aa4d28b3f0ef, type: 3}
   startRadius: 5
   radiusGap: 3
   lineCount: 24
@@ -5220,6 +5221,51 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 208183970}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &729513375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 729513377}
+  - component: {fileID: 729513376}
+  m_Layer: 0
+  m_Name: PhaseChangeTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &729513376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729513375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b22b3e1289fec49b5a6cfacb612b41f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PhaseChangeTest
+  timeSystem: {fileID: 2023553405}
+--- !u!4 &729513377
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729513375}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.20588, y: 0.5, z: -7.37144}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &733142748
 GameObject:
@@ -13542,8 +13588,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0d60b9384b674d43b990def7760ff73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeSystem
-  dayTime: 180
-  nightTime: 90
+  dayTime: 3
+  nightTime: 3
 --- !u!4 &2023553406
 Transform:
   m_ObjectHideFlags: 0
@@ -15149,6 +15195,7 @@ SceneRoots:
   - {fileID: 1112786011}
   - {fileID: 634694067}
   - {fileID: 2023553406}
+  - {fileID: 729513377}
   - {fileID: 1199011575}
   - {fileID: 317170721}
   - {fileID: 1073054018}
