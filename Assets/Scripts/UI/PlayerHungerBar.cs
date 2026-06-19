@@ -9,6 +9,7 @@ public class PlayerHungerBar : MonoBehaviour, IObserver
     private void Start()
     {
         playerStats.AddObserver(this);
+        Notify();
     }
 
     private void OnDestroy()

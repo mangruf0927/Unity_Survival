@@ -61,18 +61,22 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
 
     private void UpdateHunger()
     {
-        if (CurrentHunger <= 0f) return;
-
         timer += Time.deltaTime;
 
-        while (timer >= decreaseInterval && CurrentHunger > 0f)
+        while (timer >= decreaseInterval)
         {
             timer -= decreaseInterval;
-            CurrentHunger = Mathf.Max(CurrentHunger - 1, 0);
-            NotifyObservers();
+            if (CurrentHunger > 0f)
+            {
+                CurrentHunger = Mathf.Max(CurrentHunger - 1, 0);
+                NotifyObservers();
+            }
+            else
+            {
+                Debug.Log("Player is starving.");
+                TakeDamage(10);
+            }
         }
-
-        if (CurrentHunger <= 0f) Debug.Log("Player is starving.");
     }
 
     public void EatFood(int hunger, int hp)

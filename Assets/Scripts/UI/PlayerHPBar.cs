@@ -9,6 +9,7 @@ public class PlayerHPBar : MonoBehaviour, IObserver
     private void Start()
     {
         playerStats.AddObserver(this);
+        Notify();
     }
 
     private void OnDestroy()
