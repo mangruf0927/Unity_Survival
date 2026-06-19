@@ -22,6 +22,11 @@ public class CultistIdleState : ICultistState
             cultistStateMachine.ChangeState(CultistStateEnums.CHASE);
             return;
         }
+
+        if (cultistController.IsAwayFromCamp())
+        {
+            cultistStateMachine.ChangeState(CultistStateEnums.RETURN);
+        }
     }
 
     public void FixedUpdate()

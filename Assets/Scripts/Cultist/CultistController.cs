@@ -18,6 +18,8 @@ public class CultistController : MonoBehaviour, IDamageable
 
     [SerializeField] private int maxHP = 125;
     [SerializeField] private CultistWeapon weapon;
+
+    [SerializeField] private PoolTypeEnums cultistType;
     // <<
 
     private int currentHp;
@@ -27,11 +29,20 @@ public class CultistController : MonoBehaviour, IDamageable
     public Animator Animator => animator;
     public CultistWeapon Weapon => weapon;
     public bool IsAlerted => Time.time < alertEndTime;
+    public PoolTypeEnums CultistType => cultistType;
 
-    private void Awake()
+    public void SetUp(Transform player, CampFire fire)
     {
+        target = player;
+        campFire = fire;
+
         currentHp = maxHP;
+        alertEndTime = 0f;
+        lastAttackTime = float.NegativeInfinity;
+
+        animator.ResetTrigger("Dead");
         animator.SetLayerWeight(1, 1f);
+        cultistStateMachine.ChangeState(CultistStateEnums.IDLE);
     }
 
     public void Stop()

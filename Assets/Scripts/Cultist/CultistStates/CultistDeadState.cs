@@ -17,6 +17,10 @@ public class CultistDeadState : ICultistState
 
     public void Update()
     {
+        var state = cultistController.Animator.GetCurrentAnimatorStateInfo(0);
+        if (!state.IsName("die") || state.normalizedTime < 1f) return;
+
+        ObjectPool.Instance.ReturnToPool(cultistController.gameObject, cultistController.CultistType);
     }
 
     public void FixedUpdate()
