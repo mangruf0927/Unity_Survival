@@ -2201,18 +2201,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorkTableInventory
   itemList:
-  - itemName: Cube
-    itemPrefab: {fileID: -2267669233372935020, guid: 09c9ed8c8c68a42b3a1d1a20ad2d39a1, type: 3}
-    needWood: 3
-    needIron: 1
-  - itemName: Capsule
-    itemPrefab: {fileID: -2267669233372935020, guid: 09c9ed8c8c68a42b3a1d1a20ad2d39a1, type: 3}
+  - itemName: Bed
+    itemPrefab: {fileID: -2267669233372935020, guid: 5556f84142af04c70bccd5e4875adf97, type: 3}
+    needWood: 0
+    needIron: 0
+  - itemName: Map
+    itemPrefab: {fileID: -2267669233372935020, guid: e8f14847002f8414391b85a251ae3e4b, type: 3}
     needWood: 3
     needIron: 0
-  - itemName: Sphere
+  - itemName: CraftingBench2
     itemPrefab: {fileID: -2267669233372935020, guid: 09c9ed8c8c68a42b3a1d1a20ad2d39a1, type: 3}
-    needWood: 0
-    needIron: 3
+    needWood: 5
+    needIron: 1
   inventoryUI: {fileID: 1118487379}
   openTime: 2
   uiPoint: {fileID: 1065235937}
@@ -6673,7 +6673,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1167997880}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1073054019
 MonoBehaviour:
@@ -6687,6 +6687,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94ad296319aae4586a50f4d42932f920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectPlacement
+  timeSystem: {fileID: 2023553405}
   placeDistance: 2
 --- !u!1001 &1077987717
 PrefabInstance:
@@ -7299,6 +7300,7 @@ MonoBehaviour:
   inventory: {fileID: 1717421986}
   equipPosition: {fileID: 404059103}
   interactionUI: {fileID: 1574028816}
+  objectPlacement: {fileID: 1073054019}
 --- !u!54 &1167997879
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7335,11 +7337,12 @@ Transform:
   m_GameObject: {fileID: 1167997875}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0.5, z: -3}
+  m_LocalPosition: {x: 0, y: 0.5, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1416580746}
+  - {fileID: 1073054018}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1167997881
@@ -13689,7 +13692,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ad6d9617ff1943d6a6c27971b8f19bf, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   requiredLevel: 2
   spawnInfoList:
@@ -14551,7 +14554,6 @@ SceneRoots:
   - {fileID: 1199011575}
   - {fileID: 1011264661}
   - {fileID: 317170721}
-  - {fileID: 1073054018}
   - {fileID: 329913524}
   - {fileID: 1072211403}
   - {fileID: 1167997880}

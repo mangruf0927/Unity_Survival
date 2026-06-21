@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Inventory inventory;
     [SerializeField] private Transform equipPosition;
     [SerializeField] private InteractionUI interactionUI;
+    [SerializeField] private ObjectPlacement objectPlacement;
 
     private PlayerStats playerStats;
     private Rigidbody rigid;
@@ -120,6 +121,16 @@ public class PlayerController : MonoBehaviour
     public void Eat(int hunger, int hp)
     {
         playerStats.EatFood(hunger, hp);
+    }
+
+    public void StartPlacement(PlaceableItem item)
+    {
+        objectPlacement.StartPlacement(item, this);
+    }
+
+    public void CancelPlacement()
+    {
+        objectPlacement.CancelPlacement();
     }
 
     public bool GetEquippableItem(EquippableItem item)

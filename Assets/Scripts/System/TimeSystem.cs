@@ -13,6 +13,7 @@ public class TimeSystem : MonoBehaviour, ISubject
     private readonly List<IObserver> ObserverList = new();
 
     private int dayCount = 1;
+    private int dayBonus;
     private int minutes;
     private int seconds;
 
@@ -40,7 +41,7 @@ public class TimeSystem : MonoBehaviour, ISubject
             }
             else
             {
-                dayCount++;
+                dayCount += 1 + dayBonus;
                 SetPhase(Phase.DAY);
             }
             return;
@@ -62,6 +63,16 @@ public class TimeSystem : MonoBehaviour, ISubject
 
         UpdateTimer();
         OnPhaseChanged?.Invoke(curPhase, dayCount);
+    }
+
+    public void AddDays(int days)
+    {
+        dayBonus += days;
+    }
+
+    public void RemoveDays(int days)
+    {
+        dayBonus = Mathf.Max(0, dayBonus - days);
     }
 
     public void AddObserver(IObserver observer)
