@@ -49,6 +49,28 @@ public class TimeSystem : MonoBehaviour, ISubject
         UpdateTimer();
     }
 
+    public TimeSaveData CreateSaveData()
+    {
+        return new TimeSaveData
+        {
+            dayCount = dayCount,
+            dayBonus = dayBonus,
+            timeElapsed = timeElapsed,
+            curPhase = curPhase
+        };
+    }
+
+    public void LoadSaveData(TimeSaveData data)
+    {
+        dayCount = data.dayCount;
+        dayBonus = data.dayBonus;
+        timeElapsed = data.timeElapsed;
+        curPhase = data.curPhase;
+
+        UpdateTimer();
+        OnPhaseChanged?.Invoke(curPhase, dayCount);
+    }
+
     private void UpdateTimer()
     {
         minutes = Mathf.FloorToInt(timeElapsed / 60F);
@@ -75,6 +97,7 @@ public class TimeSystem : MonoBehaviour, ISubject
         dayBonus = Mathf.Max(0, dayBonus - days);
     }
 
+    // >>
     public void AddObserver(IObserver observer)
     {
         ObserverList.Add(observer);
