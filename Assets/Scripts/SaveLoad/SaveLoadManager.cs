@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -5,18 +6,14 @@ using UnityEngine;
 public class SaveLoadManager : MonoBehaviour
 {
     [SerializeField] private TimeSystem timeSystem;
+    [SerializeField] private PlayerStats playerStats;
 
     public void SaveData()
     {
-        if (timeSystem == null)
+        SaveData saveData = new()
         {
-            Debug.LogError("TimeSystem is not assigned.");
-            return;
-        }
-
-        SaveData saveData = new SaveData
-        {
-            timeData = timeSystem.CreateSaveData()
+            timeData = timeSystem.CreateSaveData(),
+            playerData = playerStats.CreateSaveData()
         };
 
         string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
@@ -39,13 +36,14 @@ public class SaveLoadManager : MonoBehaviour
         string json = File.ReadAllText(path);
         SaveData saveData = JsonConvert.DeserializeObject<SaveData>(json);
 
-        if (timeSystem == null || saveData == null || saveData.timeData == null)
+        if (saveData == null)
         {
             Debug.LogError("Load failed. Save data or TimeSystem is invalid.");
             return;
         }
 
         timeSystem.LoadSaveData(saveData.timeData);
+        playerStats.LoadSaveData(saveData.playerData);
 
         Debug.Log("Load Complete");
     }

@@ -59,6 +59,36 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
         NotifyObservers();
     }
 
+    public PlayerSaveData CreateSaveData()
+    {
+        Vector3 position = transform.position;
+
+        return new PlayerSaveData
+        {
+            positionX = position.x,
+            positionY = position.y,
+            positionZ = position.z,
+            rotationY = transform.eulerAngles.y,
+            currentHP = CurrentHp,
+            currentHunger = CurrentHunger,
+            hungerTimer = timer
+        };
+    }
+
+    public void LoadSaveData(PlayerSaveData data)
+    {
+        if (data == null) return;
+
+        Vector3 position = new(data.positionX, data.positionY, data.positionZ);
+        transform.SetPositionAndRotation(position, Quaternion.Euler(0f, data.rotationY, 0f));
+
+        CurrentHp = Mathf.Clamp(data.currentHP, 0, MaxHp);
+        CurrentHunger = Mathf.Clamp(data.currentHunger, 0f, MaxHunger);
+        timer = Mathf.Max(0f, data.hungerTimer);
+
+        NotifyObservers();
+    }
+
     private void UpdateHunger()
     {
         timer += Time.deltaTime;

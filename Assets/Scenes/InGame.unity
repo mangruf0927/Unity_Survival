@@ -5754,6 +5754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveLoadManager
   timeSystem: {fileID: 2023553405}
+  playerStats: {fileID: 1167997876}
 --- !u!4 &858068049
 Transform:
   m_ObjectHideFlags: 0
