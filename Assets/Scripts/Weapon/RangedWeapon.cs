@@ -40,9 +40,6 @@ public class RangedWeapon : Weapon, ISubject
         bulletSpeed = data.BulletSpeed;
         canDrop = data.CanDrop;
 
-        currentAmmo = 0;
-        totalAmmo = 0;
-
         NotifyObservers();
     }
 
@@ -83,6 +80,12 @@ public class RangedWeapon : Weapon, ISubject
         if (amount <= 0) return;
 
         currentAmmo += amount;
+        NotifyObservers();
+    }
+
+    public void SetCurrentAmmo(int count)
+    {
+        currentAmmo = magSize > 0 ? Mathf.Clamp(count, 0, magSize) : Mathf.Max(0, count);
         NotifyObservers();
     }
 

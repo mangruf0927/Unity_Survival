@@ -43,6 +43,30 @@ public class Inventory : MonoBehaviour
                 data.sackData = sack.SaveData();
             }
         }
+
+        data.rangedWeaponDataList = new List<RangedWeaponSaveData>();
+        foreach (EquippableItem item in itemList)
+        {
+            RangedWeapon rangedWeapon = item as RangedWeapon;
+            if (rangedWeapon == null) continue;
+
+            data.rangedWeaponDataList.Add(new RangedWeaponSaveData
+            {
+                itemId = rangedWeapon.ItemId,
+                currentAmmo = rangedWeapon.CurrentAmmo
+            });
+        }
+
+        data.ammoDataList = new List<AmmoSaveData>();
+        foreach (var ammo in ammoDictionary)
+        {
+            data.ammoDataList.Add(new AmmoSaveData
+            {
+                ammoType = ammo.Key,
+                count = ammo.Value
+            });
+        }
+
         return data;
     }
 
@@ -77,10 +101,46 @@ public class Inventory : MonoBehaviour
                 sack.LoadData(data.sackData, itemDatabase);
             }
 
+            if (item is RangedWeapon rangedWeapon)
+            {
+                RangedWeaponData weaponDataTable = DataManager.Instance.RangedTable.Get(rangedWeapon.ItemId);
+                rangedWeapon.SetUp(weaponDataTable);
+
+                RangedWeaponSaveData weaponData = FindRangedWeaponSaveData(data, rangedWeapon.ItemId);
+                if (weaponData != null)
+                {
+                    rangedWeapon.SetCurrentAmmo(weaponData.currentAmmo);
+                }
+            }
+
             itemList.Add(item);
         }
 
+        ammoDictionary.Clear();
+        if (data.ammoDataList != null)
+        {
+            foreach (AmmoSaveData ammoData in data.ammoDataList)
+            {
+                ammoDictionary[ammoData.ammoType] = ammoData.count;
+            }
+        }
+
         OnChanged?.Invoke();
+    }
+
+    private RangedWeaponSaveData FindRangedWeaponSaveData(InventorySaveData data, int itemId)
+    {
+        if (data.rangedWeaponDataList == null) return null;
+
+        foreach (RangedWeaponSaveData weaponData in data.rangedWeaponDataList)
+        {
+            if (weaponData != null && weaponData.itemId == itemId)
+            {
+                return weaponData;
+            }
+        }
+
+        return null;
     }
 
     public bool AddItem(EquippableItem newItem, out EquippableItem prevItem)

@@ -37,10 +37,26 @@ public class InventorySaveData
     public List<int> itemIdList;
     public int equippedIndex;
     public SackSaveData sackData;
+    public List<AmmoSaveData> ammoDataList;
+    public List<RangedWeaponSaveData> rangedWeaponDataList;
 }
 
 [Serializable]
 public class SackSaveData
 {
     public List<int> itemIdList;
+}
+
+[Serializable]
+public class AmmoSaveData
+{
+    public AmmoType ammoType;
+    public int count;
+}
+
+[Serializable]
+public class RangedWeaponSaveData
+{
+    public int itemId;
+    public int currentAmmo;
 }
