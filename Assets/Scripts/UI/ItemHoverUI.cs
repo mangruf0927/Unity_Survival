@@ -72,7 +72,9 @@ public class ItemHoverUI : MonoBehaviour
 
     private void UpdatePosition()
     {
-        Vector3 worldPos = currentItem.transform.position + offset;
+        Collider itemCollider = currentItem.GetComponentInChildren<Collider>();
+        Vector3 itemPosition = itemCollider != null ? itemCollider.bounds.center : currentItem.transform.position;
+        Vector3 worldPos = itemPosition + offset;
         Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(mainCamera, worldPos);
 
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, null, out Vector2 localPos))

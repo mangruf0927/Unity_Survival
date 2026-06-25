@@ -303,6 +303,7 @@ public class PlayerController : MonoBehaviour
         if (item == null) return;
 
         item.transform.position = transform.position + transform.forward * 1.5f + Vector3.up;
+        item.ResetPhysics();
         OnSackChanged?.Invoke();
     }
 

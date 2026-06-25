@@ -128,12 +128,13 @@ public class CampFire : MonoBehaviour, ISubject
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.TryGetComponent<Item>(out var item)) return;
+        Item item = other.GetComponentInParent<Item>();
+        if (item == null) return;
         if (item.Data == null || item.Data.FuelData == null) return;
         if (item.Data.ItemType != ItemType.FUEL) return;
 
         AddFuel(item.Data.FuelData.BurnPower);
-        Destroy(other.gameObject);
+        Destroy(item.gameObject);
     }
 
     public void AddObserver(IObserver observer)

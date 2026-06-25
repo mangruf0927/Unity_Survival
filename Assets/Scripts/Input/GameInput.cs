@@ -59,15 +59,16 @@ public class GameInput : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, 15f, ~0, QueryTriggerInteraction.Collide))
         {
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Equippable"))
+            nextEquip = hit.collider.GetComponentInParent<EquippableItem>();
+            nextItem = hit.collider.GetComponentInParent<Item>();
+
+            if (nextEquip != null)
             {
-                nextEquip = hit.collider.GetComponentInParent<EquippableItem>();
-                if (nextEquip != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
+                nextOutline = hit.collider.GetComponentInParent<Outline>();
             }
-            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Item"))
+            else if (nextItem != null)
             {
-                nextItem = hit.collider.GetComponentInParent<Item>();
-                if (nextItem != null) nextOutline = hit.collider.GetComponentInParent<Outline>();
+                nextOutline = hit.collider.GetComponentInParent<Outline>();
             }
         }
 

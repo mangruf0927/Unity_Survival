@@ -111,10 +111,10 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
 
     public void EatFood(int hunger, int hp)
     {
-        if (hunger <= 0 && hp <= 0) return;
+        if (hunger == 0 && hp == 0) return;
 
-        if (hunger > 0) CurrentHunger = Mathf.Min(CurrentHunger + hunger, MaxHunger);
-        if (hp > 0) CurrentHp = Mathf.Min(CurrentHp + hp, MaxHp);
+        CurrentHunger = Mathf.Clamp(CurrentHunger + hunger, 0, MaxHunger);
+        CurrentHp = Mathf.Clamp(CurrentHp + hp, 0, MaxHp);
 
         NotifyObservers();
     }

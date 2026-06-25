@@ -83,6 +83,8 @@ public class Sack : EquippableItem, ISubject
     {
         if (item == null || IsFull) return false;
 
+        item.ResetPhysics();
+
         itemStack.Push(item);
         item.transform.SetParent(transform);
         item.gameObject.SetActive(false);
@@ -96,8 +98,9 @@ public class Sack : EquippableItem, ISubject
         if (IsEmpty) return null;
 
         Item item = itemStack.Pop();
-        item.transform.position = transform.position + Vector3.up * 0.7f;
         item.transform.SetParent(null);
+        item.transform.position = transform.position + Vector3.up * 0.7f;
+        item.ResetPhysics();
         item.gameObject.SetActive(true);
 
         NotifyObservers();
