@@ -32,6 +32,40 @@ public class Sack : EquippableItem, ISubject
         canDrop = data.CanDrop;
     }
 
+    public SackSaveData SaveData()
+    {
+        SackSaveData data = new()
+        {
+            itemIdList = new List<int>()
+        };
+
+        foreach (Item item in itemStack)
+        {
+            if (item == null) continue;
+            data.itemIdList.Add(item.ItemId);
+        }
+        return data;
+    }
+
+    public void LoadData(SackSaveData data, ItemDataBase database)
+    {
+        if (data == null || data.itemIdList == null || database == null) return;
+
+        SackData sackData = DataManager.Instance.SackTable.Get(ItemId);
+        SetUp(sackData);
+
+        for (int i = data.itemIdList.Count - 1; i >= 0; i--)
+        {
+            Item prefab = database.GetPrefab(data.itemIdList[i]);
+            if (prefab == null) continue;
+
+            Item item = Instantiate(prefab);
+            AddItem(item);
+        }
+
+        NotifyObservers();
+    }
+
     public override void OnEquip(PlayerController player)
     {
         player.SetSack(this);

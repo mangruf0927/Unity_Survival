@@ -5735,6 +5735,7 @@ GameObject:
   - component: {fileID: 858068049}
   - component: {fileID: 858068048}
   - component: {fileID: 3000000001}
+  - component: {fileID: 3000000002}
   m_Layer: 0
   m_Name: SaveLoadManager
   m_TagString: Untagged
@@ -5758,6 +5759,7 @@ MonoBehaviour:
   playerStats: {fileID: 1167997876}
   playerController: {fileID: 1167997878}
   equippableDatabase: {fileID: 3000000001}
+  itemDataBase: {fileID: 3000000002}
 --- !u!4 &858068049
 Transform:
   m_ObjectHideFlags: 0
@@ -14658,6 +14660,20 @@ MonoBehaviour:
   - {fileID: 909573281864137417, guid: d55e668cdc781464f876ad9b29e21cb2, type: 3}
   - {fileID: 909573281864137417, guid: eeb8ecbf86e0c4922b0af0734d87d1ac, type: 3}
   - {fileID: 8920029709564255238, guid: 9a5c342fa695e4347a073abd00a8e329, type: 3}
+--- !u!114 &3000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858068047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e28d9d960c540e59a3a3df8b76dda9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemDataBase
+  prefabList:
+  - {fileID: 4130831382163440775, guid: 9856752a9aa24416998136ffabec76c1, type: 3}
 --- !u!1001 &848269144412729598
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -29,21 +29,26 @@ public class Inventory : MonoBehaviour
         InventorySaveData data = new()
         {
             itemIdList = new List<int>(),
-            equippedIndex = itemList.IndexOf(currentEquipped)
+            equippedIndex = itemList.IndexOf(currentEquipped),
+            sackData = null
         };
 
         foreach (EquippableItem item in itemList)
         {
             if (item == null) continue;
             data.itemIdList.Add(item.ItemId);
-        }
 
+            if (item is Sack sack)
+            {
+                data.sackData = sack.SaveData();
+            }
+        }
         return data;
     }
 
-    public void LoadSaveData(InventorySaveData data, EquippableDatabase database)
+    public void LoadSaveData(InventorySaveData data, EquippableDatabase equippableDatabase, ItemDataBase itemDatabase)
     {
-        if (data == null || database == null) return;
+        if (data == null || equippableDatabase == null || itemDatabase == null) return;
 
         foreach (EquippableItem item in itemList)
         {
@@ -52,7 +57,6 @@ public class Inventory : MonoBehaviour
                 Destroy(item.gameObject);
             }
         }
-
         itemList.Clear();
 
         if (data.itemIdList == null)
@@ -63,10 +67,16 @@ public class Inventory : MonoBehaviour
 
         foreach (int itemId in data.itemIdList)
         {
-            EquippableItem prefab = database.GetPrefab(itemId);
+            EquippableItem prefab = equippableDatabase.GetPrefab(itemId);
             if (prefab == null) continue;
 
             EquippableItem item = Instantiate(prefab);
+
+            if (item is Sack sack)
+            {
+                sack.LoadData(data.sackData, itemDatabase);
+            }
+
             itemList.Add(item);
         }
 

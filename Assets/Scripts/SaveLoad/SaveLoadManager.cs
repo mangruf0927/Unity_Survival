@@ -8,6 +8,7 @@ public class SaveLoadManager : MonoBehaviour
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private PlayerController playerController;
     [SerializeField] private EquippableDatabase equippableDatabase;
+    [SerializeField] private ItemDataBase itemDataBase;
 
     public void SaveData()
     {
@@ -50,7 +51,7 @@ public class SaveLoadManager : MonoBehaviour
             return;
         }
 
-        if (timeSystem == null || playerStats == null || playerController == null || equippableDatabase == null)
+        if (timeSystem == null || playerStats == null || playerController == null || equippableDatabase == null || itemDataBase == null)
         {
             Debug.LogError("Load failed. SaveLoadManager references are missing.");
             return;
@@ -58,7 +59,7 @@ public class SaveLoadManager : MonoBehaviour
 
         timeSystem.LoadSaveData(saveData.timeData);
         playerStats.LoadSaveData(saveData.playerData);
-        playerController.LoadInventorySaveData(saveData.inventoryData, equippableDatabase);
+        playerController.LoadInventorySaveData(saveData.inventoryData, equippableDatabase, itemDataBase);
 
         Debug.Log("Load Complete");
     }

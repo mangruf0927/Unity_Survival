@@ -36,4 +36,11 @@ public class InventorySaveData
 {
     public List<int> itemIdList;
     public int equippedIndex;
+    public SackSaveData sackData;
+}
+
+[Serializable]
+public class SackSaveData
+{
+    public List<int> itemIdList;
 }

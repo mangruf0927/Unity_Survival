@@ -6,6 +6,7 @@ public class Item : MonoBehaviour
 
     private ItemData itemData;
     public ItemData Data => itemData;
+    public int ItemId => itemId;
 
     private void Awake()
     {

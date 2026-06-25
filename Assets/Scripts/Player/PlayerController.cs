@@ -155,9 +155,9 @@ public class PlayerController : MonoBehaviour
         return inventory.CreateSaveData(currentEquipped);
     }
 
-    public void LoadInventorySaveData(InventorySaveData data, EquippableDatabase database)
+    public void LoadInventorySaveData(InventorySaveData data, EquippableDatabase equippableDatabase, ItemDataBase itemDatabase)
     {
-        if (data == null || database == null) return;
+        if (data == null || equippableDatabase == null || itemDatabase == null) return;
 
         if (currentEquipped != null)
         {
@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour
         currentWeapon = null;
         currentSack = null;
 
-        inventory.LoadSaveData(data, database);
+        inventory.LoadSaveData(data, equippableDatabase, itemDatabase);
 
         foreach (EquippableItem item in inventory.ItemList)
         {
