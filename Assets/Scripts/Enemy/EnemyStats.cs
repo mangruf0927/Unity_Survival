@@ -35,7 +35,7 @@ public class EnemyStats : MonoBehaviour, IDamageable
 
     private void OnDisable()
     {
-        hpBarController.UnRegister(this);
+        if (hpBarController != null) hpBarController.UnRegister(this);
         OnDamaged = null;
         OnDead = null;
     }
@@ -53,8 +53,8 @@ public class EnemyStats : MonoBehaviour, IDamageable
 
         CurrentHp = MaxHp;
 
-        hpBarController.Register(this);
-        enemyStateMachine.ChangeState(EnemyStateEnums.IDLE);
+        if (hpBarController != null) hpBarController.Register(this);
+        if (enemyStateMachine != null) enemyStateMachine.ChangeState(EnemyStateEnums.IDLE);
     }
 
     public void TakeDamage(int dmg)

@@ -16,11 +16,13 @@ public class EnemyController : MonoBehaviour
 
     private void OnEnable()
     {
+        if (enemyStats == null) return;
         enemyStats.OnDamaged += OnDamaged;
     }
 
     private void OnDisable()
     {
+        if (enemyStats == null) return;
         enemyStats.OnDamaged -= OnDamaged;
         alertEndTime = 0f;
     }

@@ -12,7 +12,7 @@ public class EnemyHPBarController : MonoBehaviour
     private void Awake()
     {
         mainCamera = Camera.main;
-        canvasRect = canvas.transform as RectTransform;
+        if (canvas != null) canvasRect = canvas.transform as RectTransform;
     }
 
     private void LateUpdate()
@@ -22,6 +22,7 @@ public class EnemyHPBarController : MonoBehaviour
             EnemyStats enemyStats = dic.Key;
             EnemyHPBar hpBar = dic.Value;
 
+            if (enemyStats == null || hpBar == null || enemyStats.HPBarPoint == null) continue;
             UpdatePosition(hpBar.transform as RectTransform, enemyStats.HPBarPoint.position);
         }
     }
@@ -55,12 +56,16 @@ public class EnemyHPBarController : MonoBehaviour
 
     public void Register(EnemyStats enemyStats)
     {
+        if (enemyStats == null) return;
+
         enemyStats.OnDamaged += ShowHPBar;
         enemyStats.OnDead += HideHPBar;
     }
 
     public void UnRegister(EnemyStats enemyStats)
     {
+        if (enemyStats == null) return;
+
         enemyStats.OnDamaged -= ShowHPBar;
         enemyStats.OnDead -= HideHPBar;
 
@@ -69,6 +74,8 @@ public class EnemyHPBarController : MonoBehaviour
 
     public void ShowHPBar(EnemyStats enemyStats)
     {
+        if (enemyStats == null) return;
+
         if (hpBarDictionary.TryGetValue(enemyStats, out EnemyHPBar hpBar))
         {
             hpBar.UpdateHPBar();
@@ -76,7 +83,11 @@ public class EnemyHPBarController : MonoBehaviour
         }
 
         GameObject hpObject = ObjectPool.Instance.GetFromPool(PoolTypeEnums.HPBAR);
+        if (hpObject == null) return;
+
         EnemyHPBar enemyHPBar = hpObject.GetComponent<EnemyHPBar>();
+        if (enemyHPBar == null) return;
+
         enemyHPBar.SetHPBar(enemyStats);
 
         hpBarDictionary.Add(enemyStats, enemyHPBar);

@@ -32,6 +32,12 @@ public class EnemySpawner : MonoBehaviour
                 continue;
             }
 
+            if (info.spawnPointList == null || info.spawnPointList.Count == 0)
+            {
+                Debug.LogError($"{info.enemyId} 스폰 포인트가 비어있습니다.");
+                continue;
+            }
+
             if (!GetEnemyType(info.enemyId, out PoolTypeEnums enemyType)) continue;
 
             if (typeToInfoDictionary.ContainsKey(enemyType))
@@ -65,11 +71,29 @@ public class EnemySpawner : MonoBehaviour
         EnemyData data = DataManager.Instance.EnemyTable.Get(info.enemyId);
 
         Transform spawnPoint = RandomSpawnPoint(info.spawnPointList);
+        if (spawnPoint == null)
+        {
+            Debug.LogError($"{info.enemyId} 스폰 포인트가 비어있습니다.");
+            return;
+        }
 
         GameObject enemy = ObjectPool.Instance.GetFromPool(data.EnemyType);
+        if (enemy == null)
+        {
+            Debug.LogError($"{data.EnemyType} 풀이 등록되어 있지 않습니다.");
+            return;
+        }
+
         enemy.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
 
         EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();
+        if (enemyStats == null)
+        {
+            Debug.LogError($"{enemy.name}에 EnemyStats가 없습니다.");
+            ObjectPool.Instance.ReturnToPool(enemy, data.EnemyType);
+            return;
+        }
+
         enemyStats.SetUp(data);
 
         enemyStats.OnDead -= EnemyDead;

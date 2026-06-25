@@ -11,6 +11,12 @@ public class ObjectPool
 
     public void Register(PoolData data, Transform parent)
     {
+        if (data == null || data.prefab == null)
+        {
+            Debug.LogError($"{data?.poolType} 풀 프리팹이 비어있습니다.");
+            return;
+        }
+
         if (dataDictionary.ContainsKey(data.poolType)) return;
 
         dataDictionary.Add(data.poolType, data);
