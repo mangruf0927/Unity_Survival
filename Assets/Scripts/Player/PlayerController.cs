@@ -150,6 +150,44 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
+    public InventorySaveData CreateInventorySaveData()
+    {
+        return inventory.CreateSaveData(currentEquipped);
+    }
+
+    public void LoadInventorySaveData(InventorySaveData data, EquippableDatabase database)
+    {
+        if (data == null || database == null) return;
+
+        if (currentEquipped != null)
+        {
+            currentEquipped.OnUnequip(this);
+        }
+
+        currentEquipped = null;
+        currentWeapon = null;
+        currentSack = null;
+
+        inventory.LoadSaveData(data, database);
+
+        foreach (EquippableItem item in inventory.ItemList)
+        {
+            if (item == null) continue;
+
+            item.Attach(equipPosition);
+            item.gameObject.SetActive(false);
+        }
+
+        if (data.equippedIndex >= 0)
+        {
+            EquipItem(data.equippedIndex);
+            return;
+        }
+
+        UpdateUpperBodyWeight();
+        OnEquipped?.Invoke(currentEquipped);
+    }
+
     private bool ReplacedItem(EquippableItem prevItem, EquippableItem newItem)
     {
         if (prevItem == null) return false;

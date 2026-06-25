@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -7,13 +6,22 @@ public class SaveLoadManager : MonoBehaviour
 {
     [SerializeField] private TimeSystem timeSystem;
     [SerializeField] private PlayerStats playerStats;
+    [SerializeField] private PlayerController playerController;
+    [SerializeField] private EquippableDatabase equippableDatabase;
 
     public void SaveData()
     {
+        if (timeSystem == null || playerStats == null || playerController == null)
+        {
+            Debug.LogError("Save failed. SaveLoadManager references are missing.");
+            return;
+        }
+
         SaveData saveData = new()
         {
             timeData = timeSystem.CreateSaveData(),
-            playerData = playerStats.CreateSaveData()
+            playerData = playerStats.CreateSaveData(),
+            inventoryData = playerController.CreateInventorySaveData()
         };
 
         string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
@@ -42,8 +50,15 @@ public class SaveLoadManager : MonoBehaviour
             return;
         }
 
+        if (timeSystem == null || playerStats == null || playerController == null || equippableDatabase == null)
+        {
+            Debug.LogError("Load failed. SaveLoadManager references are missing.");
+            return;
+        }
+
         timeSystem.LoadSaveData(saveData.timeData);
         playerStats.LoadSaveData(saveData.playerData);
+        playerController.LoadInventorySaveData(saveData.inventoryData, equippableDatabase);
 
         Debug.Log("Load Complete");
     }

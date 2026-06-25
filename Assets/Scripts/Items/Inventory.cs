@@ -24,6 +24,55 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public InventorySaveData CreateSaveData(EquippableItem currentEquipped)
+    {
+        InventorySaveData data = new()
+        {
+            itemIdList = new List<int>(),
+            equippedIndex = itemList.IndexOf(currentEquipped)
+        };
+
+        foreach (EquippableItem item in itemList)
+        {
+            if (item == null) continue;
+            data.itemIdList.Add(item.ItemId);
+        }
+
+        return data;
+    }
+
+    public void LoadSaveData(InventorySaveData data, EquippableDatabase database)
+    {
+        if (data == null || database == null) return;
+
+        foreach (EquippableItem item in itemList)
+        {
+            if (item != null)
+            {
+                Destroy(item.gameObject);
+            }
+        }
+
+        itemList.Clear();
+
+        if (data.itemIdList == null)
+        {
+            OnChanged?.Invoke();
+            return;
+        }
+
+        foreach (int itemId in data.itemIdList)
+        {
+            EquippableItem prefab = database.GetPrefab(itemId);
+            if (prefab == null) continue;
+
+            EquippableItem item = Instantiate(prefab);
+            itemList.Add(item);
+        }
+
+        OnChanged?.Invoke();
+    }
+
     public bool AddItem(EquippableItem newItem, out EquippableItem prevItem)
     {
         prevItem = null;

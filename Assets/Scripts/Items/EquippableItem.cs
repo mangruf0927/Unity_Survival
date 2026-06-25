@@ -5,12 +5,14 @@ public abstract class EquippableItem : MonoBehaviour
     [SerializeField] private ToolType itemType;
     [SerializeField] private Transform attachPoint;
     [SerializeField] private Sprite itemIcon;
+    [SerializeField] private int itemId;
 
     private Rigidbody rigid;
     private Collider[] colliders;
 
     public ToolType ItemType => itemType;
     public Sprite ItemIcon => itemIcon;
+    public int ItemId => itemId;
 
     protected bool canDrop = true;
     public virtual bool CanDrop => canDrop;

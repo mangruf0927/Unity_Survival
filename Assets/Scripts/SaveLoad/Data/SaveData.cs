@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class SaveData
 {
     public TimeSaveData timeData;
     public PlayerSaveData playerData;
+    public InventorySaveData inventoryData;
 }
 
 [Serializable]
@@ -27,4 +29,11 @@ public class PlayerSaveData
     public int currentHP;
     public float currentHunger;
     public float hungerTimer;
+}
+
+[Serializable]
+public class InventorySaveData
+{
+    public List<int> itemIdList;
+    public int equippedIndex;
 }

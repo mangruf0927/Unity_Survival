@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class MeleeWeapon : Weapon
 {
-    [SerializeField] private int weaponId;
     [SerializeField] private Collider hitCollider;
 
     private bool hasHit;
@@ -17,7 +16,7 @@ public class MeleeWeapon : Weapon
 
     private void Start()
     {
-        MeleeWeaponData data = DataManager.Instance.MeleeTable.Get(weaponId);
+        MeleeWeaponData data = DataManager.Instance.MeleeTable.Get(ItemId);
         SetUp(data);
     }
 

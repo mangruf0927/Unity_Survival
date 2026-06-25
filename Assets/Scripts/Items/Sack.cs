@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class Sack : EquippableItem, ISubject
 {
-    [SerializeField] private int sackId;
-
     private string sackName;
     private SackLevel sackLevel;
     private int capacity;
@@ -22,7 +20,7 @@ public class Sack : EquippableItem, ISubject
 
     private void Start()
     {
-        SackData data = DataManager.Instance.SackTable.Get(sackId);
+        SackData data = DataManager.Instance.SackTable.Get(ItemId);
         SetUp(data);
     }
 

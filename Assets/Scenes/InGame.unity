@@ -5734,6 +5734,7 @@ GameObject:
   m_Component:
   - component: {fileID: 858068049}
   - component: {fileID: 858068048}
+  - component: {fileID: 3000000001}
   m_Layer: 0
   m_Name: SaveLoadManager
   m_TagString: Untagged
@@ -5755,6 +5756,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SaveLoadManager
   timeSystem: {fileID: 2023553405}
   playerStats: {fileID: 1167997876}
+  playerController: {fileID: 1167997878}
+  equippableDatabase: {fileID: 3000000001}
 --- !u!4 &858068049
 Transform:
   m_ObjectHideFlags: 0
@@ -14633,6 +14636,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 498314152093778517, guid: bc2bee149548249b9a97deb76b0e2659, type: 3}
   m_PrefabInstance: {fileID: 3491255654831337902}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858068047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 356634cba98a0432bbade29df0fcf645, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EquippableDatabase
+  prefabList:
+  - {fileID: 495819712408775055, guid: 02bee19a06d7c492aab178b3bf2e35b8, type: 3}
+  - {fileID: 3262941196663201153, guid: 2e8e1240bc83d4535bf71f2e3a3e5807, type: 3}
+  - {fileID: 8686030284936840826, guid: 183ffa5064ba84a75ab585a31ca9503d, type: 3}
+  - {fileID: 5237301265010117455, guid: 9f319b9b0bddb4c6db6b7c47cfe3513d, type: 3}
+  - {fileID: 8302510858908887859, guid: 0d86ba22c5286464a86f86d39815823d, type: 3}
+  - {fileID: 1308764855148426312, guid: e70e641c32e874690bf7090f79d701f6, type: 3}
+  - {fileID: 909573281864137417, guid: d55e668cdc781464f876ad9b29e21cb2, type: 3}
+  - {fileID: 909573281864137417, guid: eeb8ecbf86e0c4922b0af0734d87d1ac, type: 3}
+  - {fileID: 8920029709564255238, guid: 9a5c342fa695e4347a073abd00a8e329, type: 3}
 --- !u!1001 &848269144412729598
 PrefabInstance:
   m_ObjectHideFlags: 0

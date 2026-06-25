@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class RangedWeapon : Weapon, ISubject
 {
-    [SerializeField] private int weaponId;
     [SerializeField] private Transform shootPosition;
 
     private readonly List<IObserver> ObserverList = new();
@@ -28,7 +27,7 @@ public class RangedWeapon : Weapon, ISubject
 
     private void Start()
     {
-        RangedWeaponData data = DataManager.Instance.RangedTable.Get(weaponId);
+        RangedWeaponData data = DataManager.Instance.RangedTable.Get(ItemId);
         SetUp(data);
     }
 
