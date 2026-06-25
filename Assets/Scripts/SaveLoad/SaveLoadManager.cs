@@ -63,4 +63,18 @@ public class SaveLoadManager : MonoBehaviour
 
         Debug.Log("Load Complete");
     }
+
+    public void DeleteData()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "Save.json");
+
+        if (!File.Exists(path))
+        {
+            Debug.LogWarning($"Save file not found: {path}");
+            return;
+        }
+
+        File.Delete(path);
+        Debug.Log($"Delete Complete: {path}");
+    }
 }
