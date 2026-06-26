@@ -12,6 +12,7 @@ public class EnemyDeadState : IEnemyState
     public void Enter()
     {
         // Debug.Log("Dead State");
+        enemyController.DropItems();
         ObjectPool.Instance.ReturnToPool(enemyController.gameObject, enemyController.EnemyType);
     }
 

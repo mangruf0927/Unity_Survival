@@ -15,6 +15,7 @@ public class EnemySpawnInfo
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private int requiredLevel;
+    [SerializeField] private ItemDataBase itemDataBase;
     [SerializeField] private List<EnemySpawnInfo> spawnInfoList;
 
     private Dictionary<PoolTypeEnums, EnemySpawnInfo> typeToInfoDictionary;
@@ -85,6 +86,11 @@ public class EnemySpawner : MonoBehaviour
         }
 
         enemy.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+
+        if (enemy.TryGetComponent(out EnemyDropper enemyDropper))
+        {
+            enemyDropper.SetUp(itemDataBase);
+        }
 
         EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();
         if (enemyStats == null)

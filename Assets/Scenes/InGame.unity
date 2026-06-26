@@ -7214,6 +7214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   requiredLevel: 3
+  itemDataBase: {fileID: 3000000002}
   spawnInfoList:
   - enemyId: 2002
     enemyCount: 1
@@ -8338,10 +8339,6 @@ PrefabInstance:
     - target: {fileID: 4818994991506592281, guid: f06f3972a1ee94adfaa2e633dbeb4595, type: 3}
       propertyPath: m_Name
       value: Bear
-      objectReference: {fileID: 0}
-    - target: {fileID: 4818994991506592281, guid: f06f3972a1ee94adfaa2e633dbeb4595, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12037,10 +12034,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: AlphaWolf
       objectReference: {fileID: 0}
-    - target: {fileID: 8177751994854317926, guid: 026fd91f5c06747eb8fd781c36502b0f, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13852,6 +13845,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   requiredLevel: 4
+  itemDataBase: {fileID: 3000000002}
   spawnInfoList:
   - enemyId: 2003
     enemyCount: 1
@@ -14093,6 +14087,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   requiredLevel: 0
+  itemDataBase: {fileID: 3000000002}
   spawnInfoList:
   - enemyId: 2001
     enemyCount: 2
@@ -14560,6 +14555,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   requiredLevel: 2
+  itemDataBase: {fileID: 3000000002}
   spawnInfoList:
   - enemyId: 2001
     enemyCount: 1
@@ -15043,6 +15039,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemDataBase
   prefabList:
   - {fileID: 4130831382163440775, guid: 9856752a9aa24416998136ffabec76c1, type: 3}
+  - {fileID: 557878269553330671, guid: 8f4b3135f9849413987b28356a21fa05, type: 3}
+  - {fileID: 8639760222476540744, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
 --- !u!1001 &848269144412729598
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15379,10 +15377,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wolf
       objectReference: {fileID: 0}
-    - target: {fileID: 498314152093778517, guid: bc2bee149548249b9a97deb76b0e2659, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7869437086160961948, guid: bc2bee149548249b9a97deb76b0e2659, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8
@@ -15491,10 +15485,6 @@ PrefabInstance:
     - target: {fileID: 5926484874372650512, guid: 903e0640b6fbc48da9e767646c31efb9, type: 3}
       propertyPath: m_Name
       value: Rabbit
-      objectReference: {fileID: 0}
-    - target: {fileID: 5926484874372650512, guid: 903e0640b6fbc48da9e767646c31efb9, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15716,34 +15706,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1766571644}
     m_Modifications:
-    - target: {fileID: 576566822512330229, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
-      propertyPath: m_Height
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 576566822512330229, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
-      propertyPath: m_Radius
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 576566822512330229, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
-      propertyPath: m_Center.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 576566822512330229, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
-      propertyPath: m_Direction
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4022025380256228450, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4022025380256228450, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4022025380256228450, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4022025380256228450, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
       propertyPath: m_LocalPosition.x
       value: 36
@@ -15787,18 +15749,6 @@ PrefabInstance:
     - target: {fileID: 5647235949069757637, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
       propertyPath: m_Name
       value: Morsel
-      objectReference: {fileID: 0}
-    - target: {fileID: 8676058271339129528, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8676058271339129528, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8676058271339129528, guid: 513b215d9b1214e52949fda724a05c00, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

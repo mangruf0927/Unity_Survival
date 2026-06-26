@@ -7,12 +7,18 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private NavMeshAgent navMesh;
     [SerializeField] private EnemyStats enemyStats;
     [SerializeField] private Animator animator;
+    [SerializeField] private EnemyDropper enemyDropper;
 
     private float alertEndTime;
     public bool IsAlerted => Time.time < alertEndTime;
 
     public PoolTypeEnums EnemyType => enemyStats.EnemyType;
     public Animator Animator => animator;
+
+    private void Awake()
+    {
+        if (enemyDropper == null) enemyDropper = GetComponent<EnemyDropper>();
+    }
 
     private void OnEnable()
     {
@@ -88,6 +94,11 @@ public class EnemyController : MonoBehaviour
     {
         if (navMesh.pathPending || !navMesh.hasPath) return false;
         return navMesh.remainingDistance <= 0.1f;
+    }
+
+    public void DropItems()
+    {
+        enemyDropper.DropItems();
     }
 
     void OnTriggerEnter(Collider other)
