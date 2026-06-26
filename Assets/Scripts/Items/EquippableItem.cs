@@ -13,6 +13,7 @@ public abstract class EquippableItem : MonoBehaviour
     public ToolType ItemType => itemType;
     public Sprite ItemIcon => itemIcon;
     public int ItemId => itemId;
+    public bool IsAttached { get; private set; }
 
     protected bool canDrop = true;
     public virtual bool CanDrop => canDrop;
@@ -25,6 +26,8 @@ public abstract class EquippableItem : MonoBehaviour
 
     public virtual void Attach(Transform position)
     {
+        IsAttached = true;
+
         transform.rotation = position.rotation * Quaternion.Inverse(attachPoint.rotation) * transform.rotation;
         transform.position += position.position - attachPoint.position;
         transform.SetParent(position, true);
@@ -47,6 +50,8 @@ public abstract class EquippableItem : MonoBehaviour
 
     public virtual void Detach()
     {
+        IsAttached = false;
+
         transform.SetParent(null);
 
         foreach (Collider col in colliders)

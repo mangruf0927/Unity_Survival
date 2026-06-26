@@ -62,7 +62,11 @@ public class GameInput : MonoBehaviour
             nextEquip = hit.collider.GetComponentInParent<EquippableItem>();
             nextItem = hit.collider.GetComponentInParent<Item>();
 
-            if (nextEquip != null)
+            if (nextEquip != null && nextEquip.IsAttached)
+            {
+                nextEquip = null;
+            }
+            else if (nextEquip != null)
             {
                 nextOutline = hit.collider.GetComponentInParent<Outline>();
             }
