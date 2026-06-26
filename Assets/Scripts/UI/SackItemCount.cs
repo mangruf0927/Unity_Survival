@@ -6,19 +6,21 @@ public class SackItemCount : MonoBehaviour, IObserver
     [SerializeField] private TextMeshProUGUI count;
     [SerializeField] private Sack sack;
 
-    private void Start()
+    private void OnEnable()
     {
         sack.AddObserver(this);
         Notify();
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         sack.RemoveObserver(this);
     }
 
     public void Notify()
     {
+        if (sack == null || count == null) return;
+
         count.text = $"{sack.Count} / {sack.Capacity}";
     }
 }

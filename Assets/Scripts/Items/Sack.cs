@@ -70,6 +70,10 @@ public class Sack : EquippableItem, ISubject
     {
         player.SetSack(this);
         gameObject.SetActive(true);
+
+        SackItemCount itemCount = GetComponentInChildren<SackItemCount>(true);
+        if (itemCount != null) itemCount.gameObject.SetActive(true);
+
         NotifyObservers();
     }
 
