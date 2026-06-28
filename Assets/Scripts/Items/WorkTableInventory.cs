@@ -13,9 +13,11 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
 
     private int wood = 0;
     private int iron = 0;
+    private int currentLevel = 1;
 
     public int Wood => wood;
     public int Iron => iron;
+    public int CurrentLevel => currentLevel;
 
     public WorkTableItem[] ItemList => itemList;
 
@@ -39,9 +41,14 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
         NotifyObservers();
     }
 
+    public bool IsUnlocked(WorkTableItem item)
+    {
+        return item.requiredLevel <= currentLevel;
+    }
+
     public bool CanBuy(WorkTableItem item)
     {
-        return wood >= item.needWood && iron >= item.needIron;
+        return IsUnlocked(item) && wood >= item.needWood && iron >= item.needIron;
     }
 
     public bool BuyItem(WorkTableItem item)
@@ -59,6 +66,8 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
 
         wood -= item.needWood;
         iron -= item.needIron;
+
+        if (item.unlocksNextLevel) currentLevel++;
 
         NotifyObservers();
         return true;
