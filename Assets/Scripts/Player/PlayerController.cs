@@ -336,6 +336,13 @@ public class PlayerController : MonoBehaviour
         IInteractable prev = currentInteractable;
         currentInteractable = null;
 
+        if (currentSack != null)
+        {
+            holdTimer = 0f;
+            if (interactionUI != null) interactionUI.Hide();
+            return;
+        }
+
         Collider[] hitArray = Physics.OverlapSphere(transform.position, playerStats.InteractDistance, ~0, QueryTriggerInteraction.Collide);
 
         float closestDistance = float.MaxValue;
@@ -343,8 +350,7 @@ public class PlayerController : MonoBehaviour
         {
             IInteractable interactable = hit.GetComponentInParent<IInteractable>();
 
-            if (interactable == null) continue;
-            if (!interactable.CanInteract(this)) continue;
+            if (interactable == null || !interactable.CanInteract(this)) continue;
 
             float distance = Vector3.Distance(transform.position, hit.transform.position);
 
@@ -379,6 +385,7 @@ public class PlayerController : MonoBehaviour
 
     public bool HasInteractable()
     {
+        if (currentSack != null) return false;
         return currentInteractable != null;
     }
 
