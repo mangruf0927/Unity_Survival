@@ -378,15 +378,24 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateHoldTimer()
     {
-        if (!isHolding || currentInteractable == null) return;
+        if (!isHolding || currentInteractable == null)
+        {
+            interactionUI.SetProgress(0f);
+            return;
+        }
 
         holdTimer += Time.deltaTime;
+
+        float progress = holdTimer / currentInteractable.HoldTime;
+        interactionUI.SetProgress(progress);
+
         if (holdTimer >= currentInteractable.HoldTime)
         {
             currentInteractable.Interact(this);
 
             holdTimer = 0f;
             isHolding = false;
+            interactionUI.SetProgress(0f);
         }
     }
 
@@ -398,7 +407,11 @@ public class PlayerController : MonoBehaviour
     public void SetHolding(bool state)
     {
         isHolding = state;
-        if (!isHolding) holdTimer = 0f;
+        if (!isHolding)
+        {
+            holdTimer = 0f;
+            interactionUI.SetProgress(0f);
+        }
     }
 
     private void UpdateUpperBodyWeight()

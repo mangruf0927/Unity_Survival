@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InteractionUI : MonoBehaviour
 {
     [SerializeField] private GameObject interactionKey;
+    [SerializeField] private Image ProgressImage;
 
     private Camera mainCamera;
     private RectTransform rectTransform;
@@ -24,6 +26,12 @@ public class InteractionUI : MonoBehaviour
     public void Hide()
     {
         interactionKey.SetActive(false);
+        SetProgress(0f);
+    }
+
+    public void SetProgress(float progress)
+    {
+        ProgressImage.fillAmount = Mathf.Clamp01(progress);
     }
 
     private void UpdatePosition(Vector3 worldPosition)
@@ -37,7 +45,6 @@ public class InteractionUI : MonoBehaviour
             interactionKey.SetActive(false);
             return;
         }
-
         rectTransform.position = screenPosition;
     }
 }
