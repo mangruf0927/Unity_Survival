@@ -20,16 +20,31 @@ public abstract class EquippableItem : MonoBehaviour
 
     private void Awake()
     {
-        rigid = GetComponent<Rigidbody>();
-        colliders = GetComponents<Collider>();
+        InitComponents();
     }
 
     public virtual void Attach(Transform position)
     {
+        if (position == null)
+        {
+            Debug.LogError($"{name} attach failed. Equip position is missing.", this);
+            return;
+        }
+
+        InitComponents();
         IsAttached = true;
 
-        transform.rotation = position.rotation * Quaternion.Inverse(attachPoint.rotation) * transform.rotation;
-        transform.position += position.position - attachPoint.position;
+        if (attachPoint != null)
+        {
+            transform.rotation = position.rotation * Quaternion.Inverse(attachPoint.rotation) * transform.rotation;
+            transform.position += position.position - attachPoint.position;
+        }
+        else
+        {
+            Debug.LogError($"{name} attach point is missing. Using item transform as the attach point.", this);
+            transform.SetPositionAndRotation(position.position, position.rotation);
+        }
+
         transform.SetParent(position, true);
 
         foreach (Collider col in colliders)
@@ -50,6 +65,7 @@ public abstract class EquippableItem : MonoBehaviour
 
     public virtual void Detach()
     {
+        InitComponents();
         IsAttached = false;
 
         transform.SetParent(null);
@@ -68,6 +84,12 @@ public abstract class EquippableItem : MonoBehaviour
             rigid.isKinematic = false;
             rigid.useGravity = true;
         }
+    }
+
+    private void InitComponents()
+    {
+        if (rigid == null) rigid = GetComponent<Rigidbody>();
+        if (colliders == null || colliders.Length == 0) colliders = GetComponentsInChildren<Collider>(true);
     }
 
     public abstract void OnEquip(PlayerController player);
