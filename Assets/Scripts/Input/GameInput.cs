@@ -86,6 +86,8 @@ public class GameInput : MonoBehaviour
 
         currentEquipped = nextEquip;
         currentItem = nextItem;
+
+        playerController.SetItemHovering(currentItem != null || currentEquipped != null);
     }
 
     private void ClearTarget()
@@ -122,9 +124,13 @@ public class GameInput : MonoBehaviour
         return -1;
     }
 
-    public void OnPick(InputValue value)        // E키 (무기 + 자루)
+    public void OnPick(InputValue value)        // E키 (총알 + 음식 + 장비 + 상호작용)
     {
-        if (!value.isPressed) return;
+        if (!value.isPressed)
+        {
+            playerController.SetHolding(false);
+            return;
+        }
 
         if (currentItem != null && currentItem.Data.ItemType == ItemType.AMMO)
         {
@@ -145,23 +151,18 @@ public class GameInput : MonoBehaviour
         {
             if (!playerController.GetEquippableItem(currentEquipped)) return;
             ClearTarget();
-        }
-    }
-
-    public void OnCollect(InputValue value)     // F키 (자루 아이템) + 상호작용
-    {
-        if (!value.isPressed)
-        {
-            playerController.SetHolding(false);
             return;
         }
 
         if (playerController.HasInteractable())
         {
-            playerController.SetHolding(value.isPressed);
+            playerController.SetHolding(true);
             return;
         }
+    }
 
+    public void OnCollect(InputValue value)     // F키 (자루 아이템)
+    {
         if (!value.isPressed) return;
 
         if (currentItem != null)

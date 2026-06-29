@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private Sack currentSack;
     private IInteractable currentInteractable;
 
+    private bool isItemHovering;
     private bool isHolding;
     private float holdTimer;
 
@@ -331,17 +332,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void SetItemHovering(bool state)
+    {
+        isItemHovering = state;
+
+        if (isItemHovering)
+        {
+            holdTimer = 0f;
+            isHolding = false;
+            if (interactionUI != null) interactionUI.Hide();
+        }
+    }
+
     private void FindInteractable()
     {
         IInteractable prev = currentInteractable;
         currentInteractable = null;
 
-        if (currentSack != null)
-        {
-            holdTimer = 0f;
-            if (interactionUI != null) interactionUI.Hide();
-            return;
-        }
 
         Collider[] hitArray = Physics.OverlapSphere(transform.position, playerStats.InteractDistance, ~0, QueryTriggerInteraction.Collide);
 
@@ -365,7 +372,7 @@ public class PlayerController : MonoBehaviour
 
         if (interactionUI == null) return;
 
-        if (currentInteractable != null) interactionUI.Show(currentInteractable.UIPosition);
+        if (currentInteractable != null && !isItemHovering) interactionUI.Show(currentInteractable.UIPosition);
         else interactionUI.Hide();
     }
 
@@ -385,7 +392,6 @@ public class PlayerController : MonoBehaviour
 
     public bool HasInteractable()
     {
-        if (currentSack != null) return false;
         return currentInteractable != null;
     }
 
