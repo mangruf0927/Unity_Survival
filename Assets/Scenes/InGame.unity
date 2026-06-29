@@ -2122,7 +2122,7 @@ Transform:
   m_Children:
   - {fileID: 626403895}
   - {fileID: 1065235937}
-  m_Father: {fileID: 910119761}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &288484888
 BoxCollider:
@@ -2215,34 +2215,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WorkTableInventory
   itemList:
-  - iconImage: {fileID: 21300000, guid: 9c459fd934f2c40f29a170b747733e13, type: 3}
+  - iconImage: {fileID: 21300000, guid: 9907662d01057466e9de3ef3fd07c0df, type: 3}
     itemName: "\uB9F5"
     itemPrefab: {fileID: -2267669233372935020, guid: e8f14847002f8414391b85a251ae3e4b, type: 3}
     needWood: 3
     needIron: 0
     requiredLevel: 1
     unlocksNextLevel: 0
-  - iconImage: {fileID: 21300000, guid: a2ae574ffb47340b2b63c8d7689cce40, type: 3}
+    purchaseLimit: 1
+  - iconImage: {fileID: 21300000, guid: 842b9f3248b844c7193607d23ed3c67f, type: 3}
     itemName: "\uB0A1\uC740 \uCE68\uB300"
     itemPrefab: {fileID: -2267669233372935020, guid: 5556f84142af04c70bccd5e4875adf97, type: 3}
     needWood: 20
     needIron: 0
     requiredLevel: 1
     unlocksNextLevel: 0
-  - iconImage: {fileID: 21300000, guid: 52d185301dd574f8dbd800a4980fb78f, type: 3}
+    purchaseLimit: 1
+  - iconImage: {fileID: 21300000, guid: e55c46b60e2e240f5b9672c92a8f5b34, type: 3}
     itemName: "\uACF5\uC608\uC6A9 \uBCA4\uCE58 2"
     itemPrefab: {fileID: -2267669233372935020, guid: 09c9ed8c8c68a42b3a1d1a20ad2d39a1, type: 3}
     needWood: 5
     needIron: 1
     requiredLevel: 1
     unlocksNextLevel: 1
-  - iconImage: {fileID: 21300000, guid: 6dd31f8a6c78147edb1abeb1b8c62cfe, type: 3}
+    purchaseLimit: 1
+  - iconImage: {fileID: 21300000, guid: a229f8d5432754e5988f5bd7e22d1a62, type: 3}
     itemName: "\uC77C\uBC18 \uCE68\uB300"
     itemPrefab: {fileID: -2267669233372935020, guid: 09c9ed8c8c68a42b3a1d1a20ad2d39a1, type: 3}
     needWood: 0
     needIron: 5
     requiredLevel: 2
     unlocksNextLevel: 0
+    purchaseLimit: 1
   inventoryUI: {fileID: 85674387}
   openTime: 2
   uiPoint: {fileID: 1065235937}
@@ -5309,51 +5313,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 114906568}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &729513375
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 729513377}
-  - component: {fileID: 729513376}
-  m_Layer: 0
-  m_Name: PhaseChangeTest
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &729513376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 729513375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b22b3e1289fec49b5a6cfacb612b41f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PhaseChangeTest
-  timeSystem: {fileID: 2023553405}
---- !u!4 &729513377
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 729513375}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.20588, y: 0.5, z: -7.37144}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &733142748
 GameObject:
   m_ObjectHideFlags: 0
@@ -5552,13 +5511,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1642925467}
   - {fileID: 856616880}
+  - {fileID: 1642925467}
   m_Father: {fileID: 1239549327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -30}
+  m_AnchoredPosition: {x: -80, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &752614443
@@ -6321,7 +6280,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200, y: -50}
+  m_AnchoredPosition: {x: 50, y: -50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &856616881
@@ -6959,8 +6918,6 @@ Transform:
   - {fileID: 505351168}
   - {fileID: 2216645238573800788}
   - {fileID: 1667093542}
-  - {fileID: 1184107775}
-  - {fileID: 288484887}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &911195304
@@ -8486,13 +8443,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1184107774}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 6, y: 1, z: 3}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2128122442}
-  m_Father: {fileID: 910119761}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1184107776
 BoxCollider:
@@ -12289,7 +12246,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2873e796b44ed49889ee22f5ef0e6c6f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5d70b6f8737714f0e877c2afd795f840, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12496,7 +12453,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -50}
+  m_AnchoredPosition: {x: 200, y: -50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1642925468
@@ -12798,9 +12755,9 @@ MonoBehaviour:
   - {fileID: 2138399095}
   - {fileID: 2061674565}
   - {fileID: 1617206549}
-  fuelImage: {fileID: 21300000, guid: 34657396b3a0b48fe9856f26ba6364c9, type: 3}
-  materialImage: {fileID: 21300000, guid: 2873e796b44ed49889ee22f5ef0e6c6f, type: 3}
-  foodImage: {fileID: 21300000, guid: 6e7a0ccb9140e4343b1951653c635313, type: 3}
+  fuelImage: {fileID: 21300000, guid: f17658cab6b8a457ea8ce3b93f03facb, type: 3}
+  materialImage: {fileID: 21300000, guid: 5d70b6f8737714f0e877c2afd795f840, type: 3}
+  foodImage: {fileID: 21300000, guid: 279156d8639f04dcea28422d1129b3c1, type: 3}
   itemName: {fileID: 1597320611}
   canvas: {fileID: 1775717917}
   rectTransform: {fileID: 1508411361}
@@ -13884,7 +13841,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6e7a0ccb9140e4343b1951653c635313, type: 3}
+  m_Sprite: {fileID: 21300000, guid: da4c3ab36079f4861bfde91cf54d08ef, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -17904,11 +17861,12 @@ SceneRoots:
   - {fileID: 1786133223}
   - {fileID: 370338872}
   - {fileID: 910119761}
+  - {fileID: 1184107775}
+  - {fileID: 288484887}
   - {fileID: 186318663}
   - {fileID: 1112786011}
   - {fileID: 634694067}
   - {fileID: 2023553406}
-  - {fileID: 729513377}
   - {fileID: 1199011575}
   - {fileID: 1011264661}
   - {fileID: 858068049}

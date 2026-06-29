@@ -24,6 +24,7 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
     public float HoldTime => openTime;
     public Vector3 UIPosition => uiPoint != null ? uiPoint.position : transform.position + Vector3.up * 3f;
 
+    private readonly Dictionary<WorkTableItem, int> purchaseDictionary = new();
     private readonly List<IObserver> ObserverList = new();
 
     public void AddMaterial(MaterialType type, int amount)
@@ -48,7 +49,8 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
 
     public bool CanBuy(WorkTableItem item)
     {
-        return IsUnlocked(item) && wood >= item.needWood && iron >= item.needIron;
+        return IsUnlocked(item) && !IsSoldOut(item) &&
+               wood >= item.needWood && iron >= item.needIron;
     }
 
     public bool BuyItem(WorkTableItem item)
@@ -67,19 +69,34 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
         wood -= item.needWood;
         iron -= item.needIron;
 
+        purchaseDictionary[item] = GetPurchaseCount(item) + 1;
+
         if (item.unlocksNextLevel) currentLevel++;
 
         NotifyObservers();
         return true;
     }
 
+    public int GetPurchaseCount(WorkTableItem item)
+    {
+        return purchaseDictionary.TryGetValue(item, out int count) ? count : 0;
+    }
+
+    public bool IsSoldOut(WorkTableItem item)
+    {
+        if (item.purchaseLimit < 0) return false;
+        return GetPurchaseCount(item) >= item.purchaseLimit;
+    }
+
     public bool CanInteract(PlayerController player)
     {
-        return inventoryUI != null && !inventoryUI.IsOpen;
+        return player != null && inventoryUI != null && !inventoryUI.IsOpen;
     }
 
     public void Interact(PlayerController player)
     {
+        if (!CanInteract(player)) return;
+
         currentPlayer = player;
         inventoryUI.OpenUI();
     }

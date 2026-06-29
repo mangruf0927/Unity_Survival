@@ -14,4 +14,6 @@ public class WorkTableItem
 
     public int requiredLevel = 1;
     public bool unlocksNextLevel;
+
+    public int purchaseLimit = 1;
 }
