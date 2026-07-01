@@ -132,6 +132,12 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
             return;
         }
 
+        if (!inventory.BuyItem(selectedItem))
+        {
+            Debug.Log($"{selectedItem.itemName} 구매에 실패했습니다.");
+            return;
+        }
+
         Debug.Log($"{selectedItem.itemName} 구매 완료");
 
         UpdateSlots();

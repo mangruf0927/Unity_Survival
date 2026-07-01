@@ -2375,9 +2375,9 @@ MonoBehaviour:
   - iconImage: {fileID: 21300000, guid: 842b9f3248b844c7193607d23ed3c67f, type: 3}
     itemName: "\uB0A1\uC740 \uCE68\uB300"
     description: 
-    itemPrefab: {fileID: -2267669233372935020, guid: 5556f84142af04c70bccd5e4875adf97, type: 3}
+    itemPrefab: {fileID: -2267669233372935020, guid: 860b38068d50247109232fc41fa0496e, type: 3}
     needIron: 0
-    needWood: 20
+    needWood: 0
     requiredLevel: 1
     unlocksNextLevel: 0
     purchaseLimit: 1
@@ -2393,10 +2393,10 @@ MonoBehaviour:
   - iconImage: {fileID: 21300000, guid: a229f8d5432754e5988f5bd7e22d1a62, type: 3}
     itemName: "\uC77C\uBC18 \uCE68\uB300"
     description: 
-    itemPrefab: {fileID: -2267669233372935020, guid: 09c9ed8c8c68a42b3a1d1a20ad2d39a1, type: 3}
-    needIron: 5
+    itemPrefab: {fileID: -2267669233372935020, guid: 0cdb04071af7f4417b614c400b444f46, type: 3}
+    needIron: 0
     needWood: 0
-    requiredLevel: 2
+    requiredLevel: 1
     unlocksNextLevel: 0
     purchaseLimit: 1
   - iconImage: {fileID: 21300000, guid: 72af138ab066a4c0d9963fcac11df123, type: 3}
@@ -2411,10 +2411,10 @@ MonoBehaviour:
   - iconImage: {fileID: 21300000, guid: 72af138ab066a4c0d9963fcac11df123, type: 3}
     itemName: "\uC88B\uC740 \uCE68\uB300"
     description: 
-    itemPrefab: {fileID: -2267669233372935020, guid: 09c9ed8c8c68a42b3a1d1a20ad2d39a1, type: 3}
-    needIron: 10
-    needWood: 10
-    requiredLevel: 3
+    itemPrefab: {fileID: -2267669233372935020, guid: 5556f84142af04c70bccd5e4875adf97, type: 3}
+    needIron: 0
+    needWood: 0
+    requiredLevel: 1
     unlocksNextLevel: 0
     purchaseLimit: 1
   inventoryUI: {fileID: 85674387}
@@ -17285,8 +17285,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0d60b9384b674d43b990def7760ff73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeSystem
-  dayTime: 180
-  nightTime: 90
+  dayTime: 3
+  nightTime: 3
 --- !u!4 &2023553406
 Transform:
   m_ObjectHideFlags: 0
