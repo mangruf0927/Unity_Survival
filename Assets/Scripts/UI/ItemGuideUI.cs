@@ -1,70 +1,100 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemGuideUI : MonoBehaviour
 {
+    [SerializeField] private List<CanvasGroup> guideGroupList;
     [SerializeField] private List<Image> slotList;
+    [SerializeField] private List<TextMeshProUGUI> textList;
 
     [SerializeField] private Sprite Ekey;
     [SerializeField] private Sprite FKey;
     [SerializeField] private Sprite RKey;
     [SerializeField] private Sprite BackKey;
 
+    private readonly struct GuideInfo
+    {
+        public readonly Sprite KeySprite;
+        public readonly string Text;
+
+        public GuideInfo(Sprite keySprite, string text)
+        {
+            KeySprite = keySprite;
+            Text = text;
+        }
+    }
+
     public void UpdateUI(EquippableItem equippedItem, Item hoveredItem, EquippableItem hoveredEquippable)
     {
         ClearUI();
 
-        List<Sprite> showList = new();
+        List<GuideInfo> showList = new();
         Sack sack = equippedItem as Sack;
 
         if (hoveredEquippable != null)
         {
-            showList.Add(Ekey);
+            showList.Add(new GuideInfo(Ekey, "가져가기"));
         }
         else if (hoveredItem != null)
         {
             ItemType itemType = hoveredItem.Data.ItemType;
 
-            if (itemType == ItemType.FOOD || itemType == ItemType.AMMO)
+            if (itemType == ItemType.FOOD)
             {
-                showList.Add(Ekey);
+                showList.Add(new GuideInfo(Ekey, "먹기"));
+            }
+            else if (itemType == ItemType.AMMO)
+            {
+                showList.Add(new GuideInfo(Ekey, "가져가기"));
             }
 
             if (sack != null && !sack.IsFull)
             {
-                showList.Add(FKey);
+                showList.Add(new GuideInfo(FKey, "상점"));
             }
         }
         else if (sack != null)
         {
             if (!sack.IsEmpty)
             {
-                showList.Add(FKey);
+                showList.Add(new GuideInfo(FKey, "저장 해제"));
             }
         }
         else if (equippedItem != null)
         {
-            if (equippedItem is RangedWeapon)
+            Weapon weapon = equippedItem as Weapon;
+
+            if (weapon is RangedWeapon)
             {
-                showList.Add(RKey);
+                showList.Add(new GuideInfo(RKey, "재장전"));
             }
 
-            if (equippedItem.CanDrop)
+            if (weapon != null && weapon.CanDrop)
             {
-                showList.Add(BackKey);
+                showList.Add(new GuideInfo(BackKey, "드롭"));
             }
         }
 
-        ShowImages(showList);
+        ShowGuides(showList);
     }
 
-    private void ShowImages(List<Sprite> showList)
+    private void ShowGuides(List<GuideInfo> showList)
     {
         for (int i = 0; i < showList.Count && i < slotList.Count; i++)
         {
-            slotList[i].sprite = showList[i];
-            slotList[i].enabled = true;
+            slotList[i].sprite = showList[i].KeySprite;
+
+            if (i < textList.Count)
+            {
+                textList[i].text = showList[i].Text;
+            }
+
+            if (i < guideGroupList.Count)
+            {
+                SetVisible(guideGroupList[i], true);
+            }
         }
     }
 
@@ -73,7 +103,23 @@ public class ItemGuideUI : MonoBehaviour
         foreach (Image slot in slotList)
         {
             slot.sprite = null;
-            slot.enabled = false;
         }
+
+        foreach (TextMeshProUGUI text in textList)
+        {
+            text.text = "";
+        }
+
+        foreach (CanvasGroup guideGroup in guideGroupList)
+        {
+            SetVisible(guideGroup, false);
+        }
+    }
+
+    private void SetVisible(CanvasGroup guideGroup, bool visible)
+    {
+        guideGroup.alpha = visible ? 1f : 0f;
+        guideGroup.blocksRaycasts = visible;
+        guideGroup.interactable = visible;
     }
 }

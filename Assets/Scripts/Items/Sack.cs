@@ -17,7 +17,7 @@ public class Sack : EquippableItem, ISubject
     public bool IsFull => itemStack.Count >= Capacity;
     public bool IsEmpty => itemStack.Count == 0;
 
-    private void Start()
+    private void Awake()
     {
         SackData data = DataManager.Instance.SackTable.Get(ItemId);
         SetUp(data);

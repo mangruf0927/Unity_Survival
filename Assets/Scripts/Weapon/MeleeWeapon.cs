@@ -13,7 +13,7 @@ public class MeleeWeapon : Weapon
     public MeleeLevel Level => meleeLevel;
     public override bool CanDrop => canDrop;
 
-    private void Start()
+    private void Awake()
     {
         MeleeWeaponData data = DataManager.Instance.MeleeTable.Get(ItemId);
         SetUp(data);
