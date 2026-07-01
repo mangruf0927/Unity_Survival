@@ -11,9 +11,10 @@ public class HUDController : MonoBehaviour
     [SerializeField] private ItemHoverUI itemHoverUI;
 
     private EquippableItem currentEquipped;
+    private EquippableItem currentHoverEquippable;
     private Item currentItem;
 
-    private void Start()
+    private void Awake()
     {
         player.OnEquipped += EquippedItem;
         player.OnSackChanged += RefreshItemGuideUI;
@@ -21,6 +22,7 @@ public class HUDController : MonoBehaviour
         inventoryUI.OnSelectSlot += SelectSlot;
 
         gameInput.OnHoverItem += ShowItem;
+        gameInput.OnHoverEquippable += ShowEquippable;
         gameInput.OnExitItem += HideItem;
     }
 
@@ -32,6 +34,7 @@ public class HUDController : MonoBehaviour
         inventoryUI.OnSelectSlot -= SelectSlot;
 
         gameInput.OnHoverItem -= ShowItem;
+        gameInput.OnHoverEquippable -= ShowEquippable;
         gameInput.OnExitItem -= HideItem;
     }
 
@@ -52,6 +55,16 @@ public class HUDController : MonoBehaviour
     private void ShowItem(Item item)
     {
         currentItem = item;
+        currentHoverEquippable = null;
+
+        itemHoverUI.ShowUI(item);
+        RefreshItemGuideUI();
+    }
+
+    private void ShowEquippable(EquippableItem item)
+    {
+        currentItem = null;
+        currentHoverEquippable = item;
 
         itemHoverUI.ShowUI(item);
         RefreshItemGuideUI();
@@ -60,6 +73,7 @@ public class HUDController : MonoBehaviour
     private void HideItem()
     {
         currentItem = null;
+        currentHoverEquippable = null;
 
         itemHoverUI.HideUI();
         RefreshItemGuideUI();
@@ -67,6 +81,6 @@ public class HUDController : MonoBehaviour
 
     private void RefreshItemGuideUI()
     {
-        itemGuideUI.UpdateUI(currentEquipped, currentItem);
+        itemGuideUI.UpdateUI(currentEquipped, currentItem, currentHoverEquippable);
     }
 }

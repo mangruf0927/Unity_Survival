@@ -18,6 +18,7 @@ public class GameInput : MonoBehaviour
     private Camera mainCamera;
 
     public event Action<Item> OnHoverItem;
+    public event Action<EquippableItem> OnHoverEquippable;
     public event Action OnExitItem;
 
     private void Awake()
@@ -40,7 +41,7 @@ public class GameInput : MonoBehaviour
     {
         if (playerController.CurrentWeapon == null) return;
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
-        if (EventSystem.current == null || EventSystem.current.IsPointerOverGameObject()) return;
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
         Ray camRay = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(camRay, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide)) playerController.SetAimPoint(hit.point);
@@ -78,9 +79,10 @@ public class GameInput : MonoBehaviour
 
         UpdateOutline(nextOutline);
 
-        if (currentItem != nextItem)
+        if (currentItem != nextItem || currentEquipped != nextEquip)
         {
             if (nextItem != null) OnHoverItem?.Invoke(nextItem);
+            else if (nextEquip != null) OnHoverEquippable?.Invoke(nextEquip);
             else OnExitItem?.Invoke();
         }
 
@@ -119,7 +121,8 @@ public class GameInput : MonoBehaviour
             Key key = Key.Digit1 + i;
             Key numpadKey = Key.Numpad1 + i;
 
-            if (Keyboard.current[key].wasPressedThisFrame || Keyboard.current[numpadKey].wasPressedThisFrame) return i;
+            if (Keyboard.current[key].wasPressedThisFrame ||
+                Keyboard.current[numpadKey].wasPressedThisFrame) return i;
         }
         return -1;
     }

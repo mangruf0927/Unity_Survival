@@ -7,10 +7,13 @@ public abstract class EquippableItem : MonoBehaviour
     [SerializeField] private Sprite itemIcon;
     [SerializeField] private int itemId;
 
+    protected string itemName;
+
     private Rigidbody rigid;
     private Collider[] colliders;
 
     public ToolType ItemType => itemType;
+    public string ItemName => itemName;
     public Sprite ItemIcon => itemIcon;
     public int ItemId => itemId;
     public bool IsAttached { get; private set; }

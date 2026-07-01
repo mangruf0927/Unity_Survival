@@ -6,7 +6,6 @@ public class MeleeWeapon : Weapon
 
     private bool hasHit;
 
-    private string weaponName;
     private MeleeLevel meleeLevel;
     private int attackDamage;
     private int treeDamage;
@@ -22,7 +21,7 @@ public class MeleeWeapon : Weapon
 
     public void SetUp(MeleeWeaponData data)
     {
-        weaponName = data.Name;
+        itemName = data.Name;
         meleeLevel = data.MeleeLevel;
         attackDamage = data.AttackDamage;
         treeDamage = data.TreeDamage;
@@ -62,4 +61,3 @@ public class MeleeWeapon : Weapon
         }
     }
 }
-

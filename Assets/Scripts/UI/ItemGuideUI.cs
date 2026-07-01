@@ -11,14 +11,18 @@ public class ItemGuideUI : MonoBehaviour
     [SerializeField] private Sprite RKey;
     [SerializeField] private Sprite BackKey;
 
-    public void UpdateUI(EquippableItem equippedItem, Item hoveredItem)
+    public void UpdateUI(EquippableItem equippedItem, Item hoveredItem, EquippableItem hoveredEquippable)
     {
         ClearUI();
 
         List<Sprite> showList = new();
         Sack sack = equippedItem as Sack;
 
-        if (hoveredItem != null)
+        if (hoveredEquippable != null)
+        {
+            showList.Add(Ekey);
+        }
+        else if (hoveredItem != null)
         {
             ItemType itemType = hoveredItem.Data.ItemType;
 

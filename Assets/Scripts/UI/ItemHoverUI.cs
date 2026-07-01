@@ -19,6 +19,7 @@ public class ItemHoverUI : MonoBehaviour
     private Camera mainCamera;
     private RectTransform canvasRect;
     private Item currentItem;
+    private EquippableItem currentEquippable;
 
     private readonly Dictionary<ItemType, Sprite> imageDictionary = new();
     private readonly Vector3 offset = new(0f, 1.5f, 0f);
@@ -37,7 +38,7 @@ public class ItemHoverUI : MonoBehaviour
 
     private void Update()
     {
-        if (currentItem == null) return;
+        if (currentItem == null && currentEquippable == null) return;
 
         UpdatePosition();
     }
@@ -51,6 +52,7 @@ public class ItemHoverUI : MonoBehaviour
         }
 
         currentItem = item;
+        currentEquippable = null;
         HoverUI.SetActive(true);
 
         HideImages();
@@ -70,10 +72,32 @@ public class ItemHoverUI : MonoBehaviour
         UpdatePosition();
     }
 
+    public void ShowUI(EquippableItem item)
+    {
+        if (item == null)
+        {
+            HideUI();
+            return;
+        }
+
+        currentItem = null;
+        currentEquippable = item;
+
+        HoverUI.SetActive(true);
+        HideImages();
+
+        itemName.text = item.ItemName;
+        UpdatePosition();
+    }
+
     private void UpdatePosition()
     {
-        Collider itemCollider = currentItem.GetComponentInChildren<Collider>();
-        Vector3 itemPosition = itemCollider != null ? itemCollider.bounds.center : currentItem.transform.position;
+        Transform targetTransform = currentItem != null ? currentItem.transform : currentEquippable.transform;
+        Collider targetCollider = currentItem != null
+            ? currentItem.GetComponentInChildren<Collider>()
+            : currentEquippable.GetComponentInChildren<Collider>();
+
+        Vector3 itemPosition = targetCollider != null ? targetCollider.bounds.center : targetTransform.position;
         Vector3 worldPos = itemPosition + offset;
         Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(mainCamera, worldPos);
 
@@ -86,6 +110,7 @@ public class ItemHoverUI : MonoBehaviour
     public void HideUI()
     {
         currentItem = null;
+        currentEquippable = null;
         itemName.text = "";
 
         HideImages();

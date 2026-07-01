@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Sack : EquippableItem, ISubject
 {
-    private string sackName;
     private SackLevel sackLevel;
     private int capacity;
 
@@ -26,7 +25,7 @@ public class Sack : EquippableItem, ISubject
 
     public void SetUp(SackData data)
     {
-        sackName = data.Name;
+        itemName = data.Name;
         sackLevel = data.Level;
         capacity = data.Capacity;
         canDrop = data.CanDrop;

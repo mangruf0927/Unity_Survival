@@ -10,7 +10,6 @@ public class RangedWeapon : Weapon, ISubject
     private int totalAmmo = 0;
     private int currentAmmo;
 
-    private string weaponName;
     private AmmoType ammoType;
     private int attackDamage;
     private int magSize;
@@ -33,7 +32,7 @@ public class RangedWeapon : Weapon, ISubject
 
     public void SetUp(RangedWeaponData data)
     {
-        weaponName = data.Name;
+        itemName = data.Name;
         ammoType = data.Type;
         attackDamage = data.AttackDamage;
         magSize = data.MagSize;
