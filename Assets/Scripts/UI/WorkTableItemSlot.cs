@@ -7,6 +7,7 @@ public class WorkTableItemSlot : MonoBehaviour
     [SerializeField] private Image iconImage;
     [SerializeField] private TextMeshProUGUI nameText;
 
+    [SerializeField] private GameObject selectedImage;
     [SerializeField] private GameObject ironCost;
     [SerializeField] private GameObject woodCost;
     [SerializeField] private GameObject purchaseLimit;
@@ -35,6 +36,7 @@ public class WorkTableItemSlot : MonoBehaviour
         ironCostText.text = item.needIron.ToString();
         woodCostText.text = item.needWood.ToString();
 
+        selectedImage.SetActive(false);
         SetPurchaseLimit();
         UpdateSlot();
     }
@@ -74,8 +76,13 @@ public class WorkTableItemSlot : MonoBehaviour
         lockOverlay.gameObject.SetActive(!unlocked);
     }
 
+    public void SetSelected(bool selected)
+    {
+        selectedImage.SetActive(selected);
+    }
+
     public void OnClickSlot()
     {
-        inventoryUI.SelectItem(item);
+        inventoryUI.SelectSlot(this, item);
     }
 }

@@ -28,6 +28,7 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
     [SerializeField] private Transform level3Parent;
 
     private readonly List<WorkTableItemSlot> slots = new();
+    private WorkTableItemSlot selectedSlot;
     private WorkTableItem selectedItem;
 
     private bool isOpen;
@@ -95,9 +96,17 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
         }
     }
 
-    public void SelectItem(WorkTableItem item)
+    public void SelectSlot(WorkTableItemSlot slot, WorkTableItem item)
     {
+        if (selectedSlot != null)
+        {
+            selectedSlot.SetSelected(false);
+        }
+
+        selectedSlot = slot;
         selectedItem = item;
+        selectedSlot.SetSelected(true);
+
         UpdateDetail();
     }
 
