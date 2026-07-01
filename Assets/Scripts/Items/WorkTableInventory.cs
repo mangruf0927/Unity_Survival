@@ -11,12 +11,12 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
 
     private PlayerController currentPlayer;
 
-    private int wood = 0;
     private int iron = 0;
+    private int wood = 0;
     private int currentLevel = 1;
 
-    public int Wood => wood;
     public int Iron => iron;
+    public int Wood => wood;
     public int CurrentLevel => currentLevel;
 
     public WorkTableItem[] ItemList => itemList;
@@ -29,13 +29,13 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
 
     public void AddMaterial(MaterialType type, int amount)
     {
-        if (type == MaterialType.WOOD)
-        {
-            wood += amount;
-        }
-        else if (type == MaterialType.IRON)
+        if (type == MaterialType.IRON)
         {
             iron += amount;
+        }
+        else if (type == MaterialType.WOOD)
+        {
+            wood += amount;
         }
         else return;
 
@@ -47,10 +47,22 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
         return item.requiredLevel <= currentLevel;
     }
 
+    public bool IsSoldOut(WorkTableItem item)
+    {
+        if (item.purchaseLimit < 0) return false;
+        return GetPurchaseCount(item) >= item.purchaseLimit;
+    }
+
+    public bool HasMaterial(WorkTableItem item)
+    {
+        return iron >= item.needIron && wood >= item.needWood;
+    }
+
     public bool CanBuy(WorkTableItem item)
     {
-        return IsUnlocked(item) && !IsSoldOut(item) &&
-               wood >= item.needWood && iron >= item.needIron;
+        return IsUnlocked(item)
+               && !IsSoldOut(item)
+               && HasMaterial(item);
     }
 
     public bool BuyItem(WorkTableItem item)
@@ -66,8 +78,8 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
             return false;
         }
 
-        wood -= item.needWood;
         iron -= item.needIron;
+        wood -= item.needWood;
 
         purchaseDictionary[item] = GetPurchaseCount(item) + 1;
 
@@ -80,12 +92,6 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
     public int GetPurchaseCount(WorkTableItem item)
     {
         return purchaseDictionary.TryGetValue(item, out int count) ? count : 0;
-    }
-
-    public bool IsSoldOut(WorkTableItem item)
-    {
-        if (item.purchaseLimit < 0) return false;
-        return GetPurchaseCount(item) >= item.purchaseLimit;
     }
 
     public bool CanInteract(PlayerController player)

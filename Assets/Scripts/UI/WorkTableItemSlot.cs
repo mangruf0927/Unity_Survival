@@ -7,12 +7,12 @@ public class WorkTableItemSlot : MonoBehaviour
     [SerializeField] private Image iconImage;
     [SerializeField] private TextMeshProUGUI nameText;
 
-    [SerializeField] private GameObject woodCost;
     [SerializeField] private GameObject ironCost;
+    [SerializeField] private GameObject woodCost;
     [SerializeField] private GameObject purchaseLimit;
 
-    [SerializeField] private TextMeshProUGUI woodCostText;
     [SerializeField] private TextMeshProUGUI ironCostText;
+    [SerializeField] private TextMeshProUGUI woodCostText;
 
     [SerializeField] private TextMeshProUGUI purchaseLimitText;
     [SerializeField] private TextMeshProUGUI soldOutText;
@@ -21,21 +21,26 @@ public class WorkTableItemSlot : MonoBehaviour
 
     private WorkTableItem item;
     private WorkTableInventory inventory;
+    private WorkTableInventoryUI inventoryUI;
 
-    public void SetUp(WorkTableItem item, WorkTableInventory inventory)
+    public void SetUp(WorkTableItem item, WorkTableInventory inventory, WorkTableInventoryUI inventoryUI)
     {
         this.item = item;
         this.inventory = inventory;
+        this.inventoryUI = inventoryUI;
 
         iconImage.sprite = item.iconImage;
         nameText.text = item.itemName;
 
-        if (item.needWood == 0) woodCost.SetActive(false);
-        if (item.needIron == 0) ironCost.SetActive(false);
-
-        woodCostText.text = item.needWood.ToString();
         ironCostText.text = item.needIron.ToString();
+        woodCostText.text = item.needWood.ToString();
 
+        SetPurchaseLimit();
+        UpdateSlot();
+    }
+
+    private void SetPurchaseLimit()
+    {
         if (item.purchaseLimit < 0)
         {
             purchaseLimitText.text = "∞";
@@ -50,8 +55,6 @@ public class WorkTableItemSlot : MonoBehaviour
         {
             purchaseLimit.SetActive(false);
         }
-
-        UpdateSlot();
     }
 
     public void UpdateSlot()
@@ -61,11 +64,11 @@ public class WorkTableItemSlot : MonoBehaviour
 
         iconImage.color = unlocked ? Color.white : new Color(0.25f, 0.25f, 0.25f, 1f);
         nameText.color = unlocked ? Color.white : Color.gray;
-        woodCostText.color = unlocked ? Color.white : Color.gray;
         ironCostText.color = unlocked ? Color.white : Color.gray;
+        woodCostText.color = unlocked ? Color.white : Color.gray;
 
-        woodCost.SetActive(!soldOut && item.needWood > 0);
         ironCost.SetActive(!soldOut && item.needIron > 0);
+        woodCost.SetActive(!soldOut && item.needWood > 0);
         soldOutText.gameObject.SetActive(soldOut);
 
         lockOverlay.gameObject.SetActive(!unlocked);
@@ -73,23 +76,6 @@ public class WorkTableItemSlot : MonoBehaviour
 
     public void OnClickSlot()
     {
-        if (inventory.IsSoldOut(item))
-        {
-            Debug.Log($"{item.itemName} 구매 완료된 아이템입니다.");
-            return;
-        }
-
-        if (!inventory.IsUnlocked(item))
-        {
-            Debug.Log($"{item.itemName} 구매할 수 없습니다.");
-            return;
-        }
-
-        if (!inventory.BuyItem(item))
-        {
-            Debug.Log($"{item.itemName} 구매 재료가 부족합니다.");
-            return;
-        }
-        Debug.Log($"{item.itemName} 구매 완료");
+        inventoryUI.SelectItem(item);
     }
 }

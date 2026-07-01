@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WorkTableInventoryUI : MonoBehaviour, IObserver
 {
@@ -8,12 +10,25 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
     [Header("UI")]
     [SerializeField] private GameObject inventoryPanel;
 
+    [Header("Detail")]
+    [SerializeField] private GameObject detailPanel;
+    [SerializeField] private Image iconImage;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI descriptionText;
+    [SerializeField] private GameObject ironCost;
+    [SerializeField] private GameObject woodCost;
+    [SerializeField] private TextMeshProUGUI ironCostText;
+    [SerializeField] private TextMeshProUGUI woodCostText;
+    [SerializeField] private Button craftButton;
+
     [Header("Slot")]
     [SerializeField] private WorkTableItemSlot slotPrefab;
     [SerializeField] private Transform level1Parent;
     [SerializeField] private Transform level2Parent;
+    [SerializeField] private Transform level3Parent;
 
     private readonly List<WorkTableItemSlot> slots = new();
+    private WorkTableItem selectedItem;
 
     private bool isOpen;
     public bool IsOpen => isOpen;
@@ -21,8 +36,11 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
     private void Awake()
     {
         inventory.AddObserver(this);
+
         CreateSlots();
+
         inventoryPanel.SetActive(false);
+        detailPanel.SetActive(false);
     }
 
     private void OnDestroy()
@@ -34,7 +52,9 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
     {
         isOpen = true;
         inventoryPanel.SetActive(true);
+
         UpdateSlots();
+        UpdateDetail();
     }
 
     public void CloseUI()
@@ -52,7 +72,8 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
             Transform parent = GetParentByLevel(itemList[i].requiredLevel);
 
             WorkTableItemSlot slot = Instantiate(slotPrefab, parent);
-            slot.SetUp(itemList[i], inventory);
+            slot.SetUp(itemList[i], inventory, this);
+
             slots.Add(slot);
         }
     }
@@ -61,6 +82,7 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
     {
         if (level == 1) return level1Parent;
         if (level == 2) return level2Parent;
+        if (level == 3) return level3Parent;
 
         return level1Parent;
     }
@@ -73,8 +95,74 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
         }
     }
 
+    public void SelectItem(WorkTableItem item)
+    {
+        selectedItem = item;
+        UpdateDetail();
+    }
+
+    public void BuySelectedItem()
+    {
+        if (selectedItem == null) return;
+
+        if (!inventory.IsUnlocked(selectedItem))
+        {
+            Debug.Log($"{selectedItem.itemName} 구매할 수 없습니다.");
+            return;
+        }
+
+        if (inventory.IsSoldOut(selectedItem))
+        {
+            Debug.Log($"{selectedItem.itemName} 구매 완료된 아이템입니다.");
+            return;
+        }
+
+        if (!inventory.HasMaterial(selectedItem))
+        {
+            Debug.Log($"{selectedItem.itemName} 구매 재료가 부족합니다.");
+            return;
+        }
+
+        Debug.Log($"{selectedItem.itemName} 구매 완료");
+
+        UpdateSlots();
+        UpdateDetail();
+    }
+
+    private void UpdateDetail()
+    {
+        bool hasItem = selectedItem != null;
+
+        detailPanel.SetActive(hasItem);
+        if (!hasItem) return;
+
+        SetDetailInfo(selectedItem);
+        SetDetailCost(selectedItem);
+
+        craftButton.interactable = hasItem;
+    }
+
+    private void SetDetailInfo(WorkTableItem item)
+    {
+        iconImage.sprite = item.iconImage;
+        nameText.text = item.itemName;
+        descriptionText.text = item.description;
+    }
+
+    private void SetDetailCost(WorkTableItem item)
+    {
+        bool soldOut = inventory.IsSoldOut(item);
+
+        ironCost.SetActive(!soldOut && item.needIron > 0);
+        woodCost.SetActive(!soldOut && item.needWood > 0);
+
+        ironCostText.text = item.needIron.ToString();
+        woodCostText.text = item.needWood.ToString();
+    }
+
     public void Notify()
     {
         UpdateSlots();
+        UpdateDetail();
     }
 }
