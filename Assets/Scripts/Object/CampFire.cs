@@ -3,36 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// { 1, 100, 200, 750, 2300, 5000 }
 public class CampFire : MonoBehaviour, ISubject
 {
     [SerializeField] private ParticleSystem fire;
 
-    [SerializeField] private int[] fuelLevelList;
     [SerializeField] private float intervalTime;
     [SerializeField] private int decreaseAmount;
 
     private readonly List<IObserver> observerList = new();
-    private const int MaxLevel = 6;
+    private const float MaxFuel = 100f;
+    private const int MaxLevel = 5;
 
     private int currentLevel = 0;
-    private int currentFuel = 0;
+    private float currentFuel = 0f;
     private bool isBurning;
     private float decreaseTimer;
     private Coroutine decreaseCoroutine;
 
     public int CurrentLevel => currentLevel;
-    public int CurrentFuel => currentFuel;
+    public float CurrentFuel => currentFuel;
     public bool IsBurning => isBurning;
     public float DecreaseTimer => decreaseTimer;
-    public int NeedFuel
-    {
-        get
-        {
-            if (currentLevel >= fuelLevelList.Length) return currentFuel;
-            return fuelLevelList[currentLevel];
-        }
-    }
 
     public event Action<int> OnLevelUp;
     public event Action<bool> OnFireChanged;
@@ -83,7 +74,7 @@ public class CampFire : MonoBehaviour, ISubject
         NotifyObservers();
     }
 
-    private void AddFuel(int amount)
+    private void AddFuel(float amount)
     {
         if (amount <= 0) return;
 
@@ -116,7 +107,7 @@ public class CampFire : MonoBehaviour, ISubject
 
                 if (currentFuel <= 0)
                 {
-                    currentFuel = 0;
+                    currentFuel = 0f;
                     decreaseTimer = 0f;
                     OffFire();
                     NotifyObservers();
@@ -133,19 +124,14 @@ public class CampFire : MonoBehaviour, ISubject
     private bool CanLevelUp()
     {
         if (currentLevel >= MaxLevel) return false;
-        if (currentLevel >= fuelLevelList.Length) return false;
 
-        return currentFuel >= fuelLevelList[currentLevel];
+        return currentFuel >= MaxFuel;
     }
 
     private void LevelUp()
     {
         currentLevel += 1;
-
-        if (currentLevel < fuelLevelList.Length)
-        {
-            currentFuel = Mathf.CeilToInt(fuelLevelList[currentLevel] * 0.29f);
-        }
+        currentFuel = Mathf.Ceil(MaxFuel * 0.29f);
         OnLevelUp?.Invoke(currentLevel);
     }
 
@@ -181,7 +167,8 @@ public class CampFire : MonoBehaviour, ISubject
         if (item.Data == null || item.Data.FuelData == null) return;
         if (item.Data.ItemType != ItemType.FUEL) return;
 
-        AddFuel(item.Data.FuelData.BurnPower);
+        int fuelLevel = Mathf.Max(currentLevel, 1);
+        AddFuel(item.Data.FuelData.GetBurnPower(fuelLevel));
         Destroy(item.gameObject);
     }
 

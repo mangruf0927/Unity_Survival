@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemData : IGameData, IValidatable
@@ -39,13 +40,39 @@ public class ItemData : IGameData, IValidatable
             return false;
         }
 
+        if (ItemType == ItemType.FUEL)
+        {
+            if (FuelData == null || FuelData.BurnPowerList == null || FuelData.BurnPowerList.Count == 0)
+            {
+                Debug.LogError($"FuelData is missing. Id: {Id}, Name: {Name}");
+                return false;
+            }
+
+            foreach (float burnPower in FuelData.BurnPowerList)
+            {
+                if (burnPower < 0f)
+                {
+                    Debug.LogError($"BurnPower is invalid. Id: {Id}, Name: {Name}, BurnPower: {burnPower}");
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 }
 
 public class FuelData
 {
-    public int BurnPower { get; set; }
+    public List<float> BurnPowerList { get; set; }
+
+    public float GetBurnPower(int campFireLevel)
+    {
+        if (BurnPowerList == null || BurnPowerList.Count == 0) return 0f;
+
+        int index = Mathf.Clamp(campFireLevel - 1, 0, BurnPowerList.Count - 1);
+        return BurnPowerList[index];
+    }
 }
 
 public class FoodData

@@ -25,18 +25,16 @@ public class CampFireProgressUI : MonoBehaviour, IObserver
     {
         if (campFire == null) return;
 
-        float ratio = campFire.NeedFuel <= 0 ? 0f : Mathf.Clamp01((float)campFire.CurrentFuel / campFire.NeedFuel);
-        int displayFuel = Mathf.RoundToInt(ratio * 100);
 
         if (fuelSlider != null)
         {
             fuelSlider.maxValue = 100;
-            fuelSlider.value = displayFuel;
+            fuelSlider.value = campFire.CurrentFuel;
         }
 
         if (fuelText != null)
         {
-            fuelText.text = $"level {campFire.CurrentLevel} progress : {displayFuel} / {100}";
+            fuelText.text = $"level {campFire.CurrentLevel} progress : {(int)campFire.CurrentFuel} / {100}";
         }
     }
 }

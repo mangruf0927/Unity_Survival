@@ -36,7 +36,7 @@ public class PlayerSaveData
 public class CampFireSaveData
 {
     public int currentLevel;
-    public int currentFuel;
+    public float currentFuel;
     public bool isBurning;
     public float decreaseTimer;
 }
