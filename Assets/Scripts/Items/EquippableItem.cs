@@ -92,7 +92,7 @@ public abstract class EquippableItem : MonoBehaviour
     private void InitComponents()
     {
         if (rigid == null) rigid = GetComponent<Rigidbody>();
-        if (colliders == null || colliders.Length == 0) colliders = GetComponentsInChildren<Collider>(true);
+        if (colliders == null || colliders.Length == 0) colliders = GetComponents<Collider>();
     }
 
     public abstract void OnEquip(PlayerController player);
