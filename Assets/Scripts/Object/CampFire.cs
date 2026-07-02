@@ -6,28 +6,30 @@ using UnityEngine;
 public class CampFire : MonoBehaviour, ISubject
 {
     [SerializeField] private ParticleSystem fire;
-
-    [SerializeField] private List<float> decreaseTimeList = new() { 1f, 5f, 10f, 15f, 20f };
-    [SerializeField] private int decreaseAmount;
-
-    [SerializeField] private float levelUpDelay = 10f;
-    [SerializeField] private float warningThreshold = 20f;
+    [SerializeField] private int campFireDataId = 1001;
 
     private readonly List<IObserver> observerList = new();
-    private const float MaxFuel = 100f;
-    private const int MaxLevel = 5;
+
+    private int maxLevel;
+    private float maxFuel;
+    private float fuelAfterLevelUp;
+    private int decreaseAmount;
+    private List<float> decreaseTimeList;
+    private float levelUpDelay;
+    private float warningThreshold;
 
     private int currentLevel = 1;
+    private int pendingLevel;
+
     private float currentFuel = 0f;
+    private float pendingCurrentFuel;
     private float decreaseTimer;
+
     private bool isBurning;
     private bool isWarned;
-
     private bool isLevelingUp;
-    private int pendingLevel;
-    private float pendingCurrentFuel;
-    private Coroutine levelUpDelayCoroutine;
 
+    private Coroutine levelUpDelayCoroutine;
     private Coroutine decreaseCoroutine;
 
     public int CurrentLevel => currentLevel;
@@ -38,12 +40,28 @@ public class CampFire : MonoBehaviour, ISubject
 
     public event Action<int> OnLevelUp;
     public event Action<bool> OnFireChanged;
-
     public event Action<CampFireNoticeType> OnNotice;
+
+    private void Awake()
+    {
+        CampFireData data = DataManager.Instance.CampFireTable.Get(campFireDataId);
+        SetUp(data);
+    }
 
     private void Start()
     {
         OffFire();
+    }
+
+    public void SetUp(CampFireData data)
+    {
+        maxLevel = data.MaxLevel;
+        maxFuel = data.MaxFuel;
+        fuelAfterLevelUp = data.FuelAfterLevelUp;
+        decreaseAmount = data.DecreaseAmount;
+        decreaseTimeList = data.DecreaseTimeList;
+        levelUpDelay = data.LevelUpDelay;
+        warningThreshold = data.WarningThreshold;
     }
 
     public CampFireSaveData CreateSaveData()
@@ -59,7 +77,7 @@ public class CampFire : MonoBehaviour, ISubject
         return new CampFireSaveData
         {
             currentLevel = saveLevel,
-            currentFuel = Mathf.Min(saveFuel, MaxFuel),
+            currentFuel = Mathf.Min(saveFuel, maxFuel),
             isBurning = isBurning,
             decreaseTimer = decreaseTimer
         };
@@ -86,8 +104,8 @@ public class CampFire : MonoBehaviour, ISubject
         pendingCurrentFuel = 0f;
         isWarned = false;
 
-        currentLevel = Mathf.Clamp(data.currentLevel, 1, MaxLevel);
-        currentFuel = Mathf.Clamp(data.currentFuel, 0f, MaxFuel);
+        currentLevel = Mathf.Clamp(data.currentLevel, 1, maxLevel);
+        currentFuel = Mathf.Clamp(data.currentFuel, 0f, maxFuel);
         decreaseTimer = data.decreaseTimer;
 
         if (data.isBurning && currentFuel > 0)
@@ -124,9 +142,9 @@ public class CampFire : MonoBehaviour, ISubject
         {
             LevelUp();
         }
-        else if (currentLevel >= MaxLevel)
+        else if (currentLevel >= maxLevel)
         {
-            currentFuel = Mathf.Min(currentFuel, MaxFuel);
+            currentFuel = Mathf.Min(currentFuel, maxFuel);
         }
 
         OnFire();
@@ -181,35 +199,26 @@ public class CampFire : MonoBehaviour, ISubject
 
     private float GetDecreaseTime()
     {
-        int index = currentLevel - 1;
-        if (index < 0 || index >= decreaseTimeList.Count)
-        {
-            return 1f;
-        }
+        if (decreaseTimeList == null || decreaseTimeList.Count == 0) return 1f;
 
-        float decreaseTime = decreaseTimeList[index];
-        if (decreaseTime <= 0f)
-        {
-            return 1f;
-        }
-
-        return decreaseTime;
+        int index = Mathf.Clamp(currentLevel - 1, 0, decreaseTimeList.Count - 1);
+        return decreaseTimeList[index];
     }
 
     private bool CanLevelUp()
     {
-        if (currentLevel >= MaxLevel) return false;
+        if (currentLevel >= maxLevel) return false;
 
-        return currentFuel >= MaxFuel;
+        return currentFuel >= maxFuel;
     }
 
     private void LevelUp()
     {
         currentLevel += 1;
-        currentFuel = MaxFuel;
+        currentFuel = maxFuel;
         isLevelingUp = true;
         pendingLevel = currentLevel;
-        pendingCurrentFuel = Mathf.Ceil(MaxFuel * 0.29f);
+        pendingCurrentFuel = fuelAfterLevelUp;
 
         OnLevelUp?.Invoke(currentLevel);
 
@@ -239,7 +248,7 @@ public class CampFire : MonoBehaviour, ISubject
         isLevelingUp = false;
         levelUpDelayCoroutine = null;
 
-        currentFuel = Mathf.Min(currentFuel, MaxFuel);
+        currentFuel = Mathf.Min(currentFuel, maxFuel);
         if (currentFuel > warningThreshold) isWarned = false;
 
         if (currentFuel > 0f)
@@ -255,14 +264,14 @@ public class CampFire : MonoBehaviour, ISubject
     {
         pendingCurrentFuel += amount;
 
-        while (pendingCurrentFuel >= MaxFuel && pendingLevel < MaxLevel)
+        while (pendingCurrentFuel >= maxFuel && pendingLevel < maxLevel)
         {
             pendingLevel += 1;
-            pendingCurrentFuel = Mathf.Ceil(MaxFuel * 0.29f);
+            pendingCurrentFuel = fuelAfterLevelUp;
             OnLevelUp?.Invoke(pendingLevel);
         }
 
-        pendingCurrentFuel = Mathf.Min(pendingCurrentFuel, MaxFuel);
+        pendingCurrentFuel = Mathf.Min(pendingCurrentFuel, maxFuel);
     }
 
     private void CheckLowFuelWarning()

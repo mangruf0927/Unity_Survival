@@ -3710,10 +3710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CampFire
   fire: {fileID: 1642804076}
-  intervalTime: 10
-  decreaseAmount: 1
-  levelUpDelay: 10
-  warningThreshold: 20
+  campFireDataId: 1001
 --- !u!65 &370338874
 BoxCollider:
   m_ObjectHideFlags: 0

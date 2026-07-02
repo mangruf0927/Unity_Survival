@@ -14,6 +14,7 @@ public class DataManager
     public DataTable<MeleeWeaponData> MeleeTable { get; } = new();
     public DataTable<RangedWeaponData> RangedTable { get; } = new();
     public DataTable<ItemData> ItemTable { get; } = new();
+    public DataTable<CampFireData> CampFireTable { get; } = new();
 
     public bool IsLoaded { get; private set; }
 
@@ -34,6 +35,7 @@ public class DataManager
         tableLoaderDictionary.Add("MeleeTable", records => MeleeTable.LoadFromToken(records));
         tableLoaderDictionary.Add("RangedTable", records => RangedTable.LoadFromToken(records));
         tableLoaderDictionary.Add("ItemTable", records => ItemTable.LoadFromToken(records));
+        tableLoaderDictionary.Add("CampFireTable", records => CampFireTable.LoadFromToken(records));
     }
 
     public void LoadAll()
