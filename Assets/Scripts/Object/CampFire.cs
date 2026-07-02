@@ -11,7 +11,7 @@ public class CampFire : MonoBehaviour, ISubject
     [SerializeField] private int decreaseAmount;
 
     [SerializeField] private float levelUpDelay = 10f;
-    [SerializeField] private float lowerFuelThreshold = 20f;
+    [SerializeField] private float warningThreshold = 20f;
 
     private readonly List<IObserver> observerList = new();
     private const float MaxFuel = 100f;
@@ -24,7 +24,8 @@ public class CampFire : MonoBehaviour, ISubject
     private bool isWarned;
 
     private bool isLevelingUp;
-    private float pendingFuel;
+    private int pendingLevel;
+    private float pendingCurrentFuel;
     private Coroutine levelUpDelayCoroutine;
 
     private Coroutine decreaseCoroutine;
@@ -47,10 +48,18 @@ public class CampFire : MonoBehaviour, ISubject
 
     public CampFireSaveData CreateSaveData()
     {
+        int saveLevel = currentLevel;
+        float saveFuel = currentFuel;
+        if (isLevelingUp)
+        {
+            saveLevel = pendingLevel;
+            saveFuel = pendingCurrentFuel;
+        }
+
         return new CampFireSaveData
         {
-            currentLevel = currentLevel,
-            currentFuel = currentFuel,
+            currentLevel = saveLevel,
+            currentFuel = Mathf.Min(saveFuel, MaxFuel),
             isBurning = isBurning,
             decreaseTimer = decreaseTimer
         };
@@ -66,13 +75,25 @@ public class CampFire : MonoBehaviour, ISubject
             decreaseCoroutine = null;
         }
 
-        currentLevel = data.currentLevel;
-        currentFuel = data.currentFuel;
+        if (levelUpDelayCoroutine != null)
+        {
+            StopCoroutine(levelUpDelayCoroutine);
+            levelUpDelayCoroutine = null;
+        }
+
+        isLevelingUp = false;
+        pendingLevel = currentLevel;
+        pendingCurrentFuel = 0f;
+        isWarned = false;
+
+        currentLevel = Mathf.Clamp(data.currentLevel, 1, MaxLevel);
+        currentFuel = Mathf.Clamp(data.currentFuel, 0f, MaxFuel);
         decreaseTimer = data.decreaseTimer;
 
         if (data.isBurning && currentFuel > 0)
         {
             OnFire();
+            CheckLowFuelWarning();
             StartDecreaseFuel();
         }
         else
@@ -82,7 +103,6 @@ public class CampFire : MonoBehaviour, ISubject
         }
 
         OnLevelUp?.Invoke(currentLevel);
-        OnFireChanged?.Invoke(isBurning);
         NotifyObservers();
     }
 
@@ -92,13 +112,13 @@ public class CampFire : MonoBehaviour, ISubject
 
         if (isLevelingUp)
         {
-            pendingFuel += amount;
+            AddPendingFuel(amount);
             NotifyObservers();
             return;
         }
 
         currentFuel += amount;
-        if (currentFuel > lowerFuelThreshold) isWarned = false;
+        if (currentFuel > warningThreshold) isWarned = false;
 
         if (CanLevelUp())
         {
@@ -169,6 +189,8 @@ public class CampFire : MonoBehaviour, ISubject
         currentLevel += 1;
         currentFuel = MaxFuel;
         isLevelingUp = true;
+        pendingLevel = currentLevel;
+        pendingCurrentFuel = Mathf.Ceil(MaxFuel * 0.29f);
 
         OnLevelUp?.Invoke(currentLevel);
 
@@ -192,20 +214,14 @@ public class CampFire : MonoBehaviour, ISubject
 
         yield return new WaitForSeconds(levelUpDelay);
 
-        currentFuel = Mathf.Ceil(MaxFuel * 0.29f) + pendingFuel;
-        pendingFuel = 0f;
+        currentLevel = pendingLevel;
+        currentFuel = pendingCurrentFuel;
+        pendingCurrentFuel = 0f;
         isLevelingUp = false;
         levelUpDelayCoroutine = null;
 
-        if (CanLevelUp())
-        {
-            LevelUp();
-            NotifyObservers();
-            yield break;
-        }
-
         currentFuel = Mathf.Min(currentFuel, MaxFuel);
-        if (currentFuel > lowerFuelThreshold) isWarned = false;
+        if (currentFuel > warningThreshold) isWarned = false;
 
         if (currentFuel > 0f)
         {
@@ -216,12 +232,26 @@ public class CampFire : MonoBehaviour, ISubject
         NotifyObservers();
     }
 
+    private void AddPendingFuel(float amount)
+    {
+        pendingCurrentFuel += amount;
+
+        while (pendingCurrentFuel >= MaxFuel && pendingLevel < MaxLevel)
+        {
+            pendingLevel += 1;
+            pendingCurrentFuel = Mathf.Ceil(MaxFuel * 0.29f);
+            OnLevelUp?.Invoke(pendingLevel);
+        }
+
+        pendingCurrentFuel = Mathf.Min(pendingCurrentFuel, MaxFuel);
+    }
+
     private void CheckLowFuelWarning()
     {
         if (isWarned) return;
         if (currentLevel < 2) return;
         if (isLevelingUp) return;
-        if (currentFuel > lowerFuelThreshold) return;
+        if (currentFuel > warningThreshold) return;
 
         isWarned = true;
         OnNotice?.Invoke(CampFireNoticeType.WARNING);
