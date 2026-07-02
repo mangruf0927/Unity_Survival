@@ -7,7 +7,7 @@ public class CampFire : MonoBehaviour, ISubject
 {
     [SerializeField] private ParticleSystem fire;
 
-    [SerializeField] private float intervalTime;
+    [SerializeField] private List<float> decreaseTimeList = new() { 1f, 5f, 10f, 15f, 20f };
     [SerializeField] private int decreaseAmount;
 
     [SerializeField] private float levelUpDelay = 10f;
@@ -152,9 +152,11 @@ public class CampFire : MonoBehaviour, ISubject
         {
             decreaseTimer += Time.deltaTime;
 
-            if (decreaseTimer >= intervalTime)
+            float decreaseTime = GetDecreaseTime();
+
+            if (decreaseTimer >= decreaseTime)
             {
-                decreaseTimer -= intervalTime;
+                decreaseTimer -= decreaseTime;
                 currentFuel -= decreaseAmount;
 
                 if (currentFuel <= 0)
@@ -175,6 +177,23 @@ public class CampFire : MonoBehaviour, ISubject
             yield return null;
         }
         decreaseCoroutine = null;
+    }
+
+    private float GetDecreaseTime()
+    {
+        int index = currentLevel - 1;
+        if (index < 0 || index >= decreaseTimeList.Count)
+        {
+            return 1f;
+        }
+
+        float decreaseTime = decreaseTimeList[index];
+        if (decreaseTime <= 0f)
+        {
+            return 1f;
+        }
+
+        return decreaseTime;
     }
 
     private bool CanLevelUp()
