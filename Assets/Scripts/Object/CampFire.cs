@@ -14,7 +14,7 @@ public class CampFire : MonoBehaviour, ISubject
     private const float MaxFuel = 100f;
     private const int MaxLevel = 5;
 
-    private int currentLevel = 0;
+    private int currentLevel = 1;
     private float currentFuel = 0f;
     private bool isBurning;
     private float decreaseTimer;
@@ -167,8 +167,7 @@ public class CampFire : MonoBehaviour, ISubject
         if (item.Data == null || item.Data.FuelData == null) return;
         if (item.Data.ItemType != ItemType.FUEL) return;
 
-        int fuelLevel = Mathf.Max(currentLevel, 1);
-        AddFuel(item.Data.FuelData.GetBurnPower(fuelLevel));
+        AddFuel(item.Data.FuelData.GetBurnPower(currentLevel));
         Destroy(item.gameObject);
     }
 

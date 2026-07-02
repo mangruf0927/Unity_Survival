@@ -11,6 +11,7 @@ public class CampFireProgressUI : MonoBehaviour, IObserver
     private void Start()
     {
         if (campFire == null) return;
+
         campFire.AddObserver(this);
         Notify();
     }
@@ -25,7 +26,13 @@ public class CampFireProgressUI : MonoBehaviour, IObserver
     {
         if (campFire == null) return;
 
+        if (!campFire.IsBurning)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
 
+        gameObject.SetActive(true);
         if (fuelSlider != null)
         {
             fuelSlider.maxValue = 100;
