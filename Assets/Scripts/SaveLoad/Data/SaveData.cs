@@ -7,6 +7,7 @@ public class SaveData
     public TimeSaveData timeData;
     public PlayerSaveData playerData;
     public InventorySaveData inventoryData;
+    public CampFireSaveData campFireData;
 }
 
 [Serializable]
@@ -29,6 +30,15 @@ public class PlayerSaveData
     public int currentHP;
     public float currentHunger;
     public float hungerTimer;
+}
+
+[Serializable]
+public class CampFireSaveData
+{
+    public int currentLevel;
+    public int currentFuel;
+    public bool isBurning;
+    public float decreaseTimer;
 }
 
 [Serializable]

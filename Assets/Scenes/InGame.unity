@@ -7602,6 +7602,7 @@ MonoBehaviour:
   timeSystem: {fileID: 2023553405}
   playerStats: {fileID: 1167997876}
   playerController: {fileID: 1167997878}
+  campFire: {fileID: 370338873}
   equippableDatabase: {fileID: 3000000001}
   itemDataBase: {fileID: 3000000002}
 --- !u!4 &858068049

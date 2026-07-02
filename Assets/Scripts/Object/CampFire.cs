@@ -18,11 +18,13 @@ public class CampFire : MonoBehaviour, ISubject
     private int currentLevel = 0;
     private int currentFuel = 0;
     private bool isBurning;
+    private float decreaseTimer;
     private Coroutine decreaseCoroutine;
 
     public int CurrentLevel => currentLevel;
     public int CurrentFuel => currentFuel;
     public bool IsBurning => isBurning;
+    public float DecreaseTimer => decreaseTimer;
     public int NeedFuel
     {
         get
@@ -38,6 +40,47 @@ public class CampFire : MonoBehaviour, ISubject
     private void Start()
     {
         OffFire();
+    }
+
+    public CampFireSaveData CreateSaveData()
+    {
+        return new CampFireSaveData
+        {
+            currentLevel = currentLevel,
+            currentFuel = currentFuel,
+            isBurning = isBurning,
+            decreaseTimer = decreaseTimer
+        };
+    }
+
+    public void LoadSaveData(CampFireSaveData data)
+    {
+        if (data == null) return;
+
+        if (decreaseCoroutine != null)
+        {
+            StopCoroutine(decreaseCoroutine);
+            decreaseCoroutine = null;
+        }
+
+        currentLevel = data.currentLevel;
+        currentFuel = data.currentFuel;
+        decreaseTimer = data.decreaseTimer;
+
+        if (data.isBurning && currentFuel > 0)
+        {
+            OnFire();
+            StartDecreaseFuel();
+        }
+        else
+        {
+            decreaseTimer = 0f;
+            OffFire();
+        }
+
+        OnLevelUp?.Invoke(currentLevel);
+        OnFireChanged?.Invoke(isBurning);
+        NotifyObservers();
     }
 
     private void AddFuel(int amount)
@@ -64,20 +107,25 @@ public class CampFire : MonoBehaviour, ISubject
     {
         while (currentFuel > 0)
         {
-            yield return new WaitForSeconds(intervalTime);
+            decreaseTimer += Time.deltaTime;
 
-            currentFuel -= decreaseAmount;
-            // Debug.Log(currentFuel);
-
-            if (currentFuel <= 0)
+            if (decreaseTimer >= intervalTime)
             {
-                currentFuel = 0;
-                OffFire();
-                NotifyObservers();
-                break;
-            }
+                decreaseTimer -= intervalTime;
+                currentFuel -= decreaseAmount;
 
-            NotifyObservers();
+                if (currentFuel <= 0)
+                {
+                    currentFuel = 0;
+                    decreaseTimer = 0f;
+                    OffFire();
+                    NotifyObservers();
+                    decreaseCoroutine = null;
+                    break;
+                }
+                NotifyObservers();
+            }
+            yield return null;
         }
         decreaseCoroutine = null;
     }

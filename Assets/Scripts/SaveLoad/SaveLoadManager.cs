@@ -7,12 +7,14 @@ public class SaveLoadManager : MonoBehaviour
     [SerializeField] private TimeSystem timeSystem;
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private PlayerController playerController;
+    [SerializeField] private CampFire campFire;
+
     [SerializeField] private EquippableDatabase equippableDatabase;
     [SerializeField] private ItemDataBase itemDataBase;
 
     public void SaveData()
     {
-        if (timeSystem == null || playerStats == null || playerController == null)
+        if (timeSystem == null || playerStats == null || playerController == null || campFire == null)
         {
             Debug.LogError("Save failed. SaveLoadManager references are missing.");
             return;
@@ -22,7 +24,8 @@ public class SaveLoadManager : MonoBehaviour
         {
             timeData = timeSystem.CreateSaveData(),
             playerData = playerStats.CreateSaveData(),
-            inventoryData = playerController.CreateInventorySaveData()
+            inventoryData = playerController.CreateInventorySaveData(),
+            campFireData = campFire.CreateSaveData()
         };
 
         string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
@@ -51,7 +54,7 @@ public class SaveLoadManager : MonoBehaviour
             return;
         }
 
-        if (timeSystem == null || playerStats == null || playerController == null || equippableDatabase == null || itemDataBase == null)
+        if (timeSystem == null || playerStats == null || playerController == null || campFire == null)
         {
             Debug.LogError("Load failed. SaveLoadManager references are missing.");
             return;
@@ -60,6 +63,7 @@ public class SaveLoadManager : MonoBehaviour
         timeSystem.LoadSaveData(saveData.timeData);
         playerStats.LoadSaveData(saveData.playerData);
         playerController.LoadInventorySaveData(saveData.inventoryData, equippableDatabase, itemDataBase);
+        campFire.LoadSaveData(saveData.campFireData);
 
         Debug.Log("Load Complete");
     }

@@ -24,13 +24,13 @@ public class MapBoundary : MonoBehaviour
         {
             CreateBoundary(level);
         }
-        campFire.OnLevelUp += RemoveBoundary;
+        campFire.OnLevelUp += UpdateBoundaries;
         campFire.OnLevelUp += UpdateSpawners;
     }
 
     private void OnDestroy()
     {
-        campFire.OnLevelUp -= RemoveBoundary;
+        campFire.OnLevelUp -= UpdateBoundaries;
         campFire.OnLevelUp -= UpdateSpawners;
     }
 
@@ -66,14 +66,15 @@ public class MapBoundary : MonoBehaviour
         }
     }
 
-    public void RemoveBoundary(int level)
+    public void UpdateBoundaries(int level)
     {
-        if (level <= 1) return;
+        for (int i = 0; i < boundaryList.Count; i++)
+        {
+            if (boundaryList[i] == null) continue;
 
-        int index = level - 2;
-        if (index < 0 || index >= boundaryList.Count) return;
-
-        boundaryList[index].SetActive(false);
+            bool shouldBeActive = i > level - 2;
+            boundaryList[i].SetActive(shouldBeActive);
+        }
     }
 
     private void UpdateSpawners(int level)
