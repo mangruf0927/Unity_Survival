@@ -11,6 +11,7 @@ public class CampFire : MonoBehaviour, ISubject
     [SerializeField] private int decreaseAmount;
 
     [SerializeField] private float levelUpDelay = 10f;
+    [SerializeField] private float lowerFuelThreshold = 20f;
 
     private readonly List<IObserver> observerList = new();
     private const float MaxFuel = 100f;
@@ -18,8 +19,9 @@ public class CampFire : MonoBehaviour, ISubject
 
     private int currentLevel = 1;
     private float currentFuel = 0f;
-    private bool isBurning;
     private float decreaseTimer;
+    private bool isBurning;
+    private bool isWarned;
 
     private bool isLevelingUp;
     private float pendingFuel;
@@ -35,6 +37,8 @@ public class CampFire : MonoBehaviour, ISubject
 
     public event Action<int> OnLevelUp;
     public event Action<bool> OnFireChanged;
+
+    public event Action<CampFireNoticeType> OnNotice;
 
     private void Start()
     {
@@ -94,6 +98,7 @@ public class CampFire : MonoBehaviour, ISubject
         }
 
         currentFuel += amount;
+        if (currentFuel > lowerFuelThreshold) isWarned = false;
 
         if (CanLevelUp())
         {
@@ -136,11 +141,15 @@ public class CampFire : MonoBehaviour, ISubject
                 {
                     currentFuel = 0f;
                     decreaseTimer = 0f;
+                    isWarned = false;
                     OffFire();
+                    OnNotice?.Invoke(CampFireNoticeType.EXTINGUISHED);
                     NotifyObservers();
                     decreaseCoroutine = null;
                     break;
                 }
+
+                CheckLowFuelWarning();
                 NotifyObservers();
             }
             yield return null;
@@ -196,6 +205,7 @@ public class CampFire : MonoBehaviour, ISubject
         }
 
         currentFuel = Mathf.Min(currentFuel, MaxFuel);
+        if (currentFuel > lowerFuelThreshold) isWarned = false;
 
         if (currentFuel > 0f)
         {
@@ -204,6 +214,17 @@ public class CampFire : MonoBehaviour, ISubject
         }
 
         NotifyObservers();
+    }
+
+    private void CheckLowFuelWarning()
+    {
+        if (isWarned) return;
+        if (currentLevel < 2) return;
+        if (isLevelingUp) return;
+        if (currentFuel > lowerFuelThreshold) return;
+
+        isWarned = true;
+        OnNotice?.Invoke(CampFireNoticeType.WARNING);
     }
 
     private void OnFire()

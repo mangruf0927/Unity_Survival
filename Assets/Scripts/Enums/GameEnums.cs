@@ -1,4 +1,5 @@
 public enum Phase { DAY, NIGHT }
+public enum CampFireNoticeType { WARNING, EXTINGUISHED }
 public enum PoolTypeEnums
 {
     BULLET, HPBAR,
