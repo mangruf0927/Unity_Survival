@@ -105,7 +105,11 @@ public class CampFire : MonoBehaviour, ISubject
         }
 
         OnFire();
-        if (!isLevelingUp) StartDecreaseFuel();
+
+        if (!isLevelingUp)
+        {
+            StartDecreaseFuel();
+        }
 
         NotifyObservers();
     }
@@ -179,10 +183,19 @@ public class CampFire : MonoBehaviour, ISubject
 
         yield return new WaitForSeconds(levelUpDelay);
 
-        currentFuel = Mathf.Min(Mathf.Ceil(MaxFuel * 0.29f) + pendingFuel, MaxFuel);
+        currentFuel = Mathf.Ceil(MaxFuel * 0.29f) + pendingFuel;
         pendingFuel = 0f;
         isLevelingUp = false;
         levelUpDelayCoroutine = null;
+
+        if (CanLevelUp())
+        {
+            LevelUp();
+            NotifyObservers();
+            yield break;
+        }
+
+        currentFuel = Mathf.Min(currentFuel, MaxFuel);
 
         if (currentFuel > 0f)
         {
