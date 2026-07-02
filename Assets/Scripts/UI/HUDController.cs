@@ -41,6 +41,8 @@ public class HUDController : MonoBehaviour
     private void EquippedItem(EquippableItem item)
     {
         currentEquipped = item;
+        currentHoverEquippable = null;
+        itemHoverUI.HideUI();
         RefreshItemGuideUI();
 
         if (item is RangedWeapon rangedWeapon) ammoCount.SetWeapon(rangedWeapon);
@@ -64,8 +66,16 @@ public class HUDController : MonoBehaviour
     private void ShowEquippable(EquippableItem item)
     {
         currentItem = null;
-        currentHoverEquippable = item;
 
+        if (currentEquipped != null)
+        {
+            currentHoverEquippable = null;
+            itemHoverUI.HideUI();
+            RefreshItemGuideUI();
+            return;
+        }
+
+        currentHoverEquippable = item;
         itemHoverUI.ShowUI(item);
         RefreshItemGuideUI();
     }
