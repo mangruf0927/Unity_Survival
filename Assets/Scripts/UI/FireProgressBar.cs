@@ -33,6 +33,23 @@ public class CampFireProgressUI : MonoBehaviour, IObserver
         }
 
         gameObject.SetActive(true);
+
+        if (campFire.IsLevelingUp)
+        {
+            if (fuelSlider != null)
+            {
+                fuelSlider.maxValue = 100;
+                fuelSlider.value = 100;
+            }
+
+            if (fuelText != null)
+            {
+                fuelText.text = $"화재레벨 {campFire.CurrentLevel}. 맵 확장";
+            }
+
+            return;
+        }
+
         if (fuelSlider != null)
         {
             fuelSlider.maxValue = 100;
@@ -41,7 +58,7 @@ public class CampFireProgressUI : MonoBehaviour, IObserver
 
         if (fuelText != null)
         {
-            fuelText.text = $"level {campFire.CurrentLevel} progress : {(int)campFire.CurrentFuel} / {100}";
+            fuelText.text = $"level {campFire.CurrentLevel} progress : {(int)campFire.CurrentFuel} / 100";
         }
     }
 }

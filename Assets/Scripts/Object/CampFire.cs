@@ -10,6 +10,8 @@ public class CampFire : MonoBehaviour, ISubject
     [SerializeField] private float intervalTime;
     [SerializeField] private int decreaseAmount;
 
+    [SerializeField] private float levelUpDelay = 10f;
+
     private readonly List<IObserver> observerList = new();
     private const float MaxFuel = 100f;
     private const int MaxLevel = 5;
@@ -18,12 +20,18 @@ public class CampFire : MonoBehaviour, ISubject
     private float currentFuel = 0f;
     private bool isBurning;
     private float decreaseTimer;
+
+    private bool isLevelingUp;
+    private float pendingFuel;
+    private Coroutine levelUpDelayCoroutine;
+
     private Coroutine decreaseCoroutine;
 
     public int CurrentLevel => currentLevel;
     public float CurrentFuel => currentFuel;
-    public bool IsBurning => isBurning;
     public float DecreaseTimer => decreaseTimer;
+    public bool IsBurning => isBurning;
+    public bool IsLevelingUp => isLevelingUp;
 
     public event Action<int> OnLevelUp;
     public event Action<bool> OnFireChanged;
@@ -78,11 +86,26 @@ public class CampFire : MonoBehaviour, ISubject
     {
         if (amount <= 0) return;
 
+        if (isLevelingUp)
+        {
+            pendingFuel += amount;
+            NotifyObservers();
+            return;
+        }
+
         currentFuel += amount;
-        if (CanLevelUp()) LevelUp();
+
+        if (CanLevelUp())
+        {
+            LevelUp();
+        }
+        else if (currentLevel >= MaxLevel)
+        {
+            currentFuel = Mathf.Min(currentFuel, MaxFuel);
+        }
 
         OnFire();
-        StartDecreaseFuel();
+        if (!isLevelingUp) StartDecreaseFuel();
 
         NotifyObservers();
     }
@@ -131,8 +154,43 @@ public class CampFire : MonoBehaviour, ISubject
     private void LevelUp()
     {
         currentLevel += 1;
-        currentFuel = Mathf.Ceil(MaxFuel * 0.29f);
+        currentFuel = MaxFuel;
+        isLevelingUp = true;
+
         OnLevelUp?.Invoke(currentLevel);
+
+        if (levelUpDelayCoroutine != null)
+        {
+            StopCoroutine(levelUpDelayCoroutine);
+        }
+
+        if (decreaseCoroutine != null)
+        {
+            StopCoroutine(decreaseCoroutine);
+            decreaseCoroutine = null;
+        }
+
+        levelUpDelayCoroutine = StartCoroutine(LevelUpDelayRoutine());
+    }
+
+    private IEnumerator LevelUpDelayRoutine()
+    {
+        NotifyObservers();
+
+        yield return new WaitForSeconds(levelUpDelay);
+
+        currentFuel = Mathf.Min(Mathf.Ceil(MaxFuel * 0.29f) + pendingFuel, MaxFuel);
+        pendingFuel = 0f;
+        isLevelingUp = false;
+        levelUpDelayCoroutine = null;
+
+        if (currentFuel > 0f)
+        {
+            OnFire();
+            StartDecreaseFuel();
+        }
+
+        NotifyObservers();
     }
 
     private void OnFire()
