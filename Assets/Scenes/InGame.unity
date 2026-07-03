@@ -2320,7 +2320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHungerBar
   hungerSlider: {fileID: 279304807}
-  playerStats: {fileID: 1167997876}
+  playerStats: {fileID: 1700390272}
 --- !u!1 &286922454
 GameObject:
   m_ObjectHideFlags: 0
@@ -7787,7 +7787,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveLoadManager
   timeSystem: {fileID: 2023553405}
-  playerStats: {fileID: 1167997876}
+  playerStats: {fileID: 1700390272}
   playerController: {fileID: 1167997878}
   campFire: {fileID: 370338873}
   equippableDatabase: {fileID: 3000000001}
@@ -7801,7 +7801,7 @@ Transform:
   m_GameObject: {fileID: 858068047}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -21.90178, y: 1.35489, z: 2.1953}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9872,7 +9872,6 @@ GameObject:
   - component: {fileID: 1167997881}
   - component: {fileID: 1167997878}
   - component: {fileID: 1167997877}
-  - component: {fileID: 1167997876}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -9880,19 +9879,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1167997876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1167997875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3d87b75841a9466eb31ba2791f0a658, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerStat
-  playerStateMachine: {fileID: 1167997877}
 --- !u!114 &1167997877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9964,6 +9950,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1700390271}
   - {fileID: 1416580746}
   - {fileID: 1073054018}
   m_Father: {fileID: 0}
@@ -13246,7 +13233,7 @@ GameObject:
   - component: {fileID: 1545453346}
   - component: {fileID: 1545453345}
   m_Layer: 7
-  m_Name: CultistSpawn
+  m_Name: CultistSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13264,7 +13251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 646bd1edcc853498880b6aba7da5ed18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CultistSpawner
-  player: {fileID: 1167997880}
+  player: {fileID: 1700390271}
   campFire: {fileID: 370338873}
   minRadius: 20
   maxRadius: 30
@@ -15038,6 +15025,73 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1688394122}
   m_CullTransparentMesh: 1
+--- !u!1 &1700390270
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1700390271}
+  - component: {fileID: 1700390273}
+  - component: {fileID: 1700390272}
+  m_Layer: 7
+  m_Name: hitcollider
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1700390271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700390270}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1167997880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1700390272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700390270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3d87b75841a9466eb31ba2791f0a658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStat
+  playerStateMachine: {fileID: 1167997877}
+--- !u!65 &1700390273
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700390270}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.85, y: 2.7, z: 0.65}
+  m_Center: {x: 0, y: -0.4, z: 0}
 --- !u!1 &1717421985
 GameObject:
   m_ObjectHideFlags: 0
@@ -15949,7 +16003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHP
   hpSlider: {fileID: 1787942272}
-  playerStats: {fileID: 1167997876}
+  playerStats: {fileID: 1700390272}
 --- !u!114 &1787942272
 MonoBehaviour:
   m_ObjectHideFlags: 0

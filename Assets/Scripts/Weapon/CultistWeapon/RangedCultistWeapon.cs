@@ -13,8 +13,11 @@ public class RangedCultistWeapon : CultistWeapon
     {
         if (bulletPrefab == null || shootPosition == null || target == null) return;
 
-        CultistBullet bullet = Instantiate(bulletPrefab, shootPosition.position, shootPosition.rotation);
+        Vector3 direction = target.position - shootPosition.position;
+        if (direction == Vector3.zero) direction = shootPosition.forward;
+
+        CultistBullet bullet = Instantiate(bulletPrefab, shootPosition.position, Quaternion.LookRotation(direction, Vector3.up));
         bullet.SetData(AttackDamage, bulletSpeed);
-        bullet.Fire(target.position - shootPosition.position);
+        bullet.Fire(direction);
     }
 }

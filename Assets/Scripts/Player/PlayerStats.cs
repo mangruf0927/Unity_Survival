@@ -30,6 +30,8 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
     public int CurrentHp { get; private set; }
     public float CurrentHunger { get; private set; }
 
+    private Transform PlayerRoot => transform.root;
+
     private void Start()
     {
         PlayerData data = DataManager.Instance.PlayerTable.Get(1001);
@@ -61,14 +63,15 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
 
     public PlayerSaveData CreateSaveData()
     {
-        Vector3 position = transform.position;
+        Transform playerRoot = PlayerRoot;
+        Vector3 position = playerRoot.position;
 
         return new PlayerSaveData
         {
             positionX = position.x,
             positionY = position.y,
             positionZ = position.z,
-            rotationY = transform.eulerAngles.y,
+            rotationY = playerRoot.eulerAngles.y,
             currentHP = CurrentHp,
             currentHunger = CurrentHunger,
             hungerTimer = timer
@@ -80,7 +83,7 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
         if (data == null) return;
 
         Vector3 position = new(data.positionX, data.positionY, data.positionZ);
-        transform.SetPositionAndRotation(position, Quaternion.Euler(0f, data.rotationY, 0f));
+        PlayerRoot.SetPositionAndRotation(position, Quaternion.Euler(0f, data.rotationY, 0f));
 
         CurrentHp = Mathf.Clamp(data.currentHP, 0, MaxHp);
         CurrentHunger = Mathf.Clamp(data.currentHunger, 0f, MaxHunger);
@@ -124,6 +127,7 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
         if (dmg <= 0 || CurrentHp <= 0) return;
 
         CurrentHp = Mathf.Max(CurrentHp - dmg, 0);
+        // Debug.Log($"Player hit. Damage: {dmg}, CurrentHp: {CurrentHp}");
         NotifyObservers();
 
         if (CurrentHp <= 0) playerStateMachine.ChangeState(PlayerStateEnums.DEAD);

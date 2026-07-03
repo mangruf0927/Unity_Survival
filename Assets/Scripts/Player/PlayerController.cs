@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
-        playerStats = GetComponent<PlayerStats>();
+        playerStats = GetComponentInChildren<PlayerStats>();
     }
 
     private void Update()

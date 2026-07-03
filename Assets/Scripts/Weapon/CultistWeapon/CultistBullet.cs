@@ -31,9 +31,16 @@ public class CultistBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.root.CompareTag("Enemy")) return;
-        if (other.transform.root.CompareTag("Player") && other.transform.root.TryGetComponent<IDamageable>(out var damageable))
+        if (other.CompareTag("Enemy")) return;
+
+        if (other.CompareTag("Player") && other.TryGetComponent<IDamageable>(out var damageable))
+        {
             damageable.TakeDamage(damage);
+            Destroy(gameObject);
+            return;
+        }
+
+        if (other.transform.root.CompareTag("Player")) return;
 
         Destroy(gameObject);
     }
