@@ -13,7 +13,7 @@ public class SackData : IGameData, IValidatable
 
     public bool Validate()
     {
-        if (Id <= 0)
+        if (Id <= 2200 || Id > 2300)
         {
             Debug.LogError($"Sack Id is invalid. Id: {Id}");
             return false;

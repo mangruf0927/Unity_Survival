@@ -22,7 +22,7 @@ public class ItemData : IGameData, IValidatable
 
     public bool Validate()
     {
-        if (Id <= 0)
+        if (Id <= 4000 || Id > 5000)
         {
             Debug.LogError($"Item Id is invalid. Id: {Id}");
             return false;

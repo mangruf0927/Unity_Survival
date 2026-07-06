@@ -15,7 +15,7 @@ public class PlayerData : IGameData, IValidatable
 
     public bool Validate()
     {
-        if (Id <= 0)
+        if (Id <= 0 || Id > 1100)
         {
             Debug.LogError($"Player Id is invalid. Id: {Id}");
             return false;

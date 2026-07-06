@@ -5,6 +5,8 @@ public class CultistStats : MonoBehaviour, IDamageable
 {
     [SerializeField] private int cultistId;
     [SerializeField] private CultistStateMachine cultistStateMachine;
+    [SerializeField] private Transform hpBarPoint;
+    [SerializeField] private CultistHPBarController hpBarController;
 
     private int maxHp;
     private float scanRange;
@@ -22,6 +24,7 @@ public class CultistStats : MonoBehaviour, IDamageable
     public float ReturnSearchRange => returnSearchRange;
     public float AlertDuration => alertDuration;
     public PoolTypeEnums CultistType => cultistType;
+    public Transform HPBarPoint => hpBarPoint;
 
     public int CurrentHp { get; private set; }
 
@@ -30,6 +33,7 @@ public class CultistStats : MonoBehaviour, IDamageable
 
     private void OnDisable()
     {
+        if (hpBarController != null) hpBarController.UnRegister(this);
         OnDamaged = null;
         OnDead = null;
     }
@@ -47,6 +51,13 @@ public class CultistStats : MonoBehaviour, IDamageable
         cultistType = data.CultistType;
 
         CurrentHp = maxHp;
+
+        if (hpBarController == null)
+        {
+            hpBarController = FindFirstObjectByType<CultistHPBarController>();
+        }
+
+        if (hpBarController != null) hpBarController.Register(this);
     }
 
     public void TakeDamage(int dmg)

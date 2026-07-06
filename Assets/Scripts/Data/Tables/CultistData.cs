@@ -15,7 +15,7 @@ public class CultistData : IGameData, IValidatable
 
     public bool Validate()
     {
-        if (Id <= 0)
+        if (Id <= 1200 || Id > 1300)
         {
             Debug.LogError($"Cultist Id is invalid. Id: {Id}");
             return false;

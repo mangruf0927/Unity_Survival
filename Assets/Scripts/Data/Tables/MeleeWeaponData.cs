@@ -14,7 +14,7 @@ public class MeleeWeaponData : IGameData, IValidatable
 
     public bool Validate()
     {
-        if (Id <= 0)
+        if (Id <= 2000 || Id > 2100)
         {
             Debug.LogError($"Melee Id is invalid. Id: {Id}");
             return false;

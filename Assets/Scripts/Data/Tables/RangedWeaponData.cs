@@ -15,7 +15,7 @@ public class RangedWeaponData : IGameData, IValidatable
 
     public bool Validate()
     {
-        if (Id <= 0)
+        if (Id <= 2100 || Id > 2200)
         {
             Debug.LogError($"Ranged Id is invalid: {Id}");
             return false;

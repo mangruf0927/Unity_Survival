@@ -3710,7 +3710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CampFire
   fire: {fileID: 1642804076}
-  campFireDataId: 1001
+  campFireDataId: 3001
 --- !u!65 &370338874
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9241,6 +9241,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1050484676}
   - component: {fileID: 1050484675}
+  - component: {fileID: 1050484677}
   m_Layer: 0
   m_Name: HPBarController
   m_TagString: Untagged
@@ -9276,6 +9277,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1050484677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050484674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c69b475d6f2a440fb99e69546911a1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CultistHPBarController
+  canvas: {fileID: 1775717917}
 --- !u!1 &1053883602
 GameObject:
   m_ObjectHideFlags: 0
@@ -9400,14 +9414,14 @@ MonoBehaviour:
   requiredLevel: 3
   itemDataBase: {fileID: 3000000002}
   spawnInfoList:
-  - enemyId: 2002
+  - enemyId: 1102
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
     - {fileID: 388900523}
     - {fileID: 1869823043}
     - {fileID: 884463346}
-  - enemyId: 2003
+  - enemyId: 1103
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
@@ -12230,7 +12244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f5d00822bff44126aa1423e21a257bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemId: 6203
+  itemId: 4203
 --- !u!114 &1411983130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18032,14 +18046,14 @@ MonoBehaviour:
   requiredLevel: 4
   itemDataBase: {fileID: 3000000002}
   spawnInfoList:
-  - enemyId: 2003
+  - enemyId: 1103
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
     - {fileID: 354617039}
     - {fileID: 658581614}
     - {fileID: 265186428}
-  - enemyId: 2004
+  - enemyId: 1104
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
@@ -18354,8 +18368,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0d60b9384b674d43b990def7760ff73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeSystem
-  dayTime: 180
-  nightTime: 90
+  dayTime: 1
+  nightTime: 1
 --- !u!4 &2023553406
 Transform:
   m_ObjectHideFlags: 0
@@ -18486,8 +18500,8 @@ MonoBehaviour:
   requiredLevel: 0
   itemDataBase: {fileID: 3000000002}
   spawnInfoList:
-  - enemyId: 2001
-    enemyCount: 2
+  - enemyId: 1101
+    enemyCount: 3
     respawnTime: 5
     spawnPointList:
     - {fileID: 352322249}
@@ -19312,14 +19326,14 @@ MonoBehaviour:
   requiredLevel: 2
   itemDataBase: {fileID: 3000000002}
   spawnInfoList:
-  - enemyId: 2001
+  - enemyId: 1101
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
     - {fileID: 181542981}
     - {fileID: 227156391}
     - {fileID: 1550540862}
-  - enemyId: 2002
+  - enemyId: 1102
     enemyCount: 1
     respawnTime: 5
     spawnPointList:

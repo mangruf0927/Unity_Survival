@@ -16,7 +16,7 @@ public class EnemyData : IGameData, IValidatable
 
     public bool Validate()
     {
-        if (Id <= 0)
+        if (Id <= 1100 || Id > 1200)
         {
             Debug.LogError($"Enemy Id is invalid. Id: {Id}");
             return false;

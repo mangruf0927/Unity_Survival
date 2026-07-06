@@ -17,7 +17,7 @@ public class CampFireData : IGameData, IValidatable
 
     public bool Validate()
     {
-        if (Id <= 0)
+        if (Id <= 3000 || Id > 3100)
         {
             Debug.LogError($"CampFire Id is invalid. Id: {Id}");
             return false;
