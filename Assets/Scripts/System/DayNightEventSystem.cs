@@ -12,12 +12,33 @@ public class DayNightEventSystem : MonoBehaviour
 
     private void OnEnable()
     {
-        timeSystem.OnPhaseChanged += PhaseChanged;
+        if (timeSystem != null)
+            timeSystem.OnPhaseChanged += PhaseChanged;
     }
 
     private void OnDisable()
     {
-        if (timeSystem != null) timeSystem.OnPhaseChanged -= PhaseChanged;
+        if (timeSystem != null)
+            timeSystem.OnPhaseChanged -= PhaseChanged;
+    }
+
+    public void CreateSaveData(TimeSaveData data)
+    {
+        data.raidCount = raidCount;
+        data.lastRaidCycle = lastRaidCycle;
+    }
+
+    public void LoadSaveData(TimeSaveData data)
+    {
+        if (data == null)
+        {
+            raidCount = 0;
+            lastRaidCycle = 0;
+            return;
+        }
+
+        raidCount = data.raidCount;
+        lastRaidCycle = data.lastRaidCycle;
     }
 
     private void PhaseChanged(Phase phase, int day)

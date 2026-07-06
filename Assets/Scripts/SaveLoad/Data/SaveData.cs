@@ -15,6 +15,11 @@ public class TimeSaveData
 {
     public int dayCount;
     public int dayBonus;
+    public int cycleCount;
+
+    public int raidCount;
+    public int lastRaidCycle;
+
     public float timeElapsed;
     public Phase curPhase;
 }

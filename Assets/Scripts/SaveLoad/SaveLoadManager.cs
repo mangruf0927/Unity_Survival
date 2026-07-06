@@ -5,12 +5,15 @@ using UnityEngine;
 public class SaveLoadManager : MonoBehaviour
 {
     [SerializeField] private TimeSystem timeSystem;
+    [SerializeField] private DayNightEventSystem dayNightEventSystem;
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private PlayerController playerController;
     [SerializeField] private CampFire campFire;
 
     [SerializeField] private EquippableDatabase equippableDatabase;
     [SerializeField] private ItemDataBase itemDataBase;
+
+    private const string SaveFileName = "Save.json";
 
     public void SaveData()
     {
@@ -20,24 +23,27 @@ public class SaveLoadManager : MonoBehaviour
             return;
         }
 
+        TimeSaveData timeData = timeSystem.CreateSaveData();
+        dayNightEventSystem.CreateSaveData(timeData);
+
         SaveData saveData = new()
         {
-            timeData = timeSystem.CreateSaveData(),
+            timeData = timeData,
             playerData = playerStats.CreateSaveData(),
             inventoryData = playerController.CreateInventorySaveData(),
             campFireData = campFire.CreateSaveData()
         };
 
         string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
-        string path = Path.Combine(Application.persistentDataPath, "Save.json");
-        File.WriteAllText(path, json);
+        string path = Path.Combine(Application.persistentDataPath, SaveFileName);
 
+        File.WriteAllText(path, json);
         Debug.Log($"Save Complete: {path}");
     }
 
     public void LoadData()
     {
-        string path = Path.Combine(Application.persistentDataPath, "Save.json");
+        string path = Path.Combine(Application.persistentDataPath, SaveFileName);
 
         if (!File.Exists(path))
         {
@@ -60,7 +66,9 @@ public class SaveLoadManager : MonoBehaviour
             return;
         }
 
+        dayNightEventSystem.LoadSaveData(saveData.timeData);
         timeSystem.LoadSaveData(saveData.timeData);
+
         playerStats.LoadSaveData(saveData.playerData);
         playerController.LoadInventorySaveData(saveData.inventoryData, equippableDatabase, itemDataBase);
         campFire.LoadSaveData(saveData.campFireData);

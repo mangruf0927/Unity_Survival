@@ -7,10 +7,10 @@ public class TimeSystem : MonoBehaviour, ISubject
     [SerializeField] private float dayTime = 180f;
     [SerializeField] private float nightTime = 90f;
 
+    private readonly List<IObserver> ObserverList = new();
+
     private float timeElapsed;
     private Phase curPhase;
-
-    private readonly List<IObserver> ObserverList = new();
 
     private int cycleCount = 1;
     private int dayCount = 1;
@@ -26,12 +26,12 @@ public class TimeSystem : MonoBehaviour, ISubject
 
     public event Action<Phase, int> OnPhaseChanged;
 
-    void Start()
+    private void Start()
     {
         SetPhase(Phase.DAY);
     }
 
-    void Update()
+    private void Update()
     {
         timeElapsed -= Time.deltaTime;
 
@@ -58,6 +58,7 @@ public class TimeSystem : MonoBehaviour, ISubject
         {
             dayCount = dayCount,
             dayBonus = dayBonus,
+            cycleCount = cycleCount,
             timeElapsed = timeElapsed,
             curPhase = curPhase
         };
@@ -67,6 +68,7 @@ public class TimeSystem : MonoBehaviour, ISubject
     {
         dayCount = data.dayCount;
         dayBonus = data.dayBonus;
+        cycleCount = data.cycleCount;
         timeElapsed = data.timeElapsed;
         curPhase = data.curPhase;
 
