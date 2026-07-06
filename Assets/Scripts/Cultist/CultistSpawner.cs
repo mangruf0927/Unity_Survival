@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class CultistSpawner : MonoBehaviour
 {
     [SerializeField] private Transform player;
-    [SerializeField] private CampFire campFire;
+    [SerializeField] private Transform CampFire;
 
     [SerializeField] private float minRadius = 20f;
     [SerializeField] private float maxRadius = 30f;
@@ -31,6 +31,6 @@ public class CultistSpawner : MonoBehaviour
 
         CultistController controller = cultist.GetComponent<CultistController>();
         controller.SetWeapon(weaponType);
-        controller.SetUp(player, campFire);
+        controller.SetUp(player, CampFire);
     }
 }

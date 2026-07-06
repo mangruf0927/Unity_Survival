@@ -23,7 +23,7 @@ public class CultistAttackState : ICultistState
         {
             if (!cultistController.ShouldChasePlayer())
             {
-                if (cultistController.IsAwayFromCamp())
+                if (cultistController.IsAwayFromRaidCenter())
                 {
                     cultistStateMachine.ChangeState(CultistStateEnums.RETURN);
                 }

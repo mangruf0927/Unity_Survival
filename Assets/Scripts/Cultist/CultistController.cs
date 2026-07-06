@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CultistController : MonoBehaviour, IDamageable
+public class CultistController : MonoBehaviour
 {
     [Serializable]
     private class WeaponData
@@ -11,49 +11,61 @@ public class CultistController : MonoBehaviour, IDamageable
         public GameObject prefab;
     }
 
-    [SerializeField] private Transform target;
-    [SerializeField] private CampFire campFire;
+    [SerializeField] private CultistStats cultistStats;
     [SerializeField] private NavMeshAgent navMesh;
     [SerializeField] private Animator animator;
     [SerializeField] private CultistStateMachine cultistStateMachine;
-
-    // >>
-    [SerializeField] private float scanRange;          // 플레이어 감지 범위
-    [SerializeField] private float maxCampDistance;    // 플레이어를 놓쳤을 때 복귀를 판단하는 캠프 기준 거리
-    [SerializeField] private float returnDistance;     // 캠프파이어 중심에서 떨어져 멈출 거리
-    [SerializeField] private float returnSearchRange;  // 복귀 위치 주변에서 NavMesh 지점을 찾는 범위
-    [SerializeField] private float alertDuration;
-
     [SerializeField] private Transform equipPosition;
-    [SerializeField] private PoolTypeEnums cultistType;
     [SerializeField] private CultistWeaponType weaponType;
     [SerializeField] private WeaponData[] weaponDatas;
 
-    [SerializeField] private int maxHP = 125;
-    // <<
+    [SerializeField] private Transform target;
+    [SerializeField] private Transform raidCenter;
 
     private GameObject currentWeapon;
     private CultistWeapon weapon;
-    private int currentHp;
     private float lastAttackTime = float.NegativeInfinity;
     private float alertEndTime;
 
     public Animator Animator => animator;
     public CultistWeapon Weapon => weapon;
     public bool IsAlerted => Time.time < alertEndTime;
-    public PoolTypeEnums CultistType => cultistType;
+    public PoolTypeEnums CultistType => cultistStats.CultistType;
 
     private void Awake()
     {
         SetWeapon(weaponType);
     }
 
-    public void SetUp(Transform player, CampFire fire)
+    private void OnEnable()
+    {
+        if (cultistStats == null) return;
+        cultistStats.OnDamaged += OnDamaged;
+    }
+
+    private void OnDisable()
+    {
+        if (cultistStats == null) return;
+        cultistStats.OnDamaged -= OnDamaged;
+        alertEndTime = 0f;
+    }
+
+    private void OnDamaged(CultistStats stats)
+    {
+        if (stats.CurrentHp <= 0) return;
+
+        Alert();
+        cultistStateMachine.ChangeState(CultistStateEnums.CHASE);
+    }
+
+    public void SetUp(Transform player, Transform raidCenter)
     {
         target = player;
-        campFire = fire;
+        this.raidCenter = raidCenter;
 
-        currentHp = maxHP;
+        CultistData data = DataManager.Instance.CultistTable.Get(cultistStats.CultistId);
+        cultistStats.SetUp(data);
+
         alertEndTime = 0f;
         lastAttackTime = float.NegativeInfinity;
 
@@ -72,7 +84,7 @@ public class CultistController : MonoBehaviour, IDamageable
 
     public void Alert()
     {
-        alertEndTime = Time.time + alertDuration;
+        alertEndTime = Time.time + cultistStats.AlertDuration;
     }
 
     public bool ShouldChasePlayer()
@@ -87,7 +99,7 @@ public class CultistController : MonoBehaviour, IDamageable
         if (target == null) return false;
 
         float distance = (target.position - transform.position).sqrMagnitude;
-        return distance <= scanRange * scanRange;
+        return distance <= cultistStats.ScanRange * cultistStats.ScanRange;
     }
 
     public void Chase()
@@ -98,16 +110,18 @@ public class CultistController : MonoBehaviour, IDamageable
         navMesh.SetDestination(target.position);
     }
 
-    public void ReturnToCamp()
+    public void ReturnToRaidCenter()
     {
+        if (raidCenter == null) return;
+
         navMesh.isStopped = false;
 
-        Vector3 direction = (transform.position - campFire.transform.position).normalized;
+        Vector3 direction = (transform.position - raidCenter.position).normalized;
         if (direction == Vector3.zero) direction = transform.forward;
 
-        Vector3 returnPosition = campFire.transform.position + direction * returnDistance;
+        Vector3 returnPosition = raidCenter.position + direction * cultistStats.ReturnDistance;
 
-        if (NavMesh.SamplePosition(returnPosition, out var hit, returnSearchRange, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(returnPosition, out var hit, cultistStats.ReturnSearchRange, NavMesh.AllAreas))
         {
             navMesh.SetDestination(hit.position);
         }
@@ -119,12 +133,12 @@ public class CultistController : MonoBehaviour, IDamageable
         return navMesh.remainingDistance <= navMesh.stoppingDistance + 0.1f;
     }
 
-    public bool IsAwayFromCamp()
+    public bool IsAwayFromRaidCenter()
     {
-        if (campFire == null) return false;
+        if (raidCenter == null) return false;
 
-        float distance = (campFire.transform.position - transform.position).sqrMagnitude;
-        return distance > maxCampDistance * maxCampDistance;
+        float distance = (raidCenter.position - transform.position).sqrMagnitude;
+        return distance > cultistStats.MaxRaidCenterDistance * cultistStats.MaxRaidCenterDistance;
     }
 
     public bool CheckAttackRange()
@@ -189,20 +203,5 @@ public class CultistController : MonoBehaviour, IDamageable
         }
 
         currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-    }
-
-    public void TakeDamage(int dmg)
-    {
-        if (dmg <= 0 || currentHp <= 0) return;
-
-        currentHp = Mathf.Max(currentHp - dmg, 0);
-        if (currentHp <= 0)
-        {
-            cultistStateMachine.ChangeState(CultistStateEnums.DEAD);
-            return;
-        }
-
-        Alert();
-        cultistStateMachine.ChangeState(CultistStateEnums.CHASE);
     }
 }

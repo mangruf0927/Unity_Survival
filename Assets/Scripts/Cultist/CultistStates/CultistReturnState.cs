@@ -12,7 +12,7 @@ public class CultistReturnState : ICultistState
     public void Enter()
     {
         cultistController.Animator.SetFloat("speed", 1f);
-        cultistController.ReturnToCamp();
+        cultistController.ReturnToRaidCenter();
     }
 
     public void Update()

@@ -15,6 +15,7 @@ public class DataManager
     public DataTable<RangedWeaponData> RangedTable { get; } = new();
     public DataTable<ItemData> ItemTable { get; } = new();
     public DataTable<CampFireData> CampFireTable { get; } = new();
+    public DataTable<CultistData> CultistTable { get; } = new();
 
     public bool IsLoaded { get; private set; }
 
@@ -36,6 +37,7 @@ public class DataManager
         tableLoaderDictionary.Add("RangedTable", records => RangedTable.LoadFromToken(records));
         tableLoaderDictionary.Add("ItemTable", records => ItemTable.LoadFromToken(records));
         tableLoaderDictionary.Add("CampFireTable", records => CampFireTable.LoadFromToken(records));
+        tableLoaderDictionary.Add("CultistTable", records => CultistTable.LoadFromToken(records));
     }
 
     public void LoadAll()
