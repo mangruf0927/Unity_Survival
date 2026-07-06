@@ -12,11 +12,13 @@ public class TimeSystem : MonoBehaviour, ISubject
 
     private readonly List<IObserver> ObserverList = new();
 
+    private int cycleCount = 1;
     private int dayCount = 1;
     private int dayBonus;
     private int minutes;
     private int seconds;
 
+    public int CycleCount => cycleCount;
     public int DayCount => dayCount;
     public int Minutes => minutes;
     public int Seconds => seconds;
@@ -41,6 +43,7 @@ public class TimeSystem : MonoBehaviour, ISubject
             }
             else
             {
+                cycleCount++;
                 dayCount += 1 + dayBonus;
                 SetPhase(Phase.DAY);
             }

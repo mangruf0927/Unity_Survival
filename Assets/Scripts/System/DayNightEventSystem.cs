@@ -6,24 +6,58 @@ public class DayNightEventSystem : MonoBehaviour
     [SerializeField] private CultistSpawner cultistSpawner;
 
     [SerializeField] private int raidInterval = 4;
-    [SerializeField] private int meleeCultistCount = 2;
 
-    private void Start()
+    private int raidCount;
+    private int lastRaidCycle;
+
+    private void OnEnable()
     {
         timeSystem.OnPhaseChanged += PhaseChanged;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        timeSystem.OnPhaseChanged -= PhaseChanged;
+        if (timeSystem != null) timeSystem.OnPhaseChanged -= PhaseChanged;
     }
 
     private void PhaseChanged(Phase phase, int day)
     {
         if (phase != Phase.NIGHT) return;
-        if (day % raidInterval != 0) return;
 
-        cultistSpawner.Spawn(PoolTypeEnums.MELEE_CULTIST, meleeCultistCount);
-        Debug.Log($"{day}일차 신도 습격 시작");
+        int elapsedCycle = timeSystem.CycleCount;
+
+        if (elapsedCycle <= 0 || elapsedCycle % raidInterval != 0) return;
+        if (lastRaidCycle == elapsedCycle) return;
+
+        StartRaid(elapsedCycle);
+    }
+
+    private void StartRaid(int elapsedCycle)
+    {
+        lastRaidCycle = elapsedCycle;
+        raidCount++;
+
+        SpawnRaid();
+
+        Debug.Log($"{timeSystem.DayCount}일차 신도 습격 시작 / 실제 경과 사이클: {elapsedCycle} / 습격 횟수: {raidCount}");
+    }
+
+    private void SpawnRaid()
+    {
+        if (timeSystem.DayCount >= 50)
+        {
+            cultistSpawner.Spawn(PoolTypeEnums.MELEE_CULTIST, CultistWeaponType.MORNINGSTAR, 4);
+            cultistSpawner.Spawn(PoolTypeEnums.RANGED_CULTIST, CultistWeaponType.CROSSBOW, 2);
+            return;
+        }
+
+        if (raidCount == 1)
+        {
+            cultistSpawner.Spawn(PoolTypeEnums.MELEE_CULTIST, CultistWeaponType.AXE, 2);
+            return;
+        }
+
+        cultistSpawner.Spawn(PoolTypeEnums.MELEE_CULTIST, CultistWeaponType.SPEAR, 3);
+        cultistSpawner.Spawn(PoolTypeEnums.RANGED_CULTIST, CultistWeaponType.CROSSBOW, 1);
     }
 }

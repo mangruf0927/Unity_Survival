@@ -5609,11 +5609,11 @@ MonoBehaviour:
     size: 5
   - poolType: 6
     prefab: {fileID: 6690928699354950131, guid: 549bc67a7151440c4b667c0db1118f0b, type: 3}
-    parent: {fileID: 854097388}
+    parent: {fileID: 1545453346}
     size: 5
   - poolType: 7
     prefab: {fileID: 2311396390416092407, guid: 3b3dca44e411548b5b45083b415d90b6, type: 3}
-    parent: {fileID: 854097388}
+    parent: {fileID: 1545453346}
     size: 5
 --- !u!4 &634694067
 Transform:
@@ -9129,7 +9129,6 @@ MonoBehaviour:
   timeSystem: {fileID: 2023553405}
   cultistSpawner: {fileID: 1545453345}
   raidInterval: 4
-  meleeCultistCount: 2
 --- !u!4 &1011264661
 Transform:
   m_ObjectHideFlags: 0

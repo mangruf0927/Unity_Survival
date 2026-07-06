@@ -9,15 +9,15 @@ public class CultistSpawner : MonoBehaviour
     [SerializeField] private float minRadius = 20f;
     [SerializeField] private float maxRadius = 30f;
 
-    public void Spawn(PoolTypeEnums cultistType, int count)
+    public void Spawn(PoolTypeEnums cultistType, CultistWeaponType weaponType, int count)
     {
         for (int i = 0; i < count; i++)
         {
-            SpawnCultist(cultistType);
+            SpawnCultist(cultistType, weaponType);
         }
     }
 
-    private void SpawnCultist(PoolTypeEnums cultistType)
+    private void SpawnCultist(PoolTypeEnums cultistType, CultistWeaponType weaponType)
     {
         Vector2 direction = Random.insideUnitCircle.normalized;
         float distance = Random.Range(minRadius, maxRadius);
@@ -27,7 +27,10 @@ public class CultistSpawner : MonoBehaviour
 
         GameObject cultist = ObjectPool.Instance.GetFromPool(cultistType);
         cultist.transform.position = hit.position;
+
+
         CultistController controller = cultist.GetComponent<CultistController>();
+        controller.SetWeapon(weaponType);
         controller.SetUp(player, campFire);
     }
 }

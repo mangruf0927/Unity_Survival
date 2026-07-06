@@ -157,6 +157,8 @@ public class CultistController : MonoBehaviour, IDamageable
 
     public void SetWeapon(CultistWeaponType weaponType)
     {
+        this.weaponType = weaponType;
+
         if (weaponDatas == null) return;
 
         foreach (WeaponData data in weaponDatas)
