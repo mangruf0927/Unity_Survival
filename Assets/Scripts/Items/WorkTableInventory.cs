@@ -27,6 +27,57 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
     private readonly Dictionary<WorkTableItem, int> purchaseDictionary = new();
     private readonly List<IObserver> ObserverList = new();
 
+    public WorkTableSaveData CreateSaveData()
+    {
+        WorkTableSaveData data = new()
+        {
+            iron = iron,
+            wood = wood,
+            currentLevel = currentLevel,
+            purchaseDataList = new List<PurchaseSaveData>()
+        };
+
+        for (int i = 0; i < itemList.Length; i++)
+        {
+            WorkTableItem item = itemList[i];
+            int count = GetPurchaseCount(item);
+
+            if (count <= 0) continue;
+
+            data.purchaseDataList.Add(new PurchaseSaveData
+            {
+                itemIndex = i,
+                purchaseCount = count
+            });
+        }
+
+        return data;
+    }
+
+    public void LoadSaveData(WorkTableSaveData data)
+    {
+        if (data == null) return;
+
+        iron = Mathf.Max(0, data.iron);
+        wood = Mathf.Max(0, data.wood);
+        currentLevel = Mathf.Max(1, data.currentLevel);
+
+        purchaseDictionary.Clear();
+
+        if (data.purchaseDataList != null)
+        {
+            foreach (PurchaseSaveData purchaseData in data.purchaseDataList)
+            {
+                if (purchaseData.itemIndex < 0 || purchaseData.itemIndex >= itemList.Length) continue;
+
+                WorkTableItem item = itemList[purchaseData.itemIndex];
+                purchaseDictionary[item] = Mathf.Max(0, purchaseData.purchaseCount);
+            }
+        }
+
+        NotifyObservers();
+    }
+
     public void AddMaterial(MaterialType type, int amount)
     {
         if (type == MaterialType.IRON)

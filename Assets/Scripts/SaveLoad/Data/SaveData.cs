@@ -8,6 +8,7 @@ public class SaveData
     public PlayerSaveData playerData;
     public InventorySaveData inventoryData;
     public CampFireSaveData campFireData;
+    public WorkTableSaveData workTableSaveData;
 }
 
 [Serializable]
@@ -74,4 +75,20 @@ public class RangedWeaponSaveData
 {
     public int itemId;
     public int currentAmmo;
+}
+
+[Serializable]
+public class WorkTableSaveData
+{
+    public int iron;
+    public int wood;
+    public int currentLevel;
+    public List<PurchaseSaveData> purchaseDataList;
+}
+
+[Serializable]
+public class PurchaseSaveData
+{
+    public int itemIndex;
+    public int purchaseCount;
 }

@@ -7821,10 +7821,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveLoadManager
   timeSystem: {fileID: 2023553405}
-  dayNightEventSystem: {fileID: 0}
+  dayNightEventSystem: {fileID: 1011264660}
   playerStats: {fileID: 1700390272}
   playerController: {fileID: 1167997878}
   campFire: {fileID: 370338873}
+  workTableInventory: {fileID: 288484891}
   equippableDatabase: {fileID: 3000000001}
   itemDataBase: {fileID: 3000000002}
 --- !u!4 &858068049

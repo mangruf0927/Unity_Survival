@@ -9,6 +9,7 @@ public class SaveLoadManager : MonoBehaviour
     [SerializeField] private PlayerStats playerStats;
     [SerializeField] private PlayerController playerController;
     [SerializeField] private CampFire campFire;
+    [SerializeField] private WorkTableInventory workTableInventory;
 
     [SerializeField] private EquippableDatabase equippableDatabase;
     [SerializeField] private ItemDataBase itemDataBase;
@@ -17,7 +18,7 @@ public class SaveLoadManager : MonoBehaviour
 
     public void SaveData()
     {
-        if (timeSystem == null || playerStats == null || playerController == null || campFire == null)
+        if (timeSystem == null || playerStats == null || playerController == null || campFire == null || workTableInventory == null)
         {
             Debug.LogError("Save failed. SaveLoadManager references are missing.");
             return;
@@ -31,7 +32,8 @@ public class SaveLoadManager : MonoBehaviour
             timeData = timeData,
             playerData = playerStats.CreateSaveData(),
             inventoryData = playerController.CreateInventorySaveData(),
-            campFireData = campFire.CreateSaveData()
+            campFireData = campFire.CreateSaveData(),
+            workTableSaveData = workTableInventory.CreateSaveData()
         };
 
         string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
@@ -60,7 +62,7 @@ public class SaveLoadManager : MonoBehaviour
             return;
         }
 
-        if (timeSystem == null || playerStats == null || playerController == null || campFire == null)
+        if (timeSystem == null || playerStats == null || playerController == null || campFire == null || workTableInventory == null)
         {
             Debug.LogError("Load failed. SaveLoadManager references are missing.");
             return;
@@ -72,6 +74,7 @@ public class SaveLoadManager : MonoBehaviour
         playerStats.LoadSaveData(saveData.playerData);
         playerController.LoadInventorySaveData(saveData.inventoryData, equippableDatabase, itemDataBase);
         campFire.LoadSaveData(saveData.campFireData);
+        workTableInventory.LoadSaveData(saveData.workTableSaveData);
 
         Debug.Log("Load Complete");
     }
