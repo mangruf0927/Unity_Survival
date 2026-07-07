@@ -9,6 +9,7 @@ public class SaveData
     public InventorySaveData inventoryData;
     public CampFireSaveData campFireData;
     public WorkTableSaveData workTableSaveData;
+    public List<CultistSaveData> cultistSaveDataList;
 }
 
 [Serializable]
@@ -91,4 +92,18 @@ public class PurchaseSaveData
 {
     public int itemIndex;
     public int purchaseCount;
+}
+
+[Serializable]
+public class CultistSaveData
+{
+    public PoolTypeEnums cultistType;
+    public CultistWeaponType weaponType;
+
+    public float positionX;
+    public float positionY;
+    public float positionZ;
+    public float rotationY;
+
+    public int currentHp;
 }

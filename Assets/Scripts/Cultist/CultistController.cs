@@ -31,6 +31,8 @@ public class CultistController : MonoBehaviour
     public CultistWeapon Weapon => weapon;
     public bool IsAlerted => Time.time < alertEndTime;
     public PoolTypeEnums CultistType => cultistStats.CultistType;
+    public CultistWeaponType WeaponType => weaponType;
+    public int CurrentHp => cultistStats.CurrentHp;
 
     private void Awake()
     {
@@ -48,6 +50,37 @@ public class CultistController : MonoBehaviour
         if (cultistStats == null) return;
         cultistStats.OnDamaged -= OnDamaged;
         alertEndTime = 0f;
+    }
+
+    public CultistSaveData CreateSaveData()
+    {
+        Vector3 position = transform.position;
+
+        return new CultistSaveData
+        {
+            cultistType = CultistType,
+            weaponType = weaponType,
+            positionX = position.x,
+            positionY = position.y,
+            positionZ = position.z,
+            rotationY = transform.eulerAngles.y,
+            currentHp = CurrentHp
+        };
+    }
+
+    public void LoadSaveData(CultistSaveData data, Transform player, Transform raidCenter)
+    {
+        if (data == null) return;
+
+        SetWeapon(data.weaponType);
+        SetUp(player, raidCenter);
+
+        Vector3 position = new(data.positionX, data.positionY, data.positionZ);
+        Quaternion rotation = Quaternion.Euler(0f, data.rotationY, 0f);
+        transform.SetPositionAndRotation(position, rotation);
+
+        cultistStats.LoadHp(data.currentHp);
+        Alert();
     }
 
     private void OnDamaged(CultistStats stats)

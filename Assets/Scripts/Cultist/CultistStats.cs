@@ -60,6 +60,11 @@ public class CultistStats : MonoBehaviour, IDamageable
         if (hpBarController != null) hpBarController.Register(this);
     }
 
+    public void LoadHp(int hp)
+    {
+        CurrentHp = Mathf.Clamp(hp, 0, MaxHp);
+    }
+
     public void TakeDamage(int dmg)
     {
         if (dmg <= 0 || CurrentHp <= 0) return;

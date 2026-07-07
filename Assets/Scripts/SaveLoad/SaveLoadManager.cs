@@ -10,6 +10,7 @@ public class SaveLoadManager : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private CampFire campFire;
     [SerializeField] private WorkTableInventory workTableInventory;
+    [SerializeField] private CultistSpawner cultistSpawner;
 
     [SerializeField] private EquippableDatabase equippableDatabase;
     [SerializeField] private ItemDataBase itemDataBase;
@@ -18,7 +19,8 @@ public class SaveLoadManager : MonoBehaviour
 
     public void SaveData()
     {
-        if (timeSystem == null || playerStats == null || playerController == null || campFire == null || workTableInventory == null)
+        if (timeSystem == null || dayNightEventSystem == null || playerStats == null || playerController == null ||
+            campFire == null || workTableInventory == null || cultistSpawner == null)
         {
             Debug.LogError("Save failed. SaveLoadManager references are missing.");
             return;
@@ -33,7 +35,8 @@ public class SaveLoadManager : MonoBehaviour
             playerData = playerStats.CreateSaveData(),
             inventoryData = playerController.CreateInventorySaveData(),
             campFireData = campFire.CreateSaveData(),
-            workTableSaveData = workTableInventory.CreateSaveData()
+            workTableSaveData = workTableInventory.CreateSaveData(),
+            cultistSaveDataList = cultistSpawner.CreateSaveData()
         };
 
         string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
@@ -62,7 +65,8 @@ public class SaveLoadManager : MonoBehaviour
             return;
         }
 
-        if (timeSystem == null || playerStats == null || playerController == null || campFire == null || workTableInventory == null)
+        if (timeSystem == null || dayNightEventSystem == null || playerStats == null || playerController == null ||
+            campFire == null || workTableInventory == null || cultistSpawner == null)
         {
             Debug.LogError("Load failed. SaveLoadManager references are missing.");
             return;
@@ -75,6 +79,7 @@ public class SaveLoadManager : MonoBehaviour
         playerController.LoadInventorySaveData(saveData.inventoryData, equippableDatabase, itemDataBase);
         campFire.LoadSaveData(saveData.campFireData);
         workTableInventory.LoadSaveData(saveData.workTableSaveData);
+        cultistSpawner.LoadSaveData(saveData.cultistSaveDataList);
 
         Debug.Log("Load Complete");
     }
