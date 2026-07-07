@@ -20,6 +20,8 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
     [SerializeField] private TextMeshProUGUI ironCostText;
     [SerializeField] private TextMeshProUGUI woodCostText;
     [SerializeField] private Button craftButton;
+    [SerializeField] private TextMeshProUGUI craftText;
+    [SerializeField] private Color lackMaterialColor;
 
     [Header("Slot")]
     [SerializeField] private WorkTableItemSlot slotPrefab;
@@ -37,7 +39,6 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
     private void Awake()
     {
         inventory.AddObserver(this);
-
         CreateSlots();
 
         inventoryPanel.SetActive(false);
@@ -153,8 +154,39 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
 
         SetDetailInfo(selectedItem);
         SetDetailCost(selectedItem);
+        SetCraftButton(selectedItem);
+    }
 
-        craftButton.interactable = hasItem;
+    private void SetCraftButton(WorkTableItem item)
+    {
+        bool unlocked = inventory.IsUnlocked(item);
+        bool soldOut = inventory.IsSoldOut(item);
+
+        if (!unlocked)
+        {
+            SetCraftStatus("잠겨 있음");
+        }
+        else if (soldOut)
+        {
+            SetCraftStatus("구매 완료");
+        }
+        else
+        {
+            SetCraftAvailable();
+        }
+    }
+
+    private void SetCraftStatus(string text)
+    {
+        craftButton.gameObject.SetActive(false);
+        craftText.gameObject.SetActive(true);
+        craftText.text = text;
+    }
+
+    private void SetCraftAvailable()
+    {
+        craftButton.gameObject.SetActive(true);
+        craftText.gameObject.SetActive(false);
     }
 
     private void SetDetailInfo(WorkTableItem item)
@@ -166,13 +198,14 @@ public class WorkTableInventoryUI : MonoBehaviour, IObserver
 
     private void SetDetailCost(WorkTableItem item)
     {
-        bool soldOut = inventory.IsSoldOut(item);
-
-        ironCost.SetActive(!soldOut && item.needIron > 0);
-        woodCost.SetActive(!soldOut && item.needWood > 0);
+        ironCost.SetActive(item.needIron > 0);
+        woodCost.SetActive(item.needWood > 0);
 
         ironCostText.text = item.needIron.ToString();
         woodCostText.text = item.needWood.ToString();
+
+        ironCostText.color = inventory.Iron < item.needIron ? lackMaterialColor : Color.white;
+        woodCostText.color = inventory.Wood < item.needWood ? lackMaterialColor : Color.white;
     }
 
     public void Notify()
