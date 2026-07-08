@@ -121,12 +121,17 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
         if (!CanBuy(item)) return false;
         if (item.itemPrefab == null || currentPlayer == null) return false;
 
-        PlaceableItem newItem = Instantiate(item.itemPrefab);
-
-        if (!currentPlayer.GetEquippableItem(newItem))
+        if (!item.unlocksNextLevel)
         {
-            Destroy(newItem.gameObject);
-            return false;
+            if (item.itemPrefab == null) return false;
+
+            PlaceableItem newItem = Instantiate(item.itemPrefab);
+
+            if (!currentPlayer.GetEquippableItem(newItem))
+            {
+                Destroy(newItem.gameObject);
+                return false;
+            }
         }
 
         iron -= item.needIron;

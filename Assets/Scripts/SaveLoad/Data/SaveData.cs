@@ -11,6 +11,7 @@ public class SaveData
     public WorkTableSaveData workTableSaveData;
     public List<CultistSaveData> cultistSaveDataList;
     public List<ItemSaveData> itemSaveDataList;
+    public List<EquippableSaveData> equippableSaveDataList;
 }
 
 [Serializable]
@@ -111,6 +112,20 @@ public class CultistSaveData
 
 [Serializable]
 public class ItemSaveData
+{
+    public int itemId;
+
+    public float positionX;
+    public float positionY;
+    public float positionZ;
+
+    public float rotationX;
+    public float rotationY;
+    public float rotationZ;
+}
+
+[Serializable]
+public class EquippableSaveData
 {
     public int itemId;
 

@@ -12,6 +12,7 @@ public class SaveLoadManager : MonoBehaviour
     [SerializeField] private WorkTableInventory workTableInventory;
     [SerializeField] private CultistSpawner cultistSpawner;
     [SerializeField] private ItemSpawner itemSpawner;
+    [SerializeField] private EquippableSpawner equippableSpawner;
 
     [SerializeField] private EquippableDatabase equippableDatabase;
     [SerializeField] private ItemDataBase itemDataBase;
@@ -38,7 +39,8 @@ public class SaveLoadManager : MonoBehaviour
             campFireData = campFire.CreateSaveData(),
             workTableSaveData = workTableInventory.CreateSaveData(),
             cultistSaveDataList = cultistSpawner.CreateSaveData(),
-            itemSaveDataList = itemSpawner.CreateSaveData()
+            itemSaveDataList = itemSpawner.CreateSaveData(),
+            equippableSaveDataList = equippableSpawner.CreateSaveData()
         };
 
         string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
@@ -83,6 +85,7 @@ public class SaveLoadManager : MonoBehaviour
         workTableInventory.LoadSaveData(saveData.workTableSaveData);
         cultistSpawner.LoadSaveData(saveData.cultistSaveDataList);
         itemSpawner.LoadSaveData(saveData.itemSaveDataList);
+        equippableSpawner.LoadSaveData(saveData.equippableSaveDataList);
 
         Debug.Log("Load Complete");
     }

@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InteractionUI interactionUI;
     [SerializeField] private ObjectPlacement objectPlacement;
     [SerializeField] private ItemSpawner itemSpawner;
+    [SerializeField] private EquippableSpawner equippableSpawner;
 
     private PlayerStats playerStats;
     private Rigidbody rigid;
@@ -140,6 +141,8 @@ public class PlayerController : MonoBehaviour
         if (item == null) return false;
         if (!inventory.AddItem(item, out EquippableItem prevItem)) return false;
 
+        item.UnregisterEquippable();
+
         item.Attach(equipPosition);
         item.gameObject.SetActive(false);
 
@@ -223,6 +226,11 @@ public class PlayerController : MonoBehaviour
 
         item.gameObject.SetActive(true);
         item.Detach();
+
+        if (equippableSpawner != null)
+        {
+            equippableSpawner.Register(item);
+        }
 
         currentEquipped = null;
         currentWeapon = null;

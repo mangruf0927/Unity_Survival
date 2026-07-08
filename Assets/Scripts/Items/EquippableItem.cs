@@ -7,6 +7,7 @@ public abstract class EquippableItem : MonoBehaviour
     [SerializeField] private Sprite itemIcon;
     [SerializeField] private int itemId;
 
+    private EquippableSpawner equippableSpawner;
     protected string itemName;
 
     private Rigidbody rigid;
@@ -24,6 +25,24 @@ public abstract class EquippableItem : MonoBehaviour
     private void Awake()
     {
         InitComponents();
+    }
+
+    public void SetEquippableSpawner(EquippableSpawner spawner)
+    {
+        equippableSpawner = spawner;
+    }
+
+    public void UnregisterEquippable()
+    {
+        if (equippableSpawner == null) return;
+
+        equippableSpawner.Unregister(this);
+        equippableSpawner = null;
+    }
+
+    private void OnDestroy()
+    {
+        UnregisterEquippable();
     }
 
     public virtual void Attach(Transform position)
