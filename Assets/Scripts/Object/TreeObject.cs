@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class TreeObject : MonoBehaviour
 {
-    [SerializeField] private GameObject log;
+    [SerializeField] private int logItemId;
+    [SerializeField] private ItemSpawner itemSpawner;
+    //[SerializeField] private GameObject log;
     [SerializeField] private int maxHP = 100;
     [SerializeField] private float shakeAngle;
     [SerializeField] private float shakeTime;
@@ -63,8 +65,8 @@ public class TreeObject : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            Vector3 randomPos = new Vector3(Random.Range(-0.5f, 0.5f), 0.3f, Random.Range(-0.5f, 0.5f));
-            Instantiate(log, transform.position + randomPos, Quaternion.identity);
+            Vector3 randomPos = new(Random.Range(-0.5f, 0.5f), 0.3f, Random.Range(-0.5f, 0.5f));
+            itemSpawner.SpawnItem(logItemId, transform.position + randomPos, Quaternion.identity);
         }
     }
 }

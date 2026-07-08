@@ -10,6 +10,7 @@ public class SaveData
     public CampFireSaveData campFireData;
     public WorkTableSaveData workTableSaveData;
     public List<CultistSaveData> cultistSaveDataList;
+    public List<ItemSaveData> itemSaveDataList;
 }
 
 [Serializable]
@@ -106,4 +107,18 @@ public class CultistSaveData
     public float rotationY;
 
     public int currentHp;
+}
+
+[Serializable]
+public class ItemSaveData
+{
+    public int itemId;
+
+    public float positionX;
+    public float positionY;
+    public float positionZ;
+
+    public float rotationX;
+    public float rotationY;
+    public float rotationZ;
 }

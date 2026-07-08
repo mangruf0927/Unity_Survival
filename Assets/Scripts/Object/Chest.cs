@@ -6,7 +6,8 @@ public class Chest : MonoBehaviour, IInteractable
     [SerializeField] private float openTime = 3f;
     [SerializeField] private Animator animator;
 
-    [SerializeField] private List<GameObject> itemList;
+    [SerializeField] private List<int> itemIdList;
+    [SerializeField] private ItemSpawner itemSpawner;
     [SerializeField] private Transform spawnPoint;
 
     [SerializeField] private Transform uiPoint;
@@ -41,10 +42,9 @@ public class Chest : MonoBehaviour, IInteractable
 
     private void RandomItem()
     {
-        if (itemList == null || itemList.Count == 0) return;
         if (spawnPoint == null) return;
 
-        int idx = Random.Range(0, itemList.Count);
-        Instantiate(itemList[idx], spawnPoint.position, Quaternion.identity);
+        int idx = Random.Range(0, itemIdList.Count);
+        itemSpawner.SpawnItem(itemIdList[idx], spawnPoint.position, Quaternion.identity);
     }
 }

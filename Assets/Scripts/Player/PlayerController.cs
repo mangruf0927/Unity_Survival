@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform equipPosition;
     [SerializeField] private InteractionUI interactionUI;
     [SerializeField] private ObjectPlacement objectPlacement;
+    [SerializeField] private ItemSpawner itemSpawner;
 
     private PlayerStats playerStats;
     private Rigidbody rigid;
@@ -305,6 +306,9 @@ public class PlayerController : MonoBehaviour
 
         item.transform.position = transform.position + transform.forward * 1.5f + Vector3.up;
         item.ResetPhysics();
+
+        if (itemSpawner != null) itemSpawner.Register(item);
+
         OnSackChanged?.Invoke();
     }
 

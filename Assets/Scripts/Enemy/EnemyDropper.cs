@@ -14,11 +14,13 @@ public class EnemyDropper : MonoBehaviour
 {
     [SerializeField] private List<DropItemInfo> dropItemList;
 
+    private ItemSpawner itemSpawner;
     private ItemDataBase itemDataBase;
 
-    public void SetUp(ItemDataBase database)
+    public void SetUp(ItemDataBase database, ItemSpawner spawner)
     {
         itemDataBase = database;
+        itemSpawner = spawner;
     }
 
     public void DropItems()
@@ -28,24 +30,19 @@ public class EnemyDropper : MonoBehaviour
         foreach (DropItemInfo dropItem in dropItemList)
         {
             if (dropItem == null || Random.value > dropItem.chance) continue;
-
-            Item prefab = itemDataBase.GetPrefab(dropItem.itemId);
-            if (prefab == null) continue;
-
             int count = Random.Range(dropItem.minCount, dropItem.maxCount + 1);
 
-            for (int i = 0; i < count; i++) SpawnItem(prefab);
+            for (int i = 0; i < count; i++)
+                SpawnItem(dropItem.itemId);
         }
     }
 
-    private void SpawnItem(Item prefab)
+    private void SpawnItem(int itemId)
     {
         Vector2 offset = Random.insideUnitCircle.normalized * Random.Range(0.5f, 1.5f);
         Vector3 dropPosition = transform.position + new Vector3(offset.x, 1f, offset.y);
-        Debug.Log(transform.position);
-        Debug.Log(offset);
-        Debug.Log(dropPosition);
 
-        Instantiate(prefab, dropPosition, Quaternion.identity).ResetPhysics();
+        itemSpawner.SpawnItem(itemId, dropPosition, Quaternion.identity);
+        // Instantiate(prefab, dropPosition, Quaternion.identity).ResetPhysics();
     }
 }

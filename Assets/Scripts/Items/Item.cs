@@ -4,6 +4,8 @@ public class Item : MonoBehaviour
 {
     [SerializeField] private int itemId;
 
+    private ItemSpawner itemSpawner;
+
     private ItemData itemData;
     private Rigidbody rigid;
 
@@ -18,9 +20,27 @@ public class Item : MonoBehaviour
         SetUp(data);
     }
 
+    private void OnDestroy()
+    {
+        UnregisterItem();
+    }
+
     public void SetUp(ItemData data)
     {
         itemData = data;
+    }
+
+    public void SetItemSpawner(ItemSpawner spawner)
+    {
+        itemSpawner = spawner;
+    }
+
+    public void UnregisterItem()
+    {
+        if (itemSpawner == null) return;
+
+        itemSpawner.Unregister(this);
+        itemSpawner = null;
     }
 
     public void ResetPhysics()

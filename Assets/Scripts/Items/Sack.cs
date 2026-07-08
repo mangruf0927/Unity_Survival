@@ -86,6 +86,7 @@ public class Sack : EquippableItem, ISubject
     {
         if (item == null || IsFull) return false;
 
+        item.UnregisterItem();
         item.ResetPhysics();
 
         itemStack.Push(item);
