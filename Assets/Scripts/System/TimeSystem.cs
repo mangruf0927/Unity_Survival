@@ -17,11 +17,13 @@ public class TimeSystem : MonoBehaviour, ISubject
     private int dayBonus;
     private int minutes;
     private int seconds;
+    private bool isTimerUnlocked;
 
     public int CycleCount => cycleCount;
     public int DayCount => dayCount;
     public int Minutes => minutes;
     public int Seconds => seconds;
+    public bool IsTimerUnlocked => isTimerUnlocked;
     public Phase CurPhase => curPhase;
 
     public event Action<Phase, int> OnPhaseChanged;
@@ -100,6 +102,12 @@ public class TimeSystem : MonoBehaviour, ISubject
     public void RemoveDays(int days)
     {
         dayBonus = Mathf.Max(0, dayBonus - days);
+    }
+
+    public void SetTimerUnlocked(bool isUnlocked)
+    {
+        isTimerUnlocked = isUnlocked;
+        NotifyObservers();
     }
 
     // >>

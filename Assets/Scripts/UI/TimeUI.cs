@@ -20,7 +20,12 @@ public class TimeUI : MonoBehaviour, IObserver
 
     public void Notify()
     {
-        timerText.text = $"{timeSystem.Minutes:00} : {timeSystem.Seconds:00}";
         dayCountText.text = $"Day {timeSystem.DayCount}";
+
+        timerText.gameObject.SetActive(timeSystem.IsTimerUnlocked);
+
+        if (!timeSystem.IsTimerUnlocked) return;
+
+        timerText.text = $"{timeSystem.Minutes:00} : {timeSystem.Seconds:00}";
     }
 }

@@ -75,11 +75,7 @@ public class ObjectRegistry : MonoBehaviour
 
     public void LoadSaveData(WorldSaveData data)
     {
-        if (data == null)
-        {
-            Debug.LogWarning("World object save data is missing. Save again after changing tree/chest state.");
-            return;
-        }
+        if (data == null) return;
 
         nextInstanceId = Math.Max(data.nextInstanceId, StartId);
         UpdateNextInstanceId(data.objectSaveDataList);

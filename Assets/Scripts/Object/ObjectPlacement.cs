@@ -77,6 +77,12 @@ public class ObjectPlacement : MonoBehaviour
             bed.OnPlaced(timeSystem);
         }
 
+        SunDial sunDial = placedObject.GetComponentInChildren<SunDial>();
+        if (sunDial != null)
+        {
+            sunDial.OnPlaced(timeSystem);
+        }
+
         Destroy(previewPrefab);
         ClearPlacement();
 
