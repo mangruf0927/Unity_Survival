@@ -34,14 +34,29 @@ public class GameInput : MonoBehaviour
         int number = InputNumber();
         if (number != -1) playerController.EquipItem(number);
 
-        OnAttack();
+        OnLeftClick();
     }
 
-    private void OnAttack()
+    private void OnLeftClick()
     {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            playerController.CancelRecoveryUse();
+            return;
+        }
+
+        if (playerController.CurrentRecovery != null)
+        {
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+                playerController.StartRecoveryUse();
+            else if (Mouse.current.leftButton.wasReleasedThisFrame)
+                playerController.CancelRecoveryUse();
+
+            return;
+        }
+
         if (playerController.CurrentWeapon == null) return;
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
         Ray camRay = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(camRay, out RaycastHit hit, 100f, ~0, QueryTriggerInteraction.Collide)) playerController.SetAimPoint(hit.point);

@@ -5,6 +5,7 @@ public class PlaceableItem : EquippableItem
     [SerializeField] private GameObject placePrefab;
 
     public GameObject PlacePrefab => placePrefab;
+    public override bool CanDrop => canDrop;
 
     public override void OnEquip(PlayerController player)
     {

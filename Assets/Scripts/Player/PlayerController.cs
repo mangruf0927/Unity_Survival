@@ -25,13 +25,18 @@ public class PlayerController : MonoBehaviour
     private Weapon currentWeapon;
     private Sack currentSack;
     private IInteractable currentInteractable;
+    private RecoveryItem currentRecoveryItem;
 
     private bool isItemHovering;
     private bool isHolding;
     private float holdTimer;
 
+    private bool isUsingRecovery;
+    private float recoveryTimer;
+
     public Animator Animator => animator;
     public Weapon CurrentWeapon => currentWeapon;
+    public RecoveryItem CurrentRecovery => currentRecoveryItem;
 
     public delegate void EquippedHandler(EquippableItem item);
     public event EquippedHandler OnEquipped;
@@ -47,11 +52,13 @@ public class PlayerController : MonoBehaviour
     {
         FindInteractable();
         UpdateHoldTimer();
+        UpdateRecoveryTimer();
     }
 
     public void SetDirection(Vector2 direction) { moveDirection = direction; }
     public void SetRun(bool state) { isRun = state; }
     public void SetSack(Sack sack) { currentSack = sack; }
+    public void SetRecoveryItem(RecoveryItem item) { currentRecoveryItem = item; }
 
     public void SetWeapon(Weapon weapon)
     {
@@ -124,6 +131,24 @@ public class PlayerController : MonoBehaviour
     public void Eat(int hunger, int hp)
     {
         playerStats.EatFood(hunger, hp);
+    }
+
+    public void RecoverHp(int hp)
+    {
+        playerStats.RecoverHp(hp);
+    }
+
+    public void StartRecoveryUse()
+    {
+        if (currentRecoveryItem == null) return;
+
+        isUsingRecovery = true;
+    }
+
+    public void CancelRecoveryUse()
+    {
+        isUsingRecovery = false;
+        recoveryTimer = 0f;
     }
 
     public void StartPlacement(PlaceableItem item)
@@ -204,6 +229,7 @@ public class PlayerController : MonoBehaviour
             currentEquipped = null;
             currentWeapon = null;
             currentSack = null;
+            currentRecoveryItem = null;
         }
 
         if (prevItem is Sack prevSack && newItem is Sack newSack)
@@ -235,6 +261,7 @@ public class PlayerController : MonoBehaviour
         currentEquipped = null;
         currentWeapon = null;
         currentSack = null;
+        currentRecoveryItem = null;
 
         UpdateUpperBodyWeight();
         OnEquipped?.Invoke(currentEquipped);
@@ -251,6 +278,7 @@ public class PlayerController : MonoBehaviour
         currentEquipped = null;
         currentWeapon = null;
         currentSack = null;
+        currentRecoveryItem = null;
 
         UpdateUpperBodyWeight();
         OnEquipped?.Invoke(currentEquipped);
@@ -286,6 +314,7 @@ public class PlayerController : MonoBehaviour
         currentEquipped = null;
         currentSack = null;
         currentWeapon = null;
+        currentRecoveryItem = null;
 
         UpdateUpperBodyWeight();
         OnEquipped?.Invoke(currentEquipped);
@@ -409,6 +438,19 @@ public class PlayerController : MonoBehaviour
             isHolding = false;
             interactionUI.SetProgress(0f);
         }
+    }
+
+    private void UpdateRecoveryTimer()
+    {
+        if (!isUsingRecovery || currentRecoveryItem == null) return;
+
+        recoveryTimer += Time.deltaTime;
+
+        if (recoveryTimer < currentRecoveryItem.HoldTime) return;
+
+        RecoveryItem item = currentRecoveryItem;
+        CancelRecoveryUse();
+        item.Apply(this);
     }
 
     public bool HasInteractable()

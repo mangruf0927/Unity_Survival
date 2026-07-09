@@ -122,6 +122,14 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
         NotifyObservers();
     }
 
+    public void RecoverHp(int hp)
+    {
+        if (hp <= 0) return;
+
+        CurrentHp = Mathf.Clamp(CurrentHp + hp, 0, maxHp);
+        NotifyObservers();
+    }
+
     public void TakeDamage(int dmg)
     {
         if (dmg <= 0 || CurrentHp <= 0) return;
