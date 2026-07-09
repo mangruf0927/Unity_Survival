@@ -18,6 +18,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private ItemDataBase itemDataBase;
     [SerializeField] private List<EnemySpawnInfo> spawnInfoList;
     [SerializeField] private ItemSpawner itemSpawner;
+    [SerializeField] private EnemyHPBarController hpBarController;
 
     private Dictionary<PoolTypeEnums, EnemySpawnInfo> typeToInfoDictionary;
     public int RequiredLevel => requiredLevel;
@@ -101,6 +102,7 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
+        enemyStats.SetHPBarController(hpBarController);
         enemyStats.SetUp(data);
 
         enemyStats.OnDead -= EnemyDead;

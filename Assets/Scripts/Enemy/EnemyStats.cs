@@ -40,6 +40,11 @@ public class EnemyStats : MonoBehaviour, IDamageable
         OnDead = null;
     }
 
+    public void SetHPBarController(EnemyHPBarController controller)
+    {
+        hpBarController = controller;
+    }
+
     public void SetUp(EnemyData data)
     {
         enemyName = data.Name;

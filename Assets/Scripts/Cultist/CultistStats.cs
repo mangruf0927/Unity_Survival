@@ -38,6 +38,11 @@ public class CultistStats : MonoBehaviour, IDamageable
         OnDead = null;
     }
 
+    public void SetHPBarController(CultistHPBarController controller)
+    {
+        hpBarController = controller;
+    }
+
     public void SetUp(CultistData data)
     {
         if (data == null) return;
@@ -51,11 +56,6 @@ public class CultistStats : MonoBehaviour, IDamageable
         cultistType = data.CultistType;
 
         CurrentHp = maxHp;
-
-        if (hpBarController == null)
-        {
-            hpBarController = FindFirstObjectByType<CultistHPBarController>();
-        }
 
         if (hpBarController != null) hpBarController.Register(this);
     }

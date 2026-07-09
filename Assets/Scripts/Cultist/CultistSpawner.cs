@@ -6,6 +6,7 @@ public class CultistSpawner : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private Transform CampFire;
+    [SerializeField] private CultistHPBarController hpBarController;
 
     [SerializeField] private float minRadius = 20f;
     [SerializeField] private float maxRadius = 30f;
@@ -32,6 +33,7 @@ public class CultistSpawner : MonoBehaviour
         cultist.transform.position = hit.position;
 
         CultistController controller = cultist.GetComponent<CultistController>();
+        SetHPBarController(controller);
         controller.SetWeapon(weaponType);
         controller.SetUp(player, CampFire);
 
@@ -80,8 +82,17 @@ public class CultistSpawner : MonoBehaviour
             return;
         }
 
+        SetHPBarController(controller);
         controller.LoadSaveData(data, player, CampFire);
         Register(controller);
+    }
+
+    private void SetHPBarController(CultistController controller)
+    {
+        if (controller == null) return;
+
+        CultistStats stats = controller.GetComponent<CultistStats>();
+        if (stats != null) stats.SetHPBarController(hpBarController);
     }
 
     private void Register(CultistController controller)
