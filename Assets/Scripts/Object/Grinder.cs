@@ -6,12 +6,14 @@ public class Grinder : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer != LayerMask.NameToLayer("Item")) return;
-
-        Item item = other.GetComponent<Item>();
+        Item item = other.GetComponentInParent<Item>();
         if (item == null) return;
 
+        if (item.gameObject.layer != LayerMask.NameToLayer("Item")) return;
+
         ItemData data = item.Data;
+        if (data.MaterialData == null) return;
+
         if (data.ItemType == ItemType.MATERIAL || data.HasProperty(ItemProperty.MATERIAL))
         {
             int count = data.MaterialData.GrindCount;

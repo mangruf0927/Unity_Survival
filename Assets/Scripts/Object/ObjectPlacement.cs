@@ -5,6 +5,7 @@ public class ObjectPlacement : MonoBehaviour
 {
     [SerializeField] private TimeSystem timeSystem;
     [SerializeField] private ObjectRegistry objectRegistry;
+    [SerializeField] private LayerMask groundLayerMask = ~0;
     [SerializeField] private float placeDistance = 2f;
 
     private PlayerController currentPlayer;
@@ -48,14 +49,8 @@ public class ObjectPlacement : MonoBehaviour
         Vector3 targetPosition = currentPlayer.transform.position + forward * placeDistance;
         Vector3 rayOrigin = new(targetPosition.x, 50f, targetPosition.z);
 
-        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 100f))
+        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 100f, groundLayerMask, QueryTriggerInteraction.Ignore))
         {
-            if (!hit.collider.CompareTag("Ground"))
-            {
-                canPlace = false;
-                return;
-            }
-
             previewPrefab.transform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(forward));
             SnapToGround(previewPrefab, hit.point.y);
             canPlace = true;

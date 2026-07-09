@@ -119,11 +119,10 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
     public bool BuyItem(WorkTableItem item)
     {
         if (!CanBuy(item)) return false;
-        if (item.itemPrefab == null || currentPlayer == null) return false;
 
         if (!item.unlocksNextLevel)
         {
-            if (item.itemPrefab == null) return false;
+            if (item.itemPrefab == null || currentPlayer == null) return false;
 
             PlaceableItem newItem = Instantiate(item.itemPrefab);
 
@@ -139,7 +138,10 @@ public class WorkTableInventory : MonoBehaviour, ISubject, IInteractable
 
         purchaseDictionary[item] = GetPurchaseCount(item) + 1;
 
-        if (item.unlocksNextLevel) currentLevel++;
+        if (item.unlocksNextLevel)
+        {
+            currentLevel = Mathf.Max(currentLevel, item.requiredLevel + 1);
+        }
 
         NotifyObservers();
         return true;

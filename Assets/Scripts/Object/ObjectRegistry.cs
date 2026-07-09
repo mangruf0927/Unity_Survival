@@ -20,6 +20,11 @@ public class ObjectRegistry : MonoBehaviour
 
     public long CreateInstanceId()
     {
+        while (worldObjectMap.ContainsKey(nextInstanceId))
+        {
+            nextInstanceId++;
+        }
+
         return nextInstanceId++;
     }
 
@@ -28,6 +33,7 @@ public class ObjectRegistry : MonoBehaviour
         if (obj == null || obj.InstanceId <= 0) return;
 
         worldObjectMap[obj.InstanceId] = obj;
+        UpdateNextInstanceId(obj.InstanceId);
 
         if (!worldObjectList.Contains(obj) && IsDynamicObject(obj.ObjectType) && !runtimeObjectList.Contains(obj))
         {
@@ -125,6 +131,12 @@ public class ObjectRegistry : MonoBehaviour
             obj.SetInstanceId(fallbackId);
             Register(obj);
         }
+
+        foreach (WorldObject obj in runtimeObjectList)
+        {
+            if (obj == null || obj.InstanceId <= 0) continue;
+            Register(obj);
+        }
     }
 
     private void ClearRuntimeObjects()
@@ -149,10 +161,15 @@ public class ObjectRegistry : MonoBehaviour
 
         foreach (ObjectSaveData data in dataList)
         {
-            if (data.instanceId >= nextInstanceId)
-            {
-                nextInstanceId = data.instanceId + 1;
-            }
+            UpdateNextInstanceId(data.instanceId);
+        }
+    }
+
+    private void UpdateNextInstanceId(long instanceId)
+    {
+        if (instanceId >= nextInstanceId)
+        {
+            nextInstanceId = instanceId + 1;
         }
     }
 
