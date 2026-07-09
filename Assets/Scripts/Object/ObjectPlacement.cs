@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class ObjectPlacement : MonoBehaviour
 {
     [SerializeField] private TimeSystem timeSystem;
+    [SerializeField] private ObjectRegistry objectRegistry;
     [SerializeField] private float placeDistance = 2f;
 
     private PlayerController currentPlayer;
@@ -73,6 +74,8 @@ public class ObjectPlacement : MonoBehaviour
         PlaceableItem item = currentItem;
 
         GameObject placedObject = Instantiate(item.PlacePrefab, previewPrefab.transform.position, previewPrefab.transform.rotation);
+        RegisterPlacedObject(placedObject);
+
         Bed bed = placedObject.GetComponentInChildren<Bed>();
         if (bed != null)
         {
@@ -83,6 +86,17 @@ public class ObjectPlacement : MonoBehaviour
         ClearPlacement();
 
         player.ConsumeEquippedItem(item);
+    }
+
+    private void RegisterPlacedObject(GameObject placedObject)
+    {
+        if (objectRegistry == null || placedObject == null) return;
+
+        WorldObject worldObject = placedObject.GetComponentInChildren<WorldObject>();
+        if (worldObject == null) return;
+
+        worldObject.SetInstanceId(objectRegistry.CreateInstanceId());
+        objectRegistry.Register(worldObject);
     }
 
     public void CancelPlacement()

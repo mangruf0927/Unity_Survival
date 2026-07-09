@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemSpawner : MonoBehaviour
+public class ItemRegistry : MonoBehaviour
 {
     [SerializeField] private ItemDataBase itemDataBase;
     [SerializeField] private List<Transform> itemRootList;

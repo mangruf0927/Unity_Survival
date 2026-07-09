@@ -4,7 +4,7 @@ public class Item : MonoBehaviour
 {
     [SerializeField] private int itemId;
 
-    private ItemSpawner itemSpawner;
+    private ItemRegistry itemRegistry;
 
     private ItemData itemData;
     private Rigidbody rigid;
@@ -30,17 +30,17 @@ public class Item : MonoBehaviour
         itemData = data;
     }
 
-    public void SetItemSpawner(ItemSpawner spawner)
+    public void SetItemSpawner(ItemRegistry registry)
     {
-        itemSpawner = spawner;
+        itemRegistry = registry;
     }
 
     public void UnregisterItem()
     {
-        if (itemSpawner == null) return;
+        if (itemRegistry == null) return;
 
-        itemSpawner.Unregister(this);
-        itemSpawner = null;
+        itemRegistry.Unregister(this);
+        itemRegistry = null;
     }
 
     public void ResetPhysics()

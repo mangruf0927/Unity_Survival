@@ -1,37 +1,56 @@
 using System.Collections;
 using UnityEngine;
 
-public class TreeObject : MonoBehaviour
+public class TreeObject : WorldObject
 {
     [SerializeField] private int logItemId;
-    [SerializeField] private ItemSpawner itemSpawner;
-    //[SerializeField] private GameObject log;
+    [SerializeField] private ItemRegistry itemRegistry;
     [SerializeField] private int maxHP = 100;
     [SerializeField] private float shakeAngle;
     [SerializeField] private float shakeTime;
 
-    private int currentHP;
+    private int currentHp;
     private Quaternion original;
     private bool isShaking;
 
     private void Awake()
     {
-        currentHP = maxHP;
+        currentHp = maxHP;
         original = transform.rotation;
+    }
+
+    public override ObjectSaveData CreateSaveData()
+    {
+        ObjectSaveData data = base.CreateSaveData();
+
+        data.treeSaveData = new TreeSaveData
+        {
+            currentHp = currentHp
+        };
+
+        return data;
+    }
+
+    public override void LoadSaveData(ObjectSaveData data)
+    {
+        base.LoadSaveData(data);
+
+        if (data.treeSaveData == null) return;
+        currentHp = data.treeSaveData.currentHp;
     }
 
     public void TakeDamage(int damage)
     {
-        if (damage <= 0 || currentHP <= 0) return;
+        if (damage <= 0 || currentHp <= 0) return;
 
-        currentHP = Mathf.Max(currentHP - damage, 0);
+        currentHp = Mathf.Max(currentHp - damage, 0);
 
         if (!isShaking) StartCoroutine(Shake());
-        if (currentHP == 0)
+        if (currentHp == 0)
         {
             StopAllCoroutines();
             CreateLog();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -66,7 +85,7 @@ public class TreeObject : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             Vector3 randomPos = new(Random.Range(-0.5f, 0.5f), 0.3f, Random.Range(-0.5f, 0.5f));
-            itemSpawner.SpawnItem(logItemId, transform.position + randomPos, Quaternion.identity);
+            itemRegistry.SpawnItem(logItemId, transform.position + randomPos, Quaternion.identity);
         }
     }
 }

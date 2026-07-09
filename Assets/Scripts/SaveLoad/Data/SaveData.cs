@@ -12,6 +12,7 @@ public class SaveData
     public List<CultistSaveData> cultistSaveDataList;
     public List<ItemSaveData> itemSaveDataList;
     public List<EquippableSaveData> equippableSaveDataList;
+    public WorldSaveData worldSaveData;
 }
 
 [Serializable]
@@ -136,4 +137,44 @@ public class EquippableSaveData
     public float rotationX;
     public float rotationY;
     public float rotationZ;
+}
+
+[Serializable]
+public class WorldSaveData
+{
+    public long nextInstanceId;
+    public List<ObjectSaveData> objectSaveDataList;
+}
+
+[Serializable]
+public class ObjectSaveData
+{
+    public long instanceId;
+    public int itemId;
+    public ObjectType objectType;
+
+    public float positionX;
+    public float positionY;
+    public float positionZ;
+
+    public float rotationX;
+    public float rotationY;
+    public float rotationZ;
+
+    public bool isActive;
+
+    public TreeSaveData treeSaveData;
+    public ChestSaveData chestSaveData;
+}
+
+[Serializable]
+public class TreeSaveData
+{
+    public int currentHp;
+}
+
+[Serializable]
+public class ChestSaveData
+{
+    public bool isOpened;
 }

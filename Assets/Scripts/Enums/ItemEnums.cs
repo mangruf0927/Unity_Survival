@@ -5,6 +5,8 @@ public enum AmmoType { REVOLVER, RIFLE }
 public enum ItemType { FOOD, FUEL, MATERIAL, AMMO }
 public enum MaterialType { WOOD, IRON }
 
+public enum ObjectType { TREE, CHEST, PLACEABLE }
+
 [System.Flags]
 public enum ItemProperty
 {

@@ -17,7 +17,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int requiredLevel;
     [SerializeField] private ItemDataBase itemDataBase;
     [SerializeField] private List<EnemySpawnInfo> spawnInfoList;
-    [SerializeField] private ItemSpawner itemSpawner;
+    [SerializeField] private ItemRegistry itemRegistry;
     [SerializeField] private EnemyHPBarController hpBarController;
 
     private Dictionary<PoolTypeEnums, EnemySpawnInfo> typeToInfoDictionary;
@@ -91,7 +91,7 @@ public class EnemySpawner : MonoBehaviour
 
         if (enemy.TryGetComponent(out EnemyDropper enemyDropper))
         {
-            enemyDropper.SetUp(itemDataBase, itemSpawner);
+            enemyDropper.SetUp(itemDataBase, itemRegistry);
         }
 
         EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();

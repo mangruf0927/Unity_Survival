@@ -14,13 +14,13 @@ public class EnemyDropper : MonoBehaviour
 {
     [SerializeField] private List<DropItemInfo> dropItemList;
 
-    private ItemSpawner itemSpawner;
+    private ItemRegistry itemRegistry;
     private ItemDataBase itemDataBase;
 
-    public void SetUp(ItemDataBase database, ItemSpawner spawner)
+    public void SetUp(ItemDataBase database, ItemRegistry registry)
     {
         itemDataBase = database;
-        itemSpawner = spawner;
+        itemRegistry = registry;
     }
 
     public void DropItems()
@@ -42,7 +42,7 @@ public class EnemyDropper : MonoBehaviour
         Vector2 offset = Random.insideUnitCircle.normalized * Random.Range(0.5f, 1.5f);
         Vector3 dropPosition = transform.position + new Vector3(offset.x, 1f, offset.y);
 
-        itemSpawner.SpawnItem(itemId, dropPosition, Quaternion.identity);
+        itemRegistry.SpawnItem(itemId, dropPosition, Quaternion.identity);
         // Instantiate(prefab, dropPosition, Quaternion.identity).ResetPhysics();
     }
 }
