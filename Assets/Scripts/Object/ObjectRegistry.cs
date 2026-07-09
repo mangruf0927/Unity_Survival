@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ObjectRegistry : MonoBehaviour
 {
-    [SerializeField] private List<WorldObject> worldObjectList = new();
     [SerializeField] private ObjectDataBase objectDataBase;
+    [SerializeField] private List<Transform> objectRootList = new();
 
     private readonly Dictionary<long, WorldObject> worldObjectMap = new();
     private readonly List<WorldObject> runtimeObjectList = new();
@@ -35,7 +35,7 @@ public class ObjectRegistry : MonoBehaviour
         worldObjectMap[obj.InstanceId] = obj;
         UpdateNextInstanceId(obj.InstanceId);
 
-        if (!worldObjectList.Contains(obj) && IsDynamicObject(obj.ObjectType) && !runtimeObjectList.Contains(obj))
+        if (!IsSceneObject(obj) && IsDynamicObject(obj.ObjectType) && !runtimeObjectList.Contains(obj))
         {
             runtimeObjectList.Add(obj);
         }
@@ -112,14 +112,16 @@ public class ObjectRegistry : MonoBehaviour
     {
         worldObjectMap.Clear();
 
-        foreach (WorldObject obj in worldObjectList)
+        List<WorldObject> sceneObjectList = GetSceneObjectList();
+
+        foreach (WorldObject obj in sceneObjectList)
         {
             if (obj == null || obj.InstanceId <= 0) continue;
             Register(obj);
         }
 
         long fallbackId = StartId;
-        foreach (WorldObject obj in worldObjectList)
+        foreach (WorldObject obj in sceneObjectList)
         {
             if (obj == null || obj.InstanceId > 0) continue;
 
@@ -137,6 +139,38 @@ public class ObjectRegistry : MonoBehaviour
             if (obj == null || obj.InstanceId <= 0) continue;
             Register(obj);
         }
+    }
+
+    private List<WorldObject> GetSceneObjectList()
+    {
+        List<WorldObject> sceneObjectList = new();
+
+        foreach (Transform root in objectRootList)
+        {
+            if (root == null) continue;
+
+            WorldObject[] objects = root.GetComponentsInChildren<WorldObject>(true);
+            foreach (WorldObject obj in objects)
+            {
+                if (obj == null || sceneObjectList.Contains(obj)) continue;
+                sceneObjectList.Add(obj);
+            }
+        }
+
+        return sceneObjectList;
+    }
+
+    private bool IsSceneObject(WorldObject obj)
+    {
+        if (obj == null) return false;
+
+        foreach (Transform root in objectRootList)
+        {
+            if (root == null) continue;
+            if (obj.transform.IsChildOf(root)) return true;
+        }
+
+        return false;
     }
 
     private void ClearRuntimeObjects()
