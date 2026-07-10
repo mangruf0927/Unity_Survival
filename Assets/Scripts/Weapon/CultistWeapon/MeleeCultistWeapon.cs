@@ -24,10 +24,12 @@ public class MeleeCultistWeapon : CultistWeapon
 
     private void OnTriggerEnter(Collider other)
     {
-        if (hasHit || !other.CompareTag("Player")) return;
-        if (!other.TryGetComponent<IDamageable>(out var damageable)) return;
+        if (hasHit || other.CompareTag("Enemy")) return;
 
-        hasHit = true;
-        damageable.TakeDamage(AttackDamage);
+        if (other.CompareTag("Player") && other.TryGetComponent<IDamageable>(out var damageable))
+        {
+            damageable.TakeDamage(AttackDamage);
+            hasHit = true;
+        }
     }
 }

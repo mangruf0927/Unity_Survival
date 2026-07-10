@@ -5730,10 +5730,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1394780}
     m_Modifications:
-    - target: {fileID: 1782198941547028466, guid: 9a5c342fa695e4347a073abd00a8e329, type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2461674066397145396, guid: 9a5c342fa695e4347a073abd00a8e329, type: 3}
       propertyPath: m_LocalPosition.x
       value: 27
@@ -5774,30 +5770,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4884057585371022394, guid: 9a5c342fa695e4347a073abd00a8e329, type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4884057585371022394, guid: 9a5c342fa695e4347a073abd00a8e329, type: 3}
-      propertyPath: m_Size.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4884057585371022394, guid: 9a5c342fa695e4347a073abd00a8e329, type: 3}
-      propertyPath: m_Size.z
-      value: 0.8
-      objectReference: {fileID: 0}
     - target: {fileID: 5445241037656293905, guid: 9a5c342fa695e4347a073abd00a8e329, type: 3}
       propertyPath: m_Name
       value: Sack_Giant
       objectReference: {fileID: 0}
-    - target: {fileID: 5445241037656293905, guid: 9a5c342fa695e4347a073abd00a8e329, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8920029709564255238, guid: 9a5c342fa695e4347a073abd00a8e329, type: 3}
-      propertyPath: itemIcon
-      value: 
-      objectReference: {fileID: 21300000, guid: 72af138ab066a4c0d9963fcac11df123, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6685,55 +6661,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 753917773}
   m_CullTransparentMesh: 1
---- !u!1 &757750037
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 757750039}
-  - component: {fileID: 757750038}
-  m_Layer: 0
-  m_Name: MapGenerator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &757750038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 757750037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2723b5387cb71428ca2e7dbc8015dc9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
-  tilePrefab: {fileID: 1788820143}
-  tileSize: 15
-  maxRadius: 28
-  minHeight: 0
-  maxHeight: 1
---- !u!4 &757750039
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 757750037}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.17092, y: 0.27892, z: 8.59711}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &758939069
 GameObject:
   m_ObjectHideFlags: 0
@@ -14255,30 +14182,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sack_Good
       objectReference: {fileID: 0}
-    - target: {fileID: 890399219125308829, guid: eeb8ecbf86e0c4922b0af0734d87d1ac, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 909573281864137417, guid: eeb8ecbf86e0c4922b0af0734d87d1ac, type: 3}
-      propertyPath: itemIcon
-      value: 
-      objectReference: {fileID: 21300000, guid: 72af138ab066a4c0d9963fcac11df123, type: 3}
-    - target: {fileID: 5533352928870077450, guid: eeb8ecbf86e0c4922b0af0734d87d1ac, type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5533352928870077450, guid: eeb8ecbf86e0c4922b0af0734d87d1ac, type: 3}
-      propertyPath: m_Size.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5533352928870077450, guid: eeb8ecbf86e0c4922b0af0734d87d1ac, type: 3}
-      propertyPath: m_Size.z
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6965247261375977070, guid: eeb8ecbf86e0c4922b0af0734d87d1ac, type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8331008554813961364, guid: eeb8ecbf86e0c4922b0af0734d87d1ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 29
@@ -17992,8 +17895,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0d60b9384b674d43b990def7760ff73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeSystem
-  dayTime: 180
-  nightTime: 90
+  dayTime: 2
+  nightTime: 2
 --- !u!4 &2023553406
 Transform:
   m_ObjectHideFlags: 0
@@ -19659,6 +19562,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2503325634948462352, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660674222435608230, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4784159813726193031, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
       propertyPath: timeSystem
       value: 
@@ -19731,6 +19642,10 @@ PrefabInstance:
       propertyPath: equippableSpawner
       value: 
       objectReference: {fileID: 523031925}
+    - target: {fileID: 6759669290860076700, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7786678248769653427, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -19748,10 +19663,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1394780}
     m_Modifications:
-    - target: {fileID: 303779208259570060, guid: 183ffa5064ba84a75ab585a31ca9503d, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
     - target: {fileID: 719724183381816035, guid: 183ffa5064ba84a75ab585a31ca9503d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 29
@@ -19792,26 +19703,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5180818473292102775, guid: 183ffa5064ba84a75ab585a31ca9503d, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 6.5
-      objectReference: {fileID: 0}
     - target: {fileID: 7397771323346284653, guid: 183ffa5064ba84a75ab585a31ca9503d, type: 3}
       propertyPath: m_Name
       value: Axe_Strong
       objectReference: {fileID: 0}
-    - target: {fileID: 7397771323346284653, guid: 183ffa5064ba84a75ab585a31ca9503d, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7631477523089015319, guid: 183ffa5064ba84a75ab585a31ca9503d, type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8686030284936840826, guid: 183ffa5064ba84a75ab585a31ca9503d, type: 3}
-      propertyPath: itemIcon
-      value: 
-      objectReference: {fileID: 21300000, guid: 72af138ab066a4c0d9963fcac11df123, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20971,7 +20866,6 @@ SceneRoots:
   - {fileID: 297800524}
   - {fileID: 1111490617}
   - {fileID: 1294170100}
-  - {fileID: 757750039}
   - {fileID: 1788820148}
   - {fileID: 1786133223}
   - {fileID: 370338872}

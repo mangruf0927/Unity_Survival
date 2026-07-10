@@ -13,6 +13,10 @@ public class MeleeWeapon : Weapon
     public MeleeLevel Level => meleeLevel;
     public override bool CanDrop => canDrop;
 
+    public bool HasHit => hasHit;
+    public int AttackDamage => attackDamage;
+    public int TreeDamage => treeDamage;
+
     private void Awake()
     {
         MeleeWeaponData data = DataManager.Instance.MeleeTable.Get(ItemId);
@@ -39,25 +43,8 @@ public class MeleeWeapon : Weapon
         hitCollider.enabled = false;
     }
 
-    void OnTriggerEnter(Collider other)
+    public void SetHasHit(bool hasHit)
     {
-        if (hasHit) return;
-
-        TreeObject tree = other.GetComponentInParent<TreeObject>();
-        if (tree != null)
-        {
-            if (ItemType != ToolType.AXE || treeDamage <= 0) return;
-
-            hasHit = true;
-            tree.TakeDamage(treeDamage);
-            return;
-        }
-
-        if (!other.CompareTag("Enemy") || attackDamage <= 0) return;
-        if (other.TryGetComponent<IDamageable>(out var enemy))
-        {
-            hasHit = true;
-            enemy.TakeDamage(attackDamage);
-        }
+        this.hasHit = hasHit;
     }
 }
