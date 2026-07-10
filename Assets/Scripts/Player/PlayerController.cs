@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void SetDirection(Vector2 direction) { moveDirection = direction; }
-    public void SetRun(bool state) { isRun = state; }
+    public void SetRun(bool state) { isRun = state; playerStats.SetRun(state); }
     public void SetSack(Sack sack) { currentSack = sack; }
     public void SetRecoveryItem(RecoveryItem item) { currentRecoveryItem = item; }
 

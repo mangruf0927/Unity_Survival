@@ -6,6 +6,8 @@ public class PlayerHungerBar : MonoBehaviour, IObserver
     [SerializeField] private Slider hungerSlider;
     [SerializeField] private PlayerStats playerStats;
 
+    [SerializeField] private Image runIcon;
+
     private void Start()
     {
         playerStats.AddObserver(this);
@@ -19,6 +21,8 @@ public class PlayerHungerBar : MonoBehaviour, IObserver
 
     public void Notify()
     {
+        runIcon.enabled = playerStats.IsRun;
+
         hungerSlider.maxValue = playerStats.MaxHunger;
         hungerSlider.value = playerStats.CurrentHunger;
     }

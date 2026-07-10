@@ -18,6 +18,7 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
 
     private bool isSetUp;
     private float timer;
+    private bool isRun;
 
     public int MaxHp => maxHp;
     public float MoveSpeed => moveSpeed;
@@ -26,6 +27,8 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
     public float RotateSpeed => rotateSpeed;
     public float MaxHunger => maxHunger;
     public float InteractDistance => interactDistance;
+
+    public bool IsRun => isRun;
 
     public int CurrentHp { get; private set; }
     public float CurrentHunger { get; private set; }
@@ -92,9 +95,18 @@ public class PlayerStats : MonoBehaviour, IDamageable, ISubject
         NotifyObservers();
     }
 
+    public void SetRun(bool isTrue)
+    {
+        if (isRun == isTrue) return;
+
+        isRun = isTrue;
+        NotifyObservers();
+    }
+
     private void UpdateHunger()
     {
-        timer += Time.deltaTime;
+        float multiplier = isRun ? 1.3f : 1f;
+        timer += Time.deltaTime * multiplier;
 
         while (timer >= decreaseInterval)
         {
