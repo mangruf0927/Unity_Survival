@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +20,14 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private EnemyHPBarController hpBarController;
 
     private Dictionary<PoolTypeEnums, EnemySpawnInfo> typeToInfoDictionary;
+    private readonly List<RespawnTimer> respawnTimerList = new();
     public int RequiredLevel => requiredLevel;
+
+    private class RespawnTimer
+    {
+        public EnemySpawnInfo spawnInfo;
+        public float remainingTime;
+    }
 
     private void Start()
     {
@@ -55,6 +61,26 @@ public class EnemySpawner : MonoBehaviour
             {
                 SpawnEnemy(info);
             }
+        }
+    }
+
+    private void Update()
+    {
+        UpdateRespawnTimer();
+    }
+
+    private void UpdateRespawnTimer()
+    {
+        for (int i = respawnTimerList.Count - 1; i >= 0; i--)
+        {
+            RespawnTimer timer = respawnTimerList[i];
+
+            timer.remainingTime -= Time.deltaTime;
+
+            if (timer.remainingTime > 0) continue;
+
+            respawnTimerList.RemoveAt(i);
+            SpawnEnemy(timer.spawnInfo);
         }
     }
 
@@ -113,14 +139,12 @@ public class EnemySpawner : MonoBehaviour
     {
         if (typeToInfoDictionary.TryGetValue(enemyStats.EnemyType, out EnemySpawnInfo info))
         {
-            StartCoroutine(Respawn(info));
+            respawnTimerList.Add(new RespawnTimer
+            {
+                spawnInfo = info,
+                remainingTime = info.respawnTime
+            });
         }
-    }
-
-    private IEnumerator Respawn(EnemySpawnInfo info)
-    {
-        yield return new WaitForSeconds(info.respawnTime);
-        SpawnEnemy(info);
     }
 
     private Transform RandomSpawnPoint(List<Transform> spawnList)
