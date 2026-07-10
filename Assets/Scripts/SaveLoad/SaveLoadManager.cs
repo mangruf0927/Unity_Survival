@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -12,6 +13,9 @@ public class SaveLoadManager : MonoBehaviour
     [SerializeField] private WorkTableInventory workTableInventory;
     [SerializeField] private CultistSpawner cultistSpawner;
     [SerializeField] private ItemRegistry itemRegistry;
+
+    [SerializeField] private List<EnemySpawner> enemySpawnerList;
+
     [SerializeField] private EquippableSpawner equippableSpawner;
     [SerializeField] private ObjectRegistry objectRegistry;
 
@@ -23,8 +27,8 @@ public class SaveLoadManager : MonoBehaviour
     public void SaveData()
     {
         if (timeSystem == null || dayNightEventSystem == null || playerStats == null || playerController == null ||
-            campFire == null || workTableInventory == null || cultistSpawner == null || itemRegistry == null ||
-            equippableSpawner == null || objectRegistry == null)
+            campFire == null || workTableInventory == null || cultistSpawner == null || enemySpawnerList == null ||
+            itemRegistry == null || equippableSpawner == null || objectRegistry == null)
         {
             Debug.LogError("Save failed. SaveLoadManager references are missing.");
             return;
@@ -43,7 +47,8 @@ public class SaveLoadManager : MonoBehaviour
             cultistSaveDataList = cultistSpawner.CreateSaveData(),
             itemSaveDataList = itemRegistry.CreateSaveData(),
             equippableSaveDataList = equippableSpawner.CreateSaveData(),
-            worldSaveData = objectRegistry.CreateSaveData()
+            worldSaveData = objectRegistry.CreateSaveData(),
+            enemyGroupDataList = CreateEnemySaveData()
         };
 
         string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
@@ -73,8 +78,8 @@ public class SaveLoadManager : MonoBehaviour
         }
 
         if (timeSystem == null || dayNightEventSystem == null || playerStats == null || playerController == null ||
-            campFire == null || workTableInventory == null || cultistSpawner == null || itemRegistry == null ||
-            equippableSpawner == null || objectRegistry == null)
+            campFire == null || workTableInventory == null || cultistSpawner == null || enemySpawnerList == null ||
+            itemRegistry == null || equippableSpawner == null || objectRegistry == null)
         {
             Debug.LogError("Load failed. SaveLoadManager references are missing.");
             return;
@@ -91,6 +96,7 @@ public class SaveLoadManager : MonoBehaviour
         objectRegistry.LoadSaveData(saveData.worldSaveData);
         itemRegistry.LoadSaveData(saveData.itemSaveDataList);
         equippableSpawner.LoadSaveData(saveData.equippableSaveDataList);
+        LoadEnemySaveData(saveData.enemyGroupDataList);
 
         Debug.Log("Load Complete");
     }
@@ -107,5 +113,32 @@ public class SaveLoadManager : MonoBehaviour
 
         File.Delete(path);
         Debug.Log($"Delete Complete: {path}");
+    }
+
+    private List<EnemyGroupSaveData> CreateEnemySaveData()
+    {
+        List<EnemyGroupSaveData> dataList = new();
+
+        foreach (EnemySpawner spawner in enemySpawnerList)
+        {
+            if (spawner == null) continue;
+
+            List<EnemyGroupSaveData> spawnerDataList = spawner.CreateSaveData();
+            if (spawnerDataList == null) continue;
+
+            dataList.AddRange(spawnerDataList);
+        }
+
+        return dataList;
+    }
+
+    private void LoadEnemySaveData(List<EnemyGroupSaveData> dataList)
+    {
+        foreach (EnemySpawner spawner in enemySpawnerList)
+        {
+            if (spawner == null) continue;
+
+            spawner.LoadSaveData(dataList);
+        }
     }
 }

@@ -13,6 +13,7 @@ public class SaveData
     public List<ItemSaveData> itemSaveDataList;
     public List<EquippableSaveData> equippableSaveDataList;
     public WorldSaveData worldSaveData;
+    public List<EnemyGroupSaveData> enemyGroupDataList;
 }
 
 [Serializable]
@@ -177,4 +178,31 @@ public class TreeSaveData
 public class ChestSaveData
 {
     public bool isOpened;
+}
+
+[Serializable]
+public class EnemyGroupSaveData
+{
+    public int groupId;
+    public List<EnemySaveData> aliveEnemyDataList;
+    public List<EnemyRespawnSaveData> respawnSaveDataList;
+}
+
+[Serializable]
+public class EnemySaveData
+{
+    public int enemyId;
+
+    public float positionX;
+    public float positionY;
+    public float positionZ;
+    public float rotationY;
+
+    public int currentHp;
+}
+
+[Serializable]
+public class EnemyRespawnSaveData
+{
+    public float remainingTime;
 }

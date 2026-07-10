@@ -15,9 +15,13 @@ public class EnemyController : MonoBehaviour
     public PoolTypeEnums EnemyType => enemyStats.EnemyType;
     public Animator Animator => animator;
 
+    public int EnemyId => enemyStats.EnemyId;
+    public int CurrentHp => enemyStats.CurrentHp;
+
     private void Awake()
     {
-        if (enemyDropper == null) enemyDropper = GetComponent<EnemyDropper>();
+        if (enemyDropper == null)
+            enemyDropper = GetComponent<EnemyDropper>();
     }
 
     private void OnEnable()
@@ -31,6 +35,33 @@ public class EnemyController : MonoBehaviour
         if (enemyStats == null) return;
         enemyStats.OnDamaged -= OnDamaged;
         alertEndTime = 0f;
+    }
+
+    public EnemySaveData CreateSaveData()
+    {
+        Vector3 position = transform.position;
+
+        return new EnemySaveData
+        {
+            enemyId = EnemyId,
+            positionX = position.x,
+            positionY = position.y,
+            positionZ = position.z,
+            rotationY = transform.eulerAngles.y,
+            currentHp = CurrentHp
+        };
+    }
+
+    public void LoadSaveData(EnemySaveData saveData, EnemyData data)
+    {
+        enemyStats.SetUp(data);
+
+        Vector3 position = new(saveData.positionX, saveData.positionY, saveData.positionZ);
+        Quaternion rotation = Quaternion.Euler(0f, saveData.rotationY, 0f);
+
+        transform.SetPositionAndRotation(position, rotation);
+
+        enemyStats.LoadHp(saveData.currentHp);
     }
 
     private void OnDamaged(EnemyStats stats)

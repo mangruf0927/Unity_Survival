@@ -7734,6 +7734,11 @@ MonoBehaviour:
   workTableInventory: {fileID: 288484891}
   cultistSpawner: {fileID: 1545453345}
   itemRegistry: {fileID: 609733976}
+  enemySpawnerList:
+  - {fileID: 2047334735}
+  - {fileID: 2100000023}
+  - {fileID: 1056495816}
+  - {fileID: 1991632776}
   equippableSpawner: {fileID: 523031925}
   objectRegistry: {fileID: 1648102914}
   equippableDatabase: {fileID: 1141158182}
@@ -9216,23 +9221,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   requiredLevel: 3
   itemDataBase: {fileID: 1141158181}
+  itemRegistry: {fileID: 609733976}
+  hpBarController: {fileID: 1050484675}
   spawnInfoList:
-  - enemyId: 1102
+  - groupId: 301
+    enemyId: 1102
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
     - {fileID: 388900523}
     - {fileID: 1869823043}
     - {fileID: 884463346}
-  - enemyId: 1103
+  - groupId: 302
+    enemyId: 1103
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
     - {fileID: 2016416437}
     - {fileID: 1434571719}
     - {fileID: 1478081406}
-  itemRegistry: {fileID: 609733976}
-  hpBarController: {fileID: 1050484675}
 --- !u!1 &1065235936
 GameObject:
   m_ObjectHideFlags: 0
@@ -17572,23 +17579,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   requiredLevel: 4
   itemDataBase: {fileID: 1141158181}
+  itemRegistry: {fileID: 609733976}
+  hpBarController: {fileID: 1050484675}
   spawnInfoList:
-  - enemyId: 1103
+  - groupId: 401
+    enemyId: 1103
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
     - {fileID: 354617039}
     - {fileID: 658581614}
     - {fileID: 265186428}
-  - enemyId: 1104
+  - groupId: 402
+    enemyId: 1104
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
     - {fileID: 960586274}
     - {fileID: 812845710}
     - {fileID: 1883954332}
-  itemRegistry: {fileID: 609733976}
-  hpBarController: {fileID: 1050484675}
 --- !u!1 &1999908544
 GameObject:
   m_ObjectHideFlags: 0
@@ -17897,8 +17906,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0d60b9384b674d43b990def7760ff73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeSystem
-  dayTime: 2
-  nightTime: 2
+  dayTime: 180
+  nightTime: 90
 --- !u!4 &2023553406
 Transform:
   m_ObjectHideFlags: 0
@@ -18028,16 +18037,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   requiredLevel: 1
   itemDataBase: {fileID: 1141158181}
+  itemRegistry: {fileID: 609733976}
+  hpBarController: {fileID: 1050484675}
   spawnInfoList:
-  - enemyId: 1101
+  - groupId: 101
+    enemyId: 1101
     enemyCount: 3
     respawnTime: 5
     spawnPointList:
     - {fileID: 352322249}
     - {fileID: 960821762}
     - {fileID: 79532149}
-  itemRegistry: {fileID: 609733976}
-  hpBarController: {fileID: 1050484675}
 --- !u!4 &2047334736
 Transform:
   m_ObjectHideFlags: 0
@@ -19018,23 +19028,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   requiredLevel: 2
   itemDataBase: {fileID: 1141158181}
+  itemRegistry: {fileID: 609733976}
+  hpBarController: {fileID: 1050484675}
   spawnInfoList:
-  - enemyId: 1101
+  - groupId: 201
+    enemyId: 1101
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
     - {fileID: 181542981}
     - {fileID: 227156391}
     - {fileID: 1550540862}
-  - enemyId: 1102
+  - groupId: 202
+    enemyId: 1102
     enemyCount: 1
     respawnTime: 5
     spawnPointList:
     - {fileID: 725028769}
     - {fileID: 299345911}
     - {fileID: 733142749}
-  itemRegistry: {fileID: 609733976}
-  hpBarController: {fileID: 1050484675}
 --- !u!1 &2112997475
 GameObject:
   m_ObjectHideFlags: 0
@@ -20419,6 +20431,10 @@ PrefabInstance:
     - target: {fileID: 6805736747285111370, guid: b895350bd050e42099ee8b764332f47a, type: 3}
       propertyPath: m_Name
       value: SunDial
+      objectReference: {fileID: 0}
+    - target: {fileID: 6805736747285111370, guid: b895350bd050e42099ee8b764332f47a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

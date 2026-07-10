@@ -62,6 +62,11 @@ public class EnemyStats : MonoBehaviour, IDamageable
         if (enemyStateMachine != null) enemyStateMachine.ChangeState(EnemyStateEnums.IDLE);
     }
 
+    public void LoadHp(int hp)
+    {
+        CurrentHp = Mathf.Clamp(hp, 0, maxHp);
+    }
+
     public void TakeDamage(int dmg)
     {
         if (dmg <= 0 || CurrentHp <= 0) return;
