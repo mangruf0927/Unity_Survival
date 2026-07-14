@@ -44,6 +44,7 @@ public class PlayerJumpState : IPlayerState
     {
         playerController.Move();
         playerController.Look();
+        playerController.Fall();
     }
 
     public void Exit()

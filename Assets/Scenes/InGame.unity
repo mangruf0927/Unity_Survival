@@ -2757,7 +2757,7 @@ MonoBehaviour:
     requiredLevel: 1
     unlocksNextLevel: 0
     purchaseLimit: 1
-  - iconImage: {fileID: 21300000, guid: 842b9f3248b844c7193607d23ed3c67f, type: 3}
+  - iconImage: {fileID: 21300000, guid: 8da0d98f8f794403f8ed82366eaf6ad4, type: 3}
     itemName: "\uB0A1\uC740 \uCE68\uB300"
     description: "\uC77C\uAC04 \uCE74\uC6B4\uD130\uAC00 +1\n\uC99D\uAC00\uD569\uB2C8\uB2E4."
     itemPrefab: {fileID: -2267669233372935020, guid: 8bc84e3a9cbef4b20bbd6123faf28147, type: 3}
@@ -2766,7 +2766,7 @@ MonoBehaviour:
     requiredLevel: 1
     unlocksNextLevel: 0
     purchaseLimit: 1
-  - iconImage: {fileID: 21300000, guid: e55c46b60e2e240f5b9672c92a8f5b34, type: 3}
+  - iconImage: {fileID: 21300000, guid: 5b0e8b0840d074c7d983cce0de5f7b60, type: 3}
     itemName: "\uACF5\uC608\uC6A9 \uBCA4\uCE58 2"
     description: "\uC81C\uC791\uC758 \uD2F0\uC5B4 2 \uC7A0\uAE08 \uD574\uC81C"
     itemPrefab: {fileID: -2267669233372935020, guid: 09c9ed8c8c68a42b3a1d1a20ad2d39a1, type: 3}
@@ -2775,7 +2775,7 @@ MonoBehaviour:
     requiredLevel: 1
     unlocksNextLevel: 1
     purchaseLimit: 1
-  - iconImage: {fileID: 21300000, guid: 72af138ab066a4c0d9963fcac11df123, type: 3}
+  - iconImage: {fileID: 21300000, guid: 74d3c7cf70f884a4f819c445b5f34c1f, type: 3}
     itemName: "\uD574\uC2DC\uACC4"
     description: "\uB0AE\uACFC \uBC24\uC5D0 \uB0A8\uC740 \uC2DC\uAC04\uC774\n\uD45C\uC2DC\uB429\uB2C8\uB2E4."
     itemPrefab: {fileID: -2267669233372935020, guid: 9455a0dc65a8a42f08a8e66f887ee890, type: 3}
@@ -2784,7 +2784,7 @@ MonoBehaviour:
     requiredLevel: 2
     unlocksNextLevel: 0
     purchaseLimit: 1
-  - iconImage: {fileID: 21300000, guid: a229f8d5432754e5988f5bd7e22d1a62, type: 3}
+  - iconImage: {fileID: 21300000, guid: ebee0d2a669ea4c689ce0e056381cd73, type: 3}
     itemName: "\uC77C\uBC18 \uCE68\uB300"
     description: "\uC77C\uAC04 \uCE74\uC6B4\uD130\uAC00 +1\n\uC99D\uAC00\uD569\uB2C8\uB2E4."
     itemPrefab: {fileID: -2267669233372935020, guid: 07933e70a11534a5694bcccad7080adf, type: 3}
@@ -2793,7 +2793,7 @@ MonoBehaviour:
     requiredLevel: 2
     unlocksNextLevel: 0
     purchaseLimit: 1
-  - iconImage: {fileID: 21300000, guid: 72af138ab066a4c0d9963fcac11df123, type: 3}
+  - iconImage: {fileID: 21300000, guid: 13c16f9c89aa94273a1db5beb0054a0c, type: 3}
     itemName: "\uACF5\uC608\uC6A9 \uBCA4\uCE58 3"
     description: "\uC81C\uC791\uC758 \uD2F0\uC5B4 3 \uC7A0\uAE08 \uD574\uC81C"
     itemPrefab: {fileID: 0}
@@ -2802,7 +2802,7 @@ MonoBehaviour:
     requiredLevel: 2
     unlocksNextLevel: 1
     purchaseLimit: 1
-  - iconImage: {fileID: 21300000, guid: 72af138ab066a4c0d9963fcac11df123, type: 3}
+  - iconImage: {fileID: 21300000, guid: a5a62141ea40b4c0287088f5a5e17201, type: 3}
     itemName: "\uC88B\uC740 \uCE68\uB300"
     description: "\uC77C\uAC04 \uCE74\uC6B4\uD130\uAC00 +1\n\uC99D\uAC00\uD569\uB2C8\uB2E4."
     itemPrefab: {fileID: -2267669233372935020, guid: 5556f84142af04c70bccd5e4875adf97, type: 3}
@@ -5020,11 +5020,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5964007886937456969, guid: a6f5664635a7541adab6cbb0e9a21162, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 33
+      value: 33.2
       objectReference: {fileID: 0}
     - target: {fileID: 5964007886937456969, guid: a6f5664635a7541adab6cbb0e9a21162, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.9
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 5964007886937456969, guid: a6f5664635a7541adab6cbb0e9a21162, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9910,6 +9910,7 @@ MonoBehaviour:
   - {fileID: 3258066141446530799, guid: cdda1503dd5494022bc8b508e721b7fb, type: 3}
   - {fileID: 7137066228788729156, guid: a4b34683600ae4decaf4f0072ef87c22, type: 3}
   - {fileID: -4951109356674733378, guid: 92e1a3bc1af1348ad952eef5af4674b8, type: 3}
+  - {fileID: 3437991200964835321, guid: b895350bd050e42099ee8b764332f47a, type: 3}
 --- !u!114 &1167997877 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2594921582611978739, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
@@ -11829,7 +11830,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5964007886937456969, guid: a6f5664635a7541adab6cbb0e9a21162, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 33
+      value: 32.5
       objectReference: {fileID: 0}
     - target: {fileID: 5964007886937456969, guid: a6f5664635a7541adab6cbb0e9a21162, type: 3}
       propertyPath: m_LocalPosition.y
@@ -19651,6 +19652,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1073473178330023853, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1567156617763215935, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
+      propertyPath: m_Center.y
+      value: 1.3
+      objectReference: {fileID: 0}
     - target: {fileID: 2503325634948462352, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
       propertyPath: m_Mass
       value: 1

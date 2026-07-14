@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ItemRegistry itemRegistry;
     [SerializeField] private EquippableSpawner equippableSpawner;
 
+    private float riseMultiplier = 1.5f;
+    private float fallMultiplier = 5f;
+
     private PlayerStats playerStats;
     private Rigidbody rigid;
 
@@ -125,7 +128,21 @@ public class PlayerController : MonoBehaviour
     public void Jump()
     {
         isGround = false;
-        rigid.AddForce(Vector3.up * playerStats.JumpForce, ForceMode.Impulse);
+
+        Vector3 velocity = rigid.linearVelocity;
+        velocity.y = playerStats.JumpForce;
+        rigid.linearVelocity = velocity;
+
+        // rigid.AddForce(Vector3.up * playerStats.JumpForce, ForceMode.Impulse);
+    }
+
+    public void Fall()
+    {
+        if (isGround) return;
+
+        float multiplier = rigid.linearVelocity.y > 0f ? riseMultiplier : fallMultiplier;
+
+        rigid.AddForce(Physics.gravity * (multiplier - 1f), ForceMode.Acceleration);
     }
 
     public void Eat(int hunger, int hp)
