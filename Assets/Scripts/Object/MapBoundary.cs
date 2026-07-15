@@ -4,11 +4,11 @@ using UnityEngine;
 public class MapBoundary : MonoBehaviour
 {
     [SerializeField] private CampFire campFire;
-
     [SerializeField] private GameObject boundaryPrefab;
-    [SerializeField] private int boundaryCount;
+
     [SerializeField] private int wallCount;
-    [SerializeField] private float radiusGap;
+    [SerializeField] private List<float> radiusList = new() { 50f, 140f, 230f, 320f, 410f };
+
     [SerializeField] private List<EnemySpawner> enemySpawnerList;
 
     private readonly List<GameObject> boundaryList = new();
@@ -20,10 +20,12 @@ public class MapBoundary : MonoBehaviour
 
     private void Start()
     {
-        for (int level = 1; level <= boundaryCount; level++)
+        for (int level = 1; level <= radiusList.Count; level++)
         {
             CreateBoundary(level);
         }
+        UpdateBoundaries(campFire.CurrentLevel);
+
         campFire.OnLevelUp += UpdateBoundaries;
         campFire.OnLevelUp += UpdateSpawners;
     }
@@ -36,11 +38,17 @@ public class MapBoundary : MonoBehaviour
 
     private void CreateBoundary(int level)
     {
-        GameObject boundary = new GameObject($"Level{level}");
+        int radiusIndex = level - 1;
+
+        if (radiusIndex < 0 || radiusIndex >= radiusList.Count)
+            return;
+
+        GameObject boundary = new($"Level{level}");
         boundary.transform.SetParent(transform, false);
+
         boundaryList.Add(boundary);
 
-        float radius = radiusGap * level;
+        float radius = radiusList[radiusIndex];
         float angleGap = 360f / wallCount;
         float wallLength = 2f * Mathf.PI * radius / wallCount;
 
@@ -56,13 +64,14 @@ public class MapBoundary : MonoBehaviour
 
             Vector3 scale = wall.transform.localScale;
             scale.x = wallLength;
-            scale.y = 4f;
+            scale.y = 15f;
             wall.transform.localScale = scale;
 
-            wall.transform.position = new Vector3(x, scale.y * 0.5f, z);
+            wall.transform.localPosition = new Vector3(x, scale.y * 0.5f, z);
 
-            Vector3 direction = new Vector3(x, 0f, z);
-            wall.transform.rotation = Quaternion.LookRotation(direction);
+            Vector3 direction = new(x, 0f, z);
+
+            wall.transform.localRotation = Quaternion.LookRotation(direction);
         }
     }
 
@@ -72,8 +81,7 @@ public class MapBoundary : MonoBehaviour
         {
             if (boundaryList[i] == null) continue;
 
-            bool shouldBeActive = i > level - 2;
-            boundaryList[i].SetActive(shouldBeActive);
+            boundaryList[i].SetActive(i > level - 2);
         }
     }
 

@@ -1627,9 +1627,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapBoundary
   campFire: {fileID: 370338873}
   boundaryPrefab: {fileID: 8873408522036913658, guid: 5cf5d206505bd4661a98d960ed1934ff, type: 3}
-  boundaryCount: 5
   wallCount: 24
-  radiusGap: 70
+  radiusList:
+  - 50
+  - 140
+  - 230
+  - 320
+  - 410
   enemySpawnerList:
   - {fileID: 2047334735}
   - {fileID: 2100000023}
