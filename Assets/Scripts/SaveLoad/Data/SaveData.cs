@@ -199,6 +199,7 @@ public class EnemyGroupSaveData
 public class EnemySaveData
 {
     public int enemyId;
+    public int spawnIndex = -1;
 
     public float positionX;
     public float positionY;
@@ -211,5 +212,5 @@ public class EnemySaveData
 [Serializable]
 public class EnemyRespawnSaveData
 {
-    public float remainingTime;
+    public int spawnIndex = -1;
 }

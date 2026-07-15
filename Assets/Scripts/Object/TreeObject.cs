@@ -5,18 +5,18 @@ public class TreeObject : WorldObject
 {
     [SerializeField] private int logItemId;
     [SerializeField] private ItemRegistry itemRegistry;
+
     [SerializeField] private int maxHP = 100;
+    [SerializeField] private int logCount = 3;
     [SerializeField] private float shakeAngle;
     [SerializeField] private float shakeTime;
 
     private int currentHp;
-    private Quaternion original;
     private bool isShaking;
 
     private void Awake()
     {
         currentHp = maxHP;
-        original = transform.rotation;
     }
 
     public override ObjectSaveData CreateSaveData()
@@ -49,8 +49,9 @@ public class TreeObject : WorldObject
         if (currentHp == 0)
         {
             StopAllCoroutines();
-            CreateLog();
+            Vector3 dropPosition = transform.position;
             gameObject.SetActive(false);
+            CreateLog(dropPosition);
         }
     }
 
@@ -58,34 +59,43 @@ public class TreeObject : WorldObject
     {
         isShaking = true;
 
-        Quaternion left = original * Quaternion.Euler(0f, 0f, shakeAngle);
-        Quaternion right = original * Quaternion.Euler(0f, 0f, -shakeAngle);
+        Vector3 originalPos = transform.position;
 
-        yield return Rotate(original, left, shakeTime * 0.33f);
-        yield return Rotate(left, right, shakeTime * 0.34f);
-        yield return Rotate(right, original, shakeTime * 0.33f);
+        yield return Move(originalPos, originalPos + Vector3.down * 0.15f, shakeTime * 0.5f);
+        yield return Move(originalPos + Vector3.down * 0.15f, originalPos, shakeTime * 0.5f);
 
-        transform.rotation = original;
         isShaking = false;
     }
 
-    private IEnumerator Rotate(Quaternion from, Quaternion to, float duration)
+    private IEnumerator Move(Vector3 from, Vector3 to, float duration)
     {
         float time = 0;
         while (time < duration)
         {
             time += Time.deltaTime;
-            transform.rotation = Quaternion.Slerp(from, to, time / duration);
+            transform.position = Vector3.Lerp(from, to, time / duration);
             yield return null;
         }
     }
 
-    private void CreateLog()
+    private void CreateLog(Vector3 center)
     {
-        for (int i = 0; i < 3; i++)
+        const float dropRadius = 0.7f;
+        const float spawnHeight = 2f;
+        const float randomRadius = 0.1f;
+
+        for (int i = 0; i < logCount; i++)
         {
-            Vector3 randomPos = new(Random.Range(-0.5f, 0.5f), 0.3f, Random.Range(-0.5f, 0.5f));
-            itemRegistry.SpawnItem(logItemId, transform.position + randomPos, Quaternion.identity);
+            float angle = i * Mathf.PI * 2f / logCount;
+
+            Vector3 direction = new(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
+            Vector2 randomCircle = Random.insideUnitCircle * randomRadius;
+            Vector3 randomOffset = new(randomCircle.x, 0f, randomCircle.y);
+
+            Vector3 spawnPosition = center + direction * dropRadius + randomOffset + Vector3.up * spawnHeight;
+            Quaternion rotation = Quaternion.Euler(90f, Random.Range(0f, 360f), 0f);
+
+            itemRegistry.SpawnItem(logItemId, spawnPosition, rotation);
         }
     }
 }
