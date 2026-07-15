@@ -166,6 +166,7 @@ public class ObjectSaveData
 
     public TreeSaveData treeSaveData;
     public ChestSaveData chestSaveData;
+    public DoorSaveData doorSaveData;
 }
 
 [Serializable]
@@ -176,6 +177,12 @@ public class TreeSaveData
 
 [Serializable]
 public class ChestSaveData
+{
+    public bool isOpened;
+}
+
+[Serializable]
+public class DoorSaveData
 {
     public bool isOpened;
 }
