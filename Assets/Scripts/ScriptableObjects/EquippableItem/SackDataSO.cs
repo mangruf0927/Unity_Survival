@@ -4,7 +4,7 @@ using UnityEngine;
 public class SackDataSO : ScriptableObject
 {
     [Header("등급")]
-    public SackLevel level;
+    public int level;
 
     [Header("용량")]
     public int capacity;

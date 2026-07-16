@@ -6,9 +6,10 @@ public class SackData : IGameData, IValidatable
     public int Id { get; set; }
     public string Name { get; set; }
 
-    public SackLevel Level { get; set; }
-    public int Capacity { get; set; }
+    public int GroupId { get; set; }
+    public int Level { get; set; }
 
+    public int Capacity { get; set; }
     public bool CanDrop { get; set; }
 
     public bool Validate()
@@ -25,15 +26,21 @@ public class SackData : IGameData, IValidatable
             return false;
         }
 
-        if (Capacity <= 0)
+        if (GroupId <= 0)
         {
-            Debug.LogError($"Sack Damage is invalid. Id: {Id}, Capacity: {Capacity}");
+            Debug.LogError($"Sack GroupId is invalid. Id: {Id}, GroupId: {GroupId}");
             return false;
         }
 
-        if (!Enum.IsDefined(typeof(SackLevel), Level))
+        if (Level <= 0)
         {
-            Debug.LogError($"Sack is invalid. Id: {Id}, SackLevel: {Level}");
+            Debug.LogError($"SackLevel is invalid. Id: {Id}, Level: {Level} ");
+            return false;
+        }
+
+        if (Capacity <= 0)
+        {
+            Debug.LogError($"Sack Damage is invalid. Id: {Id}, Capacity: {Capacity}");
             return false;
         }
 

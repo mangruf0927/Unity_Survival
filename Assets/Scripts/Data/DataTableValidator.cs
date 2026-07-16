@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DataTableValidator
@@ -15,7 +15,7 @@ public class DataTableValidator
 
     private bool ValidateSackTable()
     {
-        Dictionary<SackLevel, SackData> sackLevelDictionary = new();
+        Dictionary<int, SackData> sackLevelDictionary = new();
 
         foreach (SackData sack in DataManager.Instance.SackTable.All.Values)
         {
@@ -28,23 +28,27 @@ public class DataTableValidator
             sackLevelDictionary.Add(sack.Level, sack);
         }
 
-        SackLevel[] levelArray = (SackLevel[])Enum.GetValues(typeof(SackLevel));
-
-        foreach (SackLevel level in levelArray)
+        if (sackLevelDictionary.Count == 0)
         {
-            // 데이터 누락 방지 
-            if (!sackLevelDictionary.ContainsKey(level))
-            {
-                Debug.LogError($"Sack data is missing. Level : {level}");
-                return false;
-            }
+            Debug.LogError("Sack data is empty");
+            return false;
         }
 
-        for (int i = 0; i < levelArray.Length - 1; i++)
+        // 레벨 누락 검사
+        int maxLevel = sackLevelDictionary.Keys.Max();
+        for (int i = 1; i <= maxLevel; i++)
         {
-            // Capacity 증가 규칙 검사
-            SackData cur = sackLevelDictionary[levelArray[i]];
-            SackData next = sackLevelDictionary[levelArray[i + 1]];
+            if (sackLevelDictionary.ContainsKey(i)) continue;
+
+            Debug.LogError($"Sack data is missing. Level: {i}");
+            return false;
+        }
+
+        // Capacity 증가 규칙 검사
+        for (int i = 1; i < maxLevel; i++)
+        {
+            SackData cur = sackLevelDictionary[i];
+            SackData next = sackLevelDictionary[i + 1];
 
             if (cur.Capacity > next.Capacity)
             {
@@ -52,7 +56,6 @@ public class DataTableValidator
                 return false;
             }
         }
-
         return true;
     }
 }

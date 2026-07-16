@@ -1,15 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sack : EquippableItem, ISubject
+public class Sack : EquippableItem, ISubject, IUpgradeable
 {
-    private SackLevel sackLevel;
+    private int groupId;
+    private int sackLevel;
     private int capacity;
 
     private readonly Stack<Item> itemStack = new();
     private readonly List<IObserver> ObserverList = new();
 
-    public SackLevel Level => sackLevel;
+    public int GroupId => groupId;
+    public int Level => sackLevel;
     public int Capacity => capacity;
     public override bool CanDrop => canDrop;
 
@@ -26,6 +28,7 @@ public class Sack : EquippableItem, ISubject
     public void SetUp(SackData data)
     {
         itemName = data.Name;
+        groupId = data.GroupId;
         sackLevel = data.Level;
         capacity = data.Capacity;
         canDrop = data.CanDrop;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
@@ -155,20 +156,27 @@ public class Inventory : MonoBehaviour
             return true;
         }
 
-        for (int i = 0; i < itemList.Count; i++)
+        if (FindSameItem(newItem.ItemId) != null) return false;
+
+        if (newItem is IUpgradeable next)
         {
-            EquippableItem item = itemList[i];
+            EquippableItem upgradeItem = FindUpgradeItem(next);
+            if (upgradeItem != null)
+            {
+                if (!CanUpgrade(upgradeItem, newItem)) return false;
 
-            if (item.ItemType != newItem.ItemType) continue;
-            if (!CanUpgrade(item, newItem)) return false;
+                int idx = itemList.IndexOf(upgradeItem);
 
-            prevItem = item;
-            itemList[i] = newItem;
-            OnChanged?.Invoke();
-            return true;
+                prevItem = upgradeItem;
+                itemList[idx] = newItem;
+
+                OnChanged?.Invoke();
+                return true;
+            }
         }
         itemList.Add(newItem);
         OnChanged?.Invoke();
+
         return true;
     }
 
@@ -201,17 +209,35 @@ public class Inventory : MonoBehaviour
 
     private bool CanUpgrade(EquippableItem prevItem, EquippableItem newItem)
     {
-        if (prevItem is MeleeWeapon prevMelee && newItem is MeleeWeapon newMelee)
-        {
-            return prevMelee.Level < newMelee.Level;
-        }
+        if (prevItem is not IUpgradeable previous) return false;
+        if (newItem is not IUpgradeable next) return false;
+        if (previous.GroupId != next.GroupId) return false;
 
-        if (prevItem is Sack prevSack && newItem is Sack newSack)
-        {
-            return prevSack.Level < newSack.Level;
-        }
+        return previous.Level < next.Level;
+    }
 
-        return false;
+    private EquippableItem FindSameItem(int itemId)
+    {
+        foreach (EquippableItem item in itemList)
+        {
+            if (item == null || item.ItemId != itemId) continue;
+            return item;
+        }
+        return null;
+    }
+
+    private EquippableItem FindUpgradeItem(IUpgradeable next)
+    {
+        if (next == null || next.GroupId <= 0) return null;
+
+        foreach (EquippableItem item in itemList)
+        {
+            if (item is not IUpgradeable current) continue;
+            if (current.GroupId != next.GroupId) continue;
+
+            return item;
+        }
+        return null;
     }
 
     public void AddAmmo(AmmoType ammoType, int count)

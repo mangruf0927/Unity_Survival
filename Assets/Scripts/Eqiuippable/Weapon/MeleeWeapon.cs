@@ -1,21 +1,23 @@
 using UnityEngine;
 
-public class MeleeWeapon : Weapon
+public class MeleeWeapon : Weapon, IUpgradeable
 {
     [SerializeField] private Collider hitCollider;
 
     private bool hasHit;
-
-    private MeleeLevel meleeLevel;
+    private int groupId;
+    private int meleeLevel;
     private int attackDamage;
     private int treeDamage;
 
-    public MeleeLevel Level => meleeLevel;
+    public int GroupId => groupId;
+    public int Level => meleeLevel;
     public override bool CanDrop => canDrop;
 
     public bool HasHit => hasHit;
     public int AttackDamage => attackDamage;
     public int TreeDamage => treeDamage;
+
 
     private void Awake()
     {
@@ -26,7 +28,8 @@ public class MeleeWeapon : Weapon
     public void SetUp(MeleeWeaponData data)
     {
         itemName = data.Name;
-        meleeLevel = data.MeleeLevel;
+        groupId = data.GroupId;
+        meleeLevel = data.Level;
         attackDamage = data.AttackDamage;
         treeDamage = data.TreeDamage;
         canDrop = data.CanDrop;

@@ -4,7 +4,7 @@ using UnityEngine;
 public class MeleeWeaponDataSO : ScriptableObject
 {
     [Header("무기 레벨")]
-    public MeleeLevel level;
+    public int level;
 
     [Header("공격력")]
     public int attackDamage;
