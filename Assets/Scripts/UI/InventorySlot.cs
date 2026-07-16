@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,17 +8,21 @@ public class InventorySlot : MonoBehaviour, IPointerClickHandler, IBeginDragHand
 {
     [SerializeField] private Image iconImage;
     [SerializeField] private TextMeshProUGUI slotNumber;
+    [SerializeField] private TextMeshProUGUI count;
 
     public delegate void ClickSlotHandler(int idx);
     public event ClickSlotHandler OnClickSlot;
 
     private int slotIndex = -1;
 
-    public void SetSlot(EquippableItem item, int idx)
+    public void SetSlot(InventoryItem inventoryItem, int idx)
     {
         slotIndex = idx;
-        iconImage.sprite = item.ItemIcon;
+        iconImage.sprite = inventoryItem.Item.ItemIcon;
         slotNumber.text = (idx + 1).ToString();
+        count.text = inventoryItem.Count >= 2
+            ? inventoryItem.Count.ToString()
+            : string.Empty;
         gameObject.SetActive(true);
     }
 
@@ -26,6 +31,7 @@ public class InventorySlot : MonoBehaviour, IPointerClickHandler, IBeginDragHand
         slotIndex = -1;
         iconImage.sprite = null;
         slotNumber.text = string.Empty;
+        count.text = string.Empty;
         gameObject.SetActive(false);
     }
 

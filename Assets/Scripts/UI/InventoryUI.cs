@@ -31,7 +31,7 @@ public class InventoryUI : MonoBehaviour
     {
         for (int i = 0; i < slotList.Count; i++)
         {
-            if (i < inventory.ItemList.Count) slotList[i].SetSlot(inventory.ItemList[i].Item, i);
+            if (i < inventory.ItemList.Count) slotList[i].SetSlot(inventory.ItemList[i], i);
             else slotList[i].HideSlot();
         }
     }
