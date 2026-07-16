@@ -181,9 +181,16 @@ public class PlayerController : MonoBehaviour
     public bool GetEquippableItem(EquippableItem item)
     {
         if (item == null) return false;
-        if (!inventory.AddItem(item, out EquippableItem prevItem)) return false;
+        if (!inventory.AddItem(item, out EquippableItem prevItem, out bool isStacked)) return false;
 
         item.UnregisterEquippable();
+
+        if (isStacked)
+        {
+            // pool로 수정
+            Destroy(item.gameObject);
+            return true;
+        }
 
         item.Attach(equipPosition);
         item.gameObject.SetActive(false);
@@ -217,8 +224,10 @@ public class PlayerController : MonoBehaviour
 
         inventory.LoadSaveData(data, equippableDatabase, itemDatabase);
 
-        foreach (EquippableItem item in inventory.ItemList)
+        foreach (InventoryItem inventoryItem in inventory.ItemList)
         {
+            EquippableItem item = inventoryItem.Item;
+
             if (item == null) continue;
 
             item.Attach(equipPosition);
@@ -263,17 +272,29 @@ public class PlayerController : MonoBehaviour
         if (currentEquipped == null || !currentEquipped.CanDrop) return;
 
         EquippableItem item = currentEquipped;
+        int itemCount = inventory.GetItemCount(item);
+
+        if (itemCount <= 0) return;
+
+        if (itemCount > 1)
+        {
+            if (!inventory.RemoveItem(item, out _)) return;
+
+            EquippableItem droppedItem = Instantiate(item, item.transform.position, item.transform.rotation);
+            droppedItem.Detach();
+            droppedItem.gameObject.SetActive(true);
+
+            equippableSpawner.Register(droppedItem);
+            return;
+        }
+
+        if (!inventory.RemoveItem(item, out bool isEmpty) || !isEmpty) return;
 
         item.OnUnequip(this);
-        inventory.RemoveItem(item);
-
-        item.gameObject.SetActive(true);
         item.Detach();
+        item.gameObject.SetActive(true);
 
-        if (equippableSpawner != null)
-        {
-            equippableSpawner.Register(item);
-        }
+        equippableSpawner.Register(item);
 
         currentEquipped = null;
         currentWeapon = null;
@@ -290,7 +311,11 @@ public class PlayerController : MonoBehaviour
         if (currentEquipped != item) return;
 
         item.OnUnequip(this);
-        inventory.RemoveItem(item);
+        if (!inventory.RemoveItem(item, out bool isEmpty)) return;
+
+        if (!isEmpty) return;
+
+        item.OnUnequip(this);
 
         currentEquipped = null;
         currentWeapon = null;

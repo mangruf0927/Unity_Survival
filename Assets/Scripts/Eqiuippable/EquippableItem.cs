@@ -6,6 +6,7 @@ public abstract class EquippableItem : MonoBehaviour
     [SerializeField] private Transform attachPoint;
     [SerializeField] private Sprite itemIcon;
     [SerializeField] private int itemId;
+    [SerializeField] private int maxCount = 1;
 
     private EquippableSpawner equippableSpawner;
     protected string itemName;
@@ -17,6 +18,7 @@ public abstract class EquippableItem : MonoBehaviour
     public string ItemName => itemName;
     public Sprite ItemIcon => itemIcon;
     public int ItemId => itemId;
+    public int MaxCount => maxCount;
     public bool IsAttached { get; private set; }
 
     protected bool canDrop = true;
