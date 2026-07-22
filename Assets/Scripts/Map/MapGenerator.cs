@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
@@ -17,6 +18,8 @@ public class MapGenerator : MonoBehaviour
     private float noiseOffsetX;
     private float noiseOffsetZ;
 
+    private readonly Dictionary<Vector2Int, CellData> cellDictionary = new();
+
     private void Start()
     {
         InitializeSeed();
@@ -35,6 +38,8 @@ public class MapGenerator : MonoBehaviour
 
     private void GenerateGround()
     {
+        cellDictionary.Clear();
+
         for (int x = -radius; x <= radius; x++)
         {
             for (int z = -radius; z <= radius; z++)
@@ -50,7 +55,9 @@ public class MapGenerator : MonoBehaviour
 
     private bool IsInsideMap(Vector2Int coordinate)
     {
-        return coordinate.sqrMagnitude <= radius * radius;
+        float roundedRadius = radius + 0.5f;
+
+        return coordinate.sqrMagnitude <= roundedRadius * roundedRadius;
     }
 
     private void CreateCell(Vector2Int coordinate, float height)
@@ -58,6 +65,9 @@ public class MapGenerator : MonoBehaviour
         GameObject cell = Instantiate(groundObj, transform);
         cell.transform.localScale = new Vector3(cellSize, cellThickness, cellSize);
         cell.transform.position = new Vector3(coordinate.x * cellSize, height - cellThickness * 0.5f, coordinate.y * cellSize);
+
+        CellData cellData = new(coordinate, height, cell);
+        cellDictionary.Add(coordinate, cellData);
     }
 
     private float GetCellHeight(Vector2Int coordinate)

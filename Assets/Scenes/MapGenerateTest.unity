@@ -292,7 +292,7 @@ MonoBehaviour:
   maxHeightStep: 5
   cellSize: 15
   cellThickness: 5
-  radius: 28
+  radius: 4
   groundObj: {fileID: 933181071144506461, guid: ff6fe3222d18542539815de9d4bb2ad6, type: 3}
 --- !u!4 &418441810
 Transform:
