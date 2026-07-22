@@ -10,10 +10,13 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private float heightStep;
     [SerializeField] private int maxHeightStep;
 
+    [SerializeField] private GameObject groundPrefab;
     [SerializeField] private float cellSize;
     [SerializeField] private float cellThickness;
     [SerializeField] private int radius;
-    [SerializeField] private GameObject groundObj;
+
+    [SerializeField] private GameObject campFirePrefab;
+    [SerializeField] private float campFireY;
 
     private float noiseOffsetX;
     private float noiseOffsetZ;
@@ -24,6 +27,7 @@ public class MapGenerator : MonoBehaviour
     {
         InitializeSeed();
         GenerateGround();
+        CreateCampFire();
     }
 
     private void InitializeSeed()
@@ -38,7 +42,13 @@ public class MapGenerator : MonoBehaviour
 
     private void GenerateGround()
     {
-        cellDictionary.Clear();
+        if (groundPrefab == null)
+        {
+            Debug.LogWarning("Ground Prefab is null");
+            return;
+        }
+
+        ClearGround();
 
         for (int x = -radius; x <= radius; x++)
         {
@@ -53,6 +63,16 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    private void ClearGround()
+    {
+        foreach (CellData data in cellDictionary.Values)
+        {
+            if (data.GroundObject != null) Destroy(data.GroundObject);
+        }
+
+        cellDictionary.Clear();
+    }
+
     private bool IsInsideMap(Vector2Int coordinate)
     {
         float roundedRadius = radius + 0.5f;
@@ -62,9 +82,9 @@ public class MapGenerator : MonoBehaviour
 
     private void CreateCell(Vector2Int coordinate, float height)
     {
-        GameObject cell = Instantiate(groundObj, transform);
+        GameObject cell = Instantiate(groundPrefab, transform);
         cell.transform.localScale = new Vector3(cellSize, cellThickness, cellSize);
-        cell.transform.position = new Vector3(coordinate.x * cellSize, height - cellThickness * 0.5f, coordinate.y * cellSize);
+        cell.transform.localPosition = new Vector3(coordinate.x * cellSize, height - cellThickness * 0.5f, coordinate.y * cellSize);
 
         CellData cellData = new(coordinate, height, cell);
         cellDictionary.Add(coordinate, cellData);
@@ -72,8 +92,8 @@ public class MapGenerator : MonoBehaviour
 
     private float GetCellHeight(Vector2Int coordinate)
     {
-        bool isCampFire = Mathf.Abs(coordinate.x) <= 1 && Mathf.Abs(coordinate.y) <= 1;
-        if (isCampFire) return 0f;
+        bool isCampFireArea = Mathf.Abs(coordinate.x) <= 1 && Mathf.Abs(coordinate.y) <= 1;
+        if (isCampFireArea) return 0f;
 
         float sampleX = coordinate.x * noiseScale + noiseOffsetX;
         float sampleZ = coordinate.y * noiseScale + noiseOffsetZ;
@@ -85,5 +105,24 @@ public class MapGenerator : MonoBehaviour
         int step = Mathf.RoundToInt(centeredNoise * maxHeightStep);
 
         return step * heightStep;
+    }
+
+    private void CreateCampFire()
+    {
+        if (campFirePrefab == null)
+        {
+            Debug.LogWarning("CampFire Prefab is null");
+            return;
+        }
+
+        Vector2Int campFireCoordinate = Vector2Int.zero;
+        if (!cellDictionary.TryGetValue(campFireCoordinate, out CellData cell))
+        {
+            Debug.LogWarning("Cell (0, 0) could not be found");
+            return;
+        }
+
+        GameObject campFire = Instantiate(campFirePrefab, transform);
+        campFire.transform.localPosition = new Vector3(campFireCoordinate.x * cellSize, cell.Height + campFireY, campFireCoordinate.y * cellSize);
     }
 }

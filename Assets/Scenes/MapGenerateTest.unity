@@ -290,10 +290,12 @@ MonoBehaviour:
   noiseScale: 0.3
   heightStep: 1
   maxHeightStep: 5
+  groundPrefab: {fileID: 933181071144506461, guid: ff6fe3222d18542539815de9d4bb2ad6, type: 3}
   cellSize: 15
   cellThickness: 5
   radius: 4
-  groundObj: {fileID: 933181071144506461, guid: ff6fe3222d18542539815de9d4bb2ad6, type: 3}
+  campFirePrefab: {fileID: 536856272071179741, guid: f7c0c4cfc8d174ab98c5eb7b259eda50, type: 3}
+  campFireY: -0.4
 --- !u!4 &418441810
 Transform:
   m_ObjectHideFlags: 0
