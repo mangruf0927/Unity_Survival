@@ -23011,7 +23011,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1020299759545629356, guid: f987a496e38f34218a4cd79fdb534da7, type: 3}
       propertyPath: m_Name
-      value: Shed
+      value: Shack
       objectReference: {fileID: 0}
     - target: {fileID: 8953529159816641805, guid: f987a496e38f34218a4cd79fdb534da7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23137,6 +23137,10 @@ PrefabInstance:
     - target: {fileID: 5024804840452540696, guid: 778c8730a33fd462db70b40674512d1d, type: 3}
       propertyPath: m_Name
       value: Cube
+      objectReference: {fileID: 0}
+    - target: {fileID: 5024804840452540696, guid: 778c8730a33fd462db70b40674512d1d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6777862053122253814, guid: 778c8730a33fd462db70b40674512d1d, type: 3}
       propertyPath: m_LocalPosition.x
