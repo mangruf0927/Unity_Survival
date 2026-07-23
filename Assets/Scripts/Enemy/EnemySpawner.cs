@@ -8,24 +8,31 @@ public class EnemySpawnInfo
 {
     public int groupId;
     public int enemyId;
-    public float spawnRadius = 3f;
-    public List<Transform> spawnPointList;
+    public int requiredLevel;
+    public float spawnRadius;
+    public List<Transform> spawnPointList = new();
 }
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private int requiredLevel;
+    [SerializeField] private CampFire campFire;
     [SerializeField] private TimeSystem timeSystem;
     [SerializeField] private ItemDataBase itemDataBase;
     [SerializeField] private ItemRegistry itemRegistry;
     [SerializeField] private EnemyHPBarController hpBarController;
-    [SerializeField] private List<EnemySpawnInfo> spawnInfoList;
+
+    private readonly List<EnemySpawnInfo> spawnInfoList = new();
+    private readonly Dictionary<int, EnemySpawnInfo> groupInfoDictionary = new();
 
     private readonly List<AliveEnemy> aliveEnemyList = new();
-    private Dictionary<int, EnemySpawnInfo> groupInfoDictionary;
 
-    public int RequiredLevel => requiredLevel;
+    private int currentLevel = 1;
     private int lastCycle = 0;
+
+    private void Start()
+    {
+        if (campFire != null) UpdateLevel(campFire.CurrentLevel);
+    }
 
     private class AliveEnemy
     {
@@ -34,130 +41,42 @@ public class EnemySpawner : MonoBehaviour
         public EnemyController controller;
     }
 
-    private void Awake()
-    {
-        InitializeGroups();
-    }
-
     private void OnEnable()
     {
         if (timeSystem != null) timeSystem.OnPhaseChanged += PhaseChanged;
+        if (campFire != null) campFire.OnLevelUp += UpdateLevel;
     }
 
     private void OnDisable()
     {
         if (timeSystem != null) timeSystem.OnPhaseChanged -= PhaseChanged;
+        if (campFire != null) campFire.OnLevelUp -= UpdateLevel;
     }
 
-    public List<EnemyGroupSaveData> CreateSaveData()
+    private void UpdateLevel(int level)
     {
-        List<EnemyGroupSaveData> groupDataList = new();
+        currentLevel = level;
+    }
 
-        foreach (EnemySpawnInfo info in spawnInfoList)
+    public void RegisterSpawnPoint(int groupId, int enemyId, int requiredLevel, float spawnRadius, Transform spawnPoint)
+    {
+        if (!groupInfoDictionary.TryGetValue(groupId, out EnemySpawnInfo spawnInfo))
         {
-            if (info == null) continue;
-
-            EnemyGroupSaveData groupData = new()
+            spawnInfo = new EnemySpawnInfo
             {
-                groupId = info.groupId,
-                aliveEnemyDataList = new List<EnemySaveData>(),
-                respawnSaveDataList = new List<EnemyRespawnSaveData>()
+                groupId = groupId,
+                enemyId = enemyId,
+                requiredLevel = requiredLevel,
+                spawnRadius = spawnRadius,
+                spawnPointList = new List<Transform>()
             };
 
-            foreach (AliveEnemy enemy in aliveEnemyList)
-            {
-                if (enemy.groupId != info.groupId) continue;
-                if (enemy.controller == null || enemy.controller.CurrentHp <= 0) continue;
-
-                EnemySaveData enemySaveData = enemy.controller.CreateSaveData();
-                enemySaveData.spawnIndex = enemy.spawnIndex;
-                groupData.aliveEnemyDataList.Add(enemySaveData);
-            }
-
-            groupDataList.Add(groupData);
-        }
-        return groupDataList;
-    }
-
-    public void LoadSaveData(List<EnemyGroupSaveData> dataList)
-    {
-        InitializeGroups();
-        ClearList();
-
-        if (dataList == null) return;
-
-        foreach (EnemySpawnInfo info in spawnInfoList)
-        {
-            if (info == null) continue;
-
-            EnemyGroupSaveData groupData = dataList.Find(x => x.groupId == info.groupId);
-
-            if (groupData == null) continue;
-
-            foreach (EnemySaveData data in groupData.aliveEnemyDataList)
-            {
-                int spawnIndex = GetSpawnIndex(info, data.spawnIndex);
-
-                if (spawnIndex < 0) continue;
-
-                SpawnSavedEnemy(info.groupId, spawnIndex, data);
-            }
-        }
-    }
-
-    private void SpawnSavedEnemy(int groupId, int spawnIndex, EnemySaveData saveData)
-    {
-        EnemyData data = DataManager.Instance.EnemyTable.Get(saveData.enemyId);
-        GameObject enemy = ObjectPool.Instance.GetFromPool(data.EnemyType);
-        if (enemy == null) return;
-
-        if (enemy.TryGetComponent(out EnemyDropper enemyDropper))
-        {
-            enemyDropper.SetUp(itemDataBase, itemRegistry);
+            spawnInfoList.Add(spawnInfo);
+            groupInfoDictionary.Add(groupId, spawnInfo);
         }
 
-        EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();
-        EnemyController enemyController = enemy.GetComponent<EnemyController>();
-
-        if (enemyStats == null || enemyController == null)
-        {
-            ObjectPool.Instance.ReturnToPool(enemy, data.EnemyType);
-            return;
-        }
-
-        enemyStats.SetHPBarController(hpBarController);
-        enemyController.LoadSaveData(saveData, data);
-
-        enemyStats.OnDead -= EnemyDead;
-        enemyStats.OnDead += EnemyDead;
-
-        RegisterEnemy(groupId, spawnIndex, enemyController);
-    }
-
-    private void ClearList()
-    {
-        foreach (AliveEnemy enemy in aliveEnemyList)
-        {
-            if (enemy.controller == null) continue;
-
-            ObjectPool.Instance.ReturnToPool(enemy.controller.gameObject, enemy.controller.EnemyType);
-        }
-        aliveEnemyList.Clear();
-    }
-
-    private void InitializeGroups()
-    {
-        groupInfoDictionary = new Dictionary<int, EnemySpawnInfo>();
-
-        if (spawnInfoList == null) return;
-
-        foreach (EnemySpawnInfo info in spawnInfoList)
-        {
-            if (info == null) continue;
-            if (groupInfoDictionary.ContainsKey(info.groupId)) continue;
-
-            groupInfoDictionary.Add(info.groupId, info);
-        }
+        if (spawnInfo.spawnPointList.Contains(spawnPoint)) return;
+        spawnInfo.spawnPointList.Add(spawnPoint);
     }
 
     private void PhaseChanged(Phase phase, int day)
@@ -185,6 +104,7 @@ public class EnemySpawner : MonoBehaviour
         foreach (EnemySpawnInfo info in spawnInfoList)
         {
             if (info == null || info.spawnPointList == null) continue;
+            if (info.requiredLevel > currentLevel) continue;
 
             for (int i = 0; i < info.spawnPointList.Count; i++)
             {
@@ -286,5 +206,102 @@ public class EnemySpawner : MonoBehaviour
         }
 
         return spawnPoint.position;
+    }
+
+    // : 세이브 로드
+    public List<EnemyGroupSaveData> CreateSaveData()
+    {
+        List<EnemyGroupSaveData> groupDataList = new();
+
+        foreach (EnemySpawnInfo info in spawnInfoList)
+        {
+            if (info == null) continue;
+
+            EnemyGroupSaveData groupData = new()
+            {
+                groupId = info.groupId,
+                aliveEnemyDataList = new List<EnemySaveData>(),
+                respawnSaveDataList = new List<EnemyRespawnSaveData>()
+            };
+
+            foreach (AliveEnemy enemy in aliveEnemyList)
+            {
+                if (enemy.groupId != info.groupId) continue;
+                if (enemy.controller == null || enemy.controller.CurrentHp <= 0) continue;
+
+                EnemySaveData enemySaveData = enemy.controller.CreateSaveData();
+                enemySaveData.spawnIndex = enemy.spawnIndex;
+                groupData.aliveEnemyDataList.Add(enemySaveData);
+            }
+
+            groupDataList.Add(groupData);
+        }
+        return groupDataList;
+    }
+
+    public void LoadSaveData(List<EnemyGroupSaveData> dataList)
+    {
+        ClearList();
+
+        if (dataList == null) return;
+
+        foreach (EnemySpawnInfo info in spawnInfoList)
+        {
+            if (info == null) continue;
+
+            EnemyGroupSaveData groupData = dataList.Find(x => x.groupId == info.groupId);
+
+            if (groupData == null) continue;
+
+            foreach (EnemySaveData data in groupData.aliveEnemyDataList)
+            {
+                int spawnIndex = GetSpawnIndex(info, data.spawnIndex);
+
+                if (spawnIndex < 0) continue;
+
+                SpawnSavedEnemy(info.groupId, spawnIndex, data);
+            }
+        }
+
+    }
+
+    private void SpawnSavedEnemy(int groupId, int spawnIndex, EnemySaveData saveData)
+    {
+        EnemyData data = DataManager.Instance.EnemyTable.Get(saveData.enemyId);
+        GameObject enemy = ObjectPool.Instance.GetFromPool(data.EnemyType);
+        if (enemy == null) return;
+
+        if (enemy.TryGetComponent(out EnemyDropper enemyDropper))
+        {
+            enemyDropper.SetUp(itemDataBase, itemRegistry);
+        }
+
+        EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();
+        EnemyController enemyController = enemy.GetComponent<EnemyController>();
+
+        if (enemyStats == null || enemyController == null)
+        {
+            ObjectPool.Instance.ReturnToPool(enemy, data.EnemyType);
+            return;
+        }
+
+        enemyStats.SetHPBarController(hpBarController);
+        enemyController.LoadSaveData(saveData, data);
+
+        enemyStats.OnDead -= EnemyDead;
+        enemyStats.OnDead += EnemyDead;
+
+        RegisterEnemy(groupId, spawnIndex, enemyController);
+    }
+
+    private void ClearList()
+    {
+        foreach (AliveEnemy enemy in aliveEnemyList)
+        {
+            if (enemy.controller == null) continue;
+
+            ObjectPool.Instance.ReturnToPool(enemy.controller.gameObject, enemy.controller.EnemyType);
+        }
+        aliveEnemyList.Clear();
     }
 }

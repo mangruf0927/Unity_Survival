@@ -9,11 +9,13 @@ public class ObjectPool
 
     public static ObjectPool Instance { get; } = new();
 
+    private Transform inactiveRoot;
+
     public void Register(PoolData data, Transform parent)
     {
         if (data == null || data.prefab == null)
         {
-            Debug.LogError($"{data?.poolType} 풀 프리팹이 비어있습니다.");
+            Debug.LogError($"{data?.poolType} pool prefab is missing.");
             return;
         }
 
@@ -54,9 +56,22 @@ public class ObjectPool
 
     private GameObject CreatePool(GameObject prefab, Transform parent = null)
     {
-        GameObject obj = Object.Instantiate(prefab, parent);
+        GameObject obj = Object.Instantiate(prefab, GetInactiveRoot());
         obj.SetActive(false);
+        obj.transform.SetParent(parent, false);
         return obj;
+    }
+
+    private Transform GetInactiveRoot()
+    {
+        if (inactiveRoot != null) return inactiveRoot;
+
+        GameObject root = new("InactiveRoot");
+        root.SetActive(false);
+        Object.DontDestroyOnLoad(root);
+
+        inactiveRoot = root.transform;
+        return inactiveRoot;
     }
 
     public void ReturnToPool(GameObject obj, PoolTypeEnums poolType)

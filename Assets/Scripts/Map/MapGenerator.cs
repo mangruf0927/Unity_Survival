@@ -1,10 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.AI.Navigation;
 
 [System.Serializable]
 public class EnemySpawnEntry
 {
-    public int enemyCount;
+    public int groupId;
+    public int enemyId;
+    public int spawnCount;
+    public float spawnRadius;
     public GameObject prefab;
     public float offsetY;
 }
@@ -32,12 +36,14 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private GameObject groundPrefab;
     [SerializeField] private float cellSize;
     [SerializeField] private float cellThickness;
+    [SerializeField] private NavMeshSurface navMeshSurface;
 
     [Header("캠프파이어")]
-    [SerializeField] private GameObject campFirePrefab;
+    [SerializeField] private CampFire campFire;
     [SerializeField] private float campFireY;
 
     [Header("Enemy Spawn")]
+    [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private List<LevelEnemySpawnInfo> levelEnemySpawnList;
 
     private float noiseOffsetX;
@@ -45,7 +51,7 @@ public class MapGenerator : MonoBehaviour
 
     private readonly Dictionary<Vector2Int, CellData> cellDictionary = new();
 
-    private void Start()
+    private void Awake()
     {
         InitializeSeed();
 
@@ -86,6 +92,7 @@ public class MapGenerator : MonoBehaviour
                 CreateCell(coordinate, height);
             }
         }
+        navMeshSurface.BuildNavMesh();
     }
 
     private void ClearGround()
@@ -128,9 +135,9 @@ public class MapGenerator : MonoBehaviour
 
     private void CreateCampFire()
     {
-        if (campFirePrefab == null)
+        if (campFire == null)
         {
-            Debug.LogWarning("CampFire Prefab is null");
+            Debug.LogWarning("CampFire is null");
             return;
         }
 
@@ -142,7 +149,7 @@ public class MapGenerator : MonoBehaviour
             return;
         }
 
-        GameObject campFire = Instantiate(campFirePrefab, transform);
+        campFire.transform.SetParent(transform);
         campFire.transform.localPosition = new Vector3(campFireCoordinate.x * cellSize, cell.Height + campFireY, campFireCoordinate.y * cellSize);
 
         cell.SetCenterType(CenterType.CAMPFIRE);
@@ -166,11 +173,11 @@ public class MapGenerator : MonoBehaviour
 
             foreach (EnemySpawnEntry spawnEntry in levelInfo.spawnList)
             {
-                if (spawnEntry == null || spawnEntry.enemyCount <= 0) continue;
+                if (spawnEntry == null || spawnEntry.spawnCount <= 0) continue;
 
                 List<CellData> availableCellList = GetAvailableCellList(levelInfo.mapLevel);
 
-                for (int i = 0; i < spawnEntry.enemyCount; i++)
+                for (int i = 0; i < spawnEntry.spawnCount; i++)
                 {
                     if (availableCellList.Count == 0)
                     {
@@ -198,6 +205,8 @@ public class MapGenerator : MonoBehaviour
 
                     int randomRotation = Random.Range(0, 4) * 90;
                     spawnObject.transform.localRotation = Quaternion.Euler(0f, randomRotation, 0f);
+
+                    enemySpawner.RegisterSpawnPoint(spawnEntry.groupId, spawnEntry.enemyId, levelInfo.mapLevel, spawnEntry.spawnRadius, spawnObject.transform);
 
                     selectedCell.SetCenterType(CenterType.ENEMYSPAWN);
                     availableCellList.RemoveAt(randomIndex);

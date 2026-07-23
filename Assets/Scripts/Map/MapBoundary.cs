@@ -9,14 +9,7 @@ public class MapBoundary : MonoBehaviour
     [SerializeField] private int wallCount;
     [SerializeField] private List<float> radiusList = new() { 50f, 140f, 230f, 320f, 410f };
 
-    [SerializeField] private List<EnemySpawner> enemySpawnerList;
-
     private readonly List<GameObject> boundaryList = new();
-
-    private void Awake()
-    {
-        UpdateSpawners(campFire.CurrentLevel);
-    }
 
     private void Start()
     {
@@ -27,13 +20,11 @@ public class MapBoundary : MonoBehaviour
         UpdateBoundaries(campFire.CurrentLevel);
 
         campFire.OnLevelUp += UpdateBoundaries;
-        campFire.OnLevelUp += UpdateSpawners;
     }
 
     private void OnDestroy()
     {
         campFire.OnLevelUp -= UpdateBoundaries;
-        campFire.OnLevelUp -= UpdateSpawners;
     }
 
     private void CreateBoundary(int level)
@@ -85,13 +76,4 @@ public class MapBoundary : MonoBehaviour
         }
     }
 
-    private void UpdateSpawners(int level)
-    {
-        foreach (EnemySpawner spawner in enemySpawnerList)
-        {
-            if (spawner == null) continue;
-
-            spawner.gameObject.SetActive(level >= spawner.RequiredLevel);
-        }
-    }
 }
