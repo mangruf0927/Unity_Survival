@@ -1999,7 +1999,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &179897117
 Transform:
   m_ObjectHideFlags: 0
@@ -6821,13 +6821,13 @@ MonoBehaviour:
     - groupId: 201
       enemyId: 1101
       spawnCount: 10
-      spawnRadius: 3
+      spawnRadius: 5
       prefab: {fileID: 5046797994872184510, guid: 87346703e0c8643fd95a186016d508dc, type: 3}
       offsetY: -0.5
     - groupId: 202
       enemyId: 1102
       spawnCount: 10
-      spawnRadius: 3
+      spawnRadius: 5
       prefab: {fileID: 0}
       offsetY: 0.5
 --- !u!4 &696880429

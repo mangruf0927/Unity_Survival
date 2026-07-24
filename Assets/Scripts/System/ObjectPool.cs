@@ -42,6 +42,25 @@ public class ObjectPool
 
     public GameObject GetFromPool(PoolTypeEnums poolType)
     {
+        GameObject obj = TakeFromPool(poolType);
+        if (obj == null) return null;
+
+        obj.SetActive(true);
+        return obj;
+    }
+
+    public GameObject GetFromPool(PoolTypeEnums poolType, Vector3 position, Quaternion rotation)
+    {
+        GameObject obj = TakeFromPool(poolType);
+        if (obj == null) return null;
+
+        obj.transform.SetPositionAndRotation(position, rotation);
+        obj.SetActive(true);
+        return obj;
+    }
+
+    private GameObject TakeFromPool(PoolTypeEnums poolType)
+    {
         if (!poolDictionary.TryGetValue(poolType, out Stack<GameObject> pool)) return null;
         if (!dataDictionary.TryGetValue(poolType, out PoolData data)) return null;
 
@@ -50,7 +69,6 @@ public class ObjectPool
         else obj = CreatePool(data.prefab, parentDictionary[poolType]);
 
         obj.transform.SetParent(parentDictionary[poolType], false);
-        obj.SetActive(true);
         return obj;
     }
 

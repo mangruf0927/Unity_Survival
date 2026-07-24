@@ -55,7 +55,9 @@ public class EnemySpawner : MonoBehaviour
 
     private void UpdateLevel(int level)
     {
+        if (level <= currentLevel) return;
         currentLevel = level;
+        SpawnEnemiesAtLevel(level);
     }
 
     public void RegisterSpawnPoint(int groupId, int enemyId, int requiredLevel, float spawnRadius, Transform spawnPoint)
@@ -97,6 +99,27 @@ public class EnemySpawner : MonoBehaviour
                                         x.controller != null && x.controller.CurrentHp > 0);
     }
 
+    private void SpawnGroup(EnemySpawnInfo info)
+    {
+        for (int i = 0; i < info.spawnPointList.Count; i++)
+        {
+            if (IsEnemyAlive(info.groupId, i)) continue;
+
+            SpawnEnemy(info.groupId, i);
+        }
+    }
+
+    private void SpawnEnemiesAtLevel(int level)
+    {
+        foreach (EnemySpawnInfo info in spawnInfoList)
+        {
+            if (info == null || info.spawnPointList == null) continue;
+            if (info.requiredLevel != level) continue;
+
+            SpawnGroup(info);
+        }
+    }
+
     private void SpawnEnemies()
     {
         if (spawnInfoList == null) return;
@@ -106,11 +129,7 @@ public class EnemySpawner : MonoBehaviour
             if (info == null || info.spawnPointList == null) continue;
             if (info.requiredLevel > currentLevel) continue;
 
-            for (int i = 0; i < info.spawnPointList.Count; i++)
-            {
-                if (IsEnemyAlive(info.groupId, i)) continue;
-                SpawnEnemy(info.groupId, i);
-            }
+            SpawnGroup(info);
         }
     }
 
@@ -123,11 +142,9 @@ public class EnemySpawner : MonoBehaviour
         if (spawnPoint == null) return;
 
         EnemyData data = DataManager.Instance.EnemyTable.Get(info.enemyId);
-        GameObject enemy = ObjectPool.Instance.GetFromPool(data.EnemyType);
-        if (enemy == null) return;
-
         Vector3 spawnPosition = GetSpawnPosition(spawnPoint, info.spawnRadius);
-        enemy.transform.SetPositionAndRotation(spawnPosition, spawnPoint.rotation);
+        GameObject enemy = ObjectPool.Instance.GetFromPool(data.EnemyType, spawnPosition, spawnPoint.rotation);
+        if (enemy == null) return;
 
         if (enemy.TryGetComponent(out EnemyDropper enemyDropper))
         {
@@ -268,7 +285,9 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnSavedEnemy(int groupId, int spawnIndex, EnemySaveData saveData)
     {
         EnemyData data = DataManager.Instance.EnemyTable.Get(saveData.enemyId);
-        GameObject enemy = ObjectPool.Instance.GetFromPool(data.EnemyType);
+        Vector3 position = new(saveData.positionX, saveData.positionY, saveData.positionZ);
+        Quaternion rotation = Quaternion.Euler(0f, saveData.rotationY, 0f);
+        GameObject enemy = ObjectPool.Instance.GetFromPool(data.EnemyType, position, rotation);
         if (enemy == null) return;
 
         if (enemy.TryGetComponent(out EnemyDropper enemyDropper))
