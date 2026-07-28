@@ -6806,6 +6806,10 @@ MonoBehaviour:
   navMeshSurface: {fileID: 1583228582}
   campFire: {fileID: 370338873}
   campFireY: -0.4
+  structurePrefabList:
+  - {fileID: 6662929519143788297, guid: d4af1ca2e8dad4d9eac839ac89cf9e91, type: 3}
+  levelStructureCount: 0000000004000000050000000b00000012000000
+  offsetY: 0
   enemySpawner: {fileID: 1367383879}
   levelEnemySpawnList:
   - mapLevel: 1

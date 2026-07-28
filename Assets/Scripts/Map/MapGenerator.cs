@@ -42,6 +42,11 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private CampFire campFire;
     [SerializeField] private float campFireY;
 
+    [Header("구조물")]
+    [SerializeField] private List<GameObject> structurePrefabList;
+    [SerializeField] private List<int> levelStructureCount;
+    public float offsetY;
+
     [Header("Enemy Spawn")]
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private List<LevelEnemySpawnInfo> levelEnemySpawnList;
@@ -57,6 +62,7 @@ public class MapGenerator : MonoBehaviour
 
         GenerateGround();
         CreateCampFire();
+        CreateStructures();
         CreateEnemySpawns();
     }
 
@@ -155,6 +161,43 @@ public class MapGenerator : MonoBehaviour
         cell.SetCenterType(CenterType.CAMPFIRE);
     }
 
+    private void CreateStructures()
+    {
+        GameObject parent = new("Structures");
+        parent.transform.SetParent(transform);
+
+        for (int level = 1; level <= levelStructureCount.Count; level++)
+        {
+            int count = levelStructureCount[level - 1];
+
+            for (int i = 0; i < count; i++)
+            {
+                List<CellData> availableCellList = GetAvailableCellList(level);
+                if (availableCellList.Count == 0)
+                {
+                    Debug.LogWarning($"Not enough cells. Level: {level}");
+                    break;
+                }
+
+                int cellIndex = Random.Range(0, availableCellList.Count);
+                CellData selectedCell = availableCellList[cellIndex];
+
+                int prefabIndex = Random.Range(0, structurePrefabList.Count);
+                GameObject selectedPrefab = structurePrefabList[prefabIndex];
+
+                Vector3 position = new(selectedCell.Coordinate.x * cellSize, selectedCell.Height + offsetY, selectedCell.Coordinate.y * cellSize);
+
+                GameObject structure = Instantiate(selectedPrefab, parent.transform);
+                structure.transform.localPosition = position;
+
+                int rotation = Random.Range(0, 4) * 90;
+                structure.transform.localRotation = Quaternion.Euler(0f, rotation, 0f);
+
+                selectedCell.SetCenterType(CenterType.STRUCTURE);
+            }
+        }
+    }
+
     private void CreateEnemySpawns()
     {
         if (levelEnemySpawnList == null || levelEnemySpawnList.Count == 0)
@@ -167,9 +210,9 @@ public class MapGenerator : MonoBehaviour
         {
             if (levelInfo == null || levelInfo.spawnList == null) continue;
 
-            GameObject levelParent = new($"Lv{levelInfo.mapLevel}Spawner");
-            levelParent.transform.SetParent(transform);
-            levelParent.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            GameObject parent = new($"Lv{levelInfo.mapLevel}Spawner");
+            parent.transform.SetParent(transform);
+            parent.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
             foreach (EnemySpawnEntry spawnEntry in levelInfo.spawnList)
             {
@@ -194,11 +237,11 @@ public class MapGenerator : MonoBehaviour
                     if (spawnEntry.prefab == null)
                     {
                         spawnObject = new GameObject();
-                        spawnObject.transform.SetParent(levelParent.transform);
+                        spawnObject.transform.SetParent(parent.transform);
                     }
                     else
                     {
-                        spawnObject = Instantiate(spawnEntry.prefab, levelParent.transform);
+                        spawnObject = Instantiate(spawnEntry.prefab, parent.transform);
                     }
 
                     spawnObject.transform.localPosition = new Vector3(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
