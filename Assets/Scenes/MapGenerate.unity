@@ -6799,41 +6799,45 @@ MonoBehaviour:
   heightStep: 1
   maxHeightStep: 5
   mapRadius: 28
-  levelRadius: 040000000a00000010000000150000001c000000
+  levelRadiusList: 040000000a00000010000000150000001c000000
   groundPrefab: {fileID: 933181071144506461, guid: ff6fe3222d18542539815de9d4bb2ad6, type: 3}
   cellSize: 15
   cellThickness: 5
   navMeshSurface: {fileID: 1583228582}
   campFire: {fileID: 370338873}
   campFireY: -0.4
-  structurePrefabList:
-  - {fileID: 6662929519143788297, guid: d4af1ca2e8dad4d9eac839ac89cf9e91, type: 3}
-  levelStructureCount: 0000000004000000050000000b00000012000000
-  offsetY: 0
+  structureSpawnEntryList:
+  - prefab: {fileID: 6662929519143788297, guid: d4af1ca2e8dad4d9eac839ac89cf9e91, type: 3}
+    size: {x: 1, y: 1}
+    offsetY: -0.5
+  - prefab: {fileID: 7488217836835588314, guid: a64e03eaa29864a5285994b7cea019d3, type: 3}
+    size: {x: 2, y: 2}
+    offsetY: -0.5
+  structureCountList: 0000000004000000050000000b00000012000000
   enemySpawner: {fileID: 1367383879}
-  levelEnemySpawnList:
+  levelEnemySpawnInfoList:
   - mapLevel: 1
-    spawnList:
+    spawnEntryList:
     - groupId: 101
       enemyId: 1101
       spawnCount: 6
-      spawnRadius: 3
+      spawnRadius: 4
       prefab: {fileID: 5046797994872184510, guid: 87346703e0c8643fd95a186016d508dc, type: 3}
       offsetY: -0.5
   - mapLevel: 2
-    spawnList:
+    spawnEntryList:
     - groupId: 201
       enemyId: 1101
       spawnCount: 10
-      spawnRadius: 5
+      spawnRadius: 4
       prefab: {fileID: 5046797994872184510, guid: 87346703e0c8643fd95a186016d508dc, type: 3}
       offsetY: -0.5
     - groupId: 202
       enemyId: 1102
-      spawnCount: 10
-      spawnRadius: 5
+      spawnCount: 15
+      spawnRadius: 4
       prefab: {fileID: 0}
-      offsetY: 0.5
+      offsetY: 0
 --- !u!4 &696880429
 Transform:
   m_ObjectHideFlags: 0

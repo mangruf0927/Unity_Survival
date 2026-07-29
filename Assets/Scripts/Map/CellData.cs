@@ -23,4 +23,13 @@ public class CellData
     {
         Type = centerType;
     }
+
+    public void SetHeight(float height, float cellThickness)
+    {
+        Height = height;
+
+        Vector3 position = GroundObject.transform.localPosition;
+        position.y = height - cellThickness * 0.5f;
+        GroundObject.transform.localPosition = position;
+    }
 }

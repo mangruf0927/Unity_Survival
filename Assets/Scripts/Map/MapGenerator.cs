@@ -1,6 +1,15 @@
 using System.Collections.Generic;
-using UnityEngine;
 using Unity.AI.Navigation;
+using UnityEngine;
+using UnityEngine.Serialization;
+
+[System.Serializable]
+public class StructureSpawnEntry
+{
+    public GameObject prefab;
+    public Vector2Int size = Vector2Int.one;
+    public float offsetY;
+}
 
 [System.Serializable]
 public class EnemySpawnEntry
@@ -17,7 +26,7 @@ public class EnemySpawnEntry
 public class LevelEnemySpawnInfo
 {
     public int mapLevel;
-    public List<EnemySpawnEntry> spawnList;
+    public List<EnemySpawnEntry> spawnEntryList;
 }
 
 public class MapGenerator : MonoBehaviour
@@ -30,7 +39,8 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private int maxHeightStep;
 
     [SerializeField] private int mapRadius;
-    [SerializeField] private List<int> levelRadius;
+    [FormerlySerializedAs("levelRadius")]
+    [SerializeField] private List<int> levelRadiusList;
 
     [Header("땅")]
     [SerializeField] private GameObject groundPrefab;
@@ -43,13 +53,14 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private float campFireY;
 
     [Header("구조물")]
-    [SerializeField] private List<GameObject> structurePrefabList;
-    [SerializeField] private List<int> levelStructureCount;
-    public float offsetY;
+    [FormerlySerializedAs("structureEntryList")]
+    [SerializeField] private List<StructureSpawnEntry> structureSpawnEntryList;
+    [SerializeField] private List<int> structureCountList;
 
-    [Header("Enemy Spawn")]
+    [Header("Enemy")]
     [SerializeField] private EnemySpawner enemySpawner;
-    [SerializeField] private List<LevelEnemySpawnInfo> levelEnemySpawnList;
+    [FormerlySerializedAs("levelEnemySpawnList")]
+    [SerializeField] private List<LevelEnemySpawnInfo> levelEnemySpawnInfoList;
 
     private float noiseOffsetX;
     private float noiseOffsetZ;
@@ -147,74 +158,129 @@ public class MapGenerator : MonoBehaviour
             return;
         }
 
-        Vector2Int campFireCoordinate = Vector2Int.zero;
+        Vector2Int coordinate = Vector2Int.zero;
 
-        if (!cellDictionary.TryGetValue(campFireCoordinate, out CellData cell))
+        if (!cellDictionary.TryGetValue(coordinate, out CellData cell))
         {
             Debug.LogWarning("Cell (0, 0) could not be found");
             return;
         }
 
         campFire.transform.SetParent(transform);
-        campFire.transform.localPosition = new Vector3(campFireCoordinate.x * cellSize, cell.Height + campFireY, campFireCoordinate.y * cellSize);
+        campFire.transform.localPosition = new Vector3(coordinate.x * cellSize, cell.Height + campFireY, coordinate.y * cellSize);
 
         cell.SetCenterType(CenterType.CAMPFIRE);
     }
 
     private void CreateStructures()
     {
-        GameObject parent = new("Structures");
-        parent.transform.SetParent(transform);
+        GameObject structureParent = new("Structures");
+        structureParent.transform.SetParent(transform);
 
-        for (int level = 1; level <= levelStructureCount.Count; level++)
+        for (int level = 1; level <= structureCountList.Count; level++)
         {
-            int count = levelStructureCount[level - 1];
+            int count = structureCountList[level - 1];
 
             for (int i = 0; i < count; i++)
             {
-                List<CellData> availableCellList = GetAvailableCellList(level);
-                if (availableCellList.Count == 0)
+                bool placed = false;
+
+                for (int attempt = 0; attempt < 50; attempt++)
                 {
-                    Debug.LogWarning($"Not enough cells. Level: {level}");
+                    int structureIndex = Random.Range(0, structureSpawnEntryList.Count);
+                    StructureSpawnEntry spawnEntry = structureSpawnEntryList[structureIndex];
+
+                    if (spawnEntry == null || spawnEntry.prefab == null || spawnEntry.size.x <= 0 || spawnEntry.size.y <= 0) continue;
+
+                    List<CellData> availableCellList = GetAvailableCellList(level);
+                    if (availableCellList.Count == 0) break;
+
+                    int cellIndex = Random.Range(0, availableCellList.Count);
+                    CellData selectedCell = availableCellList[cellIndex];
+
+                    List<CellData> structureCellList = GetStructureCellList(selectedCell.Coordinate, spawnEntry.size, level);
+                    if (structureCellList == null) continue;
+
+                    PlaceStructure(spawnEntry, structureCellList, structureParent.transform);
+                    placed = true;
                     break;
                 }
 
-                int cellIndex = Random.Range(0, availableCellList.Count);
-                CellData selectedCell = availableCellList[cellIndex];
-
-                int prefabIndex = Random.Range(0, structurePrefabList.Count);
-                GameObject selectedPrefab = structurePrefabList[prefabIndex];
-
-                Vector3 position = new(selectedCell.Coordinate.x * cellSize, selectedCell.Height + offsetY, selectedCell.Coordinate.y * cellSize);
-
-                GameObject structure = Instantiate(selectedPrefab, parent.transform);
-                structure.transform.localPosition = position;
-
-                int rotation = Random.Range(0, 4) * 90;
-                structure.transform.localRotation = Quaternion.Euler(0f, rotation, 0f);
-
-                selectedCell.SetCenterType(CenterType.STRUCTURE);
+                if (!placed)
+                {
+                    Debug.LogWarning($"Failed to place structure. Level: {level}");
+                }
             }
         }
     }
 
+    private List<CellData> GetStructureCellList(Vector2Int start, Vector2Int size, int level)
+    {
+        List<CellData> cellList = new();
+
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int z = 0; z < size.y; z++)
+            {
+                Vector2Int coordinate = new(start.x + x, start.y + z);
+
+                if (!cellDictionary.TryGetValue(coordinate, out CellData cell)) return null;
+                if (cell.Type != CenterType.NONE) return null;
+                if (!IsCellInLevel(coordinate, level)) return null;
+
+                cellList.Add(cell);
+            }
+        }
+        return cellList;
+    }
+
+    private void PlaceStructure(StructureSpawnEntry entry, List<CellData> cellList, Transform structureParent)
+    {
+        float totalHeight = 0f;
+        Vector3 center = Vector3.zero;
+
+        foreach (CellData cell in cellList)
+        {
+            totalHeight += cell.Height;
+            center += new Vector3(cell.Coordinate.x * cellSize, 0f, cell.Coordinate.y * cellSize);
+        }
+
+        float averageHeight = totalHeight / cellList.Count;
+
+        if (heightStep > 0f) averageHeight = Mathf.Round(averageHeight / heightStep) * heightStep;
+
+        center /= cellList.Count;
+        center.y = averageHeight + entry.offsetY;
+
+        foreach (CellData cell in cellList)
+        {
+            cell.SetHeight(averageHeight, cellThickness);
+            cell.SetCenterType(CenterType.STRUCTURE);
+        }
+
+        GameObject structure = Instantiate(entry.prefab, structureParent);
+        int rotation = Random.Range(0, 4) * 90;
+
+        structure.transform.SetLocalPositionAndRotation(center, Quaternion.Euler(0f, rotation, 0f));
+    }
+
     private void CreateEnemySpawns()
     {
-        if (levelEnemySpawnList == null || levelEnemySpawnList.Count == 0)
+        if (levelEnemySpawnInfoList == null || levelEnemySpawnInfoList.Count == 0)
         {
             Debug.LogWarning("Level Enemy Spawn List is empty");
             return;
         }
 
-        foreach (LevelEnemySpawnInfo levelInfo in levelEnemySpawnList)
+        foreach (LevelEnemySpawnInfo levelInfo in levelEnemySpawnInfoList)
         {
-            if (levelInfo == null || levelInfo.spawnList == null) continue;
+            if (levelInfo == null || levelInfo.spawnEntryList == null) continue;
 
-            GameObject parent = new($"Lv{levelInfo.mapLevel}Spawner");
-            parent.transform.SetParent(transform);
-            parent.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            GameObject spawnParent = new($"Lv{levelInfo.mapLevel}Spawner");
+            spawnParent.transform.SetParent(transform);
+            spawnParent.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
-            foreach (EnemySpawnEntry spawnEntry in levelInfo.spawnList)
+            foreach (EnemySpawnEntry spawnEntry in levelInfo.spawnEntryList)
             {
                 if (spawnEntry == null || spawnEntry.spawnCount <= 0) continue;
 
@@ -232,24 +298,24 @@ public class MapGenerator : MonoBehaviour
                     CellData selectedCell = availableCellList[randomIndex];
                     Vector2Int coordinate = selectedCell.Coordinate;
 
-                    GameObject spawnObject;
+                    GameObject spawnPointObject;
 
                     if (spawnEntry.prefab == null)
                     {
-                        spawnObject = new GameObject();
-                        spawnObject.transform.SetParent(parent.transform);
+                        spawnPointObject = new GameObject();
+                        spawnPointObject.transform.SetParent(spawnParent.transform);
                     }
                     else
                     {
-                        spawnObject = Instantiate(spawnEntry.prefab, parent.transform);
+                        spawnPointObject = Instantiate(spawnEntry.prefab, spawnParent.transform);
                     }
 
-                    spawnObject.transform.localPosition = new Vector3(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
+                    spawnPointObject.transform.localPosition = new Vector3(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
 
                     int randomRotation = Random.Range(0, 4) * 90;
-                    spawnObject.transform.localRotation = Quaternion.Euler(0f, randomRotation, 0f);
+                    spawnPointObject.transform.localRotation = Quaternion.Euler(0f, randomRotation, 0f);
 
-                    enemySpawner.RegisterSpawnPoint(spawnEntry.groupId, spawnEntry.enemyId, levelInfo.mapLevel, spawnEntry.spawnRadius, spawnObject.transform);
+                    enemySpawner.RegisterSpawnPoint(spawnEntry.groupId, spawnEntry.enemyId, levelInfo.mapLevel, spawnEntry.spawnRadius, spawnPointObject.transform);
 
                     selectedCell.SetCenterType(CenterType.ENEMYSPAWN);
                     availableCellList.RemoveAt(randomIndex);
@@ -288,10 +354,10 @@ public class MapGenerator : MonoBehaviour
 
     private int GetLevelRadius(int level)
     {
-        if (levelRadius == null) return -1;
-        if (level < 1 || level > levelRadius.Count) return -1;
+        if (levelRadiusList == null) return -1;
+        if (level < 1 || level > levelRadiusList.Count) return -1;
 
-        return levelRadius[level - 1] - 1;
+        return levelRadiusList[level - 1] - 1;
     }
 
     private bool IsInsideRadius(Vector2Int coordinate, int radius)
