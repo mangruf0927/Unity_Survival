@@ -2136,7 +2136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &186318663
 Transform:
   m_ObjectHideFlags: 0
@@ -6841,6 +6841,7 @@ MonoBehaviour:
       spawnRadius: 4
       prefab: {fileID: 0}
       offsetY: 0
+  itemRegistry: {fileID: 609733976}
 --- !u!4 &696880429
 Transform:
   m_ObjectHideFlags: 0

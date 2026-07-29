@@ -62,6 +62,9 @@ public class MapGenerator : MonoBehaviour
     [FormerlySerializedAs("levelEnemySpawnList")]
     [SerializeField] private List<LevelEnemySpawnInfo> levelEnemySpawnInfoList;
 
+    [Header("아이템")]
+    [SerializeField] private ItemRegistry itemRegistry;
+
     private float noiseOffsetX;
     private float noiseOffsetZ;
 
@@ -103,6 +106,9 @@ public class MapGenerator : MonoBehaviour
 
         ClearGround();
 
+        GameObject groundParent = new("Grounds");
+        groundParent.transform.SetParent(transform);
+
         for (int x = -mapRadius; x <= mapRadius; x++)
         {
             for (int z = -mapRadius; z <= mapRadius; z++)
@@ -112,7 +118,7 @@ public class MapGenerator : MonoBehaviour
                 if (!IsInsideRadius(coordinate, mapRadius)) continue;
 
                 float height = GetCellHeight(coordinate);
-                CreateCell(coordinate, height);
+                CreateCell(coordinate, height, groundParent.transform);
             }
         }
         navMeshSurface.BuildNavMesh();
@@ -128,9 +134,9 @@ public class MapGenerator : MonoBehaviour
         cellDictionary.Clear();
     }
 
-    private void CreateCell(Vector2Int coordinate, float height)
+    private void CreateCell(Vector2Int coordinate, float height, Transform parent)
     {
-        GameObject cell = Instantiate(groundPrefab, transform);
+        GameObject cell = Instantiate(groundPrefab, parent);
 
         cell.transform.localScale = new Vector3(cellSize, cellThickness, cellSize);
         cell.transform.localPosition = new Vector3(coordinate.x * cellSize, height - cellThickness * 0.5f, coordinate.y * cellSize);
@@ -264,10 +270,15 @@ public class MapGenerator : MonoBehaviour
             cell.SetCenterType(CenterType.STRUCTURE);
         }
 
-        GameObject structure = Instantiate(entry.prefab, structureParent);
+        GameObject structureObj = Instantiate(entry.prefab, structureParent);
         int rotation = structureRandom.Next(0, 4) * 90;
 
-        structure.transform.SetLocalPositionAndRotation(center, Quaternion.Euler(0f, rotation, 0f));
+        structureObj.transform.SetLocalPositionAndRotation(center, Quaternion.Euler(0f, rotation, 0f));
+
+        if (structureObj.TryGetComponent(out Structure structure))
+        {
+            structure.SetUp(structureRandom, itemRegistry);
+        }
     }
 
     private void CreateEnemySpawns()
