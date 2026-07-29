@@ -6813,6 +6813,9 @@ MonoBehaviour:
   - prefab: {fileID: 7488217836835588314, guid: a64e03eaa29864a5285994b7cea019d3, type: 3}
     size: {x: 2, y: 2}
     offsetY: -0.5
+  - prefab: {fileID: 6773230448351645279, guid: 1ed0e8e0e8be04077b9f159906a3e659, type: 3}
+    size: {x: 2, y: 2}
+    offsetY: -3
   structureCountList: 0000000004000000050000000b00000012000000
   enemySpawner: {fileID: 1367383879}
   levelEnemySpawnInfoList:

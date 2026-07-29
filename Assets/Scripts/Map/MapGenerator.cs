@@ -65,6 +65,9 @@ public class MapGenerator : MonoBehaviour
     private float noiseOffsetX;
     private float noiseOffsetZ;
 
+    private System.Random structureRandom;
+    private System.Random enemyRandom;
+
     private readonly Dictionary<Vector2Int, CellData> cellDictionary = new();
 
     private void Awake()
@@ -85,6 +88,9 @@ public class MapGenerator : MonoBehaviour
 
         noiseOffsetX = Random.Range(-100000f, 100000f);
         noiseOffsetZ = Random.Range(-100000f, 100000f);
+
+        structureRandom = new System.Random(seed + 1);
+        enemyRandom = new System.Random(seed + 2);
     }
 
     private void GenerateGround()
@@ -187,7 +193,7 @@ public class MapGenerator : MonoBehaviour
 
                 for (int attempt = 0; attempt < 50; attempt++)
                 {
-                    int structureIndex = Random.Range(0, structureSpawnEntryList.Count);
+                    int structureIndex = structureRandom.Next(0, structureSpawnEntryList.Count);
                     StructureSpawnEntry spawnEntry = structureSpawnEntryList[structureIndex];
 
                     if (spawnEntry == null || spawnEntry.prefab == null || spawnEntry.size.x <= 0 || spawnEntry.size.y <= 0) continue;
@@ -195,7 +201,7 @@ public class MapGenerator : MonoBehaviour
                     List<CellData> availableCellList = GetAvailableCellList(level);
                     if (availableCellList.Count == 0) break;
 
-                    int cellIndex = Random.Range(0, availableCellList.Count);
+                    int cellIndex = structureRandom.Next(0, availableCellList.Count);
                     CellData selectedCell = availableCellList[cellIndex];
 
                     List<CellData> structureCellList = GetStructureCellList(selectedCell.Coordinate, spawnEntry.size, level);
@@ -259,7 +265,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         GameObject structure = Instantiate(entry.prefab, structureParent);
-        int rotation = Random.Range(0, 4) * 90;
+        int rotation = structureRandom.Next(0, 4) * 90;
 
         structure.transform.SetLocalPositionAndRotation(center, Quaternion.Euler(0f, rotation, 0f));
     }
@@ -294,7 +300,7 @@ public class MapGenerator : MonoBehaviour
                         break;
                     }
 
-                    int randomIndex = Random.Range(0, availableCellList.Count);
+                    int randomIndex = enemyRandom.Next(0, availableCellList.Count);
                     CellData selectedCell = availableCellList[randomIndex];
                     Vector2Int coordinate = selectedCell.Coordinate;
 
@@ -312,7 +318,7 @@ public class MapGenerator : MonoBehaviour
 
                     spawnPointObject.transform.localPosition = new Vector3(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
 
-                    int randomRotation = Random.Range(0, 4) * 90;
+                    int randomRotation = enemyRandom.Next(0, 4) * 90;
                     spawnPointObject.transform.localRotation = Quaternion.Euler(0f, randomRotation, 0f);
 
                     enemySpawner.RegisterSpawnPoint(spawnEntry.groupId, spawnEntry.enemyId, levelInfo.mapLevel, spawnEntry.spawnRadius, spawnPointObject.transform);
@@ -335,6 +341,12 @@ public class MapGenerator : MonoBehaviour
 
             availableCellList.Add(cell);
         }
+
+        availableCellList.Sort((a, b) =>
+        {
+            int xCompare = a.Coordinate.x.CompareTo(b.Coordinate.x);
+            return xCompare != 0 ? xCompare : a.Coordinate.y.CompareTo(b.Coordinate.y);
+        });
 
         return availableCellList;
     }
