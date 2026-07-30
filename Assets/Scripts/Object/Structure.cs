@@ -53,7 +53,7 @@ public class Structure : MonoBehaviour
 
             if (item == null)
             {
-                Debug.LogWarning($"{name}: Item {itemId} 생성에 실패했습니다.", this);
+                Debug.LogWarning($"{name}: Failed to spawn {itemId} item", this);
             }
         }
     }

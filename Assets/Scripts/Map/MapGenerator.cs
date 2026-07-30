@@ -23,6 +23,13 @@ public class EnemySpawnEntry
 }
 
 [System.Serializable]
+public class ItemSpotSpawnEntry
+{
+    public GameObject prefab;
+    public float offsetY;
+}
+
+[System.Serializable]
 public class LevelEnemySpawnInfo
 {
     public int mapLevel;
@@ -64,20 +71,24 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private List<StructureSpawnEntry> structureSpawnEntryList;
     [SerializeField] private List<int> structureCountList;
 
-    [Header("Enemy")]
-    [SerializeField] private EnemySpawner enemySpawner;
-    [FormerlySerializedAs("levelEnemySpawnList")]
-    [SerializeField] private List<LevelEnemySpawnInfo> levelEnemySpawnInfoList;
-
     [Header("아이템")]
     [SerializeField] private ItemRegistry itemRegistry;
     [SerializeField] private ObjectRegistry objectRegistry;
     [SerializeField] private List<LevelChestSpawnInfo> levelChestSpawnInfoList;
 
+    [Header("아이템 생성소")]
+    [SerializeField] private List<int> itemSpotCountList;
+    [SerializeField] private List<ItemSpotSpawnEntry> itemSpotPrefabList;
+
+    [Header("Enemy")]
+    [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private List<LevelEnemySpawnInfo> levelEnemySpawnInfoList;
+
     private float noiseOffsetX;
     private float noiseOffsetZ;
 
     private System.Random structureRandom;
+    private System.Random itemSpotRandom;
     private System.Random enemyRandom;
 
     private readonly Dictionary<Vector2Int, CellData> cellDictionary = new();
@@ -89,6 +100,7 @@ public class MapGenerator : MonoBehaviour
         GenerateGround();
         CreateCampFire();
         CreateStructures();
+        CreateItemSpots();
         CreateEnemySpawns();
     }
 
@@ -102,7 +114,8 @@ public class MapGenerator : MonoBehaviour
         noiseOffsetZ = Random.Range(-100000f, 100000f);
 
         structureRandom = new System.Random(seed + 1);
-        enemyRandom = new System.Random(seed + 2);
+        itemSpotRandom = new System.Random(seed + 2);
+        enemyRandom = new System.Random(seed + 3);
     }
 
     private void GenerateGround()
@@ -302,6 +315,55 @@ public class MapGenerator : MonoBehaviour
         int index = structureRandom.Next(0, validPrefabList.Count);
 
         return validPrefabList[index];
+    }
+
+    private void CreateItemSpots()
+    {
+        GameObject itemSpotParent = new("ItemSpots");
+        itemSpotParent.transform.SetParent(transform, false);
+
+        for (int level = 1; level <= itemSpotCountList.Count; level++)
+        {
+            int spawnCount = itemSpotCountList[level - 1];
+            if (spawnCount <= 0) continue;
+
+            List<CellData> availableCellList = GetAvailableCellList(level);
+
+            for (int i = 0; i < spawnCount; i++)
+            {
+                if (availableCellList.Count == 0)
+                {
+                    Debug.LogWarning($"Level {level}: Not enough cells to place LootSpot");
+                    break;
+                }
+
+                int index = itemSpotRandom.Next(0, availableCellList.Count);
+                CellData selectedCell = availableCellList[index];
+
+                availableCellList.RemoveAt(index);
+
+                int itemIndex = itemSpotRandom.Next(0, itemSpotPrefabList.Count);
+                ItemSpotSpawnEntry spawnEntry = itemSpotPrefabList[itemIndex];
+
+                Vector2Int coordinate = selectedCell.Coordinate;
+                Vector3 position = new(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
+
+                GameObject itemSpotObject = Instantiate(spawnEntry.prefab, itemSpotParent.transform);
+
+                int rotation = itemSpotRandom.Next(0, 4) * 90;
+                itemSpotObject.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
+
+                if (!itemSpotObject.TryGetComponent(out ItemSpot itemSpot))
+                {
+                    Debug.LogWarning($"{itemSpotObject.name}: ItemSpot component not found.", itemSpotObject);
+                    Destroy(itemSpotObject);
+                    continue;
+                }
+
+                selectedCell.SetCenterType(CenterType.ITEMSPOT);
+                itemSpot.SpawnItem(level, itemSpotRandom, itemRegistry);
+            }
+        }
     }
 
     private void CreateEnemySpawns()

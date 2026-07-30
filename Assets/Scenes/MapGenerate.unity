@@ -6817,6 +6817,34 @@ MonoBehaviour:
     size: {x: 2, y: 2}
     offsetY: -3
   structureCountList: 0000000004000000050000000b00000012000000
+  itemRegistry: {fileID: 609733976}
+  objectRegistry: {fileID: 1648102914}
+  levelChestSpawnInfoList:
+  - mapLevel: 1
+    chestEntryList:
+    - {fileID: 4918369992541344319, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
+  - mapLevel: 2
+    chestEntryList:
+    - {fileID: 5360605784955599650, guid: 0219d9ec14e6b4a138b479bc21d69140, type: 3}
+  - mapLevel: 3
+    chestEntryList:
+    - {fileID: 7905291230436623471, guid: 9639b551d5aaa42d5a1bcffc89273533, type: 3}
+  - mapLevel: 4
+    chestEntryList:
+    - {fileID: 4918369992541344319, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
+  - mapLevel: 5
+    chestEntryList:
+    - {fileID: 7905291230436623471, guid: 9639b551d5aaa42d5a1bcffc89273533, type: 3}
+  itemSpotCountList: 01000000050000000a0000000f00000014000000
+  itemSpotPrefabList:
+  - prefab: {fileID: 6730797194382267388, guid: 8ee7bebfdd19540feb754bf728e39114, type: 3}
+    offsetY: 0
+  - prefab: {fileID: 5429134858055333658, guid: 4a0c95caf3e704744a19c1dc4f7d5983, type: 3}
+    offsetY: 0
+  - prefab: {fileID: 1020299759545629356, guid: f987a496e38f34218a4cd79fdb534da7, type: 3}
+    offsetY: 0
+  - prefab: {fileID: 704697516798052849, guid: 5bda401759b114b449354adc1042d258, type: 3}
+    offsetY: 0
   enemySpawner: {fileID: 1367383879}
   levelEnemySpawnInfoList:
   - mapLevel: 1
@@ -6841,24 +6869,6 @@ MonoBehaviour:
       spawnRadius: 4
       prefab: {fileID: 0}
       offsetY: 0
-  itemRegistry: {fileID: 609733976}
-  objectRegistry: {fileID: 1648102914}
-  levelChestSpawnInfoList:
-  - mapLevel: 1
-    chestEntryList:
-    - {fileID: 4918369992541344319, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
-  - mapLevel: 2
-    chestEntryList:
-    - {fileID: 5360605784955599650, guid: 0219d9ec14e6b4a138b479bc21d69140, type: 3}
-  - mapLevel: 3
-    chestEntryList:
-    - {fileID: 7905291230436623471, guid: 9639b551d5aaa42d5a1bcffc89273533, type: 3}
-  - mapLevel: 4
-    chestEntryList:
-    - {fileID: 4918369992541344319, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
-  - mapLevel: 5
-    chestEntryList:
-    - {fileID: 7905291230436623471, guid: 9639b551d5aaa42d5a1bcffc89273533, type: 3}
 --- !u!4 &696880429
 Transform:
   m_ObjectHideFlags: 0
