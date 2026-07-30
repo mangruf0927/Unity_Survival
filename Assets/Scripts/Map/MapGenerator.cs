@@ -29,6 +29,13 @@ public class LevelEnemySpawnInfo
     public List<EnemySpawnEntry> spawnEntryList;
 }
 
+[System.Serializable]
+public class LevelChestSpawnInfo
+{
+    public int mapLevel;
+    public List<GameObject> chestEntryList;
+}
+
 public class MapGenerator : MonoBehaviour
 {
     [SerializeField] private int seed;
@@ -64,6 +71,8 @@ public class MapGenerator : MonoBehaviour
 
     [Header("아이템")]
     [SerializeField] private ItemRegistry itemRegistry;
+    [SerializeField] private ObjectRegistry objectRegistry;
+    [SerializeField] private List<LevelChestSpawnInfo> levelChestSpawnInfoList;
 
     private float noiseOffsetX;
     private float noiseOffsetZ;
@@ -213,7 +222,7 @@ public class MapGenerator : MonoBehaviour
                     List<CellData> structureCellList = GetStructureCellList(selectedCell.Coordinate, spawnEntry.size, level);
                     if (structureCellList == null) continue;
 
-                    PlaceStructure(spawnEntry, structureCellList, structureParent.transform);
+                    PlaceStructure(level, spawnEntry, structureCellList, structureParent.transform);
                     placed = true;
                     break;
                 }
@@ -246,7 +255,7 @@ public class MapGenerator : MonoBehaviour
         return cellList;
     }
 
-    private void PlaceStructure(StructureSpawnEntry entry, List<CellData> cellList, Transform structureParent)
+    private void PlaceStructure(int level, StructureSpawnEntry entry, List<CellData> cellList, Transform structureParent)
     {
         float totalHeight = 0f;
         Vector3 center = Vector3.zero;
@@ -275,10 +284,24 @@ public class MapGenerator : MonoBehaviour
 
         structureObj.transform.SetLocalPositionAndRotation(center, Quaternion.Euler(0f, rotation, 0f));
 
-        if (structureObj.TryGetComponent(out Structure structure))
-        {
-            structure.SetUp(structureRandom, itemRegistry);
-        }
+        if (!structureObj.TryGetComponent(out Structure structure)) return;
+
+        structure.SpawnItems(structureRandom, itemRegistry);
+
+        GameObject chestPrefab = GetRandomChest(level);
+        structure.SpawnChests(structureRandom, chestPrefab, objectRegistry);
+    }
+
+    private GameObject GetRandomChest(int level)
+    {
+        LevelChestSpawnInfo levelInfo = levelChestSpawnInfoList.Find(info => info != null && info.mapLevel == level);
+        List<GameObject> validPrefabList = levelInfo.chestEntryList.FindAll(prefab => prefab != null);
+
+        if (validPrefabList.Count == 0) return null;
+
+        int index = structureRandom.Next(0, validPrefabList.Count);
+
+        return validPrefabList[index];
     }
 
     private void CreateEnemySpawns()

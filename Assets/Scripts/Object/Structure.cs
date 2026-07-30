@@ -11,12 +11,7 @@ public class Structure : MonoBehaviour
     [SerializeField] private int minItemSpawnCount = 2;
     [SerializeField] private int maxItemSpawnCount = 4;
 
-    public void SetUp(System.Random random, ItemRegistry itemRegistry)
-    {
-        SpawnItems(random, itemRegistry);
-    }
-
-    private void SpawnItems(System.Random random, ItemRegistry itemRegistry)
+    public void SpawnItems(System.Random random, ItemRegistry itemRegistry)
     {
         if (itemIdList == null || itemIdList.Count == 0)
         {
@@ -61,5 +56,22 @@ public class Structure : MonoBehaviour
                 Debug.LogWarning($"{name}: Item {itemId} 생성에 실패했습니다.", this);
             }
         }
+    }
+
+    public void SpawnChests(System.Random random, GameObject chestPrefab, ObjectRegistry objectRegistry)
+    {
+        int index = random.Next(0, chestSpawnPointList.Count);
+        Transform spawnPoint = chestSpawnPointList[index];
+
+        GameObject chestObject = Instantiate(chestPrefab, spawnPoint.position, spawnPoint.rotation, transform);
+        if (!chestObject.TryGetComponent(out Chest chest))
+        {
+            Debug.LogWarning($"{chestObject.name}: Chest component is null.", chestObject);
+            Destroy(chestObject);
+            return;
+        }
+
+        chest.SetInstanceId(objectRegistry.CreateInstanceId());
+        objectRegistry.Register(chest);
     }
 }
