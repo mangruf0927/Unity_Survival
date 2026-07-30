@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public enum CenterType { NONE, CAMPFIRE, STRUCTURE, ITEMSPOT, ENEMYSPAWN }
+public enum CenterType { NONE, CAMPFIRE, STRUCTURE, ITEMSPOT, ENEMYSPAWN, ENVIRONMENT }
 
 [Serializable]
 public class CellData

@@ -43,6 +43,16 @@ public class LevelChestSpawnInfo
     public List<GameObject> chestEntryList;
 }
 
+[System.Serializable]
+public class EnvironmentSpawnEntry
+{
+    public GameObject prefab;
+    public int minSpawnCount;
+    public int maxSpawnCount;
+    public int maxCountPerCell;
+    public float offsetY;
+}
+
 public class MapGenerator : MonoBehaviour
 {
     [SerializeField] private int seed;
@@ -84,12 +94,16 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private List<LevelEnemySpawnInfo> levelEnemySpawnInfoList;
 
+    [Header("환경 오브젝트")]
+    [SerializeField] private List<EnvironmentSpawnEntry> environmentSpawnEntryList;
+
     private float noiseOffsetX;
     private float noiseOffsetZ;
 
     private System.Random structureRandom;
     private System.Random itemSpotRandom;
     private System.Random enemyRandom;
+    private System.Random environmentRandom;
 
     private readonly Dictionary<Vector2Int, CellData> cellDictionary = new();
 
@@ -102,6 +116,7 @@ public class MapGenerator : MonoBehaviour
         CreateStructures();
         CreateItemSpots();
         CreateEnemySpawns();
+        CreateEnvironments();
     }
 
     private void InitializeSeed()
@@ -116,6 +131,7 @@ public class MapGenerator : MonoBehaviour
         structureRandom = new System.Random(seed + 1);
         itemSpotRandom = new System.Random(seed + 2);
         enemyRandom = new System.Random(seed + 3);
+        environmentRandom = new System.Random(seed + 4);
     }
 
     private void GenerateGround()
@@ -169,9 +185,7 @@ public class MapGenerator : MonoBehaviour
 
     private float GetCellHeight(Vector2Int coordinate)
     {
-        bool isCampFireArea = Mathf.Abs(coordinate.x) <= 1 && Mathf.Abs(coordinate.y) <= 1;
-
-        if (isCampFireArea) return 0f;
+        if (IsCampFireArea(coordinate)) return 0f;
 
         float sampleX = coordinate.x * noiseScale + noiseOffsetX;
         float sampleZ = coordinate.y * noiseScale + noiseOffsetZ;
@@ -182,6 +196,11 @@ public class MapGenerator : MonoBehaviour
         int step = Mathf.RoundToInt(centeredNoise * maxHeightStep);
 
         return step * heightStep;
+    }
+
+    private bool IsCampFireArea(Vector2Int coordinate)
+    {
+        return Mathf.Abs(coordinate.x) <= 1 && Mathf.Abs(coordinate.y) <= 1;
     }
 
     private void CreateCampFire()
@@ -424,6 +443,84 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void CreateEnvironments()
+    {
+        List<CellData> availableCellList = GetEnvironmentCellList();
+        if (availableCellList.Count == 0) return;
+
+        GameObject environmentParent = new("Environments");
+        environmentParent.transform.SetParent(transform, false);
+
+        foreach (EnvironmentSpawnEntry entry in environmentSpawnEntryList)
+        {
+            int minCount = Mathf.Max(0, entry.minSpawnCount);
+            int maxCount = Mathf.Max(minCount, entry.maxSpawnCount);
+            int maxCountPerCell = Mathf.Max(1, entry.maxCountPerCell);
+            int spawnCount = environmentRandom.Next(minCount, maxCount + 1);
+
+            List<CellData> entryCellList = new(availableCellList);
+            Dictionary<Vector2Int, int> cellCountMap = new();
+
+            for (int i = 0; i < spawnCount; i++)
+            {
+                if (entryCellList.Count == 0) break;
+
+                int cellIndex = environmentRandom.Next(0, entryCellList.Count);
+                CellData selectedCell = entryCellList[cellIndex];
+
+                Vector3 position = GetRandomPositionInCell(selectedCell);
+                position.y += entry.offsetY;
+
+                int rotation = environmentRandom.Next(0, 4) * 90;
+                GameObject environment = Instantiate(entry.prefab, environmentParent.transform);
+                environment.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
+
+                cellCountMap.TryGetValue(selectedCell.Coordinate, out int currentCount);
+                currentCount++;
+
+                cellCountMap[selectedCell.Coordinate] = currentCount;
+
+                if (currentCount >= maxCountPerCell)
+                {
+                    entryCellList.RemoveAt(cellIndex);
+                }
+            }
+        }
+    }
+
+    private List<CellData> GetEnvironmentCellList()
+    {
+        List<CellData> availableCellList = new();
+
+        foreach (CellData cell in cellDictionary.Values)
+        {
+            if (cell.Type == CenterType.STRUCTURE) continue;
+            if (IsCampFireArea(cell.Coordinate)) continue;
+
+            availableCellList.Add(cell);
+        }
+
+        availableCellList.Sort((a, b) =>
+        {
+            int xCompare = a.Coordinate.x.CompareTo(b.Coordinate.x);
+            return xCompare != 0 ? xCompare : a.Coordinate.y.CompareTo(b.Coordinate.y);
+        });
+
+        return availableCellList;
+    }
+
+    private Vector3 GetRandomPositionInCell(CellData cell)
+    {
+        float range = cellSize * 0.4f;
+        float offsetX = Mathf.Lerp(-range, range, (float)environmentRandom.NextDouble());
+        float offsetZ = Mathf.Lerp(-range, range, (float)environmentRandom.NextDouble());
+
+        float x = cell.Coordinate.x * cellSize + offsetX;
+        float z = cell.Coordinate.y * cellSize + offsetZ;
+
+        return new Vector3(x, cell.Height, z);
     }
 
     private List<CellData> GetAvailableCellList(int level)

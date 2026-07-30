@@ -6869,6 +6869,22 @@ MonoBehaviour:
       spawnRadius: 4
       prefab: {fileID: 0}
       offsetY: 0
+  environmentSpawnEntryList:
+  - prefab: {fileID: 6868969764276136975, guid: 0eb171792af2c406c8d45f727939fc63, type: 3}
+    minSpawnCount: 500
+    maxSpawnCount: 700
+    maxCountPerCell: 3
+    offsetY: 0
+  - prefab: {fileID: 661524020498355123, guid: 3e36e8877449d460693efee99e98a572, type: 3}
+    minSpawnCount: 300
+    maxSpawnCount: 400
+    maxCountPerCell: 1
+    offsetY: 0
+  - prefab: {fileID: 5429134858055333658, guid: 4a0c95caf3e704744a19c1dc4f7d5983, type: 3}
+    minSpawnCount: 300
+    maxSpawnCount: 400
+    maxCountPerCell: 1
+    offsetY: 0
 --- !u!4 &696880429
 Transform:
   m_ObjectHideFlags: 0
