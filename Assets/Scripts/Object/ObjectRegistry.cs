@@ -7,82 +7,168 @@ public class ObjectRegistry : MonoBehaviour
     [SerializeField] private ObjectDataBase objectDataBase;
     [SerializeField] private List<Transform> objectRootList = new();
 
-    private readonly Dictionary<long, WorldObject> worldObjectMap = new();
+    private readonly Dictionary<long, WorldObject> worldObjectDictionary = new();
+    private readonly List<WorldObject> generatedObjectList = new();
     private readonly List<WorldObject> runtimeObjectList = new();
 
-    private const long StartId = 1;
-    private long nextInstanceId = StartId;
+    private const long StartRuntimeId = 1;
+    private const long StartGeneratedId = 1000000000;
+
+    private long nextRuntimeId = StartRuntimeId;
+    private long nextGeneratedId = StartGeneratedId;
 
     private void Awake()
     {
-        RegisterObjects();
+        RegisterSceneObjects();
     }
 
-    public long CreateInstanceId()
+    private void RegisterSceneObjects()
     {
-        while (worldObjectMap.ContainsKey(nextInstanceId))
+        foreach (Transform root in objectRootList)
         {
-            nextInstanceId++;
+            if (root == null) continue;
+
+            WorldObject[] objects = root.GetComponentsInChildren<WorldObject>(true);
+
+            foreach (WorldObject obj in objects)
+            {
+                if (obj == null) continue;
+
+                RegisterGenerated(obj);
+            }
+        }
+    }
+
+    public void RegisterGenerated(WorldObject obj)
+    {
+        if (obj == null) return;
+
+        if (obj.ObjectType != ObjectType.GENERATED)
+        {
+            Debug.LogWarning($"{obj.name}: ObjectType is not GENERATED.", obj);
         }
 
-        return nextInstanceId++;
+        if (obj.InstanceId < StartGeneratedId)
+        {
+            obj.SetInstanceId(CreateGeneratedId());
+        }
+
+        if (!generatedObjectList.Contains(obj))
+        {
+            generatedObjectList.Add(obj);
+        }
+
+        AddToDictionary(obj);
     }
 
-    public void Register(WorldObject obj)
+    public void RegisterRuntime(WorldObject obj)
     {
-        if (obj == null || obj.InstanceId <= 0) return;
+        if (obj == null) return;
 
-        worldObjectMap[obj.InstanceId] = obj;
-        UpdateNextInstanceId(obj.InstanceId);
+        if (obj.ObjectType != ObjectType.RUNTIME)
+        {
+            Debug.LogWarning($"{obj.name}: ObjectType is not RUNTIME.", obj);
+        }
 
-        if (!IsSceneObject(obj) && IsDynamicObject(obj.ObjectType) && !runtimeObjectList.Contains(obj))
+        if (obj.InstanceId <= 0 || obj.InstanceId >= StartGeneratedId)
+        {
+            obj.SetInstanceId(CreateRuntimeId());
+        }
+
+        if (!runtimeObjectList.Contains(obj))
         {
             runtimeObjectList.Add(obj);
         }
+
+        AddToDictionary(obj);
+        UpdateRuntimeId(obj.InstanceId);
     }
 
     public void Unregister(WorldObject obj)
     {
         if (obj == null || obj.InstanceId <= 0) return;
 
-        worldObjectMap.Remove(obj.InstanceId);
+        worldObjectDictionary.Remove(obj.InstanceId);
+        generatedObjectList.Remove(obj);
         runtimeObjectList.Remove(obj);
     }
 
-    public WorldSaveData CreateSaveData()
+    private void AddToDictionary(WorldObject obj)
     {
-        RegisterObjects();
+        if (obj == null || obj.InstanceId <= 0) return;
 
-        return new WorldSaveData
-        {
-            nextInstanceId = nextInstanceId,
-            objectSaveDataList = CreateObjectSaveData()
-        };
+        worldObjectDictionary[obj.InstanceId] = obj;
     }
 
-    private List<ObjectSaveData> CreateObjectSaveData()
+    private long CreateRuntimeId()
     {
-        List<ObjectSaveData> dataList = new();
-
-        foreach (WorldObject obj in worldObjectMap.Values)
+        while (worldObjectDictionary.ContainsKey(nextRuntimeId))
         {
-            if (obj == null) continue;
-            dataList.Add(obj.CreateSaveData());
+            nextRuntimeId++;
         }
 
-        return dataList;
+        return nextRuntimeId++;
+    }
+
+    private long CreateGeneratedId()
+    {
+        while (worldObjectDictionary.ContainsKey(nextGeneratedId))
+        {
+            nextGeneratedId++;
+        }
+
+        return nextGeneratedId++;
+    }
+
+    private void UpdateRuntimeId(long instanceId)
+    {
+        if (instanceId >= nextRuntimeId && instanceId < StartGeneratedId)
+        {
+            nextRuntimeId = instanceId + 1;
+        }
+    }
+
+    // Save/Load
+    public WorldSaveData CreateSaveData()
+    {
+        return new WorldSaveData
+        {
+            nextInstanceId = nextRuntimeId,
+            objectSaveDataList = CreateObjectSaveData()
+        };
     }
 
     public void LoadSaveData(WorldSaveData data)
     {
         if (data == null) return;
 
-        nextInstanceId = Math.Max(data.nextInstanceId, StartId);
-        UpdateNextInstanceId(data.objectSaveDataList);
+        nextRuntimeId = Math.Max(data.nextInstanceId, StartRuntimeId);
 
+        if (data.objectSaveDataList != null)
+        {
+            foreach (ObjectSaveData objectData in data.objectSaveDataList)
+            {
+                if (objectData == null || objectData.objectType != ObjectType.RUNTIME) continue;
+
+                UpdateRuntimeId(objectData.instanceId);
+            }
+        }
         ClearRuntimeObjects();
-        RegisterObjects();
         LoadObjectSaveData(data.objectSaveDataList);
+    }
+
+    private List<ObjectSaveData> CreateObjectSaveData()
+    {
+        List<ObjectSaveData> dataList = new();
+
+        foreach (WorldObject obj in worldObjectDictionary.Values)
+        {
+            if (obj == null) continue;
+
+            dataList.Add(obj.CreateSaveData());
+        }
+
+        return dataList;
     }
 
     private void LoadObjectSaveData(List<ObjectSaveData> dataList)
@@ -91,82 +177,19 @@ public class ObjectRegistry : MonoBehaviour
 
         foreach (ObjectSaveData data in dataList)
         {
-            if (worldObjectMap.TryGetValue(data.instanceId, out WorldObject sceneObj))
+            if (data == null) continue;
+
+            if (worldObjectDictionary.TryGetValue(data.instanceId, out WorldObject existingObject))
             {
-                sceneObj.LoadSaveData(data);
+                existingObject.LoadSaveData(data);
                 continue;
             }
 
-            if (IsDynamicObject(data.objectType))
+            if (data.objectType == ObjectType.RUNTIME)
             {
-                SpawnDynamicObject(data);
+                SpawnRuntimeObject(data);
             }
         }
-    }
-
-    private void RegisterObjects()
-    {
-        worldObjectMap.Clear();
-
-        List<WorldObject> sceneObjectList = GetSceneObjectList();
-
-        foreach (WorldObject obj in sceneObjectList)
-        {
-            if (obj == null || obj.InstanceId <= 0) continue;
-            Register(obj);
-        }
-
-        long fallbackId = StartId;
-        foreach (WorldObject obj in sceneObjectList)
-        {
-            if (obj == null || obj.InstanceId > 0) continue;
-
-            while (worldObjectMap.ContainsKey(fallbackId))
-            {
-                fallbackId++;
-            }
-
-            obj.SetInstanceId(fallbackId);
-            Register(obj);
-        }
-
-        foreach (WorldObject obj in runtimeObjectList)
-        {
-            if (obj == null || obj.InstanceId <= 0) continue;
-            Register(obj);
-        }
-    }
-
-    private List<WorldObject> GetSceneObjectList()
-    {
-        List<WorldObject> sceneObjectList = new();
-
-        foreach (Transform root in objectRootList)
-        {
-            if (root == null) continue;
-
-            WorldObject[] objects = root.GetComponentsInChildren<WorldObject>(true);
-            foreach (WorldObject obj in objects)
-            {
-                if (obj == null || sceneObjectList.Contains(obj)) continue;
-                sceneObjectList.Add(obj);
-            }
-        }
-
-        return sceneObjectList;
-    }
-
-    private bool IsSceneObject(WorldObject obj)
-    {
-        if (obj == null) return false;
-
-        foreach (Transform root in objectRootList)
-        {
-            if (root == null) continue;
-            if (obj.transform.IsChildOf(root)) return true;
-        }
-
-        return false;
     }
 
     private void ClearRuntimeObjects()
@@ -174,41 +197,24 @@ public class ObjectRegistry : MonoBehaviour
         foreach (WorldObject obj in runtimeObjectList)
         {
             if (obj == null) continue;
+
+            worldObjectDictionary.Remove(obj.InstanceId);
             Destroy(obj.gameObject);
         }
-
         runtimeObjectList.Clear();
     }
 
-    private bool IsDynamicObject(ObjectType objectType)
-    {
-        return objectType == ObjectType.PLACEABLE;
-    }
-
-    private void UpdateNextInstanceId(List<ObjectSaveData> dataList)
-    {
-        if (dataList == null) return;
-
-        foreach (ObjectSaveData data in dataList)
-        {
-            UpdateNextInstanceId(data.instanceId);
-        }
-    }
-
-    private void UpdateNextInstanceId(long instanceId)
-    {
-        if (instanceId >= nextInstanceId)
-        {
-            nextInstanceId = instanceId + 1;
-        }
-    }
-
-    private void SpawnDynamicObject(ObjectSaveData data)
+    private void SpawnRuntimeObject(ObjectSaveData data)
     {
         if (objectDataBase == null) return;
 
         WorldObject prefab = objectDataBase.GetPrefab(data.itemId);
-        if (prefab == null) return;
+
+        if (prefab == null)
+        {
+            Debug.LogError($"WorldObject prefab not found. ItemId: {data.itemId}");
+            return;
+        }
 
         Vector3 position = new(data.positionX, data.positionY, data.positionZ);
         Quaternion rotation = Quaternion.Euler(data.rotationX, data.rotationY, data.rotationZ);
@@ -217,6 +223,6 @@ public class ObjectRegistry : MonoBehaviour
         obj.SetInstanceId(data.instanceId);
         obj.LoadSaveData(data);
 
-        Register(obj);
+        RegisterRuntime(obj);
     }
 }

@@ -9,18 +9,12 @@ public class TreeObject : WorldObject
     [SerializeField] private float shakeAngle;
     [SerializeField] private float shakeTime;
 
-    private ItemRegistry itemRegistry;
     private int currentHp;
     private bool isShaking;
 
     private void Awake()
     {
         currentHp = maxHP;
-    }
-
-    public void Initialize(ItemRegistry registry)
-    {
-        itemRegistry = registry;
     }
 
     public override ObjectSaveData CreateSaveData()
@@ -84,7 +78,7 @@ public class TreeObject : WorldObject
 
     private void CreateLog(Vector3 center)
     {
-        if (itemRegistry == null)
+        if (ItemRegistry == null)
         {
             Debug.LogError($"{name}: ItemRegistry is not assigned.", this);
             return;
@@ -105,7 +99,7 @@ public class TreeObject : WorldObject
             Vector3 spawnPosition = center + direction * dropRadius + randomOffset + Vector3.up * spawnHeight;
             Quaternion rotation = Quaternion.Euler(90f, Random.Range(0f, 360f), 0f);
 
-            itemRegistry.SpawnItem(logItemId, spawnPosition, rotation);
+            ItemRegistry.SpawnItem(logItemId, spawnPosition, rotation);
         }
     }
 }

@@ -9,7 +9,6 @@ public class Chest : WorldObject, IInteractable
     [SerializeField] private Animator animator;
 
     [SerializeField] private List<int> itemIdList;
-    [SerializeField] private ItemRegistry itemRegistry;
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private Transform uiPoint;
 
@@ -69,10 +68,10 @@ public class Chest : WorldObject, IInteractable
 
     private void RandomItem()
     {
-        if (spawnPoint == null || itemRegistry == null || itemIdList == null || itemIdList.Count == 0) return;
+        if (spawnPoint == null || ItemRegistry == null || itemIdList == null || itemIdList.Count == 0) return;
 
         int idx = Random.Range(0, itemIdList.Count);
-        itemRegistry.SpawnItem(itemIdList[idx], spawnPoint.position, Quaternion.identity);
+        ItemRegistry.SpawnItem(itemIdList[idx], spawnPoint.position, Quaternion.identity);
     }
 
     private void ApplyOpenedState()

@@ -96,8 +96,7 @@ public class ObjectPlacement : MonoBehaviour
         WorldObject worldObject = placedObject.GetComponentInChildren<WorldObject>();
         if (worldObject == null) return;
 
-        worldObject.SetInstanceId(objectRegistry.CreateInstanceId());
-        objectRegistry.Register(worldObject);
+        objectRegistry.RegisterRuntime(worldObject);
     }
 
     public void CancelPlacement()

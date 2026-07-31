@@ -6,13 +6,20 @@ public class WorldObject : MonoBehaviour
     [SerializeField] private ObjectType objectType;
 
     private long instanceId;
-    public long InstanceId => instanceId;
+    protected ItemRegistry ItemRegistry { get; private set; }
+
     public int ItemId => itemId;
     public ObjectType ObjectType => objectType;
+    public long InstanceId => instanceId;
 
     public void SetInstanceId(long id)
     {
         instanceId = id;
+    }
+
+    public void Initialize(ItemRegistry registry)
+    {
+        ItemRegistry = registry;
     }
 
     public virtual ObjectSaveData CreateSaveData()

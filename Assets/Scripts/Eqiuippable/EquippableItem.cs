@@ -18,7 +18,7 @@ public abstract class EquippableItem : MonoBehaviour
     public string ItemName => itemName;
     public Sprite ItemIcon => itemIcon;
     public int ItemId => itemId;
-    public int MaxCount => maxCount;
+    public int MaxCount => Mathf.Max(1, maxCount);
     public bool IsAttached { get; private set; }
 
     protected bool canDrop = true;

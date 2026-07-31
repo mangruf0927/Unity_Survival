@@ -318,7 +318,7 @@ public class MapGenerator : MonoBehaviour
         structure.SpawnItems(structureRandom, itemRegistry);
 
         GameObject chestPrefab = GetRandomChest(level);
-        structure.SpawnChests(structureRandom, chestPrefab, objectRegistry);
+        structure.SpawnChests(structureRandom, chestPrefab, itemRegistry, objectRegistry);
     }
 
     private GameObject GetRandomChest(int level)
@@ -468,10 +468,12 @@ public class MapGenerator : MonoBehaviour
                 CellData selectedCell = entryCellList[cellIndex];
 
                 GameObject environment = Instantiate(entry.prefab, environmentParent.transform);
+                WorldObject worldObject = environment.GetComponentInChildren<WorldObject>();
 
-                if (environment.TryGetComponent(out TreeObject tree))
+                if (worldObject != null)
                 {
-                    tree.Initialize(itemRegistry);
+                    worldObject.Initialize(itemRegistry);
+                    objectRegistry.RegisterGenerated(worldObject);
                 }
 
                 Vector3 position = GetRandomPositionInCell(selectedCell);
