@@ -117,6 +117,8 @@ public class MapGenerator : MonoBehaviour
         CreateItemSpots();
         CreateEnemySpawns();
         CreateEnvironments();
+
+        navMeshSurface.BuildNavMesh();
     }
 
     private void InitializeSeed()
@@ -160,7 +162,6 @@ public class MapGenerator : MonoBehaviour
                 CreateCell(coordinate, height, groundParent.transform);
             }
         }
-        navMeshSurface.BuildNavMesh();
     }
 
     private void ClearGround()
@@ -442,7 +443,7 @@ public class MapGenerator : MonoBehaviour
                     }
 
                     Vector3 position = new(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
-                    int rotation = itemSpotRandom.Next(0, 4) * 90;
+                    int rotation = enemyRandom.Next(0, 4) * 90;
                     spawnPointObject.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
 
                     enemySpawner.RegisterSpawnPoint(spawnEntry.groupId, spawnEntry.enemyId, levelInfo.mapLevel, spawnEntry.spawnRadius, spawnPointObject.transform);

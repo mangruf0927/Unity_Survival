@@ -6819,17 +6819,16 @@ MonoBehaviour:
   objectRegistry: {fileID: 1648102914}
   levelChestSpawnInfoList:
   - mapLevel: 1
-    chestEntryList:
-    - {fileID: 4918369992541344319, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
+    chestEntryList: []
   - mapLevel: 2
     chestEntryList:
-    - {fileID: 5360605784955599650, guid: 0219d9ec14e6b4a138b479bc21d69140, type: 3}
+    - {fileID: 4918369992541344319, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
   - mapLevel: 3
     chestEntryList:
-    - {fileID: 7905291230436623471, guid: 9639b551d5aaa42d5a1bcffc89273533, type: 3}
+    - {fileID: 5360605784955599650, guid: 0219d9ec14e6b4a138b479bc21d69140, type: 3}
   - mapLevel: 4
     chestEntryList:
-    - {fileID: 4918369992541344319, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
+    - {fileID: 5360605784955599650, guid: 0219d9ec14e6b4a138b479bc21d69140, type: 3}
   - mapLevel: 5
     chestEntryList:
     - {fileID: 7905291230436623471, guid: 9639b551d5aaa42d5a1bcffc89273533, type: 3}
