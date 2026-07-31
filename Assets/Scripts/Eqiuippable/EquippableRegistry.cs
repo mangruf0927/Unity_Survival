@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquippableSpawner : MonoBehaviour
+public class EquippableRegistry : MonoBehaviour
 {
     [SerializeField] private EquippableDatabase equippableDatabase;
     [SerializeField] private Transform equippableRoot;

@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private InteractionUI interactionUI;
     [SerializeField] private ObjectPlacement objectPlacement;
     [SerializeField] private ItemRegistry itemRegistry;
-    [SerializeField] private EquippableSpawner equippableSpawner;
+    [SerializeField] private EquippableRegistry equippableRegistry;
 
     private float riseMultiplier = 1.5f;
     private float fallMultiplier = 5f;
@@ -204,46 +204,6 @@ public class PlayerController : MonoBehaviour
         return true;
     }
 
-    public InventorySaveData CreateInventorySaveData()
-    {
-        return inventory.CreateSaveData(currentEquipped);
-    }
-
-    public void LoadInventorySaveData(InventorySaveData data, EquippableDatabase equippableDatabase, ItemDataBase itemDatabase)
-    {
-        if (data == null || equippableDatabase == null || itemDatabase == null) return;
-
-        if (currentEquipped != null)
-        {
-            currentEquipped.OnUnequip(this);
-        }
-
-        currentEquipped = null;
-        currentWeapon = null;
-        currentSack = null;
-
-        inventory.LoadSaveData(data, equippableDatabase, itemDatabase);
-
-        foreach (InventoryItem inventoryItem in inventory.ItemList)
-        {
-            EquippableItem item = inventoryItem.Item;
-
-            if (item == null) continue;
-
-            item.Attach(equipPosition);
-            item.gameObject.SetActive(false);
-        }
-
-        if (data.equippedIndex >= 0)
-        {
-            EquipItem(data.equippedIndex);
-            return;
-        }
-
-        UpdateUpperBodyWeight();
-        OnEquipped?.Invoke(currentEquipped);
-    }
-
     private bool ReplacedItem(EquippableItem prevItem, EquippableItem newItem)
     {
         if (prevItem == null) return false;
@@ -284,7 +244,7 @@ public class PlayerController : MonoBehaviour
             droppedItem.Detach();
             droppedItem.gameObject.SetActive(true);
 
-            equippableSpawner.Register(droppedItem);
+            equippableRegistry.Register(droppedItem);
             return;
         }
 
@@ -294,7 +254,7 @@ public class PlayerController : MonoBehaviour
         item.Detach();
         item.gameObject.SetActive(true);
 
-        equippableSpawner.Register(item);
+        equippableRegistry.Register(item);
 
         currentEquipped = null;
         currentWeapon = null;
@@ -518,5 +478,46 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground")) isGround = true;
+    }
+
+    // Save / Load
+    public InventorySaveData CreateInventorySaveData()
+    {
+        return inventory.CreateSaveData(currentEquipped);
+    }
+
+    public void LoadInventorySaveData(InventorySaveData data, EquippableDatabase equippableDatabase, ItemDataBase itemDatabase)
+    {
+        if (data == null || equippableDatabase == null || itemDatabase == null) return;
+
+        if (currentEquipped != null)
+        {
+            currentEquipped.OnUnequip(this);
+        }
+
+        currentEquipped = null;
+        currentWeapon = null;
+        currentSack = null;
+
+        inventory.LoadSaveData(data, equippableDatabase, itemDatabase);
+
+        foreach (InventoryItem inventoryItem in inventory.ItemList)
+        {
+            EquippableItem item = inventoryItem.Item;
+
+            if (item == null) continue;
+
+            item.Attach(equipPosition);
+            item.gameObject.SetActive(false);
+        }
+
+        if (data.equippedIndex >= 0)
+        {
+            EquipItem(data.equippedIndex);
+            return;
+        }
+
+        UpdateUpperBodyWeight();
+        OnEquipped?.Invoke(currentEquipped);
     }
 }

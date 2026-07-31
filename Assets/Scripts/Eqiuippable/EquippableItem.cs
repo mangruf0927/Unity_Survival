@@ -8,7 +8,7 @@ public abstract class EquippableItem : MonoBehaviour
     [SerializeField] private int itemId;
     [SerializeField] private int maxCount = 1;
 
-    private EquippableSpawner equippableSpawner;
+    private EquippableRegistry equippableRegistry;
     protected string itemName;
 
     private Rigidbody rigid;
@@ -29,17 +29,17 @@ public abstract class EquippableItem : MonoBehaviour
         InitComponents();
     }
 
-    public void SetEquippableSpawner(EquippableSpawner spawner)
+    public void SetEquippableSpawner(EquippableRegistry registry)
     {
-        equippableSpawner = spawner;
+        equippableRegistry = registry;
     }
 
     public void UnregisterEquippable()
     {
-        if (equippableSpawner == null) return;
+        if (equippableRegistry == null) return;
 
-        equippableSpawner.Unregister(this);
-        equippableSpawner = null;
+        equippableRegistry.Unregister(this);
+        equippableRegistry = null;
     }
 
     private void OnDestroy()

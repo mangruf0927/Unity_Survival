@@ -5844,7 +5844,7 @@ GameObject:
   - component: {fileID: 523031926}
   - component: {fileID: 523031925}
   m_Layer: 0
-  m_Name: EquippableSpawner
+  m_Name: EquippableRegistry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8403,13 +8403,9 @@ MonoBehaviour:
   campFire: {fileID: 370338873}
   workTableInventory: {fileID: 288484891}
   cultistSpawner: {fileID: 1545453345}
+  enemySpawner: {fileID: 1367383879}
   itemRegistry: {fileID: 609733976}
-  enemySpawnerList:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  equippableSpawner: {fileID: 523031925}
+  equippableRegistry: {fileID: 523031925}
   objectRegistry: {fileID: 1648102914}
   equippableDatabase: {fileID: 1141158182}
   itemDataBase: {fileID: 1141158181}
@@ -10646,11 +10642,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ObjectDataBase
   prefabList:
-  - {fileID: 0}
-  - {fileID: 2216645238573800789}
+  - {fileID: 1377499415229848349, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
+  - {fileID: 8887655573932879160, guid: 0219d9ec14e6b4a138b479bc21d69140, type: 3}
+  - {fileID: 3375684373933527454, guid: 9639b551d5aaa42d5a1bcffc89273533, type: 3}
   - {fileID: 3258066141446530799, guid: cdda1503dd5494022bc8b508e721b7fb, type: 3}
   - {fileID: 7137066228788729156, guid: a4b34683600ae4decaf4f0072ef87c22, type: 3}
-  - {fileID: -4951109356674733378, guid: 92e1a3bc1af1348ad952eef5af4674b8, type: 3}
+  - {fileID: 3258066141446530799, guid: 12e7daedffc20487c94b3fc3192c11f2, type: 3}
   - {fileID: 3437991200964835321, guid: b895350bd050e42099ee8b764332f47a, type: 3}
 --- !u!114 &1167997877 stripped
 MonoBehaviour:
@@ -21333,6 +21330,10 @@ PrefabInstance:
       propertyPath: equippableSpawner
       value: 
       objectReference: {fileID: 523031925}
+    - target: {fileID: 5446265190428534976, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
+      propertyPath: equippableRegistry
+      value: 
+      objectReference: {fileID: 523031925}
     - target: {fileID: 6759669290860076700, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -21681,17 +21682,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1244075548453074272, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
   m_PrefabInstance: {fileID: 2216645238573800787}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2216645238573800789 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1377499415229848349, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
-  m_PrefabInstance: {fileID: 2216645238573800787}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c5640b883fc94a13b1b3757708f6415, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
 --- !u!1001 &2293680160926415270
 PrefabInstance:
   m_ObjectHideFlags: 0

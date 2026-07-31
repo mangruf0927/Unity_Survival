@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -12,11 +11,10 @@ public class SaveLoadManager : MonoBehaviour
     [SerializeField] private CampFire campFire;
     [SerializeField] private WorkTableInventory workTableInventory;
     [SerializeField] private CultistSpawner cultistSpawner;
+    [SerializeField] private EnemySpawner enemySpawner;
+
     [SerializeField] private ItemRegistry itemRegistry;
-
-    [SerializeField] private List<EnemySpawner> enemySpawnerList;
-
-    [SerializeField] private EquippableSpawner equippableSpawner;
+    [SerializeField] private EquippableRegistry equippableRegistry;
     [SerializeField] private ObjectRegistry objectRegistry;
 
     [SerializeField] private EquippableDatabase equippableDatabase;
@@ -27,8 +25,8 @@ public class SaveLoadManager : MonoBehaviour
     public void SaveData()
     {
         if (timeSystem == null || dayNightEventSystem == null || playerStats == null || playerController == null ||
-            campFire == null || workTableInventory == null || cultistSpawner == null || enemySpawnerList == null ||
-            itemRegistry == null || equippableSpawner == null || objectRegistry == null)
+            campFire == null || workTableInventory == null || cultistSpawner == null || enemySpawner == null ||
+            itemRegistry == null || equippableRegistry == null || objectRegistry == null)
         {
             Debug.LogError("Save failed. SaveLoadManager references are missing.");
             return;
@@ -46,9 +44,9 @@ public class SaveLoadManager : MonoBehaviour
             workTableSaveData = workTableInventory.CreateSaveData(),
             cultistSaveDataList = cultistSpawner.CreateSaveData(),
             itemSaveDataList = itemRegistry.CreateSaveData(),
-            equippableSaveDataList = equippableSpawner.CreateSaveData(),
+            equippableSaveDataList = equippableRegistry.CreateSaveData(),
             worldSaveData = objectRegistry.CreateSaveData(),
-            enemyGroupDataList = CreateEnemySaveData()
+            enemyGroupDataList = enemySpawner.CreateSaveData()
         };
 
         string json = JsonConvert.SerializeObject(saveData, Formatting.Indented);
@@ -78,8 +76,8 @@ public class SaveLoadManager : MonoBehaviour
         }
 
         if (timeSystem == null || dayNightEventSystem == null || playerStats == null || playerController == null ||
-            campFire == null || workTableInventory == null || cultistSpawner == null || enemySpawnerList == null ||
-            itemRegistry == null || equippableSpawner == null || objectRegistry == null)
+            campFire == null || workTableInventory == null || cultistSpawner == null || enemySpawner == null ||
+            itemRegistry == null || equippableRegistry == null || objectRegistry == null)
         {
             Debug.LogError("Load failed. SaveLoadManager references are missing.");
             return;
@@ -88,6 +86,7 @@ public class SaveLoadManager : MonoBehaviour
         dayNightEventSystem.LoadSaveData(saveData.timeData);
         timeSystem.LoadSaveData(saveData.timeData);
 
+        equippableRegistry.LoadSaveData(saveData.equippableSaveDataList);
         playerStats.LoadSaveData(saveData.playerData);
         playerController.LoadInventorySaveData(saveData.inventoryData, equippableDatabase, itemDataBase);
         campFire.LoadSaveData(saveData.campFireData);
@@ -95,8 +94,7 @@ public class SaveLoadManager : MonoBehaviour
         cultistSpawner.LoadSaveData(saveData.cultistSaveDataList);
         objectRegistry.LoadSaveData(saveData.worldSaveData);
         itemRegistry.LoadSaveData(saveData.itemSaveDataList);
-        equippableSpawner.LoadSaveData(saveData.equippableSaveDataList);
-        LoadEnemySaveData(saveData.enemyGroupDataList);
+        enemySpawner.LoadSaveData(saveData.enemyGroupDataList);
 
         Debug.Log("Load Complete");
     }
@@ -113,32 +111,5 @@ public class SaveLoadManager : MonoBehaviour
 
         File.Delete(path);
         Debug.Log($"Delete Complete: {path}");
-    }
-
-    private List<EnemyGroupSaveData> CreateEnemySaveData()
-    {
-        List<EnemyGroupSaveData> dataList = new();
-
-        foreach (EnemySpawner spawner in enemySpawnerList)
-        {
-            if (spawner == null) continue;
-
-            List<EnemyGroupSaveData> spawnerDataList = spawner.CreateSaveData();
-            if (spawnerDataList == null) continue;
-
-            dataList.AddRange(spawnerDataList);
-        }
-
-        return dataList;
-    }
-
-    private void LoadEnemySaveData(List<EnemyGroupSaveData> dataList)
-    {
-        foreach (EnemySpawner spawner in enemySpawnerList)
-        {
-            if (spawner == null) continue;
-
-            spawner.LoadSaveData(dataList);
-        }
     }
 }
