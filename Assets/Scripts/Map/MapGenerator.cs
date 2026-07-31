@@ -315,6 +315,7 @@ public class MapGenerator : MonoBehaviour
 
         if (!structureObj.TryGetComponent(out Structure structure)) return;
 
+        RegisterDoors(structureObj);
         structure.SpawnItems(structureRandom, itemRegistry);
 
         GameObject chestPrefab = GetRandomChest(level);
@@ -375,9 +376,21 @@ public class MapGenerator : MonoBehaviour
                     continue;
                 }
 
+                RegisterDoors(itemSpotObject);
                 selectedCell.SetCenterType(CenterType.ITEMSPOT);
                 itemSpot.SpawnItem(level, itemSpotRandom, itemRegistry);
             }
+        }
+    }
+
+    private void RegisterDoors(GameObject obj)
+    {
+        Door[] doors = obj.GetComponentsInChildren<Door>(true);
+
+        foreach (Door door in doors)
+        {
+            if (door == null) continue;
+            objectRegistry.RegisterGenerated(door);
         }
     }
 

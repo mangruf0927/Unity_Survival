@@ -55,9 +55,8 @@ public class Door : WorldObject, IInteractable
 
     public override void LoadSaveData(ObjectSaveData data)
     {
-        base.LoadSaveData(data);
-
         isOpened = data.doorSaveData.isOpened;
+        elapsedTime = moveDuration;
 
         doorPivot.localRotation = isOpened ? closedRotation * Quaternion.Euler(0f, 0f, openAngle) : closedRotation;
     }
