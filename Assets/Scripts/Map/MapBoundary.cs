@@ -6,8 +6,11 @@ public class MapBoundary : MonoBehaviour
     [SerializeField] private CampFire campFire;
     [SerializeField] private GameObject boundaryPrefab;
 
+    [SerializeField] private int cellSize;
     [SerializeField] private int wallCount;
-    [SerializeField] private List<float> radiusList = new() { 50f, 140f, 230f, 320f, 410f };
+    [SerializeField] private float wallHeight;
+    [SerializeField] private float offsetY;
+    [SerializeField] private List<int> radiusList;
 
     private readonly List<GameObject> boundaryList = new();
 
@@ -18,7 +21,6 @@ public class MapBoundary : MonoBehaviour
             CreateBoundary(level);
         }
         UpdateBoundaries(campFire.CurrentLevel);
-
         campFire.OnLevelUp += UpdateBoundaries;
     }
 
@@ -29,19 +31,13 @@ public class MapBoundary : MonoBehaviour
 
     private void CreateBoundary(int level)
     {
-        int radiusIndex = level - 1;
-
-        if (radiusIndex < 0 || radiusIndex >= radiusList.Count)
-            return;
-
         GameObject boundary = new($"Level{level}");
         boundary.transform.SetParent(transform, false);
-
         boundaryList.Add(boundary);
 
-        float radius = radiusList[radiusIndex];
+        float radius = GetRadius(level);
         float angleGap = 360f / wallCount;
-        float wallLength = 2f * Mathf.PI * radius / wallCount;
+        float wallLength = 2f * radius * Mathf.Tan(Mathf.PI / wallCount) * 1.001f;
 
         for (int i = 0; i < wallCount; i++)
         {
@@ -55,18 +51,21 @@ public class MapBoundary : MonoBehaviour
 
             Vector3 scale = wall.transform.localScale;
             scale.x = wallLength;
-            scale.y = 15f;
+            scale.y = wallHeight;
+
             wall.transform.localScale = scale;
-
-            wall.transform.localPosition = new Vector3(x, scale.y * 0.5f, z);
-
             Vector3 direction = new(x, 0f, z);
 
-            wall.transform.localRotation = Quaternion.LookRotation(direction);
+            wall.transform.SetLocalPositionAndRotation(new Vector3(x, scale.y * 0.5f + offsetY, z), Quaternion.LookRotation(direction));
         }
     }
 
-    public void UpdateBoundaries(int level)
+    private float GetRadius(int level)
+    {
+        return (radiusList[level - 1] - 0.5f) * cellSize;
+    }
+
+    private void UpdateBoundaries(int level)
     {
         for (int i = 0; i < boundaryList.Count; i++)
         {
@@ -75,5 +74,4 @@ public class MapBoundary : MonoBehaviour
             boundaryList[i].SetActive(i > level - 2);
         }
     }
-
 }

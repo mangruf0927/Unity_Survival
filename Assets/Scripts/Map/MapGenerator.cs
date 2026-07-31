@@ -134,6 +134,7 @@ public class MapGenerator : MonoBehaviour
         environmentRandom = new System.Random(seed + 4);
     }
 
+    // Ground
     private void GenerateGround()
     {
         if (groundPrefab == null)
@@ -168,7 +169,6 @@ public class MapGenerator : MonoBehaviour
         {
             if (data.GroundObject != null) Destroy(data.GroundObject);
         }
-
         cellDictionary.Clear();
     }
 
@@ -198,11 +198,7 @@ public class MapGenerator : MonoBehaviour
         return step * heightStep;
     }
 
-    private bool IsCampFireArea(Vector2Int coordinate)
-    {
-        return Mathf.Abs(coordinate.x) <= 1 && Mathf.Abs(coordinate.y) <= 1;
-    }
-
+    // Campfire
     private void CreateCampFire()
     {
         if (campFire == null)
@@ -225,6 +221,7 @@ public class MapGenerator : MonoBehaviour
         cell.SetCenterType(CenterType.CAMPFIRE);
     }
 
+    // Structure
     private void CreateStructures()
     {
         GameObject structureParent = new("Structures");
@@ -326,9 +323,8 @@ public class MapGenerator : MonoBehaviour
 
     private GameObject GetRandomChest(int level)
     {
-        LevelChestSpawnInfo levelInfo = levelChestSpawnInfoList.Find(info => info != null && info.mapLevel == level);
+        LevelChestSpawnInfo levelInfo = levelChestSpawnInfoList[level - 1];
         List<GameObject> validPrefabList = levelInfo.chestEntryList.FindAll(prefab => prefab != null);
-
         if (validPrefabList.Count == 0) return null;
 
         int index = structureRandom.Next(0, validPrefabList.Count);
@@ -336,6 +332,7 @@ public class MapGenerator : MonoBehaviour
         return validPrefabList[index];
     }
 
+    // ItemSpot
     private void CreateItemSpots()
     {
         GameObject itemSpotParent = new("ItemSpots");
@@ -364,17 +361,16 @@ public class MapGenerator : MonoBehaviour
                 int itemIndex = itemSpotRandom.Next(0, itemSpotPrefabList.Count);
                 ItemSpotSpawnEntry spawnEntry = itemSpotPrefabList[itemIndex];
 
-                Vector2Int coordinate = selectedCell.Coordinate;
-                Vector3 position = new(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
-
                 GameObject itemSpotObject = Instantiate(spawnEntry.prefab, itemSpotParent.transform);
 
+                Vector2Int coordinate = selectedCell.Coordinate;
+                Vector3 position = new(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
                 int rotation = itemSpotRandom.Next(0, 4) * 90;
                 itemSpotObject.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
 
                 if (!itemSpotObject.TryGetComponent(out ItemSpot itemSpot))
                 {
-                    Debug.LogWarning($"{itemSpotObject.name}: ItemSpot component not found.", itemSpotObject);
+                    Debug.LogWarning($"{itemSpotObject.name}: ItemSpot component not found.");
                     Destroy(itemSpotObject);
                     continue;
                 }
@@ -385,6 +381,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    // Enemy 
     private void CreateEnemySpawns()
     {
         if (levelEnemySpawnInfoList == null || levelEnemySpawnInfoList.Count == 0)
@@ -431,10 +428,9 @@ public class MapGenerator : MonoBehaviour
                         spawnPointObject = Instantiate(spawnEntry.prefab, spawnParent.transform);
                     }
 
-                    spawnPointObject.transform.localPosition = new Vector3(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
-
-                    int randomRotation = enemyRandom.Next(0, 4) * 90;
-                    spawnPointObject.transform.localRotation = Quaternion.Euler(0f, randomRotation, 0f);
+                    Vector3 position = new(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
+                    int rotation = itemSpotRandom.Next(0, 4) * 90;
+                    spawnPointObject.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
 
                     enemySpawner.RegisterSpawnPoint(spawnEntry.groupId, spawnEntry.enemyId, levelInfo.mapLevel, spawnEntry.spawnRadius, spawnPointObject.transform);
 
@@ -445,6 +441,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    // Environment
     private void CreateEnvironments()
     {
         List<CellData> availableCellList = GetEnvironmentCellList();
@@ -470,11 +467,17 @@ public class MapGenerator : MonoBehaviour
                 int cellIndex = environmentRandom.Next(0, entryCellList.Count);
                 CellData selectedCell = entryCellList[cellIndex];
 
+                GameObject environment = Instantiate(entry.prefab, environmentParent.transform);
+
+                if (environment.TryGetComponent(out TreeObject tree))
+                {
+                    tree.Initialize(itemRegistry);
+                }
+
                 Vector3 position = GetRandomPositionInCell(selectedCell);
                 position.y += entry.offsetY;
 
                 int rotation = environmentRandom.Next(0, 4) * 90;
-                GameObject environment = Instantiate(entry.prefab, environmentParent.transform);
                 environment.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
 
                 cellCountMap.TryGetValue(selectedCell.Coordinate, out int currentCount);
@@ -523,6 +526,7 @@ public class MapGenerator : MonoBehaviour
         return new Vector3(x, cell.Height, z);
     }
 
+    // >> 
     private List<CellData> GetAvailableCellList(int level)
     {
         List<CellData> availableCellList = new();
@@ -530,6 +534,7 @@ public class MapGenerator : MonoBehaviour
         foreach (CellData cell in cellDictionary.Values)
         {
             if (cell.Type != CenterType.NONE) continue;
+            if (IsCampFireArea(cell.Coordinate)) continue;
             if (!IsCellInLevel(cell.Coordinate, level)) continue;
 
             availableCellList.Add(cell);
@@ -557,18 +562,21 @@ public class MapGenerator : MonoBehaviour
         return !IsInsideRadius(coordinate, innerRadius);
     }
 
+    private bool IsCampFireArea(Vector2Int coordinate)
+    {
+        return Mathf.Abs(coordinate.x) <= 1 && Mathf.Abs(coordinate.y) <= 1;
+    }
+
     private int GetLevelRadius(int level)
     {
         if (levelRadiusList == null) return -1;
         if (level < 1 || level > levelRadiusList.Count) return -1;
 
-        return levelRadiusList[level - 1] - 1;
+        return levelRadiusList[level - 1];
     }
 
     private bool IsInsideRadius(Vector2Int coordinate, int radius)
     {
-        float roundedRadius = radius + 0.5f;
-
-        return coordinate.sqrMagnitude <= roundedRadius * roundedRadius;
+        return coordinate.sqrMagnitude < radius * radius;
     }
 }

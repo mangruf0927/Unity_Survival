@@ -15,6 +15,7 @@ public class EnemySpawnInfo
 
 public class EnemySpawner : MonoBehaviour
 {
+    [SerializeField] private Transform player;
     [SerializeField] private CampFire campFire;
     [SerializeField] private TimeSystem timeSystem;
     [SerializeField] private ItemDataBase itemDataBase;
@@ -160,6 +161,7 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
+        enemyController.SetTarget(player);
         enemyStats.SetHPBarController(hpBarController);
         enemyStats.SetUp(data);
 
@@ -304,6 +306,7 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
 
+        enemyController.SetTarget(player);
         enemyStats.SetHPBarController(hpBarController);
         enemyController.LoadSaveData(saveData, data);
 

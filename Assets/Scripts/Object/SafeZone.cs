@@ -83,7 +83,7 @@ public class SafeZone : MonoBehaviour
 
             Transform line = safeLine.transform.GetChild(i);
             line.localScale = new Vector3(lineLength, 0.02f, 0.1f);
-            line.position = transform.position + new Vector3(x, 0.52f, z);
+            line.position = transform.position + new Vector3(x, 0.4f, z);
             line.rotation = Quaternion.LookRotation(new Vector3(x, 0f, z));
         }
 

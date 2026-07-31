@@ -4,19 +4,23 @@ using UnityEngine;
 public class TreeObject : WorldObject
 {
     [SerializeField] private int logItemId;
-    [SerializeField] private ItemRegistry itemRegistry;
-
     [SerializeField] private int maxHP = 100;
     [SerializeField] private int logCount = 3;
     [SerializeField] private float shakeAngle;
     [SerializeField] private float shakeTime;
 
+    private ItemRegistry itemRegistry;
     private int currentHp;
     private bool isShaking;
 
     private void Awake()
     {
         currentHp = maxHP;
+    }
+
+    public void Initialize(ItemRegistry registry)
+    {
+        itemRegistry = registry;
     }
 
     public override ObjectSaveData CreateSaveData()
@@ -80,6 +84,12 @@ public class TreeObject : WorldObject
 
     private void CreateLog(Vector3 center)
     {
+        if (itemRegistry == null)
+        {
+            Debug.LogError($"{name}: ItemRegistry is not assigned.", this);
+            return;
+        }
+
         const float dropRadius = 0.7f;
         const float spawnHeight = 2f;
         const float randomRadius = 0.1f;

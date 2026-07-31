@@ -3,12 +3,12 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] private Transform target;
     [SerializeField] private NavMeshAgent navMesh;
     [SerializeField] private EnemyStats enemyStats;
     [SerializeField] private Animator animator;
     [SerializeField] private EnemyDropper enemyDropper;
 
+    private Transform target;
     private float alertEndTime;
     public bool IsAlerted => Time.time < alertEndTime;
 
@@ -69,6 +69,11 @@ public class EnemyController : MonoBehaviour
         if (stats.CurrentHp <= 0) return;
         if (!stats.CanChase) return;
         Alert();
+    }
+
+    public void SetTarget(Transform target)
+    {
+        this.target = target;
     }
 
     public void Stop()
