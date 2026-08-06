@@ -15,8 +15,8 @@ public class TimeSystem : MonoBehaviour, ISubject
     private int cycleCount = 1;
     private int dayCount = 1;
     private int dayBonus;
-    private int minutes;
-    private int seconds;
+    private int minutes = -1;
+    private int seconds = -1;
     private bool isTimerUnlocked;
 
     public int CycleCount => cycleCount;
@@ -54,34 +54,16 @@ public class TimeSystem : MonoBehaviour, ISubject
         UpdateTimer();
     }
 
-    public TimeSaveData CreateSaveData()
-    {
-        return new TimeSaveData
-        {
-            dayCount = dayCount,
-            dayBonus = dayBonus,
-            cycleCount = cycleCount,
-            timeElapsed = timeElapsed,
-            curPhase = curPhase
-        };
-    }
-
-    public void LoadSaveData(TimeSaveData data)
-    {
-        dayCount = data.dayCount;
-        dayBonus = data.dayBonus;
-        cycleCount = data.cycleCount;
-        timeElapsed = data.timeElapsed;
-        curPhase = data.curPhase;
-
-        UpdateTimer();
-        OnPhaseChanged?.Invoke(curPhase, dayCount);
-    }
-
     private void UpdateTimer()
     {
-        minutes = Mathf.FloorToInt(timeElapsed / 60F);
-        seconds = Mathf.FloorToInt(timeElapsed % 60F);
+        int newMinutes = Mathf.FloorToInt(timeElapsed / 60f);
+        int newSeconds = Mathf.FloorToInt(timeElapsed % 60f);
+
+        if (minutes == newMinutes && seconds == newSeconds) return;
+
+        minutes = newMinutes;
+        seconds = newSeconds;
+
         NotifyObservers();
     }
 
@@ -128,5 +110,33 @@ public class TimeSystem : MonoBehaviour, ISubject
         {
             observer.Notify();
         }
+    }
+
+    // Save/Load
+    public TimeSaveData CreateSaveData()
+    {
+        return new TimeSaveData
+        {
+            dayCount = dayCount,
+            dayBonus = dayBonus,
+            cycleCount = cycleCount,
+            timeElapsed = timeElapsed,
+            curPhase = curPhase
+        };
+    }
+
+    public void LoadSaveData(TimeSaveData data)
+    {
+        dayCount = data.dayCount;
+        dayBonus = data.dayBonus;
+        cycleCount = data.cycleCount;
+        timeElapsed = data.timeElapsed;
+        curPhase = data.curPhase;
+
+        minutes = -1;
+        seconds = -1;
+
+        UpdateTimer();
+        OnPhaseChanged?.Invoke(curPhase, dayCount);
     }
 }
