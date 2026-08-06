@@ -1,3 +1,5 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class Door : WorldObject, IInteractable
@@ -13,11 +15,9 @@ public class Door : WorldObject, IInteractable
     public Vector3 UIPosition => uiPoint != null ? uiPoint.position : transform.position;
 
     private bool isOpened;
-    private float elapsedTime;
-
-    private Quaternion startRotation;
-    private Quaternion targetRotation;
     private Quaternion closedRotation;
+
+    private CancellationTokenSource cts;
 
     private void Awake()
     {
@@ -25,22 +25,58 @@ public class Door : WorldObject, IInteractable
         closedRotation = doorPivot.localRotation;
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        if (!isOpened) return;
-        if (elapsedTime >= moveDuration) return;
-
-        elapsedTime += Time.deltaTime;
-
-        float duration = Mathf.Max(0.01f, moveDuration);
-        float t = Mathf.Clamp01(elapsedTime / duration);
-        t = Mathf.SmoothStep(0f, 1f, t);
-
-        doorPivot.localRotation = Quaternion.Slerp(startRotation, targetRotation, t);
-
-        if (elapsedTime >= duration) doorPivot.localRotation = targetRotation;
+        CancelOpen();
     }
 
+    public bool CanInteract(PlayerController player)
+    {
+        return !isOpened && doorPivot != null;
+    }
+
+    public void Interact(PlayerController player)
+    {
+        if (isOpened || doorPivot == null) return;
+
+        isOpened = true;
+        CancelOpen();
+
+        cts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
+        OpenAsync(cts.Token).Forget();
+    }
+
+    private async UniTask OpenAsync(CancellationToken ct)
+    {
+        Quaternion startRotation = doorPivot.localRotation;
+        Quaternion targetRotation = closedRotation * Quaternion.Euler(0f, 0f, openAngle);
+
+        float duration = Mathf.Max(0.01f, moveDuration);
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            float t = Mathf.Clamp01(elapsedTime / duration);
+            t = Mathf.SmoothStep(0f, 1f, t);
+
+            doorPivot.localRotation = Quaternion.Slerp(startRotation, targetRotation, t);
+            bool canceled = await UniTask.Yield(PlayerLoopTiming.Update, ct).SuppressCancellationThrow();
+            if (canceled) return;
+        }
+
+        doorPivot.localRotation = targetRotation;
+    }
+
+    private void CancelOpen()
+    {
+        cts?.Cancel();
+        cts?.Dispose();
+        cts = null;
+    }
+
+    // Save/Load
     public override ObjectSaveData CreateSaveData()
     {
         ObjectSaveData data = base.CreateSaveData();
@@ -56,24 +92,7 @@ public class Door : WorldObject, IInteractable
     public override void LoadSaveData(ObjectSaveData data)
     {
         isOpened = data.doorSaveData.isOpened;
-        elapsedTime = moveDuration;
-
+        if (doorPivot == null) return;
         doorPivot.localRotation = isOpened ? closedRotation * Quaternion.Euler(0f, 0f, openAngle) : closedRotation;
-    }
-
-    public bool CanInteract(PlayerController player)
-    {
-        return !isOpened && doorPivot != null;
-    }
-
-    public void Interact(PlayerController player)
-    {
-        if (isOpened || doorPivot == null) return;
-
-        isOpened = true;
-        elapsedTime = 0f;
-
-        startRotation = doorPivot.localRotation;
-        targetRotation = startRotation * Quaternion.Euler(0f, 0f, openAngle);
     }
 }
