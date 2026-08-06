@@ -18,8 +18,9 @@ public class ItemHoverUI : MonoBehaviour
 
     private Camera mainCamera;
     private RectTransform canvasRect;
-    private Item currentItem;
-    private EquippableItem currentEquippable;
+
+    private Transform targetTransform;
+    private Collider targetCollider;
 
     private readonly Dictionary<ItemType, Sprite> imageDictionary = new();
     private readonly Vector3 offset = new(0f, 1.5f, 0f);
@@ -38,8 +39,7 @@ public class ItemHoverUI : MonoBehaviour
 
     private void Update()
     {
-        if (currentItem == null && currentEquippable == null) return;
-
+        if (targetTransform == null) return;
         UpdatePosition();
     }
 
@@ -50,25 +50,23 @@ public class ItemHoverUI : MonoBehaviour
             HideUI();
             return;
         }
+        SetTarget(item.transform, item.GetComponentInChildren<Collider>());
 
-        currentItem = item;
-        currentEquippable = null;
         HoverUI.SetActive(true);
-
         HideImages();
 
-        int cnt = Mathf.Min(currentItem.Data.Value, imageList.Count);
+        int count = Mathf.Min(item.Data.Value, imageList.Count);
 
-        if (imageDictionary.TryGetValue(currentItem.Data.ItemType, out Sprite targetSprite))
+        if (imageDictionary.TryGetValue(item.Data.ItemType, out Sprite targetSprite))
         {
-            for (int i = 0; i < cnt; i++)
+            for (int i = 0; i < count; i++)
             {
                 imageList[i].gameObject.SetActive(true);
                 imageList[i].sprite = targetSprite;
             }
         }
 
-        itemName.text = currentItem.Data.Name;
+        itemName.text = item.Data.Name;
         UpdatePosition();
     }
 
@@ -80,8 +78,7 @@ public class ItemHoverUI : MonoBehaviour
             return;
         }
 
-        currentItem = null;
-        currentEquippable = item;
+        SetTarget(item.transform, item.GetComponentInChildren<Collider>());
 
         HoverUI.SetActive(true);
         HideImages();
@@ -90,13 +87,14 @@ public class ItemHoverUI : MonoBehaviour
         UpdatePosition();
     }
 
+    private void SetTarget(Transform target, Collider collider)
+    {
+        targetTransform = target;
+        targetCollider = collider;
+    }
+
     private void UpdatePosition()
     {
-        Transform targetTransform = currentItem != null ? currentItem.transform : currentEquippable.transform;
-        Collider targetCollider = currentItem != null
-            ? currentItem.GetComponentInChildren<Collider>()
-            : currentEquippable.GetComponentInChildren<Collider>();
-
         Vector3 itemPosition = targetCollider != null ? targetCollider.bounds.center : targetTransform.position;
         Vector3 worldPos = itemPosition + offset;
         Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(mainCamera, worldPos);
@@ -109,8 +107,9 @@ public class ItemHoverUI : MonoBehaviour
 
     public void HideUI()
     {
-        currentItem = null;
-        currentEquippable = null;
+        targetTransform = null;
+        targetCollider = null;
+
         itemName.text = "";
 
         HideImages();
