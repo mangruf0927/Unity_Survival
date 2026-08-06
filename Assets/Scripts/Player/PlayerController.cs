@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ItemRegistry itemRegistry;
     [SerializeField] private EquippableRegistry equippableRegistry;
 
+    [SerializeField] private LayerMask interactableLayerMask;
+
     private float riseMultiplier = 1.5f;
     private float fallMultiplier = 5f;
 
@@ -387,33 +389,34 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private readonly Collider[] hitBuffer = new Collider[32];
+
     private void FindInteractable()
     {
-        IInteractable prev = currentInteractable;
+        IInteractable previousInteractable = currentInteractable;
         currentInteractable = null;
 
+        int hitCount = Physics.OverlapSphereNonAlloc(
+            transform.position, playerStats.InteractDistance, hitBuffer,
+            interactableLayerMask, QueryTriggerInteraction.Collide);
 
-        Collider[] hitArray = Physics.OverlapSphere(transform.position, playerStats.InteractDistance, ~0, QueryTriggerInteraction.Collide);
-
+        Vector3 playerPosition = transform.position;
         float closestDistance = float.MaxValue;
-        foreach (Collider hit in hitArray)
-        {
-            IInteractable interactable = hit.GetComponentInParent<IInteractable>();
 
+        for (int i = 0; i < hitCount; i++)
+        {
+            Collider hit = hitBuffer[i];
+
+            IInteractable interactable = hit.GetComponentInParent<IInteractable>();
             if (interactable == null || !interactable.CanInteract(this)) continue;
 
-            float distance = Vector3.Distance(transform.position, hit.transform.position);
+            float distance = (hit.transform.position - playerPosition).sqrMagnitude;
+            if (distance >= closestDistance) continue;
 
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                currentInteractable = interactable;
-            }
+            closestDistance = distance;
+            currentInteractable = interactable;
         }
-
-        if (prev != currentInteractable) holdTimer = 0f;
-
-        if (interactionUI == null) return;
+        if (previousInteractable != currentInteractable) holdTimer = 0f;
 
         if (currentInteractable != null && !isItemHovering) interactionUI.Show(currentInteractable.UIPosition);
         else interactionUI.Hide();

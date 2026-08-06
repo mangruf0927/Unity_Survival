@@ -11020,7 +11020,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DayNightLighting
   timeSystem: {fileID: 2023553405}
   sunLight: {fileID: 410087040}
-  transitionSpeed: 1.2
+  transitionDuration: 0
   nightSunIntensity: 0.75
   nightAmbientColor: {r: 0.1764706, g: 0.15686275, b: 0.3137255, a: 1}
   nightSunColor: {r: 0.3529412, g: 0.33333334, b: 0.5882353, a: 1}
@@ -21359,6 +21359,10 @@ PrefabInstance:
       propertyPath: equippableRegistry
       value: 
       objectReference: {fileID: 523031925}
+    - target: {fileID: 5446265190428534976, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
+      propertyPath: interactableLayerMask.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
     - target: {fileID: 6759669290860076700, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
       propertyPath: m_Enabled
       value: 0
