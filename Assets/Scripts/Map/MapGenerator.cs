@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 
 [System.Serializable]
 public class StructureSpawnEntry
@@ -107,19 +109,54 @@ public class MapGenerator : MonoBehaviour
 
     private readonly Dictionary<Vector2Int, CellData> cellDictionary = new();
 
-    private void Awake()
+    private CancellationTokenSource cts;
+
+    private void Start()
+    {
+        cts = new CancellationTokenSource();
+        GenerateMapAsync(cts.Token).Forget();
+    }
+
+    private void OnDestroy()
+    {
+        cts?.Cancel();
+        cts?.Dispose();
+        cts = null;
+    }
+
+    private async UniTask GenerateMapAsync(CancellationToken ct)
     {
         InitializeSeed();
 
-        GenerateGround();
-        CreateCampFire();
-        CreateStructures();
-        CreateItemSpots();
-        CreateEnemySpawns();
-        CreateEnvironments();
+        await GenerateGround(ct);
 
-        navMeshSurface.BuildNavMesh();
+        CreateCampFire();
+
+        await CreateStructures(ct);
+        await CreateItemSpots(ct);
+        await CreateEnemySpawns(ct);
+        await CreateEnvironments(ct);
+
+        await BuildNavMeshAsync(ct);
     }
+
+    private async UniTask BuildNavMeshAsync(CancellationToken ct)
+    {
+        if (navMeshSurface == null)
+        {
+            Debug.LogWarning("NavMeshSurface is null");
+            return;
+        }
+
+        if (navMeshSurface.navMeshData == null)
+        {
+            navMeshSurface.BuildNavMesh(); // 최초 1회 초기화
+            return;
+        }
+
+        await navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData).ToUniTask(cancellationToken: ct);
+    }
+
 
     private void InitializeSeed()
     {
@@ -137,7 +174,7 @@ public class MapGenerator : MonoBehaviour
     }
 
     // Ground
-    private void GenerateGround()
+    private async UniTask GenerateGround(CancellationToken ct)
     {
         if (groundPrefab == null)
         {
@@ -150,16 +187,23 @@ public class MapGenerator : MonoBehaviour
         GameObject groundParent = new("Grounds");
         groundParent.transform.SetParent(transform);
 
+        const int cellsPerFrame = 100;
+        int counter = 0;
+
         for (int x = -mapRadius; x <= mapRadius; x++)
         {
             for (int z = -mapRadius; z <= mapRadius; z++)
             {
                 Vector2Int coordinate = new(x, z);
-
                 if (!IsInsideRadius(coordinate, mapRadius)) continue;
 
                 float height = GetCellHeight(coordinate);
                 CreateCell(coordinate, height, groundParent.transform);
+
+                if (++counter % cellsPerFrame == 0)
+                {
+                    await UniTask.Yield(PlayerLoopTiming.Update, ct);   // 메인 스레드 유지
+                }
             }
         }
     }
@@ -223,10 +267,13 @@ public class MapGenerator : MonoBehaviour
     }
 
     // Structure
-    private void CreateStructures()
+    private async UniTask CreateStructures(CancellationToken ct)
     {
         GameObject structureParent = new("Structures");
         structureParent.transform.SetParent(transform);
+
+        const int structuresPerFrame = 10;
+        int counter = 0;
 
         for (int level = 1; level <= structureCountList.Count; level++)
         {
@@ -236,15 +283,15 @@ public class MapGenerator : MonoBehaviour
             {
                 bool placed = false;
 
+                List<CellData> availableCellList = GetAvailableCellList(level);
+                if (availableCellList.Count == 0) break;
+
                 for (int attempt = 0; attempt < 50; attempt++)
                 {
                     int structureIndex = structureRandom.Next(0, structureSpawnEntryList.Count);
                     StructureSpawnEntry spawnEntry = structureSpawnEntryList[structureIndex];
 
                     if (spawnEntry == null || spawnEntry.prefab == null || spawnEntry.size.x <= 0 || spawnEntry.size.y <= 0) continue;
-
-                    List<CellData> availableCellList = GetAvailableCellList(level);
-                    if (availableCellList.Count == 0) break;
 
                     int cellIndex = structureRandom.Next(0, availableCellList.Count);
                     CellData selectedCell = availableCellList[cellIndex];
@@ -260,6 +307,11 @@ public class MapGenerator : MonoBehaviour
                 if (!placed)
                 {
                     Debug.LogWarning($"Failed to place structure. Level: {level}");
+                }
+
+                if (++counter % structuresPerFrame == 0)
+                {
+                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
                 }
             }
         }
@@ -335,10 +387,13 @@ public class MapGenerator : MonoBehaviour
     }
 
     // ItemSpot
-    private void CreateItemSpots()
+    private async UniTask CreateItemSpots(CancellationToken ct)
     {
         GameObject itemSpotParent = new("ItemSpots");
         itemSpotParent.transform.SetParent(transform, false);
+
+        const int itemSpotPerFrame = 10;
+        int counter = 0;
 
         for (int level = 1; level <= itemSpotCountList.Count; level++)
         {
@@ -380,6 +435,11 @@ public class MapGenerator : MonoBehaviour
                 RegisterDoors(itemSpotObject);
                 selectedCell.SetCenterType(CenterType.ITEMSPOT);
                 itemSpot.SpawnItem(level, itemSpotRandom, itemRegistry);
+
+                if (++counter % itemSpotPerFrame == 0)
+                {
+                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                }
             }
         }
     }
@@ -396,13 +456,16 @@ public class MapGenerator : MonoBehaviour
     }
 
     // Enemy 
-    private void CreateEnemySpawns()
+    private async UniTask CreateEnemySpawns(CancellationToken ct)
     {
         if (levelEnemySpawnInfoList == null || levelEnemySpawnInfoList.Count == 0)
         {
             Debug.LogWarning("Level Enemy Spawn List is empty");
             return;
         }
+
+        const int enemyPerFrame = 50;
+        int counter = 0;
 
         foreach (LevelEnemySpawnInfo levelInfo in levelEnemySpawnInfoList)
         {
@@ -450,19 +513,27 @@ public class MapGenerator : MonoBehaviour
 
                     selectedCell.SetCenterType(CenterType.ENEMYSPAWN);
                     availableCellList.RemoveAt(randomIndex);
+
+                    if (++counter % enemyPerFrame == 0)
+                    {
+                        await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                    }
                 }
             }
         }
     }
 
     // Environment
-    private void CreateEnvironments()
+    private async UniTask CreateEnvironments(CancellationToken ct)
     {
         List<CellData> availableCellList = GetEnvironmentCellList();
         if (availableCellList.Count == 0) return;
 
         GameObject environmentParent = new("Environments");
         environmentParent.transform.SetParent(transform, false);
+
+        const int environmentPerFrame = 50;
+        int counter = 0;
 
         foreach (EnvironmentSpawnEntry entry in environmentSpawnEntryList)
         {
@@ -504,6 +575,11 @@ public class MapGenerator : MonoBehaviour
                 if (currentCount >= maxCountPerCell)
                 {
                     entryCellList.RemoveAt(cellIndex);
+                }
+
+                if (++counter % environmentPerFrame == 0)
+                {
+                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
                 }
             }
         }
