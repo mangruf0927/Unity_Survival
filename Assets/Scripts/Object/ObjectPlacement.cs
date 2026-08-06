@@ -11,6 +11,9 @@ public class ObjectPlacement : MonoBehaviour
     private PlayerController currentPlayer;
     private PlaceableItem currentItem;
     private GameObject previewPrefab;
+
+    private float previewOffset;
+
     private bool isPlacing;
     private bool canPlace;
 
@@ -33,9 +36,13 @@ public class ObjectPlacement : MonoBehaviour
         currentPlayer = player;
 
         previewPrefab = Instantiate(currentItem.PlacePrefab);
+
         SetPreviewObject(previewPrefab);
+        CacheGroundOffset(previewPrefab);
 
         isPlacing = true;
+
+        UpdatePosition();
     }
 
     private void UpdatePosition()
@@ -44,21 +51,46 @@ public class ObjectPlacement : MonoBehaviour
 
         Vector3 forward = currentPlayer.transform.forward;
         forward.y = 0f;
+
+        if (forward.sqrMagnitude <= Mathf.Epsilon)
+        {
+            canPlace = false;
+            return;
+        }
+
         forward.Normalize();
 
         Vector3 targetPosition = currentPlayer.transform.position + forward * placeDistance;
         Vector3 rayOrigin = new(targetPosition.x, 50f, targetPosition.z);
 
-        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 100f, groundLayerMask, QueryTriggerInteraction.Ignore))
-        {
-            previewPrefab.transform.SetPositionAndRotation(hit.point, Quaternion.LookRotation(forward));
-            SnapToGround(previewPrefab, hit.point.y);
-            canPlace = true;
-        }
-        else
+        if (!Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 50f, groundLayerMask, QueryTriggerInteraction.Ignore))
         {
             canPlace = false;
+            return;
         }
+
+        previewPrefab.transform.SetPositionAndRotation(hit.point + Vector3.up * previewOffset, Quaternion.LookRotation(forward));
+        canPlace = true;
+    }
+
+    private void CacheGroundOffset(GameObject obj)
+    {
+        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+
+        if (renderers.Length == 0)
+        {
+            previewOffset = 0f;
+            return;
+        }
+
+        Bounds bounds = renderers[0].bounds;
+
+        for (int i = 1; i < renderers.Length; i++)
+        {
+            bounds.Encapsulate(renderers[i].bounds);
+        }
+
+        previewOffset = obj.transform.position.y - bounds.min.y;
     }
 
     private void PlaceObject()
@@ -110,6 +142,7 @@ public class ObjectPlacement : MonoBehaviour
         currentPlayer = null;
         currentItem = null;
         previewPrefab = null;
+        previewOffset = 0f;
         isPlacing = false;
         canPlace = false;
     }
@@ -119,20 +152,5 @@ public class ObjectPlacement : MonoBehaviour
         Collider[] colliders = obj.GetComponentsInChildren<Collider>();
 
         foreach (Collider col in colliders) col.enabled = false;
-    }
-
-    private void SnapToGround(GameObject obj, float groundY)
-    {
-        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
-        if (renderers.Length == 0) return;
-
-        Bounds bounds = renderers[0].bounds;
-        for (int i = 1; i < renderers.Length; i++)
-        {
-            bounds.Encapsulate(renderers[i].bounds);
-        }
-
-        float yOffset = groundY - bounds.min.y;
-        obj.transform.position += Vector3.up * yOffset;
     }
 }
