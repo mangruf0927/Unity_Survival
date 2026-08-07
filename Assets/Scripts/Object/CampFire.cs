@@ -124,7 +124,7 @@ public class CampFire : MonoBehaviour, ISubject
         NotifyObservers();
     }
 
-    private void AddFuel(float amount)
+    public void AddFuel(float amount)
     {
         if (amount <= 0) return;
 
@@ -175,26 +175,37 @@ public class CampFire : MonoBehaviour, ISubject
             if (decreaseTimer >= decreaseTime)
             {
                 decreaseTimer -= decreaseTime;
-                currentFuel -= decreaseAmount;
+
+                DecreaseFuelOnce();
 
                 if (currentFuel <= 0)
                 {
-                    currentFuel = 0f;
-                    decreaseTimer = 0f;
-                    isWarned = false;
-                    OffFire();
-                    OnNotice?.Invoke(CampFireNoticeType.EXTINGUISHED);
-                    NotifyObservers();
                     decreaseCoroutine = null;
                     break;
                 }
-
-                CheckLowFuelWarning();
-                NotifyObservers();
             }
             yield return null;
         }
         decreaseCoroutine = null;
+    }
+
+    public void DecreaseFuelOnce()
+    {
+        currentFuel -= decreaseAmount;
+
+        if (currentFuel <= 0)
+        {
+            currentFuel = 0f;
+            decreaseTimer = 0f;
+            isWarned = false;
+            OffFire();
+            OnNotice?.Invoke(CampFireNoticeType.EXTINGUISHED);
+            NotifyObservers();
+            return;
+        }
+
+        CheckLowFuelWarning();
+        NotifyObservers();
     }
 
     private float GetDecreaseTime()
