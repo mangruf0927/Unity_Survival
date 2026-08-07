@@ -21,7 +21,7 @@ public class PlayerIdleState : IPlayerState
 
     public HashSet<PlayerStateEnums> LogicHash { get; } = new HashSet<PlayerStateEnums>()
     {
-
+        PlayerStateEnums.FALL,
     };
 
     public void Enter()
@@ -32,7 +32,10 @@ public class PlayerIdleState : IPlayerState
 
     public void Update()
     {
-
+        if (!playerController.IsGround())
+        {
+            stateMachine.ChangeLogicState(PlayerStateEnums.FALL);
+        }
     }
 
     public void FixedUpdate()

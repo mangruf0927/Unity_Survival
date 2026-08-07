@@ -1,1 +1,1 @@
-public enum PlayerStateEnums { IDLE, MOVE, RUN, JUMP, ATTACK, DEAD };
+public enum PlayerStateEnums { IDLE, MOVE, RUN, JUMP, FALL, ATTACK, DEAD };

@@ -16,6 +16,7 @@ public class PlayerStateMachine : MonoBehaviour
             {PlayerStateEnums.MOVE, new PlayerMoveState(this, playerController)},
             {PlayerStateEnums.RUN, new PlayerRunState(this, playerController)},
             {PlayerStateEnums.JUMP, new PlayerJumpState(this, playerController)},
+            {PlayerStateEnums.FALL, new PlayerFallState(this, playerController)},
             {PlayerStateEnums.ATTACK, new PlayerAttackState(this, playerController)},
             {PlayerStateEnums.DEAD, new PlayerDeadState(this, playerController)},
         };
@@ -35,7 +36,7 @@ public class PlayerStateMachine : MonoBehaviour
         if (CurState != null)
             CurState.Update();
 
-        // Debug.Log(curState);
+        Debug.Log(CurState);
     }
 
     private void FixedUpdate()

@@ -4,7 +4,6 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Ground
   - Enemy
   layers:
   - Default
@@ -20,7 +19,7 @@ TagManager:
   - Item
   - Interactable
   - Cultist
-  - 
+  - Ground
   - 
   - 
   - 

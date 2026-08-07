@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ObjectPlacement objectPlacement;
     [SerializeField] private ItemRegistry itemRegistry;
     [SerializeField] private EquippableRegistry equippableRegistry;
+    [SerializeField] private Transform groundCheck;
 
     [SerializeField] private LayerMask interactableLayerMask;
 
@@ -24,7 +25,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 lookDirection = Vector3.forward;
 
     private bool isRun;
-    private bool isGround;
 
     private EquippableItem currentEquipped;
     private Weapon currentWeapon;
@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     public Animator Animator => animator;
     public Weapon CurrentWeapon => currentWeapon;
     public RecoveryItem CurrentRecovery => currentRecoveryItem;
+    public Rigidbody Rigid => rigid;
 
     public delegate void EquippedHandler(EquippableItem item);
     public event EquippedHandler OnEquipped;
@@ -78,7 +79,6 @@ public class PlayerController : MonoBehaviour
     }
 
     public bool IsRun() { return isRun; }
-    public bool IsGround() { return isGround; }
 
     public Vector2 GetDirection() { return moveDirection; }
     private Vector3 GetCameraDirection(Vector2 input)
@@ -94,6 +94,11 @@ public class PlayerController : MonoBehaviour
 
         Vector3 direction = right * input.x + forward * input.y;
         return Vector3.ClampMagnitude(direction, 1f);
+    }
+
+    public bool IsGround()
+    {
+        return Physics.CheckSphere(groundCheck.position, 0.3f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore);
     }
 
     public void UpdateAnimation()
@@ -129,21 +134,14 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
-        isGround = false;
-
         Vector3 velocity = rigid.linearVelocity;
         velocity.y = playerStats.JumpForce;
         rigid.linearVelocity = velocity;
-
-        // rigid.AddForce(Vector3.up * playerStats.JumpForce, ForceMode.Impulse);
     }
 
     public void Fall()
     {
-        if (isGround) return;
-
         float multiplier = rigid.linearVelocity.y > 0f ? riseMultiplier : fallMultiplier;
-
         rigid.AddForce(Physics.gravity * (multiplier - 1f), ForceMode.Acceleration);
     }
 
@@ -476,11 +474,6 @@ public class PlayerController : MonoBehaviour
     private void UpdateUpperBodyWeight()
     {
         animator.SetLayerWeight(1, currentEquipped == null ? 0f : 1f);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground")) isGround = true;
     }
 
     // Save / Load
