@@ -1,81 +1,35 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateMachine : MonoBehaviour
+public class PlayerStateMachine : StateMachine<PlayerStateEnums, IPlayerState>
 {
     [SerializeField] private PlayerController playerController;
+    protected override PlayerStateEnums InitialState => PlayerStateEnums.IDLE;
 
-    public IPlayerState CurState { get; private set; }
-    private Dictionary<PlayerStateEnums, IPlayerState> stateDictionary;
-
-    private void Awake()
+    protected override void InitializeStates()
     {
-        stateDictionary = new Dictionary<PlayerStateEnums, IPlayerState>()
-        {
-            {PlayerStateEnums.IDLE, new PlayerIdleState(this, playerController)},
-            {PlayerStateEnums.MOVE, new PlayerMoveState(this, playerController)},
-            {PlayerStateEnums.RUN, new PlayerRunState(this, playerController)},
-            {PlayerStateEnums.JUMP, new PlayerJumpState(this, playerController)},
-            {PlayerStateEnums.FALL, new PlayerFallState(this, playerController)},
-            {PlayerStateEnums.ATTACK, new PlayerAttackState(this, playerController)},
-            {PlayerStateEnums.DEAD, new PlayerDeadState(this, playerController)},
-        };
-    }
+        AddState(PlayerStateEnums.IDLE, new PlayerIdleState(this, playerController));
+        AddState(PlayerStateEnums.MOVE, new PlayerMoveState(this, playerController));
+        AddState(PlayerStateEnums.RUN, new PlayerRunState(this, playerController));
+        AddState(PlayerStateEnums.JUMP, new PlayerJumpState(this, playerController));
+        AddState(PlayerStateEnums.FALL, new PlayerFallState(this, playerController));
+        AddState(PlayerStateEnums.ATTACK, new PlayerAttackState(this, playerController));
+        AddState(PlayerStateEnums.DEAD, new PlayerDeadState(this, playerController));
 
-    private void Start()
-    {
-        if (stateDictionary.TryGetValue(PlayerStateEnums.IDLE, out IPlayerState newState))
-        {
-            CurState = newState;
-            CurState.Enter();
-        }
-    }
-
-    private void Update()
-    {
-        if (CurState != null)
-            CurState.Update();
-
-        Debug.Log(CurState);
-    }
-
-    private void FixedUpdate()
-    {
-        if (CurState != null)
-            CurState.FixedUpdate();
     }
 
     public void ChangeInputState(PlayerStateEnums newStateType)
     {
-        if (!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
-        if (CurState == newState) return;
-
+        if (CurState == null) return;
         if (!CurState.InputHash.Contains(newStateType)) return;
 
-        CurState?.Exit();
-        CurState = newState;
-        CurState.Enter();
+        ChangeState(newStateType);
     }
 
     public void ChangeLogicState(PlayerStateEnums newStateType)
     {
-        if (!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
-        if (CurState == newState) return;
-
+        if (CurState == null) return;
         if (!CurState.LogicHash.Contains(newStateType)) return;
 
-        CurState?.Exit();
-        CurState = newState;
-        CurState.Enter();
-    }
-
-    public void ChangeState(PlayerStateEnums newStateType)
-    {
-        if (!stateDictionary.TryGetValue(newStateType, out IPlayerState newState)) return;
-        if (CurState == newState) return;
-
-        CurState?.Exit();
-        CurState = newState;
-        CurState.Enter();
+        ChangeState(newStateType);
     }
 }

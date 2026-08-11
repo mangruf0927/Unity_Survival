@@ -1,54 +1,15 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStateMachine : MonoBehaviour
+public class EnemyStateMachine : StateMachine<EnemyStateEnums, IEnemyState>
 {
     [SerializeField] private EnemyController enemyController;
+    protected override EnemyStateEnums InitialState => EnemyStateEnums.IDLE;
 
-    public IEnemyState CurState { get; private set; }
-    private Dictionary<EnemyStateEnums, IEnemyState> stateDictionary;
-
-    private void Awake()
+    protected override void InitializeStates()
     {
-        stateDictionary = new Dictionary<EnemyStateEnums, IEnemyState>()
-        {
-            {EnemyStateEnums.IDLE, new EnemyIdleState(this, enemyController)},
-            {EnemyStateEnums.CHASE, new EnemyChaseState(this, enemyController)},
-            {EnemyStateEnums.PATROL, new EnemyPatrolState(this, enemyController)},
-            {EnemyStateEnums.DEAD, new EnemyDeadState(this, enemyController)},
-        };
-    }
-
-    private void Start()
-    {
-        if (stateDictionary.TryGetValue(EnemyStateEnums.IDLE, out IEnemyState newState))
-        {
-            CurState = newState;
-            CurState.Enter();
-        }
-    }
-
-    private void Update()
-    {
-        if (CurState != null)
-            CurState.Update();
-
-        // Debug.Log(CurState);
-    }
-
-    private void FixedUpdate()
-    {
-        if (CurState != null)
-            CurState.FixedUpdate();
-    }
-
-    public void ChangeState(EnemyStateEnums newStateType)
-    {
-        if (!stateDictionary.TryGetValue(newStateType, out IEnemyState newState)) return;
-        if (CurState == newState) return;
-
-        CurState?.Exit();
-        CurState = newState;
-        CurState.Enter();
+        AddState(EnemyStateEnums.IDLE, new EnemyIdleState(this, enemyController));
+        AddState(EnemyStateEnums.CHASE, new EnemyChaseState(this, enemyController));
+        AddState(EnemyStateEnums.PATROL, new EnemyPatrolState(this, enemyController));
+        AddState(EnemyStateEnums.DEAD, new EnemyDeadState(this, enemyController));
     }
 }

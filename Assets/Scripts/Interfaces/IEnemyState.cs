@@ -1,7 +1,3 @@
-public interface IEnemyState
+public interface IEnemyState : IState
 {
-    void Enter();
-    void Update();
-    void FixedUpdate();
-    void Exit();
 }

@@ -1,55 +1,17 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CultistStateMachine : MonoBehaviour
+public class CultistStateMachine : StateMachine<CultistStateEnums, ICultistState>
 {
     [SerializeField] private CultistController cultistController;
 
-    public ICultistState CurState { get; private set; }
-    private Dictionary<CultistStateEnums, ICultistState> stateDictionary;
+    protected override CultistStateEnums InitialState => CultistStateEnums.IDLE;
 
-    private void Awake()
+    protected override void InitializeStates()
     {
-        stateDictionary = new Dictionary<CultistStateEnums, ICultistState>()
-        {
-            {CultistStateEnums.IDLE, new CultistIdleState(this, cultistController)},
-            {CultistStateEnums.CHASE, new CultistChaseState(this, cultistController)},
-            {CultistStateEnums.ATTACK, new CultistAttackState(this, cultistController)},
-            {CultistStateEnums.RETURN, new CultistReturnState(this, cultistController)},
-            {CultistStateEnums.DEAD, new CultistDeadState(this, cultistController)},
-        };
-    }
-
-    private void Start()
-    {
-        if (stateDictionary.TryGetValue(CultistStateEnums.IDLE, out ICultistState newState))
-        {
-            CurState = newState;
-            CurState.Enter();
-        }
-    }
-
-    private void Update()
-    {
-        if (CurState != null)
-            CurState.Update();
-
-        // Debug.Log(CurState);
-    }
-
-    private void FixedUpdate()
-    {
-        if (CurState != null)
-            CurState.FixedUpdate();
-    }
-
-    public void ChangeState(CultistStateEnums newStateType)
-    {
-        if (!stateDictionary.TryGetValue(newStateType, out ICultistState newState)) return;
-        if (CurState == newState) return;
-
-        CurState?.Exit();
-        CurState = newState;
-        CurState.Enter();
+        AddState(CultistStateEnums.IDLE, new CultistIdleState(this, cultistController));
+        AddState(CultistStateEnums.CHASE, new CultistChaseState(this, cultistController));
+        AddState(CultistStateEnums.ATTACK, new CultistAttackState(this, cultistController));
+        AddState(CultistStateEnums.RETURN, new CultistReturnState(this, cultistController));
+        AddState(CultistStateEnums.DEAD, new CultistDeadState(this, cultistController));
     }
 }
