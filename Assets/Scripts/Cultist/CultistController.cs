@@ -78,7 +78,7 @@ public class CultistController : MonoBehaviour
 
         animator.ResetTrigger("Dead");
         animator.SetLayerWeight(1, 1f);
-        cultistStateMachine.ChangeState(CultistStateEnums.IDLE);
+        cultistStateMachine.InitializeState();
     }
 
     public void Stop()

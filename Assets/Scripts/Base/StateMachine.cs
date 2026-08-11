@@ -42,13 +42,21 @@ public abstract class StateMachine<TStateEnums, TState> : MonoBehaviour
         stateDictionary.Add(stateType, state);
     }
 
-    public void ChangeState(TStateEnums newSateType)
+    public void ChangeState(TStateEnums newStateType)
     {
-        if (!stateDictionary.TryGetValue(newSateType, out TState newState)) return;
+        if (!stateDictionary.TryGetValue(newStateType, out TState newState)) return;
         if (CurState == newState) return;
 
         CurState?.Exit();
         CurState = newState;
         CurState.Enter();
+    }
+
+    public void InitializeState()
+    {
+        CurState?.Exit();
+        CurState = null;
+
+        ChangeState(InitialState);
     }
 }

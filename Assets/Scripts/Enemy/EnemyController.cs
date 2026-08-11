@@ -57,6 +57,14 @@ public class EnemyController : MonoBehaviour
         this.target = target;
     }
 
+    public void ResetState()
+    {
+        if (enemyStateMachine == null)
+            enemyStateMachine = GetComponent<EnemyStateMachine>();
+
+        enemyStateMachine?.InitializeState();
+    }
+
     public void Stop()
     {
         navMesh.isStopped = true;

@@ -137,24 +137,30 @@ public class MapGenerator : MonoBehaviour
         await CreateEnemySpawns(ct);
         await CreateEnvironments(ct);
 
-        await BuildNavMeshAsync(ct);
+        bool isNavMeshReady = await BuildNavMeshAsync(ct);
+        if (isNavMeshReady)
+        {
+            enemySpawner.Initialize();
+        }
+
     }
 
-    private async UniTask BuildNavMeshAsync(CancellationToken ct)
+    private async UniTask<bool> BuildNavMeshAsync(CancellationToken ct)
     {
         if (navMeshSurface == null)
         {
             Debug.LogWarning("NavMeshSurface is null");
-            return;
+            return false;
         }
 
         if (navMeshSurface.navMeshData == null)
         {
             navMeshSurface.BuildNavMesh(); // 최초 1회 초기화
-            return;
+            return true;
         }
 
         await navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData).ToUniTask(cancellationToken: ct);
+        return true;
     }
 
 

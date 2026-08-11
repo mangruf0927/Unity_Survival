@@ -29,11 +29,7 @@ public class EnemySpawner : MonoBehaviour
 
     private int currentLevel = 1;
     private int lastCycle = 0;
-
-    private void Start()
-    {
-        if (campFire != null) UpdateLevel(campFire.CurrentLevel);
-    }
+    private bool isMapReady;
 
     private class AliveEnemy
     {
@@ -54,10 +50,24 @@ public class EnemySpawner : MonoBehaviour
         if (campFire != null) campFire.OnLevelUp -= UpdateLevel;
     }
 
+    public void Initialize()
+    {
+        if (isMapReady) return;
+        isMapReady = true;
+
+        currentLevel = campFire.CurrentLevel;
+        lastCycle = timeSystem.CycleCount;
+        SpawnEnemies();
+    }
+
     private void UpdateLevel(int level)
     {
         if (level <= currentLevel) return;
+
         currentLevel = level;
+
+        if (!isMapReady) return;
+
         SpawnEnemiesAtLevel(level);
     }
 
@@ -85,6 +95,7 @@ public class EnemySpawner : MonoBehaviour
     private void PhaseChanged(Phase phase, int day)
     {
         if (phase != Phase.DAY) return;
+        if (!isMapReady) return;
 
         int currentCycle = timeSystem.CycleCount;
         if (lastCycle == currentCycle) return;
@@ -164,6 +175,7 @@ public class EnemySpawner : MonoBehaviour
         enemyController.SetTarget(player);
         enemyStats.SetHPBarController(hpBarController);
         enemyStats.SetUp(data);
+        enemyController.ResetState();
 
         enemyStats.OnDead -= EnemyDead;
         enemyStats.OnDead += EnemyDead;
@@ -309,6 +321,7 @@ public class EnemySpawner : MonoBehaviour
         enemyController.SetTarget(player);
         enemyStats.SetHPBarController(hpBarController);
         enemyController.LoadSaveData(saveData, data);
+        enemyController.ResetState();
 
         enemyStats.OnDead -= EnemyDead;
         enemyStats.OnDead += EnemyDead;
