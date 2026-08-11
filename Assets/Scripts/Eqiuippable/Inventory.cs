@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Inventory : MonoBehaviour
+public class Inventory
 {
-    [SerializeField] private List<InventoryItem> basicItemList = new();
-
     private readonly List<InventoryItem> itemList = new();
     public IReadOnlyList<InventoryItem> ItemList => itemList;
 
@@ -13,20 +11,17 @@ public class Inventory : MonoBehaviour
 
     public event Action OnChanged;
 
-    private void Awake()
+    public Inventory(IEnumerable<InventoryItem> basicItemList)
     {
         foreach (InventoryItem basicItem in basicItemList)
         {
             if (basicItem == null || basicItem.Item == null) continue;
 
-            InventoryItem sameItem = FindItem(basicItem.Item.ItemId);
-            if (sameItem != null)
-            {
-                sameItem.TryAdd(basicItem.Count);
-                continue;
-            }
+            InventoryItem item = FindItem(basicItem.Item.ItemId);
 
-            itemList.Add(new InventoryItem(basicItem.Item, basicItem.Count));
+            if (item != null) item.TryAdd(basicItem.Count);
+            else itemList.Add(new InventoryItem(basicItem.Item, basicItem.Count));
+
             basicItem.Item.gameObject.SetActive(false);
         }
     }
@@ -156,6 +151,7 @@ public class Inventory : MonoBehaviour
         return current.GroupId == next.GroupId && current.Level < next.Level;
     }
 
+    // Save/Load
     public InventorySaveData CreateSaveData(EquippableItem currentEquipped)
     {
         InventorySaveData data = new()
@@ -220,7 +216,7 @@ public class Inventory : MonoBehaviour
             }
 
             EquippableItem prefab = equippableDatabase.GetPrefab(itemId);
-            EquippableItem item = Instantiate(prefab);
+            EquippableItem item = UnityEngine.Object.Instantiate(prefab);
 
             if (item is Sack sack) sack.LoadData(data.sackData, itemDatabase);
 
@@ -253,7 +249,7 @@ public class Inventory : MonoBehaviour
         {
             if (inventoryItem.Item != null)
             {
-                Destroy(inventoryItem.Item.gameObject);
+                UnityEngine.Object.Destroy(inventoryItem.Item.gameObject);
             }
         }
         itemList.Clear();

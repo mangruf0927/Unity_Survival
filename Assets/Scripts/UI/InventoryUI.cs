@@ -3,14 +3,17 @@ using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
-    [SerializeField] private Inventory inventory;
+    [SerializeField] private InventoryProvider inventoryProvider;
     [SerializeField] private List<InventorySlot> slotList;
 
     public delegate void SelectSlotHandler(int idx);
     public event SelectSlotHandler OnSelectSlot;
 
+    private Inventory inventory;
+
     private void Start()
     {
+        inventory = inventoryProvider.Inventory;
         inventory.OnChanged += UpdateSlot;
 
         for (int i = 0; i < slotList.Count; i++)

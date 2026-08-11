@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private Transform cameraPivot;
-    [SerializeField] private Inventory inventory;
+    [SerializeField] private InventoryProvider inventoryProvider;
     [SerializeField] private Transform equipPosition;
     [SerializeField] private InteractionUI interactionUI;
     [SerializeField] private ObjectPlacement objectPlacement;
@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private Sack currentSack;
     private IInteractable currentInteractable;
     private RecoveryItem currentRecoveryItem;
+    private Inventory inventory;
 
     private bool isItemHovering;
     private bool isHolding;
@@ -50,6 +51,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        inventory = inventoryProvider.Inventory;
         rigid = GetComponent<Rigidbody>();
         playerStats = GetComponentInChildren<PlayerStats>();
     }
