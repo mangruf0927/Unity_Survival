@@ -5,8 +5,8 @@ public abstract class EnemyStatsBase : MonoBehaviour, IDamageable
 {
     [SerializeField] private int id;
     [SerializeField] private Transform hpBarPoint;
-    [SerializeField] private EnemyHPBarController hpBarController;
 
+    private EnemyHPBarController hpBarController;
     protected int maxHp;
 
     public int Id => id;

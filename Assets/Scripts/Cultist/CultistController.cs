@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class CultistController : MonoBehaviour
 {
@@ -11,16 +10,16 @@ public class CultistController : MonoBehaviour
         public GameObject prefab;
     }
 
+    [SerializeField] private EnemyMovement movement;
     [SerializeField] private CultistStats cultistStats;
-    [SerializeField] private NavMeshAgent navMesh;
     [SerializeField] private Animator animator;
     [SerializeField] private CultistStateMachine cultistStateMachine;
     [SerializeField] private Transform equipPosition;
     [SerializeField] private CultistWeaponType weaponType;
     [SerializeField] private WeaponData[] weaponDatas;
 
-    [SerializeField] private Transform target;
-    [SerializeField] private Transform raidCenter;
+    private Transform target;
+    private Transform raidCenter;
 
     private GameObject currentWeapon;
     private CultistWeapon weapon;
@@ -36,6 +35,7 @@ public class CultistController : MonoBehaviour
 
     private void Awake()
     {
+        if (movement == null) movement = GetComponent<EnemyMovement>();
         SetWeapon(weaponType);
     }
 
@@ -68,6 +68,7 @@ public class CultistController : MonoBehaviour
     public void SetUp(Transform player, Transform raidCenter)
     {
         target = player;
+        movement.SetTarget(player);
         this.raidCenter = raidCenter;
 
         CultistData data = DataManager.Instance.CultistTable.Get(cultistStats.CultistId);
@@ -83,10 +84,7 @@ public class CultistController : MonoBehaviour
 
     public void Stop()
     {
-        navMesh.isStopped = true;
-        navMesh.velocity = Vector3.zero;
-        navMesh.ResetPath();
-        animator.SetFloat("speed", 0f);
+        movement.Stop();
     }
 
     public void Alert()
@@ -103,41 +101,28 @@ public class CultistController : MonoBehaviour
 
     public bool CheckRange()
     {
-        if (target == null) return false;
-
-        float distance = (target.position - transform.position).sqrMagnitude;
-        return distance <= cultistStats.ScanRange * cultistStats.ScanRange;
+        return movement.CheckRange(cultistStats.ScanRange);
     }
 
     public void Chase()
     {
-        if (target == null) return;
-
-        navMesh.isStopped = false;
-        navMesh.SetDestination(target.position);
+        movement.Chase();
     }
 
     public void ReturnToRaidCenter()
     {
         if (raidCenter == null) return;
 
-        navMesh.isStopped = false;
-
         Vector3 direction = (transform.position - raidCenter.position).normalized;
         if (direction == Vector3.zero) direction = transform.forward;
 
         Vector3 returnPosition = raidCenter.position + direction * cultistStats.ReturnDistance;
-
-        if (NavMesh.SamplePosition(returnPosition, out var hit, cultistStats.ReturnSearchRange, NavMesh.AllAreas))
-        {
-            navMesh.SetDestination(hit.position);
-        }
+        movement.MoveTo(returnPosition, cultistStats.ReturnSearchRange);
     }
 
     public bool CheckArrive()
     {
-        if (navMesh.pathPending || !navMesh.hasPath) return false;
-        return navMesh.remainingDistance <= navMesh.stoppingDistance + 0.1f;
+        return movement.CheckArrive();
     }
 
     public bool IsAwayFromRaidCenter()

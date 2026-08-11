@@ -1,16 +1,14 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] private NavMeshAgent navMesh;
+    [SerializeField] private EnemyMovement movement;
     [SerializeField] private EnemyStats enemyStats;
-    [SerializeField] private Animator animator;
 
+    private Animator animator;
     private EnemyDropper enemyDropper;
     private EnemyStateMachine enemyStateMachine;
 
-    private Transform target;
     private float alertEndTime;
     public bool IsAlerted => Time.time < alertEndTime;
 
@@ -22,8 +20,11 @@ public class EnemyController : MonoBehaviour
 
     private void Awake()
     {
+        if (movement == null) movement = GetComponent<EnemyMovement>();
+
         enemyDropper = GetComponent<EnemyDropper>();
         enemyStateMachine = GetComponent<EnemyStateMachine>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void OnEnable()
@@ -52,11 +53,6 @@ public class EnemyController : MonoBehaviour
         enemyStateMachine.ChangeState(EnemyStateEnums.DEAD);
     }
 
-    public void SetTarget(Transform target)
-    {
-        this.target = target;
-    }
-
     public void ResetState()
     {
         if (enemyStateMachine == null)
@@ -65,12 +61,14 @@ public class EnemyController : MonoBehaviour
         enemyStateMachine?.InitializeState();
     }
 
+    public void SetTarget(Transform target)
+    {
+        movement.SetTarget(target);
+    }
+
     public void Stop()
     {
-        navMesh.isStopped = true;
-        navMesh.ResetPath();
-        navMesh.velocity = Vector3.zero;
-        animator.SetFloat("speed", 0f);
+        movement.Stop();
     }
 
     public void Alert()
@@ -80,7 +78,7 @@ public class EnemyController : MonoBehaviour
 
     public bool ShouldChasePlayer()
     {
-        if (target == null) return false;
+        if (movement.Target == null) return false;
         if (!enemyStats.CanChase) return false;
 
         return IsAlerted || CheckRange();
@@ -88,26 +86,17 @@ public class EnemyController : MonoBehaviour
 
     public bool CheckRange()
     {
-        if (target == null) return false;
-
-        float distance = (target.position - transform.position).sqrMagnitude;
-        return distance <= enemyStats.ScanRange * enemyStats.ScanRange;
+        return movement.CheckRange(enemyStats.ScanRange);
     }
 
     public void Chase()
     {
-        navMesh.isStopped = false;
-        navMesh.SetDestination(target.position);
+        movement.Chase();
     }
 
     public void Patrol()
     {
-        navMesh.isStopped = false;
-
-        Vector3 randomPoint = transform.position + Random.insideUnitSphere * enemyStats.PatrolRange;
-
-        if (NavMesh.SamplePosition(randomPoint, out var hit, enemyStats.PatrolRange, NavMesh.AllAreas))
-            navMesh.SetDestination(hit.position);
+        movement.Patrol(enemyStats.PatrolRange);
     }
 
     public float RandomTime()
@@ -117,8 +106,7 @@ public class EnemyController : MonoBehaviour
 
     public bool CheckArrive()
     {
-        if (navMesh.pathPending || !navMesh.hasPath) return false;
-        return navMesh.remainingDistance <= 0.1f;
+        return movement.CheckArrive();
     }
 
     public void DropItems()
