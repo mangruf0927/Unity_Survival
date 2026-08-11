@@ -5,9 +5,9 @@ public class EnemyHPBar : MonoBehaviour
 {
     [SerializeField] private Slider hpSlider;
 
-    private EnemyStats enemyStats;
+    private EnemyStatsBase enemyStats;
 
-    public void SetHPBar(EnemyStats stats)
+    public void SetHPBar(EnemyStatsBase stats)
     {
         enemyStats = stats;
         UpdateHPBar();

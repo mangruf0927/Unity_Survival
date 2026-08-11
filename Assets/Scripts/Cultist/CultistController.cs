@@ -43,52 +43,26 @@ public class CultistController : MonoBehaviour
     {
         if (cultistStats == null) return;
         cultistStats.OnDamaged += OnDamaged;
+        cultistStats.OnDead += OnDead;
     }
 
     private void OnDisable()
     {
         if (cultistStats == null) return;
         cultistStats.OnDamaged -= OnDamaged;
+        cultistStats.OnDead -= OnDead;
         alertEndTime = 0f;
     }
 
-    public CultistSaveData CreateSaveData()
+    private void OnDamaged(EnemyStatsBase stats)
     {
-        Vector3 position = transform.position;
-
-        return new CultistSaveData
-        {
-            cultistType = CultistType,
-            weaponType = weaponType,
-            positionX = position.x,
-            positionY = position.y,
-            positionZ = position.z,
-            rotationY = transform.eulerAngles.y,
-            currentHp = CurrentHp
-        };
-    }
-
-    public void LoadSaveData(CultistSaveData data, Transform player, Transform raidCenter)
-    {
-        if (data == null) return;
-
-        SetWeapon(data.weaponType);
-        SetUp(player, raidCenter);
-
-        Vector3 position = new(data.positionX, data.positionY, data.positionZ);
-        Quaternion rotation = Quaternion.Euler(0f, data.rotationY, 0f);
-        transform.SetPositionAndRotation(position, rotation);
-
-        cultistStats.LoadHp(data.currentHp);
-        Alert();
-    }
-
-    private void OnDamaged(CultistStats stats)
-    {
-        if (stats.CurrentHp <= 0) return;
-
-        Alert();
         cultistStateMachine.ChangeState(CultistStateEnums.CHASE);
+        Alert();
+    }
+
+    private void OnDead(EnemyStatsBase stats)
+    {
+        cultistStateMachine.ChangeState(CultistStateEnums.DEAD);
     }
 
     public void SetUp(Transform player, Transform raidCenter)
@@ -236,5 +210,37 @@ public class CultistController : MonoBehaviour
         }
 
         currentWeapon.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+    }
+
+    // Save/Load
+    public CultistSaveData CreateSaveData()
+    {
+        Vector3 position = transform.position;
+
+        return new CultistSaveData
+        {
+            cultistType = CultistType,
+            weaponType = weaponType,
+            positionX = position.x,
+            positionY = position.y,
+            positionZ = position.z,
+            rotationY = transform.eulerAngles.y,
+            currentHp = CurrentHp
+        };
+    }
+
+    public void LoadSaveData(CultistSaveData data, Transform player, Transform raidCenter)
+    {
+        if (data == null) return;
+
+        SetWeapon(data.weaponType);
+        SetUp(player, raidCenter);
+
+        Vector3 position = new(data.positionX, data.positionY, data.positionZ);
+        Quaternion rotation = Quaternion.Euler(0f, data.rotationY, 0f);
+        transform.SetPositionAndRotation(position, rotation);
+
+        cultistStats.LoadHp(data.currentHp);
+        Alert();
     }
 }

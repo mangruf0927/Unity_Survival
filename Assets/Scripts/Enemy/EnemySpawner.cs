@@ -181,7 +181,7 @@ public class EnemySpawner : MonoBehaviour
         });
     }
 
-    private void EnemyDead(EnemyStats enemyStats)
+    private void EnemyDead(EnemyStatsBase enemyStats)
     {
         AliveEnemy aliveEnemy = aliveEnemyList.Find(x => x.controller != null
                                 && x.controller.GetComponent<EnemyStats>() == enemyStats);

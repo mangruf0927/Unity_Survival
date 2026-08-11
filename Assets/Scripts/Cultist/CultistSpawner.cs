@@ -6,7 +6,7 @@ public class CultistSpawner : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private Transform CampFire;
-    [SerializeField] private CultistHPBarController hpBarController;
+    [SerializeField] private EnemyHPBarController hpBarController;
 
     [SerializeField] private float minRadius = 20f;
     [SerializeField] private float maxRadius = 30f;
@@ -108,7 +108,7 @@ public class CultistSpawner : MonoBehaviour
         stats.OnDead += Unregister;
     }
 
-    private void Unregister(CultistStats stats)
+    private void Unregister(EnemyStatsBase stats)
     {
         if (stats == null) return;
 

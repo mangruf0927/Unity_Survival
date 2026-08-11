@@ -7,19 +7,22 @@ public class EnemyHPBarController : MonoBehaviour
 
     private Camera mainCamera;
     private RectTransform canvasRect;
-    private readonly Dictionary<EnemyStats, EnemyHPBar> hpBarDictionary = new();
+
+    private readonly Dictionary<EnemyStatsBase, EnemyHPBar> hpBarDictionary = new();
 
     private void Awake()
     {
         mainCamera = Camera.main;
-        if (canvas != null) canvasRect = canvas.transform as RectTransform;
+
+        if (canvas != null)
+            canvasRect = canvas.transform as RectTransform;
     }
 
     private void LateUpdate()
     {
         foreach (var dic in hpBarDictionary)
         {
-            EnemyStats enemyStats = dic.Key;
+            EnemyStatsBase enemyStats = dic.Key;
             EnemyHPBar hpBar = dic.Value;
 
             if (enemyStats == null || hpBar == null || enemyStats.HPBarPoint == null) continue;
@@ -54,52 +57,66 @@ public class EnemyHPBarController : MonoBehaviour
         }
     }
 
-    public void Register(EnemyStats enemyStats)
+    public void Register(EnemyStatsBase stats)
     {
-        if (enemyStats == null) return;
+        if (stats == null)
+            return;
 
-        enemyStats.OnDamaged += ShowHPBar;
-        enemyStats.OnDead += HideHPBar;
+        stats.OnDamaged -= ShowHPBar;
+        stats.OnDead -= HideHPBar;
+
+        stats.OnDamaged += ShowHPBar;
+        stats.OnDead += HideHPBar;
     }
 
-    public void UnRegister(EnemyStats enemyStats)
+    public void UnRegister(EnemyStatsBase stats)
     {
-        if (enemyStats == null) return;
+        if (stats == null)
+            return;
 
-        enemyStats.OnDamaged -= ShowHPBar;
-        enemyStats.OnDead -= HideHPBar;
+        stats.OnDamaged -= ShowHPBar;
+        stats.OnDead -= HideHPBar;
 
-        HideHPBar(enemyStats);
+        HideHPBar(stats);
     }
 
-    public void ShowHPBar(EnemyStats enemyStats)
+    private void ShowHPBar(EnemyStatsBase stats)
     {
-        if (enemyStats == null) return;
-
-        if (hpBarDictionary.TryGetValue(enemyStats, out EnemyHPBar hpBar))
+        if (stats == null) return;
+        if (hpBarDictionary.TryGetValue(stats, out EnemyHPBar hpBar))
         {
             hpBar.UpdateHPBar();
             return;
         }
 
         GameObject hpObject = ObjectPool.Instance.GetFromPool(PoolTypeEnums.HPBAR);
+
         if (hpObject == null) return;
 
         EnemyHPBar enemyHPBar = hpObject.GetComponent<EnemyHPBar>();
-        if (enemyHPBar == null) return;
 
-        enemyHPBar.SetHPBar(enemyStats);
+        if (enemyHPBar == null)
+        {
+            ObjectPool.Instance.ReturnToPool(hpObject, PoolTypeEnums.HPBAR);
+            return;
+        }
 
-        hpBarDictionary.Add(enemyStats, enemyHPBar);
+        enemyHPBar.SetHPBar(stats);
+
+        hpBarDictionary.Add(stats, enemyHPBar);
     }
 
-    public void HideHPBar(EnemyStats enemyStats)
+    private void HideHPBar(EnemyStatsBase stats)
     {
-        if (!hpBarDictionary.TryGetValue(enemyStats, out EnemyHPBar hpBar)) return;
-        hpBarDictionary.Remove(enemyStats);
+        if (stats == null) return;
+        if (!hpBarDictionary.TryGetValue(stats, out EnemyHPBar hpBar)) return;
 
-        if (hpBar == null || !hpBar.gameObject.activeSelf) return;
+        hpBarDictionary.Remove(stats);
+
+        if (hpBar == null) return;
+
         hpBar.Clear();
+
         ObjectPool.Instance.ReturnToPool(hpBar.gameObject, PoolTypeEnums.HPBAR);
     }
 }
