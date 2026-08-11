@@ -142,6 +142,16 @@ public class GameInput : MonoBehaviour
         return -1;
     }
 
+    private void DestroyCurrentItem()
+    {
+        if (currentItem == null) return;
+
+        GameObject item = currentItem.gameObject;
+        item.SetActive(false);
+        ClearTarget();
+        Destroy(item);
+    }
+
     public void OnPick(InputValue value)        // E키 (총알 + 음식 + 장비 + 상호작용)
     {
         if (!value.isPressed)
@@ -153,15 +163,13 @@ public class GameInput : MonoBehaviour
         if (currentItem != null && currentItem.Data.ItemType == ItemType.AMMO)
         {
             playerController.AddAmmo(currentItem.Data.AmmoData.AmmoType, currentItem.Data.AmmoData.Amount);
-            Destroy(currentItem.gameObject);
-            ClearTarget();
+            DestroyCurrentItem();
             return;
         }
         else if (currentItem != null && currentItem.Data.ItemType == ItemType.FOOD)
         {
             playerController.Eat(currentItem.Data.FoodData.HungerAmount, currentItem.Data.FoodData.HpAmount);
-            Destroy(currentItem.gameObject);
-            ClearTarget();
+            DestroyCurrentItem();
             return;
         }
 
