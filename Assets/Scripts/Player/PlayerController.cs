@@ -4,36 +4,29 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerMovement movement;
-
+    [SerializeField] private PlayerInteraction interaction;
 
     [SerializeField] private Animator animator;
     [SerializeField] private InventoryProvider inventoryProvider;
     [SerializeField] private Transform equipPosition;
-    [SerializeField] private InteractionUI interactionUI;
     [SerializeField] private ObjectPlacement objectPlacement;
     [SerializeField] private ItemRegistry itemRegistry;
     [SerializeField] private EquippableRegistry equippableRegistry;
-
-    [SerializeField] private LayerMask interactableLayerMask;
 
     private PlayerStats playerStats;
 
     private EquippableItem currentEquipped;
     private Weapon currentWeapon;
     private Sack currentSack;
-    private IInteractable currentInteractable;
     private RecoveryItem currentRecoveryItem;
     private Inventory inventory;
-
-    private bool isItemHovering;
-    private bool isHolding;
-    private float holdTimer;
 
     private bool isUsingRecovery;
     private float recoveryTimer;
 
     public Rigidbody Rigid => movement.Rigid;
     public Animator Animator => animator;
+
     public Weapon CurrentWeapon => currentWeapon;
     public RecoveryItem CurrentRecovery => currentRecoveryItem;
 
@@ -49,8 +42,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        FindInteractable();
-        UpdateHoldTimer();
         UpdateRecoveryTimer();
     }
 
@@ -67,6 +58,10 @@ public class PlayerController : MonoBehaviour
     public void Stop() => movement.Stop();
     public void Jump() => movement.Jump();
     public void Fall() => movement.Fall();
+
+    public void SetItemHovering(bool state) => interaction.SetItemHovering(state);
+    public void SetHolding(bool state) => interaction.SetHolding(state);
+    public bool HasInteractable() => interaction.HasInteractable;
 
     public void UpdateAnimation()
     {
@@ -320,74 +315,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void SetItemHovering(bool state)
-    {
-        isItemHovering = state;
-
-        if (isItemHovering)
-        {
-            holdTimer = 0f;
-            isHolding = false;
-            if (interactionUI != null) interactionUI.Hide();
-        }
-    }
-
-    private readonly Collider[] hitBuffer = new Collider[32];
-
-    private void FindInteractable()
-    {
-        IInteractable previousInteractable = currentInteractable;
-        currentInteractable = null;
-
-        int hitCount = Physics.OverlapSphereNonAlloc(
-            transform.position, playerStats.InteractDistance, hitBuffer,
-            interactableLayerMask, QueryTriggerInteraction.Collide);
-
-        Vector3 playerPosition = transform.position;
-        float closestDistance = float.MaxValue;
-
-        for (int i = 0; i < hitCount; i++)
-        {
-            Collider hit = hitBuffer[i];
-
-            IInteractable interactable = hit.GetComponentInParent<IInteractable>();
-            if (interactable == null || !interactable.CanInteract(this)) continue;
-
-            float distance = (hit.transform.position - playerPosition).sqrMagnitude;
-            if (distance >= closestDistance) continue;
-
-            closestDistance = distance;
-            currentInteractable = interactable;
-        }
-        if (previousInteractable != currentInteractable) holdTimer = 0f;
-
-        if (currentInteractable != null && !isItemHovering) interactionUI.Show(currentInteractable.UIPosition);
-        else interactionUI.Hide();
-    }
-
-    private void UpdateHoldTimer()
-    {
-        if (!isHolding || currentInteractable == null)
-        {
-            interactionUI.SetProgress(0f);
-            return;
-        }
-
-        holdTimer += Time.deltaTime;
-
-        float progress = holdTimer / currentInteractable.HoldTime;
-        interactionUI.SetProgress(progress);
-
-        if (holdTimer >= currentInteractable.HoldTime)
-        {
-            currentInteractable.Interact(this);
-
-            holdTimer = 0f;
-            isHolding = false;
-            interactionUI.SetProgress(0f);
-        }
-    }
-
     private void UpdateRecoveryTimer()
     {
         if (!isUsingRecovery || currentRecoveryItem == null) return;
@@ -399,21 +326,6 @@ public class PlayerController : MonoBehaviour
         RecoveryItem item = currentRecoveryItem;
         CancelRecoveryUse();
         item.Apply(this);
-    }
-
-    public bool HasInteractable()
-    {
-        return currentInteractable != null;
-    }
-
-    public void SetHolding(bool state)
-    {
-        isHolding = state;
-        if (!isHolding)
-        {
-            holdTimer = 0f;
-            interactionUI.SetProgress(0f);
-        }
     }
 
     private void UpdateUpperBodyWeight()

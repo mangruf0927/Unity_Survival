@@ -20092,6 +20092,10 @@ PrefabInstance:
       propertyPath: cameraPivot
       value: 
       objectReference: {fileID: 104391444}
+    - target: {fileID: 2316166957360092100, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
+      propertyPath: interactionUI
+      value: 
+      objectReference: {fileID: 1574028816}
     - target: {fileID: 4784159813726193031, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
       propertyPath: timeSystem
       value: 
@@ -20144,10 +20148,6 @@ PrefabInstance:
       propertyPath: itemRegistry
       value: 
       objectReference: {fileID: 609733976}
-    - target: {fileID: 5446265190428534976, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
-      propertyPath: interactionUI
-      value: 
-      objectReference: {fileID: 1574028816}
     - target: {fileID: 5446265190428534976, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
       propertyPath: inventoryProvider
       value: 
