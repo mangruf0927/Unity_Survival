@@ -3,28 +3,20 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private PlayerMovement movement;
+
+
     [SerializeField] private Animator animator;
-    [SerializeField] private Transform cameraPivot;
     [SerializeField] private InventoryProvider inventoryProvider;
     [SerializeField] private Transform equipPosition;
     [SerializeField] private InteractionUI interactionUI;
     [SerializeField] private ObjectPlacement objectPlacement;
     [SerializeField] private ItemRegistry itemRegistry;
     [SerializeField] private EquippableRegistry equippableRegistry;
-    [SerializeField] private Transform groundCheck;
 
     [SerializeField] private LayerMask interactableLayerMask;
 
-    private float riseMultiplier = 1.5f;
-    private float fallMultiplier = 5f;
-
     private PlayerStats playerStats;
-    private Rigidbody rigid;
-
-    private Vector2 moveDirection;
-    private Vector3 lookDirection = Vector3.forward;
-
-    private bool isRun;
 
     private EquippableItem currentEquipped;
     private Weapon currentWeapon;
@@ -40,10 +32,10 @@ public class PlayerController : MonoBehaviour
     private bool isUsingRecovery;
     private float recoveryTimer;
 
+    public Rigidbody Rigid => movement.Rigid;
     public Animator Animator => animator;
     public Weapon CurrentWeapon => currentWeapon;
     public RecoveryItem CurrentRecovery => currentRecoveryItem;
-    public Rigidbody Rigid => rigid;
 
     public delegate void EquippedHandler(EquippableItem item);
     public event EquippedHandler OnEquipped;
@@ -52,7 +44,6 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         inventory = inventoryProvider.Inventory;
-        rigid = GetComponent<Rigidbody>();
         playerStats = GetComponentInChildren<PlayerStats>();
     }
 
@@ -63,8 +54,27 @@ public class PlayerController : MonoBehaviour
         UpdateRecoveryTimer();
     }
 
-    public void SetDirection(Vector2 direction) { moveDirection = direction; }
-    public void SetRun(bool state) { isRun = state; playerStats.SetRun(state); }
+    public void SetDirection(Vector2 direction) => movement.SetDirection(direction);
+    public Vector2 GetDirection() => movement.Direction;
+
+    public bool IsGround() => movement.IsGround();
+
+    public void SetRun(bool state) => movement.SetRun(state);
+    public bool IsRun() => movement.IsRun;
+
+    public void Move() => movement.Move();
+    public void Look() => movement.Look();
+    public void Stop() => movement.Stop();
+    public void Jump() => movement.Jump();
+    public void Fall() => movement.Fall();
+
+    public void UpdateAnimation()
+    {
+        if (GetDirection() == Vector2.zero) animator.SetFloat("speed", 0f);
+        else if (IsRun()) animator.SetFloat("speed", 2f);
+        else animator.SetFloat("speed", 1f);
+    }
+
     public void SetSack(Sack sack) { currentSack = sack; }
     public void SetRecoveryItem(RecoveryItem item) { currentRecoveryItem = item; }
 
@@ -78,73 +88,6 @@ public class PlayerController : MonoBehaviour
     {
         if (currentWeapon is RangedWeapon rangedWeapon)
             rangedWeapon.SetAimPoint(point);
-    }
-
-    public bool IsRun() { return isRun; }
-
-    public Vector2 GetDirection() { return moveDirection; }
-    private Vector3 GetCameraDirection(Vector2 input)
-    {
-        Vector3 forward = cameraPivot.forward;
-        Vector3 right = cameraPivot.right;
-
-        forward.y = 0f;
-        right.y = 0f;
-
-        forward.Normalize();
-        right.Normalize();
-
-        Vector3 direction = right * input.x + forward * input.y;
-        return Vector3.ClampMagnitude(direction, 1f);
-    }
-
-    public bool IsGround()
-    {
-        return Physics.CheckSphere(groundCheck.position, 0.3f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore);
-    }
-
-    public void UpdateAnimation()
-    {
-        if (moveDirection == Vector2.zero) animator.SetFloat("speed", 0f);
-        else if (IsRun()) animator.SetFloat("speed", 2f);
-        else animator.SetFloat("speed", 1f);
-    }
-
-    public void Move()
-    {
-        Vector3 curVelocity = rigid.linearVelocity;
-        float speed = isRun ? playerStats.RunSpeed : playerStats.MoveSpeed;
-
-        Vector3 moveVec = GetCameraDirection(moveDirection);
-        rigid.linearVelocity = new Vector3(moveVec.x * speed, curVelocity.y, moveVec.z * speed);
-    }
-
-    public void Look()
-    {
-        Vector3 lookVec = GetCameraDirection(moveDirection);
-        if (lookVec.sqrMagnitude >= 0.0001f) lookDirection = lookVec.normalized;
-
-        Quaternion target = Quaternion.LookRotation(lookDirection, Vector3.up);
-        rigid.MoveRotation(Quaternion.Slerp(rigid.rotation, target, Time.fixedDeltaTime * playerStats.RotateSpeed));
-    }
-
-    public void Stop()
-    {
-        Vector3 curVelocity = rigid.linearVelocity;
-        rigid.linearVelocity = new Vector3(0f, curVelocity.y, 0f);
-    }
-
-    public void Jump()
-    {
-        Vector3 velocity = rigid.linearVelocity;
-        velocity.y = playerStats.JumpForce;
-        rigid.linearVelocity = velocity;
-    }
-
-    public void Fall()
-    {
-        float multiplier = rigid.linearVelocity.y > 0f ? riseMultiplier : fallMultiplier;
-        rigid.AddForce(Physics.gravity * (multiplier - 1f), ForceMode.Acceleration);
     }
 
     public void Eat(int hunger, int hp)
