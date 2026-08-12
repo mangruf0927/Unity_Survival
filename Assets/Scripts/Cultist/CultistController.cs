@@ -6,8 +6,8 @@ public class CultistController : MonoBehaviour
     [Serializable]
     private class WeaponData
     {
-        public CultistWeaponType type;
-        public GameObject prefab;
+        public CultistWeaponType type = default;
+        public GameObject prefab = null;
     }
 
     [SerializeField] private EnemyMovement movement;

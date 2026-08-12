@@ -65,7 +65,6 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private int maxHeightStep;
 
     [SerializeField] private int mapRadius;
-    [FormerlySerializedAs("levelRadius")]
     [SerializeField] private List<int> levelRadiusList;
 
     [Header("땅")]
@@ -108,11 +107,14 @@ public class MapGenerator : MonoBehaviour
     private System.Random environmentRandom;
 
     private MapGrid mapGrid;
+    private MapGroundGenerator groundGenerator;
     private CancellationTokenSource cts;
 
     private void Awake()
     {
         mapGrid = new MapGrid(levelRadiusList);
+        groundGenerator = new MapGroundGenerator(mapGrid, transform, groundPrefab, mapRadius,
+                                cellSize, cellThickness, noiseScale, heightStep, maxHeightStep);
     }
 
     private void Start()
@@ -132,7 +134,7 @@ public class MapGenerator : MonoBehaviour
     {
         InitializeSeed();
 
-        await GenerateGround(ct);
+        await groundGenerator.GenerateGroundAsync(noiseOffsetX, noiseOffsetZ, ct);
 
         CreateCampFire();
 
@@ -181,76 +183,6 @@ public class MapGenerator : MonoBehaviour
         itemSpotRandom = new System.Random(seed + 2);
         enemyRandom = new System.Random(seed + 3);
         environmentRandom = new System.Random(seed + 4);
-    }
-
-    // Ground
-    private async UniTask GenerateGround(CancellationToken ct)
-    {
-        if (groundPrefab == null)
-        {
-            Debug.LogWarning("Ground Prefab is null");
-            return;
-        }
-
-        ClearGround();
-
-        GameObject groundParent = new("Grounds");
-        groundParent.transform.SetParent(transform);
-
-        const int cellsPerFrame = 100;
-        int counter = 0;
-
-        for (int x = -mapRadius; x <= mapRadius; x++)
-        {
-            for (int z = -mapRadius; z <= mapRadius; z++)
-            {
-                Vector2Int coordinate = new(x, z);
-                if (!mapGrid.IsInsideRadius(coordinate, mapRadius)) continue;
-
-                float height = GetCellHeight(coordinate);
-                CreateCell(coordinate, height, groundParent.transform);
-
-                if (++counter % cellsPerFrame == 0)
-                {
-                    await UniTask.Yield(PlayerLoopTiming.Update, ct);   // 메인 스레드 유지
-                }
-            }
-        }
-    }
-
-    private void ClearGround()
-    {
-        foreach (CellData data in mapGrid.Cells)
-        {
-            if (data.GroundObject != null) Destroy(data.GroundObject);
-        }
-        mapGrid.Clear();
-    }
-
-    private void CreateCell(Vector2Int coordinate, float height, Transform parent)
-    {
-        GameObject cell = Instantiate(groundPrefab, parent);
-
-        cell.transform.localScale = new Vector3(cellSize, cellThickness, cellSize);
-        cell.transform.localPosition = new Vector3(coordinate.x * cellSize, height - cellThickness * 0.5f, coordinate.y * cellSize);
-
-        CellData cellData = new(coordinate, height, cell);
-        mapGrid.Add(cellData);
-    }
-
-    private float GetCellHeight(Vector2Int coordinate)
-    {
-        if (mapGrid.IsCampFireArea(coordinate)) return 0f;
-
-        float sampleX = coordinate.x * noiseScale + noiseOffsetX;
-        float sampleZ = coordinate.y * noiseScale + noiseOffsetZ;
-
-        float noise = Mathf.PerlinNoise(sampleX, sampleZ);
-        float centeredNoise = noise * 2f - 1f;
-
-        int step = Mathf.RoundToInt(centeredNoise * maxHeightStep);
-
-        return step * heightStep;
     }
 
     // Campfire
