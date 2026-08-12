@@ -111,6 +111,7 @@ public class MapGenerator : MonoBehaviour
     private EnemySpawnGenerator enemySpawnGenerator;
     private StructureGenerator structureGenerator;
     private ItemSpotGenerator itemSpotGenerator;
+    private EnvironmentGenerator environmentGenerator;
     private CancellationTokenSource cts;
 
     private void Awake()
@@ -123,6 +124,7 @@ public class MapGenerator : MonoBehaviour
         itemSpotGenerator = new ItemSpotGenerator(mapGrid, transform, itemSpotCountList, itemSpotPrefabList,
                                                   itemRegistry, objectRegistry, cellSize);
         enemySpawnGenerator = new EnemySpawnGenerator(mapGrid, transform, enemySpawner, levelEnemySpawnInfoList, cellSize);
+        environmentGenerator = new EnvironmentGenerator(mapGrid, transform, environmentSpawnEntryList, itemRegistry, objectRegistry, cellSize);
     }
 
     private void Start()
@@ -149,14 +151,10 @@ public class MapGenerator : MonoBehaviour
         await structureGenerator.GenerateAsync(structureRandom, ct);
         await itemSpotGenerator.GenerateAsync(itemSpotRandom, ct);
         await enemySpawnGenerator.GenerateAsync(enemyRandom, ct);
-        await CreateEnvironments(ct);
+        await environmentGenerator.GenerateAsync(environmentRandom, ct);
 
         bool isNavMeshReady = await BuildNavMeshAsync(ct);
-        if (isNavMeshReady)
-        {
-            enemySpawner.Initialize();
-        }
-
+        if (isNavMeshReady) enemySpawner.Initialize();
     }
 
     private async UniTask<bool> BuildNavMeshAsync(CancellationToken ct)
@@ -176,7 +174,6 @@ public class MapGenerator : MonoBehaviour
         await navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData).ToUniTask(cancellationToken: ct);
         return true;
     }
-
 
     private void InitializeSeed()
     {
@@ -214,79 +211,5 @@ public class MapGenerator : MonoBehaviour
         campFire.transform.localPosition = new Vector3(coordinate.x * cellSize, cell.Height + campFireY, coordinate.y * cellSize);
 
         cell.SetCenterType(CenterType.CAMPFIRE);
-    }
-
-    // Environment
-    private async UniTask CreateEnvironments(CancellationToken ct)
-    {
-        List<CellData> availableCellList = mapGrid.GetEnvironmentCells();
-        if (availableCellList.Count == 0) return;
-
-        GameObject environmentParent = new("Environments");
-        environmentParent.transform.SetParent(transform, false);
-
-        const int environmentPerFrame = 50;
-        int counter = 0;
-
-        foreach (EnvironmentSpawnEntry entry in environmentSpawnEntryList)
-        {
-            int minCount = Mathf.Max(0, entry.minSpawnCount);
-            int maxCount = Mathf.Max(minCount, entry.maxSpawnCount);
-            int maxCountPerCell = Mathf.Max(1, entry.maxCountPerCell);
-            int spawnCount = environmentRandom.Next(minCount, maxCount + 1);
-
-            List<CellData> entryCellList = new(availableCellList);
-            Dictionary<Vector2Int, int> cellCountMap = new();
-
-            for (int i = 0; i < spawnCount; i++)
-            {
-                if (entryCellList.Count == 0) break;
-
-                int cellIndex = environmentRandom.Next(0, entryCellList.Count);
-                CellData selectedCell = entryCellList[cellIndex];
-
-                GameObject environment = Instantiate(entry.prefab, environmentParent.transform);
-                WorldObject worldObject = environment.GetComponentInChildren<WorldObject>();
-
-                if (worldObject != null)
-                {
-                    worldObject.Initialize(itemRegistry);
-                    objectRegistry.RegisterGenerated(worldObject);
-                }
-
-                Vector3 position = GetRandomPositionInCell(selectedCell);
-                position.y += entry.offsetY;
-
-                int rotation = environmentRandom.Next(0, 4) * 90;
-                environment.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
-
-                cellCountMap.TryGetValue(selectedCell.Coordinate, out int currentCount);
-                currentCount++;
-
-                cellCountMap[selectedCell.Coordinate] = currentCount;
-
-                if (currentCount >= maxCountPerCell)
-                {
-                    entryCellList.RemoveAt(cellIndex);
-                }
-
-                if (++counter % environmentPerFrame == 0)
-                {
-                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
-                }
-            }
-        }
-    }
-
-    private Vector3 GetRandomPositionInCell(CellData cell)
-    {
-        float range = cellSize * 0.4f;
-        float offsetX = Mathf.Lerp(-range, range, (float)environmentRandom.NextDouble());
-        float offsetZ = Mathf.Lerp(-range, range, (float)environmentRandom.NextDouble());
-
-        float x = cell.Coordinate.x * cellSize + offsetX;
-        float z = cell.Coordinate.y * cellSize + offsetZ;
-
-        return new Vector3(x, cell.Height, z);
     }
 }
