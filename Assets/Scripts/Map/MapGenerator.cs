@@ -107,9 +107,13 @@ public class MapGenerator : MonoBehaviour
     private System.Random enemyRandom;
     private System.Random environmentRandom;
 
-    private readonly Dictionary<Vector2Int, CellData> cellDictionary = new();
-
+    private MapGrid mapGrid;
     private CancellationTokenSource cts;
+
+    private void Awake()
+    {
+        mapGrid = new MapGrid(levelRadiusList);
+    }
 
     private void Start()
     {
@@ -201,7 +205,7 @@ public class MapGenerator : MonoBehaviour
             for (int z = -mapRadius; z <= mapRadius; z++)
             {
                 Vector2Int coordinate = new(x, z);
-                if (!IsInsideRadius(coordinate, mapRadius)) continue;
+                if (!mapGrid.IsInsideRadius(coordinate, mapRadius)) continue;
 
                 float height = GetCellHeight(coordinate);
                 CreateCell(coordinate, height, groundParent.transform);
@@ -216,11 +220,11 @@ public class MapGenerator : MonoBehaviour
 
     private void ClearGround()
     {
-        foreach (CellData data in cellDictionary.Values)
+        foreach (CellData data in mapGrid.Cells)
         {
             if (data.GroundObject != null) Destroy(data.GroundObject);
         }
-        cellDictionary.Clear();
+        mapGrid.Clear();
     }
 
     private void CreateCell(Vector2Int coordinate, float height, Transform parent)
@@ -231,12 +235,12 @@ public class MapGenerator : MonoBehaviour
         cell.transform.localPosition = new Vector3(coordinate.x * cellSize, height - cellThickness * 0.5f, coordinate.y * cellSize);
 
         CellData cellData = new(coordinate, height, cell);
-        cellDictionary.Add(coordinate, cellData);
+        mapGrid.Add(cellData);
     }
 
     private float GetCellHeight(Vector2Int coordinate)
     {
-        if (IsCampFireArea(coordinate)) return 0f;
+        if (mapGrid.IsCampFireArea(coordinate)) return 0f;
 
         float sampleX = coordinate.x * noiseScale + noiseOffsetX;
         float sampleZ = coordinate.y * noiseScale + noiseOffsetZ;
@@ -260,7 +264,7 @@ public class MapGenerator : MonoBehaviour
 
         Vector2Int coordinate = Vector2Int.zero;
 
-        if (!cellDictionary.TryGetValue(coordinate, out CellData cell))
+        if (!mapGrid.TryGetCell(coordinate, out CellData cell))
         {
             Debug.LogWarning("Cell (0, 0) could not be found");
             return;
@@ -289,7 +293,7 @@ public class MapGenerator : MonoBehaviour
             {
                 bool placed = false;
 
-                List<CellData> availableCellList = GetAvailableCellList(level);
+                List<CellData> availableCellList = mapGrid.GetAvailableCells(level);
                 if (availableCellList.Count == 0) break;
 
                 for (int attempt = 0; attempt < 50; attempt++)
@@ -302,7 +306,7 @@ public class MapGenerator : MonoBehaviour
                     int cellIndex = structureRandom.Next(0, availableCellList.Count);
                     CellData selectedCell = availableCellList[cellIndex];
 
-                    List<CellData> structureCellList = GetStructureCellList(selectedCell.Coordinate, spawnEntry.size, level);
+                    List<CellData> structureCellList = mapGrid.GetStructureCells(selectedCell.Coordinate, spawnEntry.size, level);
                     if (structureCellList == null) continue;
 
                     PlaceStructure(level, spawnEntry, structureCellList, structureParent.transform);
@@ -321,26 +325,6 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
-    }
-
-    private List<CellData> GetStructureCellList(Vector2Int start, Vector2Int size, int level)
-    {
-        List<CellData> cellList = new();
-
-        for (int x = 0; x < size.x; x++)
-        {
-            for (int z = 0; z < size.y; z++)
-            {
-                Vector2Int coordinate = new(start.x + x, start.y + z);
-
-                if (!cellDictionary.TryGetValue(coordinate, out CellData cell)) return null;
-                if (cell.Type != CenterType.NONE) return null;
-                if (!IsCellInLevel(coordinate, level)) return null;
-
-                cellList.Add(cell);
-            }
-        }
-        return cellList;
     }
 
     private void PlaceStructure(int level, StructureSpawnEntry entry, List<CellData> cellList, Transform structureParent)
@@ -406,7 +390,7 @@ public class MapGenerator : MonoBehaviour
             int spawnCount = itemSpotCountList[level - 1];
             if (spawnCount <= 0) continue;
 
-            List<CellData> availableCellList = GetAvailableCellList(level);
+            List<CellData> availableCellList = mapGrid.GetAvailableCells(level);
 
             for (int i = 0; i < spawnCount; i++)
             {
@@ -485,7 +469,7 @@ public class MapGenerator : MonoBehaviour
             {
                 if (spawnEntry == null || spawnEntry.spawnCount <= 0) continue;
 
-                List<CellData> availableCellList = GetAvailableCellList(levelInfo.mapLevel);
+                List<CellData> availableCellList = mapGrid.GetAvailableCells(levelInfo.mapLevel);
 
                 for (int i = 0; i < spawnEntry.spawnCount; i++)
                 {
@@ -532,7 +516,7 @@ public class MapGenerator : MonoBehaviour
     // Environment
     private async UniTask CreateEnvironments(CancellationToken ct)
     {
-        List<CellData> availableCellList = GetEnvironmentCellList();
+        List<CellData> availableCellList = mapGrid.GetEnvironmentCells();
         if (availableCellList.Count == 0) return;
 
         GameObject environmentParent = new("Environments");
@@ -591,26 +575,6 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private List<CellData> GetEnvironmentCellList()
-    {
-        List<CellData> availableCellList = new();
-
-        foreach (CellData cell in cellDictionary.Values)
-        {
-            if (cell.Type == CenterType.STRUCTURE) continue;
-            if (IsCampFireArea(cell.Coordinate)) continue;
-
-            availableCellList.Add(cell);
-        }
-
-        availableCellList.Sort((a, b) =>
-        {
-            int xCompare = a.Coordinate.x.CompareTo(b.Coordinate.x);
-            return xCompare != 0 ? xCompare : a.Coordinate.y.CompareTo(b.Coordinate.y);
-        });
-
-        return availableCellList;
-    }
 
     private Vector3 GetRandomPositionInCell(CellData cell)
     {
@@ -622,59 +586,5 @@ public class MapGenerator : MonoBehaviour
         float z = cell.Coordinate.y * cellSize + offsetZ;
 
         return new Vector3(x, cell.Height, z);
-    }
-
-    // >> 
-    private List<CellData> GetAvailableCellList(int level)
-    {
-        List<CellData> availableCellList = new();
-
-        foreach (CellData cell in cellDictionary.Values)
-        {
-            if (cell.Type != CenterType.NONE) continue;
-            if (IsCampFireArea(cell.Coordinate)) continue;
-            if (!IsCellInLevel(cell.Coordinate, level)) continue;
-
-            availableCellList.Add(cell);
-        }
-
-        availableCellList.Sort((a, b) =>
-        {
-            int xCompare = a.Coordinate.x.CompareTo(b.Coordinate.x);
-            return xCompare != 0 ? xCompare : a.Coordinate.y.CompareTo(b.Coordinate.y);
-        });
-
-        return availableCellList;
-    }
-
-    private bool IsCellInLevel(Vector2Int coordinate, int level)
-    {
-        int outerRadius = GetLevelRadius(level);
-
-        if (outerRadius < 0) return false;
-        if (!IsInsideRadius(coordinate, outerRadius)) return false;
-        if (level == 1) return true;
-
-        int innerRadius = GetLevelRadius(level - 1);
-
-        return !IsInsideRadius(coordinate, innerRadius);
-    }
-
-    private bool IsCampFireArea(Vector2Int coordinate)
-    {
-        return Mathf.Abs(coordinate.x) <= 1 && Mathf.Abs(coordinate.y) <= 1;
-    }
-
-    private int GetLevelRadius(int level)
-    {
-        if (levelRadiusList == null) return -1;
-        if (level < 1 || level > levelRadiusList.Count) return -1;
-
-        return levelRadiusList[level - 1];
-    }
-
-    private bool IsInsideRadius(Vector2Int coordinate, int radius)
-    {
-        return coordinate.sqrMagnitude < radius * radius;
     }
 }

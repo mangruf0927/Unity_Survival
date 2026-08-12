@@ -20144,6 +20144,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7786678248769653427, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
+      propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 8836942742256811200, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
       propertyPath: itemRegistry
       value: 
@@ -20156,10 +20160,6 @@ PrefabInstance:
       propertyPath: equippableRegistry
       value: 
       objectReference: {fileID: 523031925}
-    - target: {fileID: 7786678248769653427, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
