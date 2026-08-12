@@ -2,7 +2,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class MapGroundGenerator
+public class GroundGenerator
 {
     private readonly MapGrid mapGrid;
     private readonly Transform mapParent;
@@ -16,7 +16,7 @@ public class MapGroundGenerator
     private readonly float heightStep;
     private readonly int maxHeightStep;
 
-    public MapGroundGenerator(MapGrid mapGrid, Transform mapParent, GameObject groundPrefab,
+    public GroundGenerator(MapGrid mapGrid, Transform mapParent, GameObject groundPrefab,
         int mapRadius, float cellSize, float cellThickness, float noiseScale, float heightStep, int maxHeightStep)
     {
         this.mapGrid = mapGrid;
@@ -30,7 +30,7 @@ public class MapGroundGenerator
         this.maxHeightStep = maxHeightStep;
     }
 
-    public async UniTask GenerateGroundAsync(float noiseOffsetX, float noiseOffsetZ, CancellationToken ct)
+    public async UniTask GenerateAsync(float noiseOffsetX, float noiseOffsetZ, CancellationToken ct)
     {
         if (groundPrefab == null)
         {

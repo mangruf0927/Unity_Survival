@@ -107,14 +107,16 @@ public class MapGenerator : MonoBehaviour
     private System.Random environmentRandom;
 
     private MapGrid mapGrid;
-    private MapGroundGenerator groundGenerator;
+    private GroundGenerator groundGenerator;
+    private EnemySpawnGenerator enemySpawnGenerator;
     private CancellationTokenSource cts;
 
     private void Awake()
     {
         mapGrid = new MapGrid(levelRadiusList);
-        groundGenerator = new MapGroundGenerator(mapGrid, transform, groundPrefab, mapRadius,
+        groundGenerator = new GroundGenerator(mapGrid, transform, groundPrefab, mapRadius,
                                 cellSize, cellThickness, noiseScale, heightStep, maxHeightStep);
+        enemySpawnGenerator = new EnemySpawnGenerator(mapGrid, transform, enemySpawner, levelEnemySpawnInfoList, cellSize);
     }
 
     private void Start()
@@ -134,13 +136,13 @@ public class MapGenerator : MonoBehaviour
     {
         InitializeSeed();
 
-        await groundGenerator.GenerateGroundAsync(noiseOffsetX, noiseOffsetZ, ct);
+        await groundGenerator.GenerateAsync(noiseOffsetX, noiseOffsetZ, ct);
 
         CreateCampFire();
 
         await CreateStructures(ct);
         await CreateItemSpots(ct);
-        await CreateEnemySpawns(ct);
+        await enemySpawnGenerator.GenerateAsync(enemyRandom, ct);
         await CreateEnvironments(ct);
 
         bool isNavMeshReady = await BuildNavMeshAsync(ct);
@@ -374,74 +376,6 @@ public class MapGenerator : MonoBehaviour
         {
             if (door == null) continue;
             objectRegistry.RegisterGenerated(door);
-        }
-    }
-
-    // Enemy 
-    private async UniTask CreateEnemySpawns(CancellationToken ct)
-    {
-        if (levelEnemySpawnInfoList == null || levelEnemySpawnInfoList.Count == 0)
-        {
-            Debug.LogWarning("Level Enemy Spawn List is empty");
-            return;
-        }
-
-        const int enemyPerFrame = 50;
-        int counter = 0;
-
-        foreach (LevelEnemySpawnInfo levelInfo in levelEnemySpawnInfoList)
-        {
-            if (levelInfo == null || levelInfo.spawnEntryList == null) continue;
-
-            GameObject spawnParent = new($"Lv{levelInfo.mapLevel}Spawner");
-            spawnParent.transform.SetParent(transform);
-            spawnParent.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-
-            foreach (EnemySpawnEntry spawnEntry in levelInfo.spawnEntryList)
-            {
-                if (spawnEntry == null || spawnEntry.spawnCount <= 0) continue;
-
-                List<CellData> availableCellList = mapGrid.GetAvailableCells(levelInfo.mapLevel);
-
-                for (int i = 0; i < spawnEntry.spawnCount; i++)
-                {
-                    if (availableCellList.Count == 0)
-                    {
-                        Debug.LogWarning($"Not enough cells. Level: {levelInfo.mapLevel}");
-                        break;
-                    }
-
-                    int randomIndex = enemyRandom.Next(0, availableCellList.Count);
-                    CellData selectedCell = availableCellList[randomIndex];
-                    Vector2Int coordinate = selectedCell.Coordinate;
-
-                    GameObject spawnPointObject;
-
-                    if (spawnEntry.prefab == null)
-                    {
-                        spawnPointObject = new GameObject();
-                        spawnPointObject.transform.SetParent(spawnParent.transform);
-                    }
-                    else
-                    {
-                        spawnPointObject = Instantiate(spawnEntry.prefab, spawnParent.transform);
-                    }
-
-                    Vector3 position = new(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
-                    int rotation = enemyRandom.Next(0, 4) * 90;
-                    spawnPointObject.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
-
-                    enemySpawner.RegisterSpawnPoint(spawnEntry.groupId, spawnEntry.enemyId, levelInfo.mapLevel, spawnEntry.spawnRadius, spawnPointObject.transform);
-
-                    selectedCell.SetCenterType(CenterType.ENEMYSPAWN);
-                    availableCellList.RemoveAt(randomIndex);
-
-                    if (++counter % enemyPerFrame == 0)
-                    {
-                        await UniTask.Yield(PlayerLoopTiming.Update, ct);
-                    }
-                }
-            }
         }
     }
 
