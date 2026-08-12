@@ -109,13 +109,19 @@ public class MapGenerator : MonoBehaviour
     private MapGrid mapGrid;
     private GroundGenerator groundGenerator;
     private EnemySpawnGenerator enemySpawnGenerator;
+    private StructureGenerator structureGenerator;
+    private ItemSpotGenerator itemSpotGenerator;
     private CancellationTokenSource cts;
 
     private void Awake()
     {
         mapGrid = new MapGrid(levelRadiusList);
         groundGenerator = new GroundGenerator(mapGrid, transform, groundPrefab, mapRadius,
-                                cellSize, cellThickness, noiseScale, heightStep, maxHeightStep);
+                                              cellSize, cellThickness, noiseScale, heightStep, maxHeightStep);
+        structureGenerator = new StructureGenerator(mapGrid, transform, structureSpawnEntryList, structureCountList, levelChestSpawnInfoList,
+                                                    itemRegistry, objectRegistry, cellSize, cellThickness, heightStep);
+        itemSpotGenerator = new ItemSpotGenerator(mapGrid, transform, itemSpotCountList, itemSpotPrefabList,
+                                                  itemRegistry, objectRegistry, cellSize);
         enemySpawnGenerator = new EnemySpawnGenerator(mapGrid, transform, enemySpawner, levelEnemySpawnInfoList, cellSize);
     }
 
@@ -140,8 +146,8 @@ public class MapGenerator : MonoBehaviour
 
         CreateCampFire();
 
-        await CreateStructures(ct);
-        await CreateItemSpots(ct);
+        await structureGenerator.GenerateAsync(structureRandom, ct);
+        await itemSpotGenerator.GenerateAsync(itemSpotRandom, ct);
         await enemySpawnGenerator.GenerateAsync(enemyRandom, ct);
         await CreateEnvironments(ct);
 
@@ -210,175 +216,6 @@ public class MapGenerator : MonoBehaviour
         cell.SetCenterType(CenterType.CAMPFIRE);
     }
 
-    // Structure
-    private async UniTask CreateStructures(CancellationToken ct)
-    {
-        GameObject structureParent = new("Structures");
-        structureParent.transform.SetParent(transform);
-
-        const int structuresPerFrame = 10;
-        int counter = 0;
-
-        for (int level = 1; level <= structureCountList.Count; level++)
-        {
-            int count = structureCountList[level - 1];
-
-            for (int i = 0; i < count; i++)
-            {
-                bool placed = false;
-
-                List<CellData> availableCellList = mapGrid.GetAvailableCells(level);
-                if (availableCellList.Count == 0) break;
-
-                for (int attempt = 0; attempt < 50; attempt++)
-                {
-                    int structureIndex = structureRandom.Next(0, structureSpawnEntryList.Count);
-                    StructureSpawnEntry spawnEntry = structureSpawnEntryList[structureIndex];
-
-                    if (spawnEntry == null || spawnEntry.prefab == null || spawnEntry.size.x <= 0 || spawnEntry.size.y <= 0) continue;
-
-                    int cellIndex = structureRandom.Next(0, availableCellList.Count);
-                    CellData selectedCell = availableCellList[cellIndex];
-
-                    List<CellData> structureCellList = mapGrid.GetStructureCells(selectedCell.Coordinate, spawnEntry.size, level);
-                    if (structureCellList == null) continue;
-
-                    PlaceStructure(level, spawnEntry, structureCellList, structureParent.transform);
-                    placed = true;
-                    break;
-                }
-
-                if (!placed)
-                {
-                    Debug.LogWarning($"Failed to place structure. Level: {level}");
-                }
-
-                if (++counter % structuresPerFrame == 0)
-                {
-                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
-                }
-            }
-        }
-    }
-
-    private void PlaceStructure(int level, StructureSpawnEntry entry, List<CellData> cellList, Transform structureParent)
-    {
-        float totalHeight = 0f;
-        Vector3 center = Vector3.zero;
-
-        foreach (CellData cell in cellList)
-        {
-            totalHeight += cell.Height;
-            center += new Vector3(cell.Coordinate.x * cellSize, 0f, cell.Coordinate.y * cellSize);
-        }
-
-        float averageHeight = totalHeight / cellList.Count;
-
-        if (heightStep > 0f) averageHeight = Mathf.Round(averageHeight / heightStep) * heightStep;
-
-        center /= cellList.Count;
-        center.y = averageHeight + entry.offsetY;
-
-        foreach (CellData cell in cellList)
-        {
-            cell.SetHeight(averageHeight, cellThickness);
-            cell.SetCenterType(CenterType.STRUCTURE);
-        }
-
-        GameObject structureObj = Instantiate(entry.prefab, structureParent);
-        int rotation = structureRandom.Next(0, 4) * 90;
-
-        structureObj.transform.SetLocalPositionAndRotation(center, Quaternion.Euler(0f, rotation, 0f));
-
-        if (!structureObj.TryGetComponent(out Structure structure)) return;
-
-        RegisterDoors(structureObj);
-        structure.SpawnItems(structureRandom, itemRegistry);
-
-        GameObject chestPrefab = GetRandomChest(level);
-        structure.SpawnChests(structureRandom, chestPrefab, itemRegistry, objectRegistry);
-    }
-
-    private GameObject GetRandomChest(int level)
-    {
-        LevelChestSpawnInfo levelInfo = levelChestSpawnInfoList[level - 1];
-        List<GameObject> validPrefabList = levelInfo.chestEntryList.FindAll(prefab => prefab != null);
-        if (validPrefabList.Count == 0) return null;
-
-        int index = structureRandom.Next(0, validPrefabList.Count);
-
-        return validPrefabList[index];
-    }
-
-    // ItemSpot
-    private async UniTask CreateItemSpots(CancellationToken ct)
-    {
-        GameObject itemSpotParent = new("ItemSpots");
-        itemSpotParent.transform.SetParent(transform, false);
-
-        const int itemSpotPerFrame = 10;
-        int counter = 0;
-
-        for (int level = 1; level <= itemSpotCountList.Count; level++)
-        {
-            int spawnCount = itemSpotCountList[level - 1];
-            if (spawnCount <= 0) continue;
-
-            List<CellData> availableCellList = mapGrid.GetAvailableCells(level);
-
-            for (int i = 0; i < spawnCount; i++)
-            {
-                if (availableCellList.Count == 0)
-                {
-                    Debug.LogWarning($"Level {level}: Not enough cells to place LootSpot");
-                    break;
-                }
-
-                int index = itemSpotRandom.Next(0, availableCellList.Count);
-                CellData selectedCell = availableCellList[index];
-
-                availableCellList.RemoveAt(index);
-
-                int itemIndex = itemSpotRandom.Next(0, itemSpotPrefabList.Count);
-                ItemSpotSpawnEntry spawnEntry = itemSpotPrefabList[itemIndex];
-
-                GameObject itemSpotObject = Instantiate(spawnEntry.prefab, itemSpotParent.transform);
-
-                Vector2Int coordinate = selectedCell.Coordinate;
-                Vector3 position = new(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
-                int rotation = itemSpotRandom.Next(0, 4) * 90;
-                itemSpotObject.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
-
-                if (!itemSpotObject.TryGetComponent(out ItemSpot itemSpot))
-                {
-                    Debug.LogWarning($"{itemSpotObject.name}: ItemSpot component not found.");
-                    Destroy(itemSpotObject);
-                    continue;
-                }
-
-                RegisterDoors(itemSpotObject);
-                selectedCell.SetCenterType(CenterType.ITEMSPOT);
-                itemSpot.SpawnItem(level, itemSpotRandom, itemRegistry);
-
-                if (++counter % itemSpotPerFrame == 0)
-                {
-                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
-                }
-            }
-        }
-    }
-
-    private void RegisterDoors(GameObject obj)
-    {
-        Door[] doors = obj.GetComponentsInChildren<Door>(true);
-
-        foreach (Door door in doors)
-        {
-            if (door == null) continue;
-            objectRegistry.RegisterGenerated(door);
-        }
-    }
-
     // Environment
     private async UniTask CreateEnvironments(CancellationToken ct)
     {
@@ -440,7 +277,6 @@ public class MapGenerator : MonoBehaviour
             }
         }
     }
-
 
     private Vector3 GetRandomPositionInCell(CellData cell)
     {

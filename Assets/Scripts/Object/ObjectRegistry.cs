@@ -28,14 +28,19 @@ public class ObjectRegistry : MonoBehaviour
         {
             if (root == null) continue;
 
-            WorldObject[] objects = root.GetComponentsInChildren<WorldObject>(true);
+            RegisterGeneratedObjects(root.gameObject);
+        }
+    }
 
-            foreach (WorldObject obj in objects)
-            {
-                if (obj == null) continue;
+    public void RegisterGeneratedObjects(GameObject root)
+    {
+        if (root == null) return;
 
-                RegisterGenerated(obj);
-            }
+        WorldObject[] objects = root.GetComponentsInChildren<WorldObject>(true);
+
+        foreach (WorldObject obj in objects)
+        {
+            RegisterGenerated(obj);
         }
     }
 
