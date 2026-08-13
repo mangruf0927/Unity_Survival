@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 
@@ -11,6 +10,20 @@ public class StructureSpawnEntry
     public GameObject prefab;
     public Vector2Int size = Vector2Int.one;
     public float offsetY;
+}
+
+[System.Serializable]
+public class ItemSpotSpawnEntry
+{
+    public GameObject prefab;
+    public float offsetY;
+}
+
+[System.Serializable]
+public class LevelChestSpawnInfo
+{
+    public int mapLevel;
+    public List<GameObject> chestEntryList;
 }
 
 [System.Serializable]
@@ -24,25 +37,12 @@ public class EnemySpawnEntry
     public float offsetY;
 }
 
-[System.Serializable]
-public class ItemSpotSpawnEntry
-{
-    public GameObject prefab;
-    public float offsetY;
-}
 
 [System.Serializable]
 public class LevelEnemySpawnInfo
 {
     public int mapLevel;
     public List<EnemySpawnEntry> spawnEntryList;
-}
-
-[System.Serializable]
-public class LevelChestSpawnInfo
-{
-    public int mapLevel;
-    public List<GameObject> chestEntryList;
 }
 
 [System.Serializable]
@@ -78,7 +78,6 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private float campFireY;
 
     [Header("구조물")]
-    [FormerlySerializedAs("structureEntryList")]
     [SerializeField] private List<StructureSpawnEntry> structureSpawnEntryList;
     [SerializeField] private List<int> structureCountList;
 
@@ -112,6 +111,7 @@ public class MapGenerator : MonoBehaviour
     private StructureGenerator structureGenerator;
     private ItemSpotGenerator itemSpotGenerator;
     private EnvironmentGenerator environmentGenerator;
+    private NavMeshGenerator navMeshGenerator;
     private CancellationTokenSource cts;
 
     private void Awake()
@@ -125,6 +125,7 @@ public class MapGenerator : MonoBehaviour
                                                   itemRegistry, objectRegistry, cellSize);
         enemySpawnGenerator = new EnemySpawnGenerator(mapGrid, transform, enemySpawner, levelEnemySpawnInfoList, cellSize);
         environmentGenerator = new EnvironmentGenerator(mapGrid, transform, environmentSpawnEntryList, itemRegistry, objectRegistry, cellSize);
+        navMeshGenerator = new NavMeshGenerator(navMeshSurface);
     }
 
     private void Start()
@@ -153,26 +154,8 @@ public class MapGenerator : MonoBehaviour
         await enemySpawnGenerator.GenerateAsync(enemyRandom, ct);
         await environmentGenerator.GenerateAsync(environmentRandom, ct);
 
-        bool isNavMeshReady = await BuildNavMeshAsync(ct);
-        if (isNavMeshReady) enemySpawner.Initialize();
-    }
-
-    private async UniTask<bool> BuildNavMeshAsync(CancellationToken ct)
-    {
-        if (navMeshSurface == null)
-        {
-            Debug.LogWarning("NavMeshSurface is null");
-            return false;
-        }
-
-        if (navMeshSurface.navMeshData == null)
-        {
-            navMeshSurface.BuildNavMesh(); // 최초 1회 초기화
-            return true;
-        }
-
-        await navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData).ToUniTask(cancellationToken: ct);
-        return true;
+        bool isReady = await navMeshGenerator.GenerateAsync(ct);
+        if (isReady) enemySpawner.Initialize();
     }
 
     private void InitializeSeed()

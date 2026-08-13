@@ -30,6 +30,10 @@ public class PlayerEquipment : MonoBehaviour
     {
         playerController = GetComponent<PlayerController>();
         animator = playerController.Animator;
+    }
+
+    private void Start()
+    {
         inventory = inventoryProvider.Inventory;
     }
 
