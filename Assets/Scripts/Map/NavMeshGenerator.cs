@@ -21,13 +21,20 @@ public class NavMeshGenerator
             return false;
         }
 
-        if (navMeshSurface.navMeshData == null)
+        bool isNewData = navMeshSurface.navMeshData == null;
+
+        if (isNewData)
         {
-            navMeshSurface.BuildNavMesh();
-            return !ct.IsCancellationRequested;
+            NavMeshData navMeshData = new(navMeshSurface.agentTypeID)
+            {
+                name = navMeshSurface.gameObject.name
+            };
+            navMeshSurface.navMeshData = navMeshData;
         }
 
-        await navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData).ToUniTask(cancellationToken: ct);
+        bool isCanceled = await navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData).ToUniTask(cancellationToken: ct).SuppressCancellationThrow();
+        if (isCanceled) return false;
+        if (isNewData) navMeshSurface.AddData();
 
         return !ct.IsCancellationRequested;
     }
