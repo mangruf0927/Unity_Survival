@@ -11,7 +11,8 @@ public class PlayerData : IGameData, IValidatable
     public float RotateSpeed { get; set; }
     public float InteractDistance { get; set; }
     public float MaxHunger { get; set; }
-    public int DecreaseInterval { get; set; }
+    public float DecreaseInterval { get; set; }
+    public float RecoveryInterval { get; set; }
 
     public bool Validate()
     {
@@ -66,6 +67,12 @@ public class PlayerData : IGameData, IValidatable
         if (DecreaseInterval <= 0)
         {
             Debug.LogError($"Player DecreaseInterval is invalid. DecreaseInterval: {DecreaseInterval}");
+            return false;
+        }
+
+        if (RecoveryInterval <= 0)
+        {
+            Debug.LogError($"Player RecoveryInterval is invalid. RecoveryInterval: {RecoveryInterval}");
             return false;
         }
 

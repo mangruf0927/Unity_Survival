@@ -18134,8 +18134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0d60b9384b674d43b990def7760ff73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TimeSystem
-  dayTime: 180
-  nightTime: 90
+  dayTime: 10
+  nightTime: 60
 --- !u!4 &2023553406
 Transform:
   m_ObjectHideFlags: 0

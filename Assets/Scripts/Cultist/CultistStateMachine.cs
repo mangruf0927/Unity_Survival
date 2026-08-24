@@ -4,7 +4,7 @@ public class CultistStateMachine : StateMachine<CultistStateEnums, ICultistState
 {
     [SerializeField] private CultistController cultistController;
 
-    protected override CultistStateEnums InitialState => CultistStateEnums.IDLE;
+    protected override CultistStateEnums InitialState => CultistStateEnums.RETURN;
 
     protected override void InitializeStates()
     {
