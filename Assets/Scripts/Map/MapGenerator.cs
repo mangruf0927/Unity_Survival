@@ -83,6 +83,7 @@ public class MapGenerator : MonoBehaviour
 
     [Header("아이템")]
     [SerializeField] private ItemRegistry itemRegistry;
+    [SerializeField] private EquippableRegistry equippableRegistry;
     [SerializeField] private ObjectRegistry objectRegistry;
     [SerializeField] private List<LevelChestSpawnInfo> levelChestSpawnInfoList;
 
@@ -120,7 +121,7 @@ public class MapGenerator : MonoBehaviour
         groundGenerator = new GroundGenerator(mapGrid, transform, groundPrefab, mapRadius,
                                               cellSize, cellThickness, noiseScale, heightStep, maxHeightStep);
         structureGenerator = new StructureGenerator(mapGrid, transform, structureSpawnEntryList, structureCountList, levelChestSpawnInfoList,
-                                                    itemRegistry, objectRegistry, cellSize, cellThickness, heightStep);
+                                                    itemRegistry, equippableRegistry, objectRegistry, cellSize, cellThickness, heightStep);
         itemSpotGenerator = new ItemSpotGenerator(mapGrid, transform, itemSpotCountList, itemSpotPrefabList,
                                                   itemRegistry, objectRegistry, cellSize);
         enemySpawnGenerator = new EnemySpawnGenerator(mapGrid, transform, enemySpawner, levelEnemySpawnInfoList, cellSize);

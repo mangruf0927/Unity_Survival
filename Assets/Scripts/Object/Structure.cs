@@ -58,7 +58,7 @@ public class Structure : MonoBehaviour
         }
     }
 
-    public void SpawnChests(System.Random random, GameObject chestPrefab, ItemRegistry itemRegistry, ObjectRegistry objectRegistry)
+    public void SpawnChests(System.Random random, GameObject chestPrefab, ItemRegistry itemRegistry, EquippableRegistry equippableRegistry, ObjectRegistry objectRegistry)
     {
         int index = random.Next(0, chestSpawnPointList.Count);
         Transform spawnPoint = chestSpawnPointList[index];
@@ -71,7 +71,7 @@ public class Structure : MonoBehaviour
             return;
         }
 
-        chest.Initialize(itemRegistry);
+        chest.Initialize(itemRegistry, equippableRegistry);
         objectRegistry.RegisterGenerated(chest);
     }
 }

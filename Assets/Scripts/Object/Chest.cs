@@ -13,34 +13,15 @@ public class Chest : WorldObject, IInteractable
     [SerializeField] private Transform uiPoint;
 
     private bool isOpened;
+    private EquippableRegistry equippableRegistry;
 
     public float HoldTime => openTime;
     public Vector3 UIPosition => uiPoint != null ? uiPoint.position : transform.position + Vector3.up * 3f;
 
-    public override ObjectSaveData CreateSaveData()
+    public void Initialize(ItemRegistry itemRegistry, EquippableRegistry equippableRegistry)
     {
-        ObjectSaveData data = base.CreateSaveData();
-
-        data.chestSaveData = new ChestSaveData
-        {
-            isOpened = isOpened
-        };
-
-        return data;
-    }
-
-    public override void LoadSaveData(ObjectSaveData data)
-    {
-        base.LoadSaveData(data);
-
-        if (data.chestSaveData == null) return;
-
-        isOpened = data.chestSaveData.isOpened;
-
-        if (isOpened)
-        {
-            ApplyOpenedState();
-        }
+        Initialize(itemRegistry);
+        this.equippableRegistry = equippableRegistry;
     }
 
     public bool CanInteract(PlayerController player)
@@ -68,10 +49,31 @@ public class Chest : WorldObject, IInteractable
 
     private void RandomItem()
     {
-        if (spawnPoint == null || ItemRegistry == null || itemIdList == null || itemIdList.Count == 0) return;
+        if (spawnPoint == null || itemIdList == null || itemIdList.Count == 0) return;
 
-        int idx = Random.Range(0, itemIdList.Count);
-        ItemRegistry.SpawnItem(itemIdList[idx], spawnPoint.position, Quaternion.identity);
+        int index = Random.Range(0, itemIdList.Count);
+        int itemId = itemIdList[index];
+
+        if (equippableRegistry != null)
+        {
+            EquippableItem equippable = equippableRegistry.SpawnItem(itemId, spawnPoint.position, spawnPoint.rotation);
+
+            if (equippable != null)
+            {
+                equippable.Detach();
+                return;
+            }
+        }
+
+        if (ItemRegistry != null)
+        {
+            Item item = ItemRegistry.SpawnItem(itemId, spawnPoint.position, spawnPoint.rotation);
+
+            if (item != null)
+            {
+                return;
+            }
+        }
     }
 
     private void ApplyOpenedState()
@@ -80,5 +82,32 @@ public class Chest : WorldObject, IInteractable
 
         animator.Play(AnimationName, 0, 1f);
         animator.Update(0f);
+    }
+
+    // Save/Load
+    public override ObjectSaveData CreateSaveData()
+    {
+        ObjectSaveData data = base.CreateSaveData();
+
+        data.chestSaveData = new ChestSaveData
+        {
+            isOpened = isOpened
+        };
+
+        return data;
+    }
+
+    public override void LoadSaveData(ObjectSaveData data)
+    {
+        base.LoadSaveData(data);
+
+        if (data.chestSaveData == null) return;
+
+        isOpened = data.chestSaveData.isOpened;
+
+        if (isOpened)
+        {
+            ApplyOpenedState();
+        }
     }
 }

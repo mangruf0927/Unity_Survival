@@ -13,6 +13,7 @@ public class StructureGenerator
     private readonly List<LevelChestSpawnInfo> levelChestSpawnInfoList;
 
     private readonly ItemRegistry itemRegistry;
+    private readonly EquippableRegistry equippableRegistry;
     private readonly ObjectRegistry objectRegistry;
 
     private readonly float cellSize;
@@ -21,7 +22,7 @@ public class StructureGenerator
 
     public StructureGenerator(MapGrid mapGrid, Transform mapParent,
         List<StructureSpawnEntry> spawnEntryList, List<int> structureCountList, List<LevelChestSpawnInfo> levelChestSpawnInfoList,
-        ItemRegistry itemRegistry, ObjectRegistry objectRegistry,
+        ItemRegistry itemRegistry, EquippableRegistry equippableRegistry, ObjectRegistry objectRegistry,
         float cellSize, float cellThickness, float heightStep)
     {
         this.mapGrid = mapGrid;
@@ -30,6 +31,7 @@ public class StructureGenerator
         this.structureCountList = structureCountList;
         this.levelChestSpawnInfoList = levelChestSpawnInfoList;
         this.itemRegistry = itemRegistry;
+        this.equippableRegistry = equippableRegistry;
         this.objectRegistry = objectRegistry;
         this.cellSize = cellSize;
         this.cellThickness = cellThickness;
@@ -121,7 +123,7 @@ public class StructureGenerator
         structure.SpawnItems(random, itemRegistry);
 
         GameObject chestPrefab = GetRandomChest(level, random);
-        structure.SpawnChests(random, chestPrefab, itemRegistry, objectRegistry);
+        structure.SpawnChests(random, chestPrefab, itemRegistry, equippableRegistry, objectRegistry);
     }
 
     private GameObject GetRandomChest(int level, System.Random random)

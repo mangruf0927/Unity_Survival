@@ -6434,7 +6434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa7fd3bd0e9fe459896d5559325e7d28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
-  seed: 12345
+  seed: 227
   useSeed: 1
   noiseScale: 0.3
   heightStep: 1
@@ -6459,6 +6459,7 @@ MonoBehaviour:
     offsetY: -3
   structureCountList: 0000000004000000050000000b00000012000000
   itemRegistry: {fileID: 609733976}
+  equippableRegistry: {fileID: 523031925}
   objectRegistry: {fileID: 1648102914}
   levelChestSpawnInfoList:
   - mapLevel: 1
@@ -6511,8 +6512,8 @@ MonoBehaviour:
       offsetY: 0
   environmentSpawnEntryList:
   - prefab: {fileID: 6868969764276136975, guid: 0eb171792af2c406c8d45f727939fc63, type: 3}
-    minSpawnCount: 500
-    maxSpawnCount: 700
+    minSpawnCount: 800
+    maxSpawnCount: 1000
     maxCountPerCell: 3
     offsetY: 0
   - prefab: {fileID: 661524020498355123, guid: 3e36e8877449d460693efee99e98a572, type: 3}
