@@ -1,6 +1,5 @@
 public abstract class Weapon : EquippableItem
 {
-
     public override void OnEquip(PlayerController player)
     {
         player.SetWeapon(this);

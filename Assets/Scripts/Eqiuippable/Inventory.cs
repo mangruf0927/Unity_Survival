@@ -21,8 +21,6 @@ public class Inventory
 
             if (item != null) item.TryAdd(basicItem.Count);
             else itemList.Add(new InventoryItem(basicItem.Item, basicItem.Count));
-
-            basicItem.Item.gameObject.SetActive(false);
         }
     }
 

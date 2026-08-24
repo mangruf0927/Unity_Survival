@@ -20089,6 +20089,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2116152047647590155, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2154820067646535690, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
       propertyPath: cameraPivot
       value: 
@@ -20097,6 +20101,10 @@ PrefabInstance:
       propertyPath: interactionUI
       value: 
       objectReference: {fileID: 1574028816}
+    - target: {fileID: 3382130407510651937, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4784159813726193031, guid: 3852e58abf0ed4c18a559ff7a168d39c, type: 3}
       propertyPath: timeSystem
       value: 
