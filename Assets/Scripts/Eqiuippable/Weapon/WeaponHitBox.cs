@@ -16,7 +16,7 @@ public class WeaponHitBox : MonoBehaviour
         TreeObject tree = other.GetComponentInParent<TreeObject>();
         if (tree != null)
         {
-            if (weapon.ItemType != ToolType.AXE || weapon.TreeDamage <= 0) return;
+            if (weapon.TreeDamage <= 0) return;
 
             weapon.SetHasHit(true);
             tree.TakeDamage(weapon.TreeDamage);

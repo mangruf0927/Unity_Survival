@@ -66,15 +66,6 @@ public class HUDController : MonoBehaviour
     private void ShowEquippable(EquippableItem item)
     {
         currentItem = null;
-
-        if (currentEquipped != null)
-        {
-            currentHoverEquippable = null;
-            itemHoverUI.HideUI();
-            RefreshItemGuideUI();
-            return;
-        }
-
         currentHoverEquippable = item;
         itemHoverUI.ShowUI(item);
         RefreshItemGuideUI();

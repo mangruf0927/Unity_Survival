@@ -6532,13 +6532,13 @@ MonoBehaviour:
     maxCountPerCell: 1
     offsetY: 0
   - prefab: {fileID: 6222505414781315101, guid: cf0de45c497844092b4a973d5d9865ad, type: 3}
-    minSpawnCount: 300
-    maxSpawnCount: 400
+    minSpawnCount: 700
+    maxSpawnCount: 800
     maxCountPerCell: 1
     offsetY: -0.2
   - prefab: {fileID: 2594399911115001548, guid: bf152595cd9784e1d8e76a3881109113, type: 3}
-    minSpawnCount: 300
-    maxSpawnCount: 400
+    minSpawnCount: 700
+    maxSpawnCount: 800
     maxCountPerCell: 1
     offsetY: -0.2
 --- !u!4 &696880429

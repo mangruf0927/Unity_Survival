@@ -1,4 +1,4 @@
-public enum ToolType { SACK, AXE, SPEAR, REVOLVER, RIFLE, PLACEABLE, RECOVERY }
+// public enum ToolType { SACK, AXE, SPEAR, REVOLVER, RIFLE, PLACEABLE, RECOVERY }
 public enum AmmoType { REVOLVER, RIFLE }
 public enum ItemType { FOOD, FUEL, MATERIAL, AMMO }
 public enum MaterialType { WOOD, IRON }

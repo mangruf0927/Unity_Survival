@@ -2,19 +2,17 @@ using UnityEngine;
 
 public abstract class EquippableItem : MonoBehaviour
 {
-    [SerializeField] private ToolType itemType;
     [SerializeField] private Transform attachPoint;
     [SerializeField] private Sprite itemIcon;
     [SerializeField] private int itemId;
     [SerializeField] private int maxCount = 1;
+    [SerializeField] protected string itemName;
 
     private EquippableRegistry equippableRegistry;
-    protected string itemName;
 
     private Rigidbody rigid;
     private Collider[] colliders;
 
-    public ToolType ItemType => itemType;
     public string ItemName => itemName;
     public Sprite ItemIcon => itemIcon;
     public int ItemId => itemId;
