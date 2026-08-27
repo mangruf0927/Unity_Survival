@@ -4,6 +4,8 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private Transform cameraPivot;
     [SerializeField] private Transform groundCheck;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private LayerMask environmentMask;
 
     private PlayerStats stats;
     private Rigidbody rigid;
@@ -45,7 +47,30 @@ public class PlayerMovement : MonoBehaviour
 
     public bool IsGround()
     {
-        return Physics.CheckSphere(groundCheck.position, 0.3f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore);
+        bool isHit = Physics.SphereCast(groundCheck.position, 0.25f, Vector3.down, out RaycastHit hit, 0.2f, environmentMask, QueryTriggerInteraction.Ignore);
+        if (!isHit) return false;
+
+        return hit.normal.y >= 0.6f;
+        // return Physics.CheckSphere(groundCheck.position, 0.3f, LayerMask.GetMask("Ground"), QueryTriggerInteraction.Ignore);
+    }
+
+    private bool IsWall(Vector3 direction, out Vector3 normal)
+    {
+        normal = Vector3.zero;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.0001f) return false;
+
+        bool isHit = Physics.SphereCast(wallCheck.position, 0.45f, direction.normalized, out RaycastHit hit, 0.15f, environmentMask, QueryTriggerInteraction.Ignore);
+        if (!isHit) return false;
+
+        if (Mathf.Abs(hit.normal.y) >= 0.6f) return false;
+
+        normal = hit.normal;
+        normal.y = 0f;
+        normal.Normalize();
+
+        return normal.sqrMagnitude > 0f;
     }
 
     public void Move()
@@ -54,6 +79,16 @@ public class PlayerMovement : MonoBehaviour
         float speed = isRun ? stats.RunSpeed : stats.MoveSpeed;
 
         Vector3 moveVec = GetCameraDirection(moveDirection);
+
+        if (IsWall(moveVec, out Vector3 wallNormal))
+        {
+            float intoWall = Vector3.Dot(moveVec, wallNormal);
+            if (intoWall < 0f)
+            {
+                moveVec -= wallNormal * intoWall;
+            }
+        }
+
         rigid.linearVelocity = new Vector3(moveVec.x * speed, curVelocity.y, moveVec.z * speed);
     }
 
