@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Unity.Profiling;
 
 public class StructureGenerator
 {
@@ -19,6 +20,8 @@ public class StructureGenerator
     private readonly float cellSize;
     private readonly float cellThickness;
     private readonly float heightStep;
+
+    private static readonly ProfilerMarker GenerateMarker = new("MapGeneration.Structure");
 
     public StructureGenerator(MapGrid mapGrid, Transform mapParent,
         List<StructureSpawnEntry> spawnEntryList, List<int> structureCountList, List<LevelChestSpawnInfo> levelChestSpawnInfoList,
@@ -43,7 +46,7 @@ public class StructureGenerator
         GameObject structureParent = new("Structures");
         structureParent.transform.SetParent(mapParent);
 
-        const int structuresPerFrame = 10;
+        const int structuresPerFrame = 3;
         int counter = 0;
 
         for (int level = 1; level <= structureCountList.Count; level++)
@@ -52,37 +55,40 @@ public class StructureGenerator
 
             for (int i = 0; i < count; i++)
             {
-                bool placed = false;
-
-                List<CellData> availableCellList = mapGrid.GetAvailableCells(level);
-                if (availableCellList.Count == 0) break;
-
-                for (int attempt = 0; attempt < 50; attempt++)
+                using (GenerateMarker.Auto())
                 {
-                    int structureIndex = random.Next(0, spawnEntryList.Count);
-                    StructureSpawnEntry spawnEntry = spawnEntryList[structureIndex];
+                    bool placed = false;
 
-                    if (spawnEntry == null || spawnEntry.prefab == null || spawnEntry.size.x <= 0 || spawnEntry.size.y <= 0) continue;
+                    List<CellData> availableCellList = mapGrid.GetAvailableCells(level);
+                    if (availableCellList.Count == 0) break;
 
-                    int cellIndex = random.Next(0, availableCellList.Count);
-                    CellData selectedCell = availableCellList[cellIndex];
+                    for (int attempt = 0; attempt < 50; attempt++)
+                    {
+                        int structureIndex = random.Next(0, spawnEntryList.Count);
+                        StructureSpawnEntry spawnEntry = spawnEntryList[structureIndex];
 
-                    List<CellData> structureCellList = mapGrid.GetStructureCells(selectedCell.Coordinate, spawnEntry.size, level);
-                    if (structureCellList == null) continue;
+                        if (spawnEntry == null || spawnEntry.prefab == null || spawnEntry.size.x <= 0 || spawnEntry.size.y <= 0) continue;
 
-                    PlaceStructure(level, spawnEntry, structureCellList, structureParent.transform, random);
-                    placed = true;
-                    break;
-                }
+                        int cellIndex = random.Next(0, availableCellList.Count);
+                        CellData selectedCell = availableCellList[cellIndex];
 
-                if (!placed)
-                {
-                    Debug.LogWarning($"Failed to place structure. Level: {level}");
+                        List<CellData> structureCellList = mapGrid.GetStructureCells(selectedCell.Coordinate, spawnEntry.size, level);
+                        if (structureCellList == null) continue;
+
+                        PlaceStructure(level, spawnEntry, structureCellList, structureParent.transform, random);
+                        placed = true;
+                        break;
+                    }
+
+                    if (!placed)
+                    {
+                        Debug.LogWarning($"Failed to place structure. Level: {level}");
+                    }
                 }
 
                 if (++counter % structuresPerFrame == 0)
                 {
-                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                    await UniTask.NextFrame(ct);
                 }
             }
         }

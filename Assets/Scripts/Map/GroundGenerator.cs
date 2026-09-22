@@ -1,6 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Unity.Profiling;
 
 public class GroundGenerator
 {
@@ -15,6 +16,8 @@ public class GroundGenerator
     private readonly float noiseScale;
     private readonly float heightStep;
     private readonly int maxHeightStep;
+
+    private static readonly ProfilerMarker GenerateMarker = new("MapGeneration.Ground");
 
     public GroundGenerator(MapGrid mapGrid, Transform mapParent, GameObject groundPrefab,
         int mapRadius, float cellSize, float cellThickness, float noiseScale, float heightStep, int maxHeightStep)
@@ -43,7 +46,7 @@ public class GroundGenerator
         GameObject parent = new("Grounds");
         parent.transform.SetParent(mapParent);
 
-        const int cellsPerFrame = 100;
+        const int cellsPerFrame = 250;
         int counter = 0;
 
         for (int x = -mapRadius; x <= mapRadius; x++)
@@ -53,12 +56,15 @@ public class GroundGenerator
                 Vector2Int coordinate = new(x, z);
                 if (!mapGrid.IsInsideRadius(coordinate, mapRadius)) continue;
 
-                float height = GetCellHeight(coordinate, noiseOffsetX, noiseOffsetZ);
-                CreateCell(coordinate, height, parent.transform);
+                using (GenerateMarker.Auto())
+                {
+                    float height = GetCellHeight(coordinate, noiseOffsetX, noiseOffsetZ);
+                    CreateCell(coordinate, height, parent.transform);
+                }
 
                 if (++counter % cellsPerFrame == 0)
                 {
-                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                    await UniTask.NextFrame(ct);
                 }
             }
         }

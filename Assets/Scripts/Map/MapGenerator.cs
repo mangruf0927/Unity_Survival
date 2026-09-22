@@ -57,6 +57,9 @@ public class EnvironmentSpawnEntry
 
 public class MapGenerator : MonoBehaviour
 {
+    [Header("플레이어")]
+    [SerializeField] private Transform player;
+
     [SerializeField] private int seed;
     [SerializeField] private bool useSeed;
 
@@ -117,6 +120,8 @@ public class MapGenerator : MonoBehaviour
 
     private void Awake()
     {
+        if (player != null) player.gameObject.SetActive(false);
+
         mapGrid = new MapGrid(levelRadiusList);
         groundGenerator = new GroundGenerator(mapGrid, transform, groundPrefab, mapRadius,
                                               cellSize, cellThickness, noiseScale, heightStep, maxHeightStep);
@@ -156,7 +161,10 @@ public class MapGenerator : MonoBehaviour
         await environmentGenerator.GenerateAsync(environmentRandom, ct);
 
         bool isReady = await navMeshGenerator.GenerateAsync(ct);
-        if (isReady) enemySpawner.Initialize();
+        if (!isReady || ct.IsCancellationRequested) return;
+
+        enemySpawner.Initialize();
+        if (player != null) player.gameObject.SetActive(true);
     }
 
     private void InitializeSeed()

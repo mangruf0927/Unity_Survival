@@ -21,6 +21,11 @@ public class NavMeshGenerator
             return false;
         }
 
+        if (ct.IsCancellationRequested) return false;
+
+        // Include colliders created or moved during map generation.
+        Physics.SyncTransforms();
+
         bool isNewData = navMeshSurface.navMeshData == null;
 
         if (isNewData)
@@ -34,7 +39,7 @@ public class NavMeshGenerator
 
         bool isCanceled = await navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData).ToUniTask(cancellationToken: ct).SuppressCancellationThrow();
         if (isCanceled) return false;
-        if (isNewData) navMeshSurface.AddData();
+        navMeshSurface.AddData();
 
         return !ct.IsCancellationRequested;
     }

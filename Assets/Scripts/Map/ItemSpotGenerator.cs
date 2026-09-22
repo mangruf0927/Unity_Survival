@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Unity.Profiling;
 
 public class ItemSpotGenerator
 {
@@ -12,6 +13,8 @@ public class ItemSpotGenerator
     private readonly ItemRegistry itemRegistry;
     private readonly ObjectRegistry objectRegistry;
     private readonly float cellSize;
+
+    private static readonly ProfilerMarker GenerateMarker = new("MapGeneration.ItemSpot");
 
     public ItemSpotGenerator(MapGrid mapGrid, Transform mapParent, List<int> itemSpotCountList, List<ItemSpotSpawnEntry> itemSpotPrefabList,
         ItemRegistry itemRegistry, ObjectRegistry objectRegistry, float cellSize)
@@ -30,7 +33,7 @@ public class ItemSpotGenerator
         GameObject itemSpotParent = new("ItemSpots");
         itemSpotParent.transform.SetParent(mapParent, false);
 
-        const int itemSpotsPerFrame = 10;
+        const int itemSpotsPerFrame = 25;
         int counter = 0;
 
         for (int level = 1; level <= itemSpotCountList.Count; level++)
@@ -42,42 +45,45 @@ public class ItemSpotGenerator
 
             for (int i = 0; i < spawnCount; i++)
             {
-                if (availableCellList.Count == 0)
+                using (GenerateMarker.Auto())
                 {
-                    Debug.LogWarning($"Level {level}: Not enough cells to place LootSpot");
-                    break;
+                    if (availableCellList.Count == 0)
+                    {
+                        Debug.LogWarning($"Level {level}: Not enough cells to place LootSpot");
+                        break;
+                    }
+
+                    int index = random.Next(0, availableCellList.Count);
+                    CellData selectedCell = availableCellList[index];
+
+                    availableCellList.RemoveAt(index);
+
+                    int itemIndex = random.Next(0, itemSpotPrefabList.Count);
+                    ItemSpotSpawnEntry spawnEntry = itemSpotPrefabList[itemIndex];
+
+                    GameObject itemSpotObject = Object.Instantiate(spawnEntry.prefab, itemSpotParent.transform);
+
+                    Vector2Int coordinate = selectedCell.Coordinate;
+                    Vector3 position = new(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
+
+                    int rotation = random.Next(0, 4) * 90;
+                    itemSpotObject.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
+
+                    if (!itemSpotObject.TryGetComponent(out ItemSpot itemSpot))
+                    {
+                        Debug.LogWarning($"{itemSpotObject.name}: ItemSpot component not found.");
+                        Object.Destroy(itemSpotObject);
+                        continue;
+                    }
+
+                    objectRegistry.RegisterGeneratedObjects(itemSpotObject);
+                    selectedCell.SetCenterType(CenterType.ITEMSPOT);
+                    itemSpot.SpawnItem(level, random, itemRegistry);
                 }
-
-                int index = random.Next(0, availableCellList.Count);
-                CellData selectedCell = availableCellList[index];
-
-                availableCellList.RemoveAt(index);
-
-                int itemIndex = random.Next(0, itemSpotPrefabList.Count);
-                ItemSpotSpawnEntry spawnEntry = itemSpotPrefabList[itemIndex];
-
-                GameObject itemSpotObject = Object.Instantiate(spawnEntry.prefab, itemSpotParent.transform);
-
-                Vector2Int coordinate = selectedCell.Coordinate;
-                Vector3 position = new(coordinate.x * cellSize, selectedCell.Height + spawnEntry.offsetY, coordinate.y * cellSize);
-
-                int rotation = random.Next(0, 4) * 90;
-                itemSpotObject.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
-
-                if (!itemSpotObject.TryGetComponent(out ItemSpot itemSpot))
-                {
-                    Debug.LogWarning($"{itemSpotObject.name}: ItemSpot component not found.");
-                    Object.Destroy(itemSpotObject);
-                    continue;
-                }
-
-                objectRegistry.RegisterGeneratedObjects(itemSpotObject);
-                selectedCell.SetCenterType(CenterType.ITEMSPOT);
-                itemSpot.SpawnItem(level, random, itemRegistry);
 
                 if (++counter % itemSpotsPerFrame == 0)
                 {
-                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                    await UniTask.NextFrame(ct);
                 }
             }
         }

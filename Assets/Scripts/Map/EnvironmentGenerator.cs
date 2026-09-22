@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Unity.Profiling;
 
 public class EnvironmentGenerator
 {
@@ -12,6 +13,7 @@ public class EnvironmentGenerator
     private readonly ObjectRegistry objectRegistry;
     private readonly float cellSize;
 
+    private static readonly ProfilerMarker GenerateMarker = new("MapGeneration.Environment");
 
     public EnvironmentGenerator(MapGrid mapGrid, Transform mapParent, List<EnvironmentSpawnEntry> spawnEntryList,
         ItemRegistry itemRegistry, ObjectRegistry objectRegistry, float cellSize)
@@ -33,7 +35,7 @@ public class EnvironmentGenerator
         GameObject environmentParent = new("Environments");
         environmentParent.transform.SetParent(mapParent, false);
 
-        const int environmentPerFrame = 50;
+        const int environmentPerFrame = 75;
         int counter = 0;
 
         foreach (EnvironmentSpawnEntry entry in spawnEntryList)
@@ -48,39 +50,42 @@ public class EnvironmentGenerator
 
             for (int i = 0; i < spawnCount; i++)
             {
-                if (entryCellList.Count == 0) break;
-
-                int cellIndex = random.Next(0, entryCellList.Count);
-                CellData selectedCell = entryCellList[cellIndex];
-
-                GameObject environment = Object.Instantiate(entry.prefab, environmentParent.transform);
-                WorldObject worldObject = environment.GetComponentInChildren<WorldObject>();
-
-                if (worldObject != null)
+                using (GenerateMarker.Auto())
                 {
-                    worldObject.Initialize(itemRegistry);
-                    objectRegistry.RegisterGenerated(worldObject);
-                }
+                    if (entryCellList.Count == 0) break;
 
-                Vector3 position = GetRandomPositionInCell(random, selectedCell);
-                position.y += entry.offsetY;
+                    int cellIndex = random.Next(0, entryCellList.Count);
+                    CellData selectedCell = entryCellList[cellIndex];
 
-                int rotation = random.Next(0, 4) * 90;
-                environment.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
+                    GameObject environment = Object.Instantiate(entry.prefab, environmentParent.transform);
+                    WorldObject worldObject = environment.GetComponentInChildren<WorldObject>();
 
-                cellCountMap.TryGetValue(selectedCell.Coordinate, out int currentCount);
-                currentCount++;
+                    if (worldObject != null)
+                    {
+                        worldObject.Initialize(itemRegistry);
+                        objectRegistry.RegisterGenerated(worldObject);
+                    }
 
-                cellCountMap[selectedCell.Coordinate] = currentCount;
+                    Vector3 position = GetRandomPositionInCell(random, selectedCell);
+                    position.y += entry.offsetY;
 
-                if (currentCount >= maxCountPerCell)
-                {
-                    entryCellList.RemoveAt(cellIndex);
+                    int rotation = random.Next(0, 4) * 90;
+                    environment.transform.SetLocalPositionAndRotation(position, Quaternion.Euler(0f, rotation, 0f));
+
+                    cellCountMap.TryGetValue(selectedCell.Coordinate, out int currentCount);
+                    currentCount++;
+
+                    cellCountMap[selectedCell.Coordinate] = currentCount;
+
+                    if (currentCount >= maxCountPerCell)
+                    {
+                        entryCellList.RemoveAt(cellIndex);
+                    }
                 }
 
                 if (++counter % environmentPerFrame == 0)
                 {
-                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                    await UniTask.NextFrame(ct);
                 }
             }
         }

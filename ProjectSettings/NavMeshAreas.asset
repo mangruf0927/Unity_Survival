@@ -85,7 +85,7 @@ NavMeshProjectSettings:
     manualTileSize: 0
     tileSize: 256
     buildHeightMesh: 0
-    maxJobWorkers: 0
+    maxJobWorkers: 8
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0

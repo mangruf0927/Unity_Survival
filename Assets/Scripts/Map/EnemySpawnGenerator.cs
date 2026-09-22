@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Unity.Profiling;
 
 public class EnemySpawnGenerator
 {
@@ -10,6 +11,8 @@ public class EnemySpawnGenerator
     private readonly EnemySpawner enemySpawner;
     private readonly List<LevelEnemySpawnInfo> levelSpawnInfoList;
     private readonly float cellSize;
+
+    private static readonly ProfilerMarker GenerateMarker = new("MapGeneration.Enemy");
 
     public EnemySpawnGenerator(MapGrid mapGrid, Transform mapParent, EnemySpawner enemySpawner, List<LevelEnemySpawnInfo> levelSpawnInfoList, float cellSize)
     {
@@ -28,7 +31,7 @@ public class EnemySpawnGenerator
             return;
         }
 
-        const int enemyPerFrame = 50;
+        const int enemyPerFrame = 75;
         int counter = 0;
 
         foreach (LevelEnemySpawnInfo levelInfo in levelSpawnInfoList)
@@ -47,26 +50,29 @@ public class EnemySpawnGenerator
 
                 for (int i = 0; i < spawnEntry.spawnCount; i++)
                 {
-                    if (availableCellList.Count == 0)
+                    using (GenerateMarker.Auto())
                     {
-                        Debug.LogWarning($"Not enough cells. Level: {levelInfo.mapLevel}");
-                        break;
+                        if (availableCellList.Count == 0)
+                        {
+                            Debug.LogWarning($"Not enough cells. Level: {levelInfo.mapLevel}");
+                            break;
+                        }
+
+                        int randomIndex = random.Next(0, availableCellList.Count);
+                        CellData selectedCell = availableCellList[randomIndex];
+
+                        GameObject spawnPointObject = CreateSpawnPoint(spawnEntry.prefab, spawnParent.transform);
+                        SetSpawnPointTransform(spawnPointObject, selectedCell, spawnEntry.offsetY, random);
+
+                        enemySpawner.RegisterSpawnPoint(spawnEntry.groupId, spawnEntry.enemyId, levelInfo.mapLevel, spawnEntry.spawnRadius, spawnPointObject.transform);
+
+                        selectedCell.SetCenterType(CenterType.ENEMYSPAWN);
+                        availableCellList.RemoveAt(randomIndex);
                     }
-
-                    int randomIndex = random.Next(0, availableCellList.Count);
-                    CellData selectedCell = availableCellList[randomIndex];
-
-                    GameObject spawnPointObject = CreateSpawnPoint(spawnEntry.prefab, spawnParent.transform);
-                    SetSpawnPointTransform(spawnPointObject, selectedCell, spawnEntry.offsetY, random);
-
-                    enemySpawner.RegisterSpawnPoint(spawnEntry.groupId, spawnEntry.enemyId, levelInfo.mapLevel, spawnEntry.spawnRadius, spawnPointObject.transform);
-
-                    selectedCell.SetCenterType(CenterType.ENEMYSPAWN);
-                    availableCellList.RemoveAt(randomIndex);
 
                     if (++counter % enemyPerFrame == 0)
                     {
-                        await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                        await UniTask.NextFrame(ct);
                     }
                 }
             }
