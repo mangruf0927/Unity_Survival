@@ -1,0 +1,29 @@
+{
+    "tableName": "SackTable",
+    "records": [
+        {
+            "Id": 2201,
+            "Name": "낡은 자루",
+            "GroupId": 300,
+            "Level": 1,
+            "Capacity": 5,
+            "CanDrop": false
+        },
+        {
+            "Id": 2202,
+            "Name": "좋은 자루",
+            "GroupId": 300,
+            "Level": 2,
+            "Capacity": 15,
+            "CanDrop": false
+        },
+        {
+            "Id": 2203,
+            "Name": "거대한 자루",
+            "GroupId": 300,
+            "Level": 3,
+            "Capacity": 25,
+            "CanDrop": false
+        }
+    ]
+}

@@ -339,4 +339,46 @@ public class EnemySpawner : MonoBehaviour
         }
         aliveEnemyList.Clear();
     }
+
+    [ContextMenu("Spawn 15 Test Enemies")]
+    private void Spawn15TestEnemies()
+    {
+        const int enemyId = 1102;
+        const int count = 15;
+        const float radius = 10f;
+
+        EnemyData data = DataManager.Instance.EnemyTable.Get(enemyId);
+
+        for (int i = 0; i < count; i++)
+        {
+            Vector2 randomCircle = UnityEngine.Random.insideUnitCircle * radius;
+            Vector3 randomPosition = player.position + new Vector3(randomCircle.x, 0f, randomCircle.y);
+
+            if (!NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, radius, NavMesh.AllAreas)) continue;
+
+            GameObject enemy = ObjectPool.Instance.GetFromPool(data.EnemyType, hit.position, Quaternion.identity);
+            if (enemy == null) continue;
+
+            if (enemy.TryGetComponent(out EnemyDropper enemyDropper))
+            {
+                enemyDropper.SetUp(itemDataBase, itemRegistry);
+            }
+
+            EnemyStats enemyStats = enemy.GetComponent<EnemyStats>();
+            EnemyController enemyController = enemy.GetComponent<EnemyController>();
+
+            if (enemyStats == null || enemyController == null)
+            {
+                ObjectPool.Instance.ReturnToPool(enemy, data.EnemyType);
+                continue;
+            }
+
+            enemyController.SetTarget(player);
+            enemyStats.SetHPBarController(hpBarController);
+            enemyStats.SetUp(data);
+            enemyController.ResetState();
+
+            SetDestinationProfiler.StartMeasure();
+        }
+    }
 }

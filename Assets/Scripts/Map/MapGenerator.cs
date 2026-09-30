@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Unity.AI.Navigation;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
-using System.Threading;
+using UnityEngine.AddressableAssets;
 
 [System.Serializable]
 public class StructureSpawnEntry
@@ -37,7 +38,6 @@ public class EnemySpawnEntry
     public float offsetY;
 }
 
-
 [System.Serializable]
 public class LevelEnemySpawnInfo
 {
@@ -71,7 +71,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private List<int> levelRadiusList;
 
     [Header("땅")]
-    [SerializeField] private GameObject groundPrefab;
+    [SerializeField] private AssetReferenceGameObject groundReference;
     [SerializeField] private float cellSize;
     [SerializeField] private float cellThickness;
     [SerializeField] private NavMeshSurface navMeshSurface;
@@ -116,19 +116,20 @@ public class MapGenerator : MonoBehaviour
     private ItemSpotGenerator itemSpotGenerator;
     private EnvironmentGenerator environmentGenerator;
     private NavMeshGenerator navMeshGenerator;
+
     private CancellationTokenSource cts;
+    private AddressableLoader addressableLoader;
 
     private void Awake()
     {
         if (player != null) player.gameObject.SetActive(false);
 
+        addressableLoader = new AddressableLoader();
+
         mapGrid = new MapGrid(levelRadiusList);
-        groundGenerator = new GroundGenerator(mapGrid, transform, groundPrefab, mapRadius,
-                                              cellSize, cellThickness, noiseScale, heightStep, maxHeightStep);
-        structureGenerator = new StructureGenerator(mapGrid, transform, structureSpawnEntryList, structureCountList, levelChestSpawnInfoList,
-                                                    itemRegistry, equippableRegistry, objectRegistry, cellSize, cellThickness, heightStep);
-        itemSpotGenerator = new ItemSpotGenerator(mapGrid, transform, itemSpotCountList, itemSpotPrefabList,
-                                                  itemRegistry, objectRegistry, cellSize);
+
+        structureGenerator = new StructureGenerator(mapGrid, transform, structureSpawnEntryList, structureCountList, levelChestSpawnInfoList, itemRegistry, equippableRegistry, objectRegistry, cellSize, cellThickness, heightStep);
+        itemSpotGenerator = new ItemSpotGenerator(mapGrid, transform, itemSpotCountList, itemSpotPrefabList, itemRegistry, objectRegistry, cellSize);
         enemySpawnGenerator = new EnemySpawnGenerator(mapGrid, transform, enemySpawner, levelEnemySpawnInfoList, cellSize);
         environmentGenerator = new EnvironmentGenerator(mapGrid, transform, environmentSpawnEntryList, itemRegistry, objectRegistry, cellSize);
         navMeshGenerator = new NavMeshGenerator(navMeshSurface);
@@ -145,11 +146,24 @@ public class MapGenerator : MonoBehaviour
         cts?.Cancel();
         cts?.Dispose();
         cts = null;
+
+        addressableLoader?.ReleaseAll();
+    }
+
+    private async UniTask<bool> InitializeAsync(CancellationToken ct)
+    {
+        GameObject groundPrefab = await addressableLoader.LoadPrefabAsync(groundReference, ct);
+        if (groundPrefab == null) return false;
+        groundGenerator = new GroundGenerator(mapGrid, transform, groundPrefab, mapRadius, cellSize, cellThickness, noiseScale, heightStep, maxHeightStep);
+
+        return true;
     }
 
     private async UniTask GenerateMapAsync(CancellationToken ct)
     {
         InitializeSeed();
+
+        if (!await InitializeAsync(ct)) return;
 
         await groundGenerator.GenerateAsync(noiseOffsetX, noiseOffsetZ, ct);
 
@@ -164,6 +178,7 @@ public class MapGenerator : MonoBehaviour
         if (!isReady || ct.IsCancellationRequested) return;
 
         enemySpawner.Initialize();
+
         if (player != null) player.gameObject.SetActive(true);
     }
 
@@ -182,7 +197,6 @@ public class MapGenerator : MonoBehaviour
         environmentRandom = new System.Random(seed + 4);
     }
 
-    // Campfire
     private void CreateCampFire()
     {
         if (campFire == null)

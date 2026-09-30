@@ -1,0 +1,23 @@
+{
+    "tableName": "RangedTable",
+    "records": [
+        {
+            "Id": 2101,
+            "Name": "리볼버",
+            "AmmoType": "REVOLVER",
+            "AttackDamage": 25,
+            "BulletSpeed": 30,
+            "MagSize": 6,
+            "CanDrop": true
+        },
+        {
+            "Id": 2102,
+            "Name": "소총",
+            "AmmoType": "RIFLE",
+            "AttackDamage": 50,
+            "BulletSpeed": 40,
+            "MagSize": 1,
+            "CanDrop": true
+        }
+    ]
+}

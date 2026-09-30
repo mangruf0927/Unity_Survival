@@ -1,0 +1,21 @@
+{
+    "tableName": "CampFireTable",
+    "records": [
+        {
+            "Id": 3001,
+            "MaxLevel": 5,
+            "MaxFuel": 100,
+            "FuelAfterLevelUp": 29,
+            "DecreaseAmount": 1,
+            "DecreaseTimeList": [
+                1,
+                5,
+                10,
+                15,
+                20
+            ],
+            "LevelUpDelay": 10,
+            "WarningThreshold": 20
+        }
+    ]
+}

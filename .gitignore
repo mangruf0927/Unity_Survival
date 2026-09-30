@@ -71,6 +71,10 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-/[Aa]ssets/Resources
+# External assets and prefabs excluded from redistribution
+/[Aa]ssets/[Ee]xternal[Aa]ssets/
+/[Aa]ssets/[Ee]xternal[Aa]ssets.meta
+/[Aa]ssets/[Aa]ddressable[Pp]refab/
+/[Aa]ssets/[Aa]ddressable[Pp]refab.meta
 *.slnx
 *.DS_Store

@@ -1,0 +1,17 @@
+{
+    "tableName": "PlayerTable",
+    "records": [
+        {
+            "Id": 1001,
+            "MaxHp": 100,
+            "MoveSpeed": 7.0,
+            "RunSpeed": 10.0,
+            "JumpForce": 8.0,
+            "RotateSpeed": 6.0,
+            "InteractDistance": 3.0,
+            "MaxHunger": 100.0,
+            "DecreaseInterval": 3,
+            "RecoveryInterval": 2
+        }
+    ]
+}

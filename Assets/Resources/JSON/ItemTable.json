@@ -1,0 +1,173 @@
+{
+    "tableName": "ItemTable",
+    "records": [
+        {
+            "Id": 4001,
+            "Name": "통나무",
+            "Value": 1,
+            "ItemType": "FUEL",
+            "ItemProperty": "MATERIAL",
+            "FuelData": {
+                "BurnPowerList": [
+                    22,
+                    11,
+                    3,
+                    1,
+                    0.5
+                ]
+            },
+            "MaterialData": {
+                "GrindCount": 1,
+                "Type": "WOOD"
+            }
+        },
+        {
+            "Id": 4002,
+            "Name": "석탄",
+            "Value": 2,
+            "ItemType": "FUEL",
+            "ItemProperty": "NONE",
+            "FuelData": {
+                "BurnPowerList": [
+                    98,
+                    56,
+                    13,
+                    4,
+                    2
+                ]
+            }
+        },
+        {
+            "Id": 4003,
+            "Name": "연료 캐니스터",
+            "Value": 3,
+            "ItemType": "FUEL",
+            "ItemProperty": "NONE",
+            "FuelData": {
+                "BurnPowerList": [
+                    150,
+                    99,
+                    39,
+                    12,
+                    8
+                ]
+            }
+        },
+        {
+            "Id": 4101,
+            "Name": "볼트",
+            "Value": 1,
+            "ItemType": "MATERIAL",
+            "ItemProperty": "MATERIAL",
+            "MaterialData": {
+                "GrindCount": 1,
+                "Type": "IRON"
+            }
+        },
+        {
+            "Id": 4102,
+            "Name": "낡은 라디오",
+            "Value": 2,
+            "ItemType": "MATERIAL",
+            "ItemProperty": "MATERIAL",
+            "MaterialData": {
+                "GrindCount": 3,
+                "Type": "IRON"
+            }
+        },
+        {
+            "Id": 4201,
+            "Name": "스테이크",
+            "Value": 1,
+            "ItemType": "FOOD",
+            "ItemProperty": "COOKABLE",
+            "FoodData": {
+                "HungerAmount": 15,
+                "HpAmount": -5,
+                "NeedCook": true
+            }
+        },
+        {
+            "Id": 4202,
+            "Name": "익힌 스테이크",
+            "Value": 2,
+            "ItemType": "FOOD",
+            "ItemProperty": "COOKABLE",
+            "FoodData": {
+                "HungerAmount": 20,
+                "HpAmount": 0,
+                "NeedCook": false
+            }
+        },
+        {
+            "Id": 4203,
+            "Name": "케이크",
+            "Value": 2,
+            "ItemType": "FOOD",
+            "ItemProperty": "NONE",
+            "FoodData": {
+                "HungerAmount": 15,
+                "HpAmount": 15,
+                "NeedCook": false
+            }
+        },
+        {
+            "Id": 4204,
+            "Name": "당근",
+            "Value": 1,
+            "ItemType": "FOOD",
+            "ItemProperty": "NONE",
+            "FoodData": {
+                "HungerAmount": 5,
+                "HpAmount": 0,
+                "NeedCook": false
+            }
+        },
+        {
+            "Id": 4205,
+            "Name": "작은 고기",
+            "Value": 1,
+            "ItemType": "FOOD",
+            "ItemProperty": "NONE",
+            "FoodData": {
+                "HungerAmount": 10,
+                "HpAmount": -5,
+                "NeedCook": true
+            }
+        },
+        {
+            "Id": 4206,
+            "Name": "익힌 작은 고기",
+            "Value": 2,
+            "ItemType": "FOOD",
+            "ItemProperty": "NONE",
+            "FoodData": {
+                "HungerAmount": 15,
+                "HpAmount": 0,
+                "NeedCook": false
+            }
+        },
+        {
+            "Id": 4301,
+            "Name": "리볼버 탄약",
+            "Value": 0,
+            "ItemType": "AMMO",
+            "ItemProperty": "NONE",
+            "AmmoData": {
+                "AmmoType": "REVOLVER",
+                "Amount": 6
+            }
+        },
+        {
+            "Id": 4302,
+            "Name": "소총 탄약",
+            "Value": 0,
+            "ItemType": "AMMO",
+            "ItemProperty": "NONE",
+            "AmmoData": {
+                "AmmoType": "RIFLE",
+                "Amount": 6
+            }
+        }
+    ]
+}

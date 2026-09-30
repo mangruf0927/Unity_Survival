@@ -72,6 +72,7 @@ public class EnemyMovement : MonoBehaviour
         if (!NavMesh.SamplePosition(position, out NavMeshHit hit, searchRange, navMesh.areaMask)) return false;
 
         navMesh.isStopped = false;
+        SetDestinationProfiler.Record();
         return navMesh.SetDestination(hit.position);
     }
 

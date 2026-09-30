@@ -1,5 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 public class EnemyChaseState : IEnemyState
 {
@@ -27,7 +28,7 @@ public class EnemyChaseState : IEnemyState
         {
             enemyController.Chase();
 
-            bool canceled = await UniTask.Delay(200, cancellationToken: ct).SuppressCancellationThrow();
+            bool canceled = await UniTask.Delay(100, cancellationToken: ct).SuppressCancellationThrow();
 
             if (canceled) return;
         }

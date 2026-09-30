@@ -1,0 +1,25 @@
+{
+    "tableName": "CultistTable",
+    "records": [
+        {
+            "Id": 1201,
+            "MaxHp": 125,
+            "ScanRange": 30.0,
+            "MaxRaidCenterDistance": 20.0,
+            "ReturnDistance": 7.0,
+            "ReturnSearchRange": 5.0,
+            "AlertDuration": 10.0,
+            "CultistType": "MELEE_CULTIST"
+        },
+        {
+            "Id": 1202,
+            "MaxHp": 100,
+            "ScanRange": 30.0,
+            "MaxRaidCenterDistance": 20.0,
+            "ReturnDistance": 7.0,
+            "ReturnSearchRange": 5.0,
+            "AlertDuration": 10.0,
+            "CultistType": "RANGED_CULTIST"
+        }
+    ]
+}

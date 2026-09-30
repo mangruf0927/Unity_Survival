@@ -1,0 +1,49 @@
+{
+    "tableName": "EnemyTable",
+    "records": [
+        {
+            "Id": 1101,
+            "Name": "Rabbit",
+            "MaxHp": 45,
+            "AttackDamage": 0,
+            "ScanRange": 8.0,
+            "CanChase": false,
+            "PatrolRange": 5.0,
+            "AlertDuration": 10.0,
+            "EnemyType": "RABBIT"
+        },
+        {
+            "Id": 1102,
+            "Name": "Wolf",
+            "MaxHp": 75,
+            "AttackDamage": 20,
+            "ScanRange": 15.0,
+            "CanChase": true,
+            "PatrolRange": 10.0,
+            "AlertDuration": 10.0,
+            "EnemyType": "WOLF"
+        },
+        {
+            "Id": 1103,
+            "Name": "AlphaWolf",
+            "MaxHp": 125,
+            "AttackDamage": 25,
+            "ScanRange": 24.0,
+            "CanChase": true,
+            "PatrolRange": 10.0,
+            "AlertDuration": 10.0,
+            "EnemyType": "ALPHAWOLF"
+        },
+        {
+            "Id": 1104,
+            "Name": "Bear",
+            "MaxHp": 100,
+            "AttackDamage": 40,
+            "ScanRange": 17.0,
+            "CanChase": true,
+            "PatrolRange": 8.0,
+            "AlertDuration": 10.0,
+            "EnemyType": "BEAR"
+        }
+    ]
+}
