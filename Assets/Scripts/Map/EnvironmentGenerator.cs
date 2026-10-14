@@ -29,6 +29,8 @@ public class EnvironmentGenerator
 
     public async UniTask GenerateAsync(System.Random random, CancellationToken ct)
     {
+        if (spawnEntryList == null) return;
+
         List<CellData> availableCellList = mapGrid.GetEnvironmentCells();
         if (availableCellList.Count == 0) return;
 
@@ -40,6 +42,8 @@ public class EnvironmentGenerator
 
         foreach (EnvironmentSpawnEntry entry in spawnEntryList)
         {
+            if (entry == null) continue;
+
             int minCount = Mathf.Max(0, entry.minSpawnCount);
             int maxCount = Mathf.Max(minCount, entry.maxSpawnCount);
             int maxCountPerCell = Mathf.Max(1, entry.maxCountPerCell);

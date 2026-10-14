@@ -28,13 +28,19 @@ public class TimeSystem : MonoBehaviour, ISubject
 
     public event Action<Phase, int> OnPhaseChanged;
 
-    private void Start()
+    private bool isRunning;
+
+    public void StartTimer()
     {
+        if (isRunning) return;
         SetPhase(Phase.DAY);
+        isRunning = true;
     }
 
     private void Update()
     {
+        if (!isRunning) return;
+
         timeElapsed -= Time.deltaTime;
 
         if (timeElapsed <= 0f)

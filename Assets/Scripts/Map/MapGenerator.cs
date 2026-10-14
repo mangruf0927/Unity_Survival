@@ -8,23 +8,30 @@ using UnityEngine.AddressableAssets;
 [System.Serializable]
 public class StructureSpawnEntry
 {
-    public GameObject prefab;
+    public AssetReferenceGameObject prefabReference;
     public Vector2Int size = Vector2Int.one;
     public float offsetY;
+
+    [System.NonSerialized]
+    public GameObject prefab;
 }
 
 [System.Serializable]
 public class ItemSpotSpawnEntry
 {
-    public GameObject prefab;
+    public AssetReferenceGameObject prefabReference;
     public float offsetY;
+
+    [System.NonSerialized] public GameObject prefab;
 }
 
 [System.Serializable]
 public class LevelChestSpawnInfo
 {
     public int mapLevel;
-    public List<GameObject> chestEntryList;
+    public List<AssetReferenceGameObject> chestReferences;
+
+    [System.NonSerialized] public List<GameObject> chestEntryList = new();
 }
 
 [System.Serializable]
@@ -34,8 +41,10 @@ public class EnemySpawnEntry
     public int enemyId;
     public int spawnCount;
     public float spawnRadius;
-    public GameObject prefab;
+    public AssetReferenceGameObject prefabReference;
     public float offsetY;
+
+    [System.NonSerialized] public GameObject prefab;
 }
 
 [System.Serializable]
@@ -48,11 +57,13 @@ public class LevelEnemySpawnInfo
 [System.Serializable]
 public class EnvironmentSpawnEntry
 {
-    public GameObject prefab;
+    public AssetReferenceGameObject prefabReference;
     public int minSpawnCount;
     public int maxSpawnCount;
     public int maxCountPerCell;
     public float offsetY;
+
+    [System.NonSerialized] public GameObject prefab;
 }
 
 public class MapGenerator : MonoBehaviour
@@ -117,7 +128,7 @@ public class MapGenerator : MonoBehaviour
     private EnvironmentGenerator environmentGenerator;
     private NavMeshGenerator navMeshGenerator;
 
-    private CancellationTokenSource cts;
+    private GameObject groundPrefab;
     private AddressableLoader addressableLoader;
 
     private void Awake()
@@ -125,61 +136,193 @@ public class MapGenerator : MonoBehaviour
         if (player != null) player.gameObject.SetActive(false);
 
         addressableLoader = new AddressableLoader();
-
         mapGrid = new MapGrid(levelRadiusList);
-
-        structureGenerator = new StructureGenerator(mapGrid, transform, structureSpawnEntryList, structureCountList, levelChestSpawnInfoList, itemRegistry, equippableRegistry, objectRegistry, cellSize, cellThickness, heightStep);
-        itemSpotGenerator = new ItemSpotGenerator(mapGrid, transform, itemSpotCountList, itemSpotPrefabList, itemRegistry, objectRegistry, cellSize);
-        enemySpawnGenerator = new EnemySpawnGenerator(mapGrid, transform, enemySpawner, levelEnemySpawnInfoList, cellSize);
-        environmentGenerator = new EnvironmentGenerator(mapGrid, transform, environmentSpawnEntryList, itemRegistry, objectRegistry, cellSize);
         navMeshGenerator = new NavMeshGenerator(navMeshSurface);
-    }
-
-    private void Start()
-    {
-        cts = new CancellationTokenSource();
-        GenerateMapAsync(cts.Token).Forget();
     }
 
     private void OnDestroy()
     {
-        cts?.Cancel();
-        cts?.Dispose();
-        cts = null;
-
         addressableLoader?.ReleaseAll();
     }
 
     private async UniTask<bool> InitializeAsync(CancellationToken ct)
     {
-        GameObject groundPrefab = await addressableLoader.LoadPrefabAsync(groundReference, ct);
-        if (groundPrefab == null) return false;
+        var groundTask = LoadGroundAsync(ct);
+        var structureTask = LoadStructuresAsync(ct);
+        var chestTask = LoadChestsAsync(ct);
+        var itemSpotTask = LoadItemSpotsAsync(ct);
+        var enemyTask = LoadEnemiesAsync(ct);
+        var environmentTask = LoadEnvironmentsAsync(ct);
+
+        var (ground, structure, chest, itemSpot, enemy, environment) = await UniTask.WhenAll(groundTask, structureTask, chestTask, itemSpotTask, enemyTask, environmentTask);
+        if (!ground || !structure || !chest || !itemSpot || !enemy || !environment) return false;
+
         groundGenerator = new GroundGenerator(mapGrid, transform, groundPrefab, mapRadius, cellSize, cellThickness, noiseScale, heightStep, maxHeightStep);
+        structureGenerator = new StructureGenerator(mapGrid, transform, structureSpawnEntryList, structureCountList, levelChestSpawnInfoList, itemRegistry, equippableRegistry, objectRegistry, cellSize, cellThickness, heightStep);
+        itemSpotGenerator = new ItemSpotGenerator(mapGrid, transform, itemSpotCountList, itemSpotPrefabList, itemRegistry, objectRegistry, cellSize);
+        enemySpawnGenerator = new EnemySpawnGenerator(mapGrid, transform, enemySpawner, levelEnemySpawnInfoList, cellSize);
+        environmentGenerator = new EnvironmentGenerator(mapGrid, transform, environmentSpawnEntryList, itemRegistry, objectRegistry, cellSize);
 
         return true;
     }
 
-    private async UniTask GenerateMapAsync(CancellationToken ct)
+    private async UniTask<bool> LoadGroundAsync(CancellationToken ct)
+    {
+        groundPrefab = await addressableLoader.LoadPrefabAsync(groundReference, ct);
+        return groundPrefab != null;
+    }
+
+    private async UniTask<bool> LoadStructuresAsync(CancellationToken ct)
+    {
+        foreach (var entry in structureSpawnEntryList)
+        {
+            if (entry == null) continue;
+            entry.prefab = await addressableLoader.LoadPrefabAsync(entry.prefabReference, ct);
+            if (entry.prefab == null) return false;
+        }
+        return true;
+    }
+
+    private async UniTask<bool> LoadChestsAsync(CancellationToken ct)
+    {
+        if (levelChestSpawnInfoList == null) return true;
+
+        Dictionary<string, UniTask<GameObject>> loadTasks = new();
+
+        foreach (var levelInfo in levelChestSpawnInfoList)
+        {
+            if (levelInfo?.chestReferences == null) continue;
+
+            foreach (var reference in levelInfo.chestReferences)
+            {
+                if (reference == null || string.IsNullOrEmpty(reference.AssetGUID)) continue;
+                if (!loadTasks.ContainsKey(reference.AssetGUID)) loadTasks.Add(reference.AssetGUID, addressableLoader.LoadPrefabAsync(reference, ct));
+            }
+        }
+
+        Dictionary<string, GameObject> loadedChests = new();
+
+        foreach (var pair in loadTasks)
+        {
+            GameObject prefab = await pair.Value;
+            if (prefab == null) return false;
+            loadedChests.Add(pair.Key, prefab);
+        }
+
+        foreach (var levelInfo in levelChestSpawnInfoList)
+        {
+            if (levelInfo == null) continue;
+
+            levelInfo.chestEntryList = new List<GameObject>();
+            if (levelInfo.chestReferences == null) continue;
+
+            foreach (var reference in levelInfo.chestReferences)
+            {
+                if (reference == null || string.IsNullOrEmpty(reference.AssetGUID)) continue;
+                if (loadedChests.TryGetValue(reference.AssetGUID, out var prefab)) levelInfo.chestEntryList.Add(prefab);
+            }
+        }
+        return true;
+    }
+
+    private async UniTask<bool> LoadItemSpotsAsync(CancellationToken ct)
+    {
+        foreach (var spot in itemSpotPrefabList)
+        {
+            if (spot == null) continue;
+            spot.prefab = await addressableLoader.LoadPrefabAsync(spot.prefabReference, ct);
+            if (spot.prefab == null) return false;
+        }
+        return true;
+    }
+
+    private async UniTask<bool> LoadEnemiesAsync(CancellationToken ct)
+    {
+        if (levelEnemySpawnInfoList == null) return true;
+
+        Dictionary<string, UniTask<GameObject>> loadTasks = new();
+        foreach (var levelInfo in levelEnemySpawnInfoList)
+        {
+            if (levelInfo?.spawnEntryList == null) continue;
+
+            foreach (var entry in levelInfo.spawnEntryList)
+            {
+                if (entry == null || entry.spawnCount <= 0) continue;
+                if (entry.prefabReference == null || string.IsNullOrEmpty(entry.prefabReference.AssetGUID)) continue;
+
+                string key = entry.prefabReference.AssetGUID;
+                if (!loadTasks.ContainsKey(key)) loadTasks.Add(key, addressableLoader.LoadPrefabAsync(entry.prefabReference, ct));
+            }
+        }
+
+        Dictionary<string, GameObject> loadedEnemies = new();
+        foreach (var pair in loadTasks)
+        {
+            GameObject prefab = await pair.Value;
+            if (prefab == null) return false;
+            loadedEnemies.Add(pair.Key, prefab);
+        }
+
+        foreach (var levelInfo in levelEnemySpawnInfoList)
+        {
+            if (levelInfo?.spawnEntryList == null) continue;
+
+            foreach (var entry in levelInfo.spawnEntryList)
+            {
+                if (entry == null || entry.spawnCount <= 0) continue;
+                if (entry.prefabReference == null || string.IsNullOrEmpty(entry.prefabReference.AssetGUID)) continue;
+                if (loadedEnemies.TryGetValue(entry.prefabReference.AssetGUID, out var prefab)) entry.prefab = prefab;
+            }
+        }
+        return true;
+    }
+
+    private async UniTask<bool> LoadEnvironmentsAsync(CancellationToken ct)
+    {
+        foreach (var entry in environmentSpawnEntryList)
+        {
+            if (entry == null) continue;
+            entry.prefab = await addressableLoader.LoadPrefabAsync(entry.prefabReference, ct);
+            if (entry.prefab == null) return false;
+        }
+        return true;
+    }
+
+    public async UniTask GenerateMapAsync(System.Action<float> onProgress, CancellationToken ct)
     {
         InitializeSeed();
+        if (!await InitializeAsync(ct)) throw new System.InvalidOperationException("맵 리소스 로드 실패");
 
-        if (!await InitializeAsync(ct)) return;
-
+        onProgress?.Invoke(0.45f);
+        await UniTask.NextFrame(ct);
         await groundGenerator.GenerateAsync(noiseOffsetX, noiseOffsetZ, ct);
-
         CreateCampFire();
-
+        onProgress?.Invoke(0.60f);
+        await UniTask.NextFrame(ct);
         await structureGenerator.GenerateAsync(structureRandom, ct);
+        onProgress?.Invoke(0.70f);
+        await UniTask.NextFrame(ct);
         await itemSpotGenerator.GenerateAsync(itemSpotRandom, ct);
+        onProgress?.Invoke(0.75f);
+        await UniTask.NextFrame(ct);
         await enemySpawnGenerator.GenerateAsync(enemyRandom, ct);
+        onProgress?.Invoke(0.80f);
+        await UniTask.NextFrame(ct);
         await environmentGenerator.GenerateAsync(environmentRandom, ct);
 
+        onProgress?.Invoke(0.90f);
+        await UniTask.NextFrame(ct);
         bool isReady = await navMeshGenerator.GenerateAsync(ct);
-        if (!isReady || ct.IsCancellationRequested) return;
 
-        enemySpawner.Initialize();
+        ct.ThrowIfCancellationRequested();
+        if (!isReady) throw new System.InvalidOperationException("NavMesh 생성 실패");
+        onProgress?.Invoke(1f);
+    }
 
+    public void ActivateWorld()
+    {
         if (player != null) player.gameObject.SetActive(true);
+        enemySpawner.Initialize();
     }
 
     private void InitializeSeed()

@@ -22,12 +22,6 @@ public class DataManager
     private readonly DataTableValidator validator = new();
     private readonly Dictionary<string, Action<JToken>> tableLoaderDictionary = new();
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void InitializeBeforeSceneLoad()
-    {
-        Instance.LoadAll();
-    }
-
     private DataManager()
     {
         tableLoaderDictionary.Add("EnemyTable", records => EnemyTable.LoadFromToken(records));
@@ -53,7 +47,7 @@ public class DataManager
 
         if (!validator.Validate())
         {
-            Debug.LogError("DataTable validation failed");
+            throw new InvalidOperationException("DataTable validation failed");
         }
 
         IsLoaded = true;
@@ -97,55 +91,3 @@ public class DataManager
         loader.Invoke(baseData.records);
     }
 }
-
-// 데이터 매니저 로드를 RunTimeInitializeOnLoadMethod 기반으로 하면 좋을 것 같다.
-// 씬 로드전에 데이터 매니저의 세팅을 보장할 수 있기 때문에 WaitUntilLoaded라는 보일러 플레이트가 없어짐
-
-/*
-using Newtonsoft.Json;
-
-Console.WriteLine("Hello, World!");
-
-string jsonText = @"{
-  ""TableName"" : ""EquipmentTable"",
-  ""Records"": [
-    {
-      ""Id"": 1,
-      ""Name"": ""칼""
-    },
-    {
-      ""Id"": 2,
-      ""Name"": ""긴칼""
-    },
-    {
-      ""Id"": 3,
-      ""Name"": ""짧은칼""
-    }
-  ]
-}";
-
-
-var json = JsonConvert.DeserializeObject<BaseGameData>(jsonText);
-Console.WriteLine(json.TableName);
-
-// json
-
-public class BaseGameData
-{
-    public string TableName { get; set; }
-    public List<EquipmentData>  Records { get; set; }
-}
-
-
-public class EquipmentData : IGameData
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-}
-
-interface IGameData
-{
-    public int Id { get; set; }
-}
-
-*/

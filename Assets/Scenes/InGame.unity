@@ -1911,7 +1911,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &179897117
 Transform:
   m_ObjectHideFlags: 0
@@ -6530,13 +6530,28 @@ MonoBehaviour:
   campFire: {fileID: 370338873}
   campFireY: -0.4
   structureSpawnEntryList:
-  - prefab: {fileID: 6662929519143788297, guid: d4af1ca2e8dad4d9eac839ac89cf9e91, type: 3}
+  - prefabReference:
+      m_AssetGUID: d4af1ca2e8dad4d9eac839ac89cf9e91
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     size: {x: 1, y: 1}
     offsetY: -0.5
-  - prefab: {fileID: 7488217836835588314, guid: a64e03eaa29864a5285994b7cea019d3, type: 3}
+  - prefabReference:
+      m_AssetGUID: a64e03eaa29864a5285994b7cea019d3
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     size: {x: 2, y: 2}
     offsetY: -0.5
-  - prefab: {fileID: 6773230448351645279, guid: 1ed0e8e0e8be04077b9f159906a3e659, type: 3}
+  - prefabReference:
+      m_AssetGUID: 1ed0e8e0e8be04077b9f159906a3e659
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1
     size: {x: 2, y: 2}
     offsetY: -3
   structureCountList: 0000000004000000050000000b00000012000000
@@ -6545,28 +6560,64 @@ MonoBehaviour:
   objectRegistry: {fileID: 1648102914}
   levelChestSpawnInfoList:
   - mapLevel: 1
-    chestEntryList: []
+    chestReferences: []
   - mapLevel: 2
-    chestEntryList:
-    - {fileID: 4918369992541344319, guid: d43bb0f3f563b43e7b73480b9c20560b, type: 3}
+    chestReferences:
+    - m_AssetGUID: d43bb0f3f563b43e7b73480b9c20560b
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
   - mapLevel: 3
-    chestEntryList:
-    - {fileID: 5360605784955599650, guid: 0219d9ec14e6b4a138b479bc21d69140, type: 3}
+    chestReferences:
+    - m_AssetGUID: 0219d9ec14e6b4a138b479bc21d69140
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
   - mapLevel: 4
-    chestEntryList:
-    - {fileID: 5360605784955599650, guid: 0219d9ec14e6b4a138b479bc21d69140, type: 3}
+    chestReferences:
+    - m_AssetGUID: 0219d9ec14e6b4a138b479bc21d69140
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
   - mapLevel: 5
-    chestEntryList:
-    - {fileID: 7905291230436623471, guid: 9639b551d5aaa42d5a1bcffc89273533, type: 3}
+    chestReferences:
+    - m_AssetGUID: 9639b551d5aaa42d5a1bcffc89273533
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
   itemSpotCountList: 01000000050000000a0000000f00000014000000
   itemSpotPrefabList:
-  - prefab: {fileID: 6730797194382267388, guid: 8ee7bebfdd19540feb754bf728e39114, type: 3}
+  - prefabReference:
+      m_AssetGUID: 8ee7bebfdd19540feb754bf728e39114
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     offsetY: 0
-  - prefab: {fileID: 5429134858055333658, guid: 4a0c95caf3e704744a19c1dc4f7d5983, type: 3}
+  - prefabReference:
+      m_AssetGUID: 4a0c95caf3e704744a19c1dc4f7d5983
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     offsetY: 0
-  - prefab: {fileID: 1020299759545629356, guid: f987a496e38f34218a4cd79fdb534da7, type: 3}
+  - prefabReference:
+      m_AssetGUID: f987a496e38f34218a4cd79fdb534da7
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     offsetY: 0
-  - prefab: {fileID: 704697516798052849, guid: 5bda401759b114b449354adc1042d258, type: 3}
+  - prefabReference:
+      m_AssetGUID: 5bda401759b114b449354adc1042d258
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 1
     offsetY: 0
   enemySpawner: {fileID: 1367383879}
   levelEnemySpawnInfoList:
@@ -6576,7 +6627,12 @@ MonoBehaviour:
       enemyId: 1101
       spawnCount: 6
       spawnRadius: 4
-      prefab: {fileID: 5046797994872184510, guid: 87346703e0c8643fd95a186016d508dc, type: 3}
+      prefabReference:
+        m_AssetGUID: f53d7d4ab6f44422793c548797083e16
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
+        m_EditorAssetChanged: 0
       offsetY: -0.5
   - mapLevel: 2
     spawnEntryList:
@@ -6584,13 +6640,23 @@ MonoBehaviour:
       enemyId: 1101
       spawnCount: 10
       spawnRadius: 4
-      prefab: {fileID: 5046797994872184510, guid: 87346703e0c8643fd95a186016d508dc, type: 3}
+      prefabReference:
+        m_AssetGUID: f53d7d4ab6f44422793c548797083e16
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
+        m_EditorAssetChanged: 0
       offsetY: -0.5
     - groupId: 202
       enemyId: 1102
       spawnCount: 15
       spawnRadius: 4
-      prefab: {fileID: 0}
+      prefabReference:
+        m_AssetGUID: 
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
+        m_EditorAssetChanged: 0
       offsetY: 0
   - mapLevel: 3
     spawnEntryList:
@@ -6598,7 +6664,12 @@ MonoBehaviour:
       enemyId: 1102
       spawnCount: 20
       spawnRadius: 4
-      prefab: {fileID: 0}
+      prefabReference:
+        m_AssetGUID: 
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
+        m_EditorAssetChanged: 0
       offsetY: 0
   - mapLevel: 4
     spawnEntryList:
@@ -6606,13 +6677,23 @@ MonoBehaviour:
       enemyId: 1102
       spawnCount: 20
       spawnRadius: 4
-      prefab: {fileID: 5046797994872184510, guid: 87346703e0c8643fd95a186016d508dc, type: 3}
+      prefabReference:
+        m_AssetGUID: f53d7d4ab6f44422793c548797083e16
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
+        m_EditorAssetChanged: 0
       offsetY: -0.5
     - groupId: 402
       enemyId: 1103
       spawnCount: 30
       spawnRadius: 4
-      prefab: {fileID: 0}
+      prefabReference:
+        m_AssetGUID: 
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
+        m_EditorAssetChanged: 0
       offsetY: 0
   - mapLevel: 5
     spawnEntryList:
@@ -6620,41 +6701,81 @@ MonoBehaviour:
       enemyId: 1103
       spawnCount: 20
       spawnRadius: 4
-      prefab: {fileID: 0}
+      prefabReference:
+        m_AssetGUID: 
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
+        m_EditorAssetChanged: 0
       offsetY: 0
     - groupId: 502
       enemyId: 1104
       spawnCount: 25
       spawnRadius: 4
-      prefab: {fileID: 0}
+      prefabReference:
+        m_AssetGUID: 
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_SubObjectGUID: 
+        m_EditorAssetChanged: 0
       offsetY: 0
   environmentSpawnEntryList:
-  - prefab: {fileID: 6868969764276136975, guid: 0eb171792af2c406c8d45f727939fc63, type: 3}
+  - prefabReference:
+      m_AssetGUID: 0eb171792af2c406c8d45f727939fc63
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     minSpawnCount: 800
     maxSpawnCount: 1000
     maxCountPerCell: 3
     offsetY: 0
-  - prefab: {fileID: 661524020498355123, guid: 3e36e8877449d460693efee99e98a572, type: 3}
+  - prefabReference:
+      m_AssetGUID: 3e36e8877449d460693efee99e98a572
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     minSpawnCount: 300
     maxSpawnCount: 400
     maxCountPerCell: 1
     offsetY: 0
-  - prefab: {fileID: 5429134858055333658, guid: 4a0c95caf3e704744a19c1dc4f7d5983, type: 3}
+  - prefabReference:
+      m_AssetGUID: 4a0c95caf3e704744a19c1dc4f7d5983
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     minSpawnCount: 300
     maxSpawnCount: 400
     maxCountPerCell: 1
     offsetY: 0
-  - prefab: {fileID: 8227234525851103315, guid: 535ccd650bcc545feb01b3213e5af04e, type: 3}
+  - prefabReference:
+      m_AssetGUID: b90f2f6264adf4eb3a4b3a4bbfcf321a
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     minSpawnCount: 300
     maxSpawnCount: 400
     maxCountPerCell: 1
     offsetY: 0
-  - prefab: {fileID: 6222505414781315101, guid: cf0de45c497844092b4a973d5d9865ad, type: 3}
+  - prefabReference:
+      m_AssetGUID: cf0de45c497844092b4a973d5d9865ad
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     minSpawnCount: 700
     maxSpawnCount: 800
     maxCountPerCell: 1
     offsetY: -0.2
-  - prefab: {fileID: 2594399911115001548, guid: bf152595cd9784e1d8e76a3881109113, type: 3}
+  - prefabReference:
+      m_AssetGUID: bf152595cd9784e1d8e76a3881109113
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_SubObjectGUID: 
+      m_EditorAssetChanged: 0
     minSpawnCount: 700
     maxSpawnCount: 800
     maxCountPerCell: 1

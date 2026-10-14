@@ -16,82 +16,87 @@ MonoBehaviour:
   m_GUID: be0684af6d8da4a4599228cab1995f53
   m_SerializeEntries:
   - m_GUID: 0219d9ec14e6b4a138b479bc21d69140
-    m_Address: Assets/ExternalAssets/MapStructures/Chest_Gold.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/Chest_Gold.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0eb171792af2c406c8d45f727939fc63
-    m_Address: Assets/ExternalAssets/MapStructures/Tree.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/Tree.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1ed0e8e0e8be04077b9f159906a3e659
-    m_Address: Assets/ExternalAssets/MapStructures/House(2X2).prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/House(2X2).prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3e36e8877449d460693efee99e98a572
-    m_Address: Assets/ExternalAssets/MapStructures/Leaves.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/Leaves.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4a0c95caf3e704744a19c1dc4f7d5983
-    m_Address: Assets/ExternalAssets/MapStructures/Stone.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/Stone.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5bda401759b114b449354adc1042d258
-    m_Address: Assets/ExternalAssets/MapStructures/Barrel.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 87346703e0c8643fd95a186016d508dc
-    m_Address: Assets/ExternalAssets/MapStructures/RabbitHole.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/Barrel.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8ee7bebfdd19540feb754bf728e39114
-    m_Address: Assets/ExternalAssets/MapStructures/Well.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/Well.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9639b551d5aaa42d5a1bcffc89273533
-    m_Address: Assets/ExternalAssets/MapStructures/Chest_Stone.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/Chest_Stone.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a64e03eaa29864a5285994b7cea019d3
-    m_Address: Assets/ExternalAssets/MapStructures/TentHouse(2X2).prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/TentHouse(2X2).prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b90f2f6264adf4eb3a4b3a4bbfcf321a
+    m_Address: Assets/AddressablePrefab/MapStructures/Stone(2).prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bf152595cd9784e1d8e76a3881109113
-    m_Address: Assets/ExternalAssets/MapStructures/Grass02.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/Grass02.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cf0de45c497844092b4a973d5d9865ad
-    m_Address: Assets/ExternalAssets/MapStructures/Grass01.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/Grass01.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d43bb0f3f563b43e7b73480b9c20560b
-    m_Address: Assets/ExternalAssets/MapStructures/Chest_Old.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/Chest_Old.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4af1ca2e8dad4d9eac839ac89cf9e91
-    m_Address: Assets/ExternalAssets/MapStructures/StoneMonument(1X1).prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/StoneMonument(1X1).prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f53d7d4ab6f44422793c548797083e16
+    m_Address: Assets/AddressablePrefab/MapStructures/RabbitHole.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f987a496e38f34218a4cd79fdb534da7
-    m_Address: Assets/ExternalAssets/MapStructures/Shack.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/Shack.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ff6fe3222d18542539815de9d4bb2ad6
-    m_Address: Assets/ExternalAssets/MapStructures/GroundCell.prefab
+    m_Address: Assets/AddressablePrefab/MapStructures/GroundCell.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

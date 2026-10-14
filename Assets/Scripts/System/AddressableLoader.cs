@@ -9,6 +9,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class AddressableLoader
 {
     private readonly List<AsyncOperationHandle> handles = new();
+    private readonly Dictionary<string, GameObject> prefabCache = new();
 
     public async UniTask<GameObject> LoadPrefabAsync(AssetReferenceGameObject reference, CancellationToken ct)
     {
@@ -18,6 +19,10 @@ public class AddressableLoader
             return null;
         }
 
+        string key = reference.AssetGUID;
+
+        if (prefabCache.TryGetValue(key, out var cachedPrefab)) return cachedPrefab;
+
         var handle = Addressables.LoadAssetAsync<GameObject>(reference.RuntimeKey);
 
         try
@@ -25,23 +30,18 @@ public class AddressableLoader
             await handle.ToUniTask(cancellationToken: ct);
 
             handles.Add(handle);
+            prefabCache[key] = handle.Result;
+
             return handle.Result;
         }
         catch (OperationCanceledException)
         {
-            if (handle.IsValid())
-            {
-                Addressables.Release(handle);
-            }
-
+            if (handle.IsValid()) Addressables.Release(handle);
             throw;
         }
         catch (Exception exception)
         {
-            if (handle.IsValid())
-            {
-                Addressables.Release(handle);
-            }
+            if (handle.IsValid()) Addressables.Release(handle);
 
             Debug.LogError($"Addressable 로드 실패: {reference.RuntimeKey}\n{exception}");
             return null;
@@ -52,12 +52,9 @@ public class AddressableLoader
     {
         foreach (var handle in handles)
         {
-            if (handle.IsValid())
-            {
-                Addressables.Release(handle);
-            }
+            if (handle.IsValid()) Addressables.Release(handle);
         }
-
         handles.Clear();
+        prefabCache.Clear();
     }
 }
